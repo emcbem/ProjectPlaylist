@@ -1,77 +1,57 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "./component/Navbar";
+import axios from "axios";
 
-interface Forecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
+const URL = "https://localhost:7041";
+
+interface Game {
+  coverUrl: string;
 }
 
+export const fetchAllGames = async () => {
+  try {
+    const response = await axios.get<Game>(`${URL}/game/getall`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch games:", error);
+    throw error;
+  }
+};
+
 function App() {
-  const [forecasts, setForecasts] = useState<Forecast[]>();
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    populateWeatherData();
+    const getGames = async () => {
+      try {
+        const data = await fetchAllGames();
+        setGames((x) => [...x, data]);
+      } catch (err) {
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getGames();
   }, []);
 
-  const contents =
-    forecasts === undefined ? (
-      <p>
-        <em>
-          Loading... Please refresh once the ASP.NET backend has started. See{" "}
-          <a href="https://aka.ms/jspsintegrationreact">
-            https://aka.ms/jspsintegrationreact
-          </a>{" "}
-          for more details.
-        </em>
-      </p>
-    ) : (
-      <table className="table table-striped" aria-labelledby="tableLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map((forecast) => (
-            <>
-              <tr key={forecast.date}>
-                <td>{forecast.date}</td>
-                <td>{forecast.temperatureC}</td>
-                <td>{forecast.temperatureF}</td>
-                <td>{forecast.summary}</td>
-              </tr>
-
-              <p></p>
-            </>
-          ))}
-        </tbody>
-      </table>
-    );
+  console.log(games);
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <h1 className="underline text-sky-400">Weather forecast</h1>
-      <p>This component demonstrates fetching data from the server.</p>
-      {contents}
+      {games.map((x) => {
+        return (
+          <>
+            <img src={"https://" + x.coverUrl} />
+          </>
+        );
+      })}
     </div>
   );
-
-  async function populateWeatherData() {
-    try {
-      const response = await fetch("weatherforecast");
-      const data = await response.json();
-      setForecasts(data);
-    } catch {
-      /* empty */
-    }
-  }
 }
 
 export default App;

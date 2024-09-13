@@ -15,7 +15,21 @@ builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgs
 
 builder.Services.AddSingleton<IGameService, GameService>();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:5174")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
