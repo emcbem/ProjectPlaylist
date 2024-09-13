@@ -6,6 +6,10 @@ import axios from "axios";
 const URL = "https://localhost:7041";
 
 interface Game {
+  title: string;
+  description: string;
+  ageRating: string;
+  publishDate: Date;
   coverUrl: string;
 }
 
@@ -39,20 +43,42 @@ function App() {
     };
 
     getGames();
-  }, []); 
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="max-h-screen flex flex-col">
       <Navbar />
       {games.map((game, index) => (
-        <img
+        <div
+          className="flex flex-col rounded-lg bg-[#D9D9D9] md:max-w-xl md:flex-row w-100 m-5"
           key={index}
-          src={game.coverUrl}
-          alt={`Game Cover ${index}`}
-        />
+        >
+          <img
+            className="w-64 h-64 object-cover rounded-lg md:rounded-l-lg"
+            src={game.coverUrl}
+            alt={`Game Cover ${index}`}
+          />
+          <div className="flex flex-col justify-start p-6  w-1/2">
+            <h5 className="mb-2 text-xl font-medium text-neutral-800">
+              {game.title}
+            </h5>
+            <p className="mb-4 text-base text-neutral-600">
+              <span>
+                {" "}
+                Release Date: {new Date(game.publishDate).toLocaleDateString()}
+              </span>
+            </p>
+            <p className="mb-4 text-base text-neutral-600 line-clamp-3">
+              {game.description}
+            </p>
+            <p className="mb-4 text-base text-neutral-600 flex">
+              Age Rating: {game.ageRating}
+            </p>
+          </div>
+        </div>
       ))}
     </div>
   );
