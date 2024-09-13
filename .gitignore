@@ -561,3 +561,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
+#
+slnx.sqlite
+.wsuo
