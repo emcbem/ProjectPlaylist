@@ -27,9 +27,21 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin2",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowSpecificOrigin2");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
