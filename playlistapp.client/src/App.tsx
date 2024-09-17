@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "./component/Navbar";
 import axios from "axios";
+import Profile from "./Auth0/profile";
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "./Auth0/login";
 
 const URL = "https://localhost:7041";
 
@@ -27,6 +30,7 @@ function App() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const getGames = async () => {
