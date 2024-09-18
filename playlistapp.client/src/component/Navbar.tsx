@@ -32,8 +32,6 @@ const Navbar: React.FC = () => {
         </div>
       )}
 
-      {/* <div>{isAuthenticated ? <Profile /> : <LoginButton />}</div> */}
-
       <div>
         {!isAuthenticated ? (
           <LoginButton />
