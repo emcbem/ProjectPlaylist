@@ -41,6 +41,16 @@ public static class DTOConverter
         };
     }
 
+    public static PlatformDTO ToDTO(this Platform platform)
+    {
+        return new PlatformDTO()
+        {
+            Id = platform.Id,
+            Name = platform.PlatformName,
+            logoURL = platform.LogoUrl,
+        };
+    }
+
     public static FriendDTO ToDTO(this Friend friend) {
         return new FriendDTO()
         {

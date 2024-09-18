@@ -14,11 +14,11 @@ public class IGDBController : Controller
         this.igdbService = igdbService;
     }
 
-    [HttpGet]
+    [HttpGet("AddMostRecent500Games")]
     public async Task PostGames()
     {
-        var jsonGames = await igdbService.GetGamesFromIGDB("fields *, age_ratings.*, cover.*, release_dates.*; limit 2;");
-        
-        await igdbService.PostGamesToDatabase(jsonGames);
+        //var jsonGames = await igdbService.GetGamesFromIGDB("fields *, age_ratings.*, cover.*, release_dates.*; limit 500; where rating > 80;");
+
+        //await igdbService.PostGamesToDatabase(jsonGames);
     }
 }
