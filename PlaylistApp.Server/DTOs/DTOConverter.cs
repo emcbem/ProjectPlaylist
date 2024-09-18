@@ -62,4 +62,19 @@ public static class DTOConverter
         };
     }
 
+    public static AchievementDTO ToDTO(this Achievement achievement)
+    {
+        return new AchievementDTO()
+        {
+            ID = achievement.Id,
+            PlatformGame = achievement.PlatformGame.ToDTO(),
+            ImageURL = achievement.ImageUrl ?? "",
+            Name = achievement.AchievementName,
+            Description = achievement.AchievementDesc ?? "",
+            // TODO: Calculate this later
+            // Get the achievement and all of the users that have completed this achievement. 
+            // TotalTimeClaimed = achievement.
+        };
+    }
+
 }
