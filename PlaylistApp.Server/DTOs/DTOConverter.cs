@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.Data;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using PlaylistApp.Server.Data;
 
 namespace PlaylistApp.Server.DTOs;
 
@@ -37,6 +38,17 @@ public static class DTOConverter
             AuthID = user.AuthId,
             //TODO: Get Image URL from Image Table
             //ProfileURL = user.UserImage,
+        };
+    }
+
+    public static FriendDTO ToDTO(this Friend friend) {
+        return new FriendDTO()
+        {
+            Id = friend.Id,
+            BaseUser = friend.Base.ToDTO(),
+            ReceivingUser = friend.Recieved.ToDTO(),
+            IsAccepted = friend.IsAccepted,
+            DateAccepted = friend.AcceptedDate,
         };
     }
 }
