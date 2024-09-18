@@ -30,7 +30,7 @@ public static class DTOConverter
         {
             Id = user.Id,
             Username = user.Username,
-            Bio = user.Bio,
+            Bio = user.Bio ?? "",
             Strikes = user.Strike,
             XP = user.Xp,
             CreationDate = user.JoinDate,
@@ -49,4 +49,17 @@ public static class DTOConverter
             logoURL = platform.LogoUrl,
         };
     }
+
+    public static PlatformGameDTO ToDTO(this PlatformGame platformGame)
+    {
+        return new PlatformGameDTO()
+        {
+            id = platformGame.Id,
+            Game = platformGame.Game.ToDTO(),
+            PlatformKey = platformGame.PlatformKey ?? "",
+            Platform = platformGame.Platform.ToDTO(),
+            PlatformURL = platformGame.PlatformUrl ?? "",
+        };
+    }
+
 }

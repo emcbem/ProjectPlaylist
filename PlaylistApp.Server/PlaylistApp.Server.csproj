@@ -32,7 +32,6 @@
   <ItemGroup>
     <Folder Include="Requests\AddRequests\" />
     <Folder Include="Requests\DeleteRequests\" />
-    <Folder Include="Requests\GetRequests\" />
   </ItemGroup>
 
 </Project>
