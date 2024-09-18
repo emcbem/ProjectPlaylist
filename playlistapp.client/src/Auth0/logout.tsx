@@ -5,14 +5,16 @@ const LogoutButton = () => {
   const { logout } = useAuth0();
 
   return (
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-4 rounded-full"
-      onClick={() =>
-        logout({ logoutParams: { returnTo: window.location.origin } })
-      }
-    >
-      Log Out
-    </button>
+    <div className="bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-1 rounded-md">
+      <button
+        className="bg-white text-black font-bold h-full w-full focus:border-none border-none"
+        onClick={() =>
+          logout({ logoutParams: { returnTo: window.location.origin } })
+        }
+      >
+        Log Out
+      </button>
+    </div>
   );
 };
 

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import Navbar from "./component/Navbar";
 import axios from "axios";
 import Profile from "./Auth0/profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./Auth0/login";
+import CardCarousel from "./component/InfiniteCardScroll";
+import TempComponent from "./component/TempComponent";
 
 const URL = "https://localhost:7041";
 
-interface Game {
+export interface Game {
   title: string;
   description: string;
   ageRating: string;
@@ -37,10 +38,8 @@ function App() {
       try {
         const data = await fetchAllGames();
         setGames(data);
-        console.log("GAMES", data);
       } catch (err) {
         setError("Failed to fetch games");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -53,39 +52,20 @@ function App() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="max-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2">
       <Navbar />
-      {games.map((game, index) => (
-        <div
-          className="flex flex-col rounded-lg bg-[#D9D9D9] md:max-w-xl md:flex-row w-100 m-5"
-          key={index}
-        >
-          <img
-            className="w-64 h-64 object-cover rounded-lg md:rounded-l-lg"
-            src={game.coverUrl}
-            alt={`Game Cover ${index}`}
-          />
-          <div className="flex flex-col justify-start p-6  w-1/2">
-            <h5 className="mb-2 text-xl font-medium text-neutral-800">
-              {game.title}
-            </h5>
-            <p className="mb-4 text-base text-neutral-600">
-              <span>
-                {" "}
-                Release Date: {new Date(game.publishDate).toLocaleDateString()}
-              </span>
-            </p>
-            <p className="mb-4 text-base text-neutral-600 line-clamp-3">
-              {game.description}
-            </p>
-            <p className="mb-4 text-base text-neutral-600 flex">
-              Age Rating: {game.ageRating}
-            </p>
-          </div>
+      <div className="flex text-8xl bg-white text-black justify-center text-center ">
+        <div className="w-1/2 my-20 font-bold">
+          Explore your gaming library like never before.
         </div>
-      ))}
+      </div>
+      <CardCarousel list={games} reverse={false} />
+      <CardCarousel list={games} reverse={true} /> 
+       <TempComponent />
     </div>
   );
 }
 
 export default App;
+
+// #EDBD68 to #602B53
