@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Requests\DeleteRequests\" />
-    <Folder Include="Requests\GetRequests\" />
   </ItemGroup>
 
 </Project>
