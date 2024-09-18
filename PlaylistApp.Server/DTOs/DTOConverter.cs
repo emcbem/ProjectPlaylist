@@ -39,4 +39,14 @@ public static class DTOConverter
             //ProfileURL = user.UserImage,
         };
     }
+
+    public static PlatformDTO ToDTO(this Platform platform)
+    {
+        return new PlatformDTO()
+        {
+            Id = platform.Id,
+            Name = platform.PlatformName,
+            logoURL = platform.LogoUrl,
+        };
+    }
 }
