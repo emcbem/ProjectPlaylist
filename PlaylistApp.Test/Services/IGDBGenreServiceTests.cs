@@ -1,4 +1,8 @@
 ﻿using FluentAssertions;
+using IGDB;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services.IGDBServices.Genre;
 using System;
 using System.Collections.Generic;
@@ -14,7 +18,10 @@ public class IGDBGenreServiceTests
     [Fact]
     public void IGDBGenreAbleToGetNamePropertyFromJsonProperly()
     {
-        var igdbGenre = new IGDBGenreService();
+        IDbContextFactory<PlaylistDbContext> db = new Mock<IDbContextFactory<PlaylistDbContext>>().Object;
+        IGDBClient client = new IGDBClient("", "");
+
+        var igdbGenre = new IGDBGenreService(db, client);
 
         var jsonObject = new JsonObject
         {
