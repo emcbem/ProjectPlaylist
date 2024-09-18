@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistApp.Server", "PlaylistApp.Server\PlaylistApp.Server.csproj", "{B340D085-A8D9-47A4-A218-9C7125C77A86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlaylistApp.Server", "PlaylistApp.Server\PlaylistApp.Server.csproj", "{B340D085-A8D9-47A4-A218-9C7125C77A86}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "playlistapp.client", "playlistapp.client\playlistapp.client.esproj", "{A9DEDA49-8932-46A5-8524-5F162806A47B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistApp.Test", "PlaylistApp.Test\PlaylistApp.Test.csproj", "{82B64461-D8D8-4BD1-9563-CB08F7600E7C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B340D085-A8D9-47A4-A218-9C7125C77A86} = {B340D085-A8D9-47A4-A218-9C7125C77A86}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +28,10 @@ Global
 		{A9DEDA49-8932-46A5-8524-5F162806A47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9DEDA49-8932-46A5-8524-5F162806A47B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9DEDA49-8932-46A5-8524-5F162806A47B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{82B64461-D8D8-4BD1-9563-CB08F7600E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82B64461-D8D8-4BD1-9563-CB08F7600E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82B64461-D8D8-4BD1-9563-CB08F7600E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82B64461-D8D8-4BD1-9563-CB08F7600E7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
