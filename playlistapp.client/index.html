@@ -1,13 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-</head>
-  <body>
+    <style>
+      /* Tailwind CDN does not support custom animations out-of-the-box,
+         so we need to define the keyframes and animation manually. */
+      @keyframes infinite-scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      @keyframes infinite-scroll-reverse {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(0%);
+        }
+      }
+
+      .animate-infinite-scroll {
+        animation: infinite-scroll 1500s linear infinite;
+      }
+
+      .animate-infinite-scroll-reverse {
+        animation: infinite-scroll-reverse 1500s linear infinite;
+      }
+
+      .custom-gradient {
+        background: linear-gradient(to bottom, #edbd68, #602b53);
+      }
+    </style>
+  </head>
+  <body style="font-family: 'Josefin Sans', sans-serif">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

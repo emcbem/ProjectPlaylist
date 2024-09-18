@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.Data;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using PlaylistApp.Server.Data;
 
 namespace PlaylistApp.Server.DTOs;
 
@@ -77,4 +78,15 @@ public static class DTOConverter
         };
     }
 
+
+    public static FriendDTO ToDTO(this Friend friend) {
+        return new FriendDTO()
+        {
+            Id = friend.Id,
+            BaseUser = friend.Base.ToDTO(),
+            ReceivingUser = friend.Recieved.ToDTO(),
+            IsAccepted = friend.IsAccepted,
+            DateAccepted = friend.AcceptedDate,
+        };
+    }
 }

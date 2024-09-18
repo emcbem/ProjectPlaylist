@@ -23,7 +23,9 @@ public class GameService : IGameService
     public async Task<GameDTO> GetGameByID(int id)
     {
         using var context = dbContextFactory.CreateDbContext();
-        var game = await context.Games.Where(x => x.Id == id).FirstOrDefaultAsync();
+        var game = await context.Games
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
         if (game == null)
         {
             return new GameDTO();
@@ -34,7 +36,9 @@ public class GameService : IGameService
     public async Task<GameDTO> GetGameByIGDB(int id)
     {
         using var context = dbContextFactory.CreateDbContext();
-        var game = await context.Games.Where(x => x.IdgbId == id).FirstOrDefaultAsync();
+        var game = await context.Games
+            .Where(x => x.IdgbId == id)
+            .FirstOrDefaultAsync();
         if (game == null)
         {
             return new GameDTO();
@@ -45,7 +49,9 @@ public class GameService : IGameService
     public async Task<List<GameDTO>> GetGameByName(string name)
     {
         using var context = dbContextFactory.CreateDbContext();
-        var games = await context.Games.Where(x => x.Title == name).ToListAsync();
+        var games = await context.Games
+            .Where(x => x.Title == name)
+            .ToListAsync();
         return games.Select(x => x.ToDTO()).ToList();
     }
 }
