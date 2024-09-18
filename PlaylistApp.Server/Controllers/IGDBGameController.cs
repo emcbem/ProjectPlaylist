@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PlaylistApp.Server.Services.IGDBServices;
+using PlaylistApp.Server.Services.IGDBServices.Game;
 
 namespace PlaylistApp.Server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class IGDBController : Controller
+public class IGDBGameController : Controller
 {
-    private readonly IIGDBService igdbService;
+    private readonly IIGDBGameService igdbService;
 
-    public IGDBController(IIGDBService igdbService)
+    public IGDBGameController(IIGDBGameService igdbService)
     {
         this.igdbService = igdbService;
     }

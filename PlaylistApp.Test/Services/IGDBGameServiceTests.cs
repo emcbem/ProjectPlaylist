@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PlaylistApp.Server.Services.IGDBServices;
-using System.Text.Json.Nodes;
-using Microsoft.OpenApi;
+﻿using System.Text.Json.Nodes;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using PlaylistApp.Server.Data;
-using Moq;
 using IGDB;
-using System.Security.Cryptography.Xml;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using PlaylistApp.Server.Data;
+using PlaylistApp.Server.Services.IGDBServices.Game;
+
 
 namespace PlaylistApp.Test.Services;
 
-public class IGDBServiceTest
+public class IGDBGameServiceTest
 {
     [Fact]
     public void IGDBServiceIsAbleToTranslateAGameIntoOurGameClass()
     {
-      
-        var igdbService = new IGDBService();
+        IDbContextFactory<PlaylistDbContext> db = new Mock<IDbContextFactory<PlaylistDbContext>>().Object;
+        IGDBClient client = new IGDBClient("", "");
+
+        var igdbService = new IGDBGameService(db, client);
 
         var jsonObject = new JsonObject
         {
@@ -85,8 +81,10 @@ public class IGDBServiceTest
     [Fact]
     public void IGDBServiceIsAbleToTranslateAGameIntoOurGameClassWithALotOfNullParameters()
     {
+        IDbContextFactory<PlaylistDbContext> db = new Mock<IDbContextFactory<PlaylistDbContext>>().Object;
+        IGDBClient client = new IGDBClient("", "");
 
-        var igdbService = new IGDBService();
+        var igdbService = new IGDBGameService(db, client);
 
         var jsonObject = new JsonObject
         {
