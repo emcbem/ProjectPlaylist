@@ -33,7 +33,6 @@
     <Folder Include="Requests\AddRequests\" />
     <Folder Include="Requests\DeleteRequests\" />
     <Folder Include="Requests\GetRequests\" />
-    <Folder Include="Requests\UpdateRequests\" />
   </ItemGroup>
 
 </Project>

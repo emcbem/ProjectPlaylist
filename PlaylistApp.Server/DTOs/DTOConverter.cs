@@ -23,4 +23,20 @@ public static class DTOConverter
             
         };
     }
+
+    public static UserDTO ToDTO(this UserAccount user)
+    {
+        return new UserDTO()
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Bio = user.Bio,
+            Strikes = user.Strike,
+            XP = user.Xp,
+            CreationDate = user.JoinDate,
+            AuthID = user.AuthId,
+            //TODO: Get Image URL from Image Table
+            //ProfileURL = user.UserImage,
+        };
+    }
 }
