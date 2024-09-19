@@ -78,7 +78,6 @@ public static class DTOConverter
         };
     }
 
-
     public static FriendDTO ToDTO(this Friend friend)
     {
         return new FriendDTO()
@@ -100,6 +99,23 @@ public static class DTOConverter
             TimePlayed = userGame.TimePlayed,
             UserGameId = userGame.Id,
             DateAdded = userGame.DateAdded,
+        };
+    }
+
+    public static GoalDTO ToDTO(this Goal goal)
+    {
+        return new GoalDTO()
+        {
+            Achievement = goal.Achievement.ToDTO(),
+            DateAdded = goal.DateAdded,
+            DateCompleted = goal.DateCompleted,
+            DateToAchieve = goal.DateToAchieve,
+            Dislikes = goal.GoalLikes.Where(x => x.IsLike == false).Count(),
+            Likes = goal.GoalLikes.Where(x => x.IsLike == true).Count(),
+            Id = goal.Id,
+            IsCompleted = goal.IsComplete,
+            IsCurrent = goal.IsCurrent,
+            User = goal.User.ToDTO(),
         };
     }
 }
