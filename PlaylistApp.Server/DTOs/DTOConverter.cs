@@ -89,4 +89,18 @@ public static class DTOConverter
             DateAccepted = friend.AcceptedDate,
         };
     }
+
+    public static UserAchievementDTO ToDTO(this UserAchievement userAchievement)
+    {
+        return new UserAchievementDTO() 
+        { 
+            Id = userAchievement.Id, 
+            Achievement = userAchievement.Achievement.ToDTO(),
+            User = userAchievement.User.ToDTO(),
+            IsSelfSubmitted = userAchievement.IsSelfSubmitted,
+            DateAchieved = userAchievement.DateAchieved,
+            Likes = userAchievement.AchievementLikes.Where(x => x.IsLike == true).Count(),
+            Dislikes = userAchievement.AchievementLikes.Where(x => x.IsLike == false).Count(),
+        };
+    }
 }
