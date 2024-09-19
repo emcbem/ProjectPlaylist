@@ -21,7 +21,7 @@ public static class DTOConverter
 
             //TODO: Calculate hours plays
             //TODO: Calculate total total owned
-            
+
         };
     }
 
@@ -79,7 +79,8 @@ public static class DTOConverter
     }
 
 
-    public static FriendDTO ToDTO(this Friend friend) {
+    public static FriendDTO ToDTO(this Friend friend)
+    {
         return new FriendDTO()
         {
             Id = friend.Id,
@@ -101,6 +102,18 @@ public static class DTOConverter
             DateAchieved = userAchievement.DateAchieved,
             Likes = userAchievement.AchievementLikes.Where(x => x.IsLike == true).Count(),
             Dislikes = userAchievement.AchievementLikes.Where(x => x.IsLike == false).Count(),
+        };
+    }
+
+    public static UserGameDTO ToDTO(this UserGame userGame)
+    {
+        return new UserGameDTO()
+        {
+            PlatformGame = userGame.PlatformGame.ToDTO(),
+            User = userGame.User.ToDTO(),
+            TimePlayed = userGame.TimePlayed,
+            UserGameId = userGame.Id,
+            DateAdded = userGame.DateAdded,
         };
     }
 }
