@@ -4,7 +4,7 @@ using IGDB;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using PlaylistApp.Server.Data;
-using PlaylistApp.Server.Services.IGDBServices.Game;
+using PlaylistApp.Server.Services.IGDBServices;
 
 
 namespace PlaylistApp.Test.Services;

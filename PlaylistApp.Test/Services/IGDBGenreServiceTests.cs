@@ -3,7 +3,7 @@ using IGDB;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using PlaylistApp.Server.Data;
-using PlaylistApp.Server.Services.IGDBServices.Genre;
+using PlaylistApp.Server.Services.IGDBServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
