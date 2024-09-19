@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PlaylistApp.Server.Services.IGDBServices.Genre;
+using PlaylistApp.Server.Services.IGDBServices;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -7,9 +7,9 @@ namespace PlaylistApp.Server.Controllers;
 [Route("[controller]")]
 public class IGDBGenreController : Controller
 {
-    private readonly IIGDBGenreService igdbService;
+    private readonly IGDBGenreService igdbService;
 
-    public IGDBGenreController(IIGDBGenreService igdbService)
+    public IGDBGenreController(IGDBGenreService igdbService)
     {
         this.igdbService = igdbService;
     }
