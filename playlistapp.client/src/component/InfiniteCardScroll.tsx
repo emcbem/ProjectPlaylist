@@ -25,17 +25,21 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full bg-white inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,white_0,_black_128px,_black_calc(100%-128px),white_100%)] p-8"
+      className="w-full h-full bg-white dark:bg-black inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,white_0,_black_128px,_black_calc(100%-128px),white_100%)] p-8"
     >
+
       <ul
-        className={`flex items-center justify-center md:justify-start [&_li]:mx-16 [&_img]:max-w-none ${
+        className={`flex items-center justify-center md:justify-start [&_li]:mx-16 [&_img]:max-w-none  ${
           reverse
             ? `animate-infinite-scroll-reverse`
             : `animate-infinite-scroll`
         }`}
       >
         {list.map((game, index) => (
-          <li key={index} className="inline-flex flex-none mx-5">
+          <li
+            key={index}
+            className="inline-flex flex-none mx-5 drop-shadow-[0_0px_10px_rgba(96,43,83,2)] dark:drop-shadow-[0_0px_10px_rgba(237,189,104,2)]"
+          >
             <GameCard
               index={index}
               cover={game.coverUrl}
@@ -47,7 +51,6 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
           </li>
         ))}
       </ul>
-      {/* Duplicate list for seamless scroll */}
       <ul
         className={`flex items-center justify-center md:justify-start [&_li]:mx-16 [&_img]:max-w-none ${
           reverse
@@ -57,7 +60,10 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
         aria-hidden="true"
       >
         {list.map((game, index) => (
-          <li key={index} className="inline-flex flex-none mx-5">
+          <li
+            key={index}
+            className="inline-flex flex-none mx-5 drop-shadow-[0_0px_10px_rgba(96,43,83,2)] dark:drop-shadow-[0_0px_10px_rgba(237,189,104,2)]"
+          >
             <GameCard
               index={index}
               cover={game.coverUrl}
