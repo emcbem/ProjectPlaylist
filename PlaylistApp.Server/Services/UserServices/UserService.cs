@@ -16,7 +16,7 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteUserById(Guid userId)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
         var user = await context.UserAccounts.Where(x => x.Guid == userId).FirstOrDefaultAsync();
         if (user == null)
         {
@@ -36,7 +36,7 @@ public class UserService : IUserService
 
     public async Task<UserDTO> GetUserById(Guid guid)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
         var user = await context.UserAccounts.Where(x => x.Guid == guid).FirstOrDefaultAsync();
         if (user == null)
         {
@@ -47,7 +47,7 @@ public class UserService : IUserService
 
     public async Task<List<UserDTO>> GetUsersByName(string username)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
         var users = await context.UserAccounts.Where(x => x.Username.Contains(username)).ToListAsync();
         if (!users.Any())
         {
@@ -58,7 +58,7 @@ public class UserService : IUserService
 
     public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
         var userUnderChange = await context.UserAccounts
             .Include(x => x.UserGenres)
             .Include(x => x.UserPlatforms)

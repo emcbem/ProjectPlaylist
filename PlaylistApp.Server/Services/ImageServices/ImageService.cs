@@ -15,7 +15,7 @@ public class ImageService : IImageService
 
     public async Task<List<UserImage>> GetImagesAsync()
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userImgs = await context.UserImages.ToListAsync();
 

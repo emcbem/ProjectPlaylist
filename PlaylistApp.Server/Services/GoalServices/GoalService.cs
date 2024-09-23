@@ -18,16 +18,7 @@ public class GoalService : IGoalService
 
     public async Task<int> AddGoal(AddGoalRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
-
-        var achievement = await context.Achievements
-            .Where(x => x.Id == request.AchievementId)
-            .FirstOrDefaultAsync();
-
-        if (achievement == null)
-        {
-            return 0;
-        }
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
             .Where(x => x.Guid == request.UserId)
@@ -42,11 +33,9 @@ public class GoalService : IGoalService
         {
             DateAdded = DateTime.Today,
             DateToAchieve = request.DateToAchieve,
-            Achievement = achievement,
             AchievementId = request.AchievementId,
             IsComplete = false,
             IsCurrent = request.IsCurrent,
-            User = user,
             UserId = user.Id
         };
 
@@ -57,7 +46,7 @@ public class GoalService : IGoalService
 
     public async Task<bool> DeleteGoal(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var goal = await context.Goals
             .Where(x => x.Id == id)
@@ -76,7 +65,7 @@ public class GoalService : IGoalService
 
     public async Task<GoalDTO> GetGoalById(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var goal = await context.Goals
             .Where(x => x.Id == id)
@@ -92,7 +81,7 @@ public class GoalService : IGoalService
 
     public async Task<List<GoalDTO>> GetGoalsFromUser(Guid userId)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
             .Where(x => x.Guid == userId)
@@ -117,7 +106,7 @@ public class GoalService : IGoalService
 
     public async Task<GoalDTO> UpdateGoal(UpdateGoalRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         Goal goal = new Goal()
         {

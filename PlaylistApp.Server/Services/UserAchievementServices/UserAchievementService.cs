@@ -18,7 +18,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<int> AddUserAchievement(AddUserAchievementRequest addRequest)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var usr = await context.UserAccounts.Where(x => x.Guid == addRequest.UserGuid).FirstOrDefaultAsync();
 
@@ -40,7 +40,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<bool> DeleteUserAchievement(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var UserAchievement = await context.UserAchievements.Where(x => x.Id == id).FirstOrDefaultAsync();
 
@@ -58,7 +58,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<List<UserAchievementDTO>> GetUserAchievementByAchievementId(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userAchievements = await context.UserAchievements.Where(x => x.AchievementId == id).ToListAsync();
 
@@ -72,7 +72,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<UserAchievementDTO> GetUserAchievementById(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var achievement = await context.UserAchievements.Where(x => x.AchievementId == id).FirstOrDefaultAsync();
 
@@ -86,7 +86,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<List<UserAchievementDTO>> GetUserAchievementByUserId(Guid userId)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts.Where(x => x.Guid == userId).FirstOrDefaultAsync();
 
@@ -107,7 +107,7 @@ public class UserAchievementService : IUserAchievementService
 
     public async Task<UserAchievementDTO> UpdateUserAchievement(UpdateUserAchievementRequest updatedRequest)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var UserAchievementUnderChange = await context.UserAchievements.Where(x => x.Id == updatedRequest.Id).FirstOrDefaultAsync();
 
