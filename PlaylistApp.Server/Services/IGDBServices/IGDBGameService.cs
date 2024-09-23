@@ -5,9 +5,9 @@ using PlaylistApp.Server.Data.Enums;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace PlaylistApp.Server.Services.IGDBServices.Game;
+namespace PlaylistApp.Server.Services.IGDBServices;
 
-public class IGDBGameService : IIGDBGameService
+public class IGDBGameService
 {
     private IDbContextFactory<PlaylistDbContext> contextFactory;
     private IGDBClient igdbClient;
@@ -39,11 +39,11 @@ public class IGDBGameService : IIGDBGameService
         await context.SaveChangesAsync();
     }
 
-    public Data.Game ParseGameIntoLocalGame(JsonObject jsonObject)
+    public Data.Game ParseGameIntoLocalGame(JsonObject jsonGame)
     {
         var game = new Data.Game();
 
-        var jsonString = jsonObject.ToString();
+        var jsonString = jsonGame.ToString();
 
         using (var document = JsonDocument.Parse(jsonString))
         {
@@ -115,19 +115,10 @@ public class IGDBGameService : IIGDBGameService
             //Try get publish date
             if (root.TryGetProperty("first_release_date", out foundProperty))
             {
-                game.PublishDate = UnixTimeToDateTime(foundProperty.GetUInt32());
+                game.PublishDate = Conversions.UnixTimeToDateTime(foundProperty.GetUInt32());
             }
 
         }
         return game;
-    }
-
-    public static DateTime UnixTimeToDateTime(long unixTimeSeconds)
-    {
-        // Unix epoch
-        DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-        // Convert Unix time to DateTime
-        return unixEpoch.AddSeconds(unixTimeSeconds).ToUniversalTime();
     }
 }

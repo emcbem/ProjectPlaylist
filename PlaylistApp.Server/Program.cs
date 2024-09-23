@@ -2,8 +2,7 @@ using IGDB;
 using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services.Game;
-using PlaylistApp.Server.Services.IGDBServices.Game;
-using PlaylistApp.Server.Services.IGDBServices.Genre;
+using PlaylistApp.Server.Services.IGDBServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +16,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration["ppdb"]));
 
 builder.Services.AddSingleton<IGameService, GameService>();
-builder.Services.AddSingleton<IIGDBGameService, IGDBGameService>();
-builder.Services.AddSingleton<IIGDBGenreService, IGDBGenreService>();
+builder.Services.AddSingleton< IGDBGameService>();
+builder.Services.AddSingleton<IGDBGenreService>();
+builder.Services.AddSingleton<IGDBCompanyService>();
+
 
 
 

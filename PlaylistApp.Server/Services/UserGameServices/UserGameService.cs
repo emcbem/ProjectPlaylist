@@ -46,7 +46,7 @@ public class UserGameService : IUserGameService
             TimePlayed = 0,
         };
 
-        context.Add(newUserGame);
+        await context.AddAsync(newUserGame);
         await context.SaveChangesAsync();
         return newUserGame.Id;
     }

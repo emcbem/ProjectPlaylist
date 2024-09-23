@@ -5,9 +5,9 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace PlaylistApp.Server.Services.IGDBServices.Genre;
+namespace PlaylistApp.Server.Services.IGDBServices;
 
-public class IGDBGenreService : IIGDBGenreService
+public class IGDBGenreService
 {
     private readonly IDbContextFactory<PlaylistDbContext> contextFactory;
     private readonly IGDBClient igdbClient;
@@ -28,11 +28,11 @@ public class IGDBGenreService : IIGDBGenreService
         return array!.AsArray();
     }
 
-    public Data.Genre ParseGenreIntoLocalGenre(JsonObject genreObject)
+    public Genre ParseGenreIntoLocalGenre(JsonObject jsonGenre)
     {
-        var genre = new Data.Genre();
+        var genre = new Genre();
 
-        var genreString = genreObject.ToString();
+        var genreString = jsonGenre.ToString();
 
         using (var document = JsonDocument.Parse(genreString))
         {
