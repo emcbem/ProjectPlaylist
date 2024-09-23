@@ -21,7 +21,7 @@ public static class DTOConverter
 
             //TODO: Calculate hours plays
             //TODO: Calculate total total owned
-            
+
         };
     }
 
@@ -63,8 +63,23 @@ public static class DTOConverter
         };
     }
 
+    public static AchievementDTO ToDTO(this Achievement achievement)
+    {
+        return new AchievementDTO()
+        {
+            ID = achievement.Id,
+            PlatformGame = achievement.PlatformGame.ToDTO(),
+            ImageURL = achievement.ImageUrl ?? "",
+            Name = achievement.AchievementName,
+            Description = achievement.AchievementDesc ?? "",
+            // TODO: Calculate this later
+            // Get the achievement and all of the users that have completed this achievement. 
+            // TotalTimeClaimed = achievement.
+        };
+    }
 
-    public static FriendDTO ToDTO(this Friend friend) {
+    public static FriendDTO ToDTO(this Friend friend)
+    {
         return new FriendDTO()
         {
             Id = friend.Id,
@@ -72,6 +87,49 @@ public static class DTOConverter
             ReceivingUser = friend.Recieved.ToDTO(),
             IsAccepted = friend.IsAccepted,
             DateAccepted = friend.AcceptedDate,
+        };
+    }
+
+    public static UserAchievementDTO ToDTO(this UserAchievement userAchievement)
+    {
+        return new UserAchievementDTO() 
+        { 
+            Id = userAchievement.Id, 
+            Achievement = userAchievement.Achievement.ToDTO(),
+            User = userAchievement.User.ToDTO(),
+            IsSelfSubmitted = userAchievement.IsSelfSubmitted,
+            DateAchieved = userAchievement.DateAchieved,
+            Likes = userAchievement.AchievementLikes.Where(x => x.IsLike == true).Count(),
+            Dislikes = userAchievement.AchievementLikes.Where(x => x.IsLike == false).Count(),
+        };
+    }
+
+    public static UserGameDTO ToDTO(this UserGame userGame)
+    {
+        return new UserGameDTO()
+        {
+            PlatformGame = userGame.PlatformGame.ToDTO(),
+            User = userGame.User.ToDTO(),
+            TimePlayed = userGame.TimePlayed,
+            UserGameId = userGame.Id,
+            DateAdded = userGame.DateAdded,
+        };
+    }
+
+    public static GoalDTO ToDTO(this Goal goal)
+    {
+        return new GoalDTO()
+        {
+            Achievement = goal.Achievement.ToDTO(),
+            DateAdded = goal.DateAdded,
+            DateCompleted = goal.DateCompleted,
+            DateToAchieve = goal.DateToAchieve,
+            Dislikes = goal.GoalLikes.Where(x => x.IsLike == false).Count(),
+            Likes = goal.GoalLikes.Where(x => x.IsLike == true).Count(),
+            Id = goal.Id,
+            IsCompleted = goal.IsComplete,
+            IsCurrent = goal.IsCurrent,
+            User = goal.User.ToDTO(),
         };
     }
 }

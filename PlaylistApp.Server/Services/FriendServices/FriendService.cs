@@ -65,7 +65,7 @@ public class FriendService : IFriendService
             IsAccepted = true,
         };
 
-        context.Friends.Add(newFriend);
+        await context.Friends.AddAsync(newFriend);
         await context.SaveChangesAsync();
         return true;
     }
