@@ -146,4 +146,29 @@ public static class DTOConverter
             LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
         };
     }
+
+    public static ListDTO ToDTO(this List list)
+    {
+        return new ListDTO()
+        {
+            CreationDate = list.DateMade,
+            IsPublic = list.IsPublic,
+            Name = list.ListName,
+            OwnerName = list.User.Username,
+            Id = list.Id,
+            Games = list.ListGames.Select(x => x.ToDTO()).ToList(),
+        };
+    }
+
+    public static ListGameDTO ToDTO(this ListGame listGame)
+    {
+        return new ListGameDTO()
+        {
+            DateAdded = listGame.DateAdded,
+            GameId = listGame.GameId,
+            Id = listGame.Id,
+            ListId = listGame.ListId,
+        };
+    }
+
 }
