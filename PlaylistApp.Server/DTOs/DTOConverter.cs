@@ -170,5 +170,4 @@ public static class DTOConverter
             ListId = listGame.ListId,
         };
     }
-
 }
