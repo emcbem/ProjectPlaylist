@@ -171,4 +171,14 @@ public static class DTOConverter
         };
     }
 
+    public static UserPlatformDTO ToDTO(this UserPlatform userPlatform)
+    {
+        return new UserPlatformDTO()
+        {
+            GamerTag = userPlatform.Gamertag,
+            Id = userPlatform.Id,
+            PlatformId = userPlatform.PlatformId,
+            UserId = userPlatform.User.Guid,
+        };
+    }
 }
