@@ -12,10 +12,7 @@ interface props {
 const GameCard: React.FC<props> = ({
   index,
   cover,
-  title,
-  publishDate,
-  description,
-  ageRating,
+
 }) => {
   return (
     <div className="flex flex-col rounded-lg bg-[#D9D9D9] md:max-w-sm md:flex-col w-full">

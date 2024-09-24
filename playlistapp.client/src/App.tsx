@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./component/Navbar";
 import axios from "axios";
-import Profile from "./Auth0/profile";
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "./Auth0/login";
+//import { useAuth0 } from "@auth0/auth0-react";
 import CardCarousel from "./component/InfiniteCardScroll";
 import TempComponent from "./component/TempComponent";
 
@@ -32,7 +30,7 @@ function App() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated } = useAuth0();
+  //const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const getGames = async () => {
