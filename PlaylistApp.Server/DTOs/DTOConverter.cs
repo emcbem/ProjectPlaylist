@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using PlaylistApp.Server.Data;
+using PlaylistApp.Server.Services.GameReviewService;
 
 namespace PlaylistApp.Server.DTOs;
 
@@ -130,6 +131,19 @@ public static class DTOConverter
             IsCompleted = goal.IsComplete,
             IsCurrent = goal.IsCurrent,
             User = goal.User.ToDTO(),
+        };
+    }
+
+    public static GameReviewDTO ToDTO(this GameReview gameReview)
+    {
+        return new GameReviewDTO()
+        {
+            Dislikes = gameReview.ReviewLikes.Where(x => x.IsLike == false).Count(),
+            PublishDate = DateOnly.FromDateTime(DateTime.Today),
+            Likes = gameReview.ReviewLikes.Where(x => x.IsLike == true).Count(),
+            Rating = gameReview.Rating,
+            Text = gameReview.Review,
+            LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
         };
     }
 }
