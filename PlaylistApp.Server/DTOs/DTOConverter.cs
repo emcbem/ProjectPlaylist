@@ -170,4 +170,24 @@ public static class DTOConverter
             ListId = listGame.ListId,
         };
     }
+
+    public static UserPlatformDTO ToDTO(this UserPlatform userPlatform)
+    {
+        return new UserPlatformDTO()
+        {
+            GamerTag = userPlatform.Gamertag,
+            Id = userPlatform.Id,
+            PlatformId = userPlatform.PlatformId,
+            UserId = userPlatform.User.Guid,
+        };
+    }
+
+    public static GenreDTO ToDTO(this Genre genre)
+    {
+        return new GenreDTO()
+        {
+            Id = genre.Id,
+            Name = genre.GenreName,
+        };
+    }
 }
