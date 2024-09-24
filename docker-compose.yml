@@ -1,0 +1,29 @@
+services:
+  # playlistdb:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_USER: postgres
+  #   volumes:
+  #     - ./20240328.06.25.21.sql:/docker-entrypoint-initdb.d/A_init.sql
+
+  playlistserver:
+    build: ./PlaylistApp.Server
+    ports:
+      - 421:7041
+    environment:
+      ConnectionStrings__ppdb: "uh"
+      
+
+
+  playlistclient:
+    build: ./playlistapp.client
+    ports:
+      - 420:5174
+    environment:
+      VITE_AUTH0_DOMAIN: dev-hto6puiswhque3fr.us.auth0.com
+      VITE_AUTH0_CLIENT_ID: ubMKeoY2RUXas6SYMEwlzoX30ByMxpwt
+      VITE_URL: http://playlistserver:421
+    depends_on: 
+      - playlistserver
