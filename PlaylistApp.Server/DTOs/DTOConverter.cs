@@ -186,8 +186,17 @@ public static class DTOConverter
     {
         return new GenreDTO()
         {
-            Id = genre.Id,
+            id = genre.Id,
             Name = genre.GenreName,
+        };
+    }
+
+    public static GenreDTO ToDTO(this UserGenre genre)
+    {
+        return new GenreDTO()
+        {
+            id = genre.Id,
+            Name = genre.Genre.GenreName,
         };
     }
 }

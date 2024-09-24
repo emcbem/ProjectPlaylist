@@ -67,6 +67,6 @@ public class UserGenreService : IUserGenreService
         
         var usrGenres = await context.UserGenres.Where(x => x.UserId == usr.Id).ToListAsync();
 
-        return await usrGenres.Select(x => x.ToDTO()).ToListAsync();
+        return usrGenres.Select(x => x.ToDTO()).ToList();
     }
 }
