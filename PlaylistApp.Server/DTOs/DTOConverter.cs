@@ -13,10 +13,8 @@ public static class DTOConverter
             Id = game.Id,
             Title = game.Title,
             PublishDate = game.PublishDate,
-            AgeRating
-            = game.AgeRating,
-            CoverUrl
-            = game.CoverUrl,
+            AgeRating = game.AgeRating,
+            CoverUrl = game.CoverUrl,
             Description = game.Description,
             IdgbId = game.IdgbId,
 
@@ -93,9 +91,9 @@ public static class DTOConverter
 
     public static UserAchievementDTO ToDTO(this UserAchievement userAchievement)
     {
-        return new UserAchievementDTO() 
-        { 
-            Id = userAchievement.Id, 
+        return new UserAchievementDTO()
+        {
+            Id = userAchievement.Id,
             Achievement = userAchievement.Achievement.ToDTO(),
             User = userAchievement.User.ToDTO(),
             IsSelfSubmitted = userAchievement.IsSelfSubmitted,
@@ -191,12 +189,15 @@ public static class DTOConverter
         };
     }
 
-    public static GenreDTO ToDTO(this UserGenre genre)
+    public static CompanyDTO ToDTO(this Company company)
     {
-        return new GenreDTO()
+        return new CompanyDTO()
         {
-            id = genre.Id,
-            Name = genre.Genre.GenreName,
+            Id = company.Id,
+            StartDate = company.StartDate,
+            LogoURL = company.LogoUrl,
+            Name = company.CompanyName,
+            Slug = company.Slug,
         };
     }
 }

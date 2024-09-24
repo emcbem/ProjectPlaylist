@@ -8,4 +8,5 @@ public interface IGameService
     public Task<GameDTO> GetGameByID(int id);
     public Task<List<GameDTO>> GetGameByName(string name);
     public Task<GameDTO> GetGameByIGDB(int id);
+    public Task<List<GameDTO>> GetAllGamesByCompany(int companyId); 
 }

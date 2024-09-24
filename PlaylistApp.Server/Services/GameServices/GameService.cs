@@ -22,6 +22,24 @@ public class GameService : IGameService
         return games.Select(x => x.ToDTO()).ToList();
     }
 
+    public async Task<List<GameDTO>> GetAllGamesByCompany(int companyId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var games = await context.Games
+            .Where(x => x.InvolvedCompanies
+                .Where(x => x.CompanyId == companyId)
+                .Count() > 0)
+            .ToListAsync();
+
+        if (!games.Any())
+        {
+            return new List<GameDTO>();
+        }
+
+        return games.Select(x => x.ToDTO()).ToList();
+    }
+
     public async Task<GameDTO> GetGameByID(int id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
