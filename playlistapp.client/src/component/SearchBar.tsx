@@ -18,7 +18,7 @@ const SearchBar = () => {
         </svg>
 
         <input
-          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black rounded-lg pl-10 pr-3 py-2 ring-0 focus:ring-transparent focus:border-black"
+          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 focus:ring-transparent focus:border-black dark:focus:border-white"
           placeholder="Start your journey here..."
         />
       </div>

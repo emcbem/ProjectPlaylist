@@ -55,14 +55,14 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2">
       <Navbar />
-      <div className="flex text-8xl bg-white text-black justify-center text-center ">
+      <div className="flex text-8xl bg-white text-black justify-center text-center dark:bg-black dark:text-white">
         <div className="w-1/2 my-20 font-bold">
           Explore your gaming library like never before.
         </div>
       </div>
       <CardCarousel list={games} reverse={false} />
-      <CardCarousel list={games} reverse={true} /> 
-       <TempComponent />
+      <CardCarousel list={games} reverse={true} />
+      <TempComponent />
     </div>
   );
 }
