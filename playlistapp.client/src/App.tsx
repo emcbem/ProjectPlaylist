@@ -7,7 +7,6 @@ import LoginButton from "./Auth0/login";
 import CardCarousel from "./component/InfiniteCardScroll";
 import TempComponent from "./component/TempComponent";
 
-const URL = "https://localhost:7041";
 
 export interface Game {
   title: string;
@@ -17,9 +16,11 @@ export interface Game {
   coverUrl: string;
 }
 
+console.log(import.meta.env.VITE_URL)
+
 const fetchAllGames = async () => {
   try {
-    const response = await axios.get<Game[]>(`${URL}/game/getall`);
+    const response = await axios.get<Game[]>(`${import.meta.env.VITE_URL}/game/getall`);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch games:", error);
