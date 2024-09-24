@@ -181,4 +181,13 @@ public static class DTOConverter
             UserId = userPlatform.User.Guid,
         };
     }
+
+    public static GenreDTO ToDTO(this Genre genre)
+    {
+        return new GenreDTO()
+        {
+            Id = genre.Id,
+            Name = genre.GenreName,
+        };
+    }
 }
