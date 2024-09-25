@@ -62,11 +62,25 @@ public class UserGenreService : IUserGenreService
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        var usr = await context.UserAccounts.Where(x => x.Guid == id)
-            .FirstOrDefaultAsync() ?? throw new Exception("The user doesn't exist");
-        
-        var usrGenres = await context.UserGenres.Where(x => x.UserId == usr.Id).ToListAsync();
+        var usr = await context.UserAccounts
+            .Where(x => x.Guid == id)
+            .FirstOrDefaultAsync();
 
-        return usrGenres.Select(x => x.ToDTO()).ToList();
+        if (usr == null) 
+        {
+            return new List<GenreDTO>();
+        }
+        
+        var usrGenres = await context.UserGenres
+            .Where(x => x.UserId == usr.Id)
+            .ToListAsync();
+
+        if (!usrGenres.Any()) 
+        {
+            return new List<GenreDTO>(); 
+        }
+
+
+        return usrGenres.Select(x => x.Genre.ToDTO()).ToList();   
     }
 }
