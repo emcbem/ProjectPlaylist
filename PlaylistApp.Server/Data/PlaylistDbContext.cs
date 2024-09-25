@@ -59,9 +59,6 @@ public partial class PlaylistDbContext : DbContext
 
     public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Name=ConnectionStrings:ppdb");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Achievement>(entity =>

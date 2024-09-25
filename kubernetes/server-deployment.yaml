@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playlist-server
+  namespace: codebras
+  labels:
+    app: playlist-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: playlist-server
+  template:
+    metadata:
+      labels:
+        app: playlist-server
+    spec:
+      containers:
+      - name: server
+        image: codebras/playlistserver:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ConnectionStrings__ppdb
+          value: user id=postgres; password=postgres; server=playlist-db; database=playlistdb;
+        - name: allowAll
+          value: "true"
+        - name: clientUrl
+          value: https://projectplaylist.duckdns.org # Updated client URL

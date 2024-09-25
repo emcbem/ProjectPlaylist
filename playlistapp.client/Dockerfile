@@ -3,6 +3,9 @@ WORKDIR /app
 COPY package.json . 
 RUN npm i
 COPY . .
+ARG VITE_URL
+ENV VITE_URL $VITE_URL
+
 RUN npm run build
 
 FROM nginx:1.27.0
