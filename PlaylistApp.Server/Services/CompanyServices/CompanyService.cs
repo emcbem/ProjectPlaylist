@@ -32,7 +32,9 @@ public class CompanyService : ICompanyService
 
         var companies = await context.Companies
             .Include(x => x.InvolvedCompanies)
-            .Where(x => context.InvolvedCompanies.Where(y => y.GameId == gameId).Count() > 0)
+            .Where(x => x.InvolvedCompanies
+                .Where(y => y.GameId == gameId)
+                .Count() > 0)
             .ToListAsync();
 
         if (!companies.Any())
