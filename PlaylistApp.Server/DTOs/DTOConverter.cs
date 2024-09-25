@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using PlaylistApp.Server.Data;
+using PlaylistApp.Server.Services.GameReviewService;
 
 namespace PlaylistApp.Server.DTOs;
 
@@ -12,10 +13,8 @@ public static class DTOConverter
             Id = game.Id,
             Title = game.Title,
             PublishDate = game.PublishDate,
-            AgeRating
-            = game.AgeRating,
-            CoverUrl
-            = game.CoverUrl,
+            AgeRating = game.AgeRating,
+            CoverUrl = game.CoverUrl,
             Description = game.Description,
             IdgbId = game.IdgbId,
 
@@ -92,9 +91,9 @@ public static class DTOConverter
 
     public static UserAchievementDTO ToDTO(this UserAchievement userAchievement)
     {
-        return new UserAchievementDTO() 
-        { 
-            Id = userAchievement.Id, 
+        return new UserAchievementDTO()
+        {
+            Id = userAchievement.Id,
             Achievement = userAchievement.Achievement.ToDTO(),
             User = userAchievement.User.ToDTO(),
             IsSelfSubmitted = userAchievement.IsSelfSubmitted,
@@ -130,6 +129,75 @@ public static class DTOConverter
             IsCompleted = goal.IsComplete,
             IsCurrent = goal.IsCurrent,
             User = goal.User.ToDTO(),
+        };
+    }
+
+    public static GameReviewDTO ToDTO(this GameReview gameReview)
+    {
+        return new GameReviewDTO()
+        {
+            Dislikes = gameReview.ReviewLikes.Where(x => x.IsLike == false).Count(),
+            PublishDate = DateOnly.FromDateTime(DateTime.Today),
+            Likes = gameReview.ReviewLikes.Where(x => x.IsLike == true).Count(),
+            Rating = gameReview.Rating,
+            Text = gameReview.Review,
+            LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
+        };
+    }
+
+    public static ListDTO ToDTO(this List list)
+    {
+        return new ListDTO()
+        {
+            CreationDate = list.DateMade,
+            IsPublic = list.IsPublic,
+            Name = list.ListName,
+            OwnerName = list.User.Username,
+            Id = list.Id,
+            Games = list.ListGames.Select(x => x.ToDTO()).ToList(),
+        };
+    }
+
+    public static ListGameDTO ToDTO(this ListGame listGame)
+    {
+        return new ListGameDTO()
+        {
+            DateAdded = listGame.DateAdded,
+            GameId = listGame.GameId,
+            Id = listGame.Id,
+            ListId = listGame.ListId,
+        };
+    }
+
+    public static UserPlatformDTO ToDTO(this UserPlatform userPlatform)
+    {
+        return new UserPlatformDTO()
+        {
+            GamerTag = userPlatform.Gamertag,
+            Id = userPlatform.Id,
+            PlatformId = userPlatform.PlatformId,
+            UserId = userPlatform.User.Guid,
+        };
+    }
+
+    public static GenreDTO ToDTO(this Genre genre)
+    {
+        return new GenreDTO()
+        {
+            id = genre.Id,
+            Name = genre.GenreName,
+        };
+    }
+
+    public static CompanyDTO ToDTO(this Company company)
+    {
+        return new CompanyDTO()
+        {
+            Id = company.Id,
+            StartDate = company.StartDate,
+            LogoURL = company.LogoUrl,
+            Name = company.CompanyName,
+            Slug = company.Slug,
         };
     }
 }

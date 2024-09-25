@@ -17,7 +17,7 @@ const GameCard: React.FC<props> = ({
   return (
     <div className="flex flex-col rounded-lg bg-[#D9D9D9] md:max-w-sm md:flex-col w-full">
       <img
-        className="w-40 h-64 object-cover rounded-lg "
+        className="lg:w-40 lg:h-64 sm:w-32 sm:h-48 w-24 h-40 object-cover rounded-lg "
         src={cover}
         alt={`Game Cover ${index}`}
       />

@@ -15,65 +15,69 @@ const Profile: React.FC = () => {
     return <div>Loading ...</div>;
   }
 
+  console.log(user);
+
   return (
     isAuthenticated &&
     user && (
-      <div className="flex flex-row flex-shrink-0 h-14 w-14">
-        <Menu>
-          <MenuHandler>
-            <img
-              src={user.picture ? user.picture : UserPFP}
-              alt={user.name}
-              className="rounded-full"
-            />
-          </MenuHandler>
-          <MenuList
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-          >
-            <MenuItem
+      <div className="lg:w-[213.69px] flex justify-end">
+        <div className="flex flex-row flex-shrink-0 h-14 w-14">
+          <Menu>
+            <MenuHandler>
+              <img
+                src={user.picture ? user.picture : UserPFP}
+                alt={user.name}
+                className="rounded-full"
+              />
+            </MenuHandler>
+            <MenuList
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              Welcome back, {user.name}!
-            </MenuItem>
+              <MenuItem
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                Welcome back, {user.name}!
+              </MenuItem>
 
-            <hr className="my-3" />
-            <MenuItem
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-              className="font-bold"
-            >
-              Account
-            </MenuItem>
+              <hr className="my-3" />
+              <MenuItem
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+                className="font-bold"
+              >
+                Account
+              </MenuItem>
 
-            <hr className="my-3" />
-            <MenuItem
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-              className="font-bold"
-            >
-              My Library
-            </MenuItem>
+              <hr className="my-3" />
+              <MenuItem
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+                className="font-bold"
+              >
+                My Library
+              </MenuItem>
 
-            <hr className="my-3" />
-            <MenuItem
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-              className="font-bold"
-            >
-              Settings
-            </MenuItem>
+              <hr className="my-3" />
+              <MenuItem
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+                className="font-bold"
+              >
+                Settings
+              </MenuItem>
 
-            <hr className="my-3" />
-            <LogoutButton />
-          </MenuList>
-        </Menu>
+              <hr className="my-3" />
+              <LogoutButton />
+            </MenuList>
+          </Menu>
+        </div>
       </div>
     )
   );

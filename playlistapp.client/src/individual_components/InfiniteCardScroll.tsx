@@ -25,11 +25,10 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full bg-white dark:bg-black inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,white_0,_black_128px,_black_calc(100%-128px),white_100%)] p-8"
+      className="w-full h-full bg-white dark:bg-black inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,white_0,_black_128px,_black_calc(100%-128px),white_100%)] lg:p-8 sm:p-6 p-4"
     >
-
       <ul
-        className={`flex items-center justify-center md:justify-start [&_li]:mx-16 [&_img]:max-w-none  ${
+        className={`flex items-center justify-center md:justify-start lg:[&_li]:mx-16 md:[&_li]:mx-12 [&_li]:mx-8 [&_img]:max-w-none  ${
           reverse
             ? `animate-infinite-scroll-reverse`
             : `animate-infinite-scroll`
@@ -52,7 +51,7 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
         ))}
       </ul>
       <ul
-        className={`flex items-center justify-center md:justify-start [&_li]:mx-16 [&_img]:max-w-none ${
+        className={`flex items-center justify-center md:justify-start lg:[&_li]:mx-16 md:[&_li]:mx-12 [&_li]:mx-8 [&_img]:max-w-none ${
           reverse
             ? `animate-infinite-scroll-reverse`
             : `animate-infinite-scroll`

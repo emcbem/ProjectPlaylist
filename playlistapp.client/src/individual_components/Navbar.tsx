@@ -1,21 +1,34 @@
 import React from "react";
 import PPLogoLight from "../assets/PPLogoLight.svg";
 import PPLogoDark from "../assets/PPLogoDark.svg";
+import PPDiamond from "../assets/PPDiamond.svg";
 import LoginButton from "../Auth0/login";
 import Profile from "../Auth0/profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import SearchBar from "./SearchBar";
-
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
 
   return (
     <div className="bg-white dark:bg-black">
-      <nav className="bg-white dark:bg-black w-full flex items-center px-8 pt-8 h-20 mb-2">
+      <nav className="bg-white dark:bg-black w-full flex items-center sm:px-8 px-4 pt-8 h-20 mb-2">
         <div className="flex-shrink-0">
           <a href="/">
-            <img className="h-14 block dark:hidden" src={PPLogoLight} alt="PP Logo" />
-            <img className="h-14 hidden dark:block" src={PPLogoDark} alt="PP Logo"  />
+            <img
+              className="lg:h-14 md:h-12 sm:h-10 h-6 lg:block dark:hidden hidden"
+              src={PPLogoLight}
+              alt="PP Logo"
+            />
+            <img
+              className="lg:h-14 md:h-12 sm:h-10 h-6 hidden lg:dark:block"
+              src={PPLogoDark}
+              alt="PP Logo"
+            />
+            <img
+              className="h-14 lg:hidden block"
+              src={PPDiamond}
+              alt="PP Diamond"
+            />
           </a>
         </div>
 

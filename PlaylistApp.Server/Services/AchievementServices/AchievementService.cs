@@ -18,10 +18,14 @@ public class AchievementService : IAchievementService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var result = await context.Achievements
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
+             .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
             .Where(x => x.Id == id)
             .Select(x => x.ToDTO())
             .ToListAsync();
-        
+
         return result;
     }
 
@@ -30,6 +34,10 @@ public class AchievementService : IAchievementService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var result = await context.Achievements
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
             .Where(x => x.Id == id)
             .Select(x => x.ToDTO())
             .FirstOrDefaultAsync();
@@ -47,8 +55,17 @@ public class AchievementService : IAchievementService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var result = await context.Achievements
+             .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
             .Where(x => x.AchievementName.Contains(name))
             .ToListAsync();
+
+        if (!result.Any())
+        {
+            return new List<AchievementDTO>();
+        }
 
         return result.Select(x => x.ToDTO()).ToList();
     }
