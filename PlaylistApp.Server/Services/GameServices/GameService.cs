@@ -24,6 +24,7 @@ public class GameService : IGameService
 
     public async Task<List<GameDTO>> GetAllGamesByCompany(int companyId)
     {
+        // TODO: Come back once there is involved companies in the database
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var games = await context.Games
