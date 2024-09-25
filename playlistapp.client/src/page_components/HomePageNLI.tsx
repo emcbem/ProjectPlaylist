@@ -4,6 +4,7 @@ import HorizontalRule from "../individual_components/HorizontalRule";
 import CardCarousel from "../individual_components/InfiniteCardScroll";
 import { Game } from "../App";
 import ExpandingColumns from "../individual_components/Platforms";
+import { Link } from "react-router-dom";
 
 interface props {
   allGames: Game[];
@@ -17,7 +18,9 @@ const HomePageNLI: React.FC<props> = ({ allGames }) => {
           <div className="md:w-1/2 sm:w-3/4 w-5/6 sm:my-20 my-10 font-bold">
             Explore your gaming library like never before.
           </div>
+          
         </div>
+        
         <CardCarousel list={allGames} reverse={false} />
         <CardCarousel list={allGames} reverse={true} />
         <HorizontalRule />
@@ -25,6 +28,9 @@ const HomePageNLI: React.FC<props> = ({ allGames }) => {
           <div className="md:w-1/2 sm:w-3/4 w-5/6 font-bold">Connect all of your platforms.</div>
         </div>
         <ExpandingColumns />
+        <Link to="/search">
+            <button className="text-white">Search Page</button>
+          </Link>
       </div>
     </>
   );

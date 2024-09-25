@@ -6,7 +6,6 @@ import LoginButton from "../Auth0/login";
 import Profile from "../Auth0/profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import SearchBar from "./SearchBar";
-
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
 
