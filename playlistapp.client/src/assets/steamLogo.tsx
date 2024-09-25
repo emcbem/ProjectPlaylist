@@ -1,7 +1,7 @@
 export const SteamIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="transition-colors duration-300 fill-current group-hover:fill-[#FFFFFF] 2xl:w-40 xl:w-32 lg:w-24 md:w-16 sm:w-8 2xl:h-40 xl:h-32 lg:h-24 md:h-16 sm:h-8"
+    className="transition-colors duration-300 fill-current group-hover:fill-[#FFFFFF] 2xl:w-40 xl:w-32 lg:w-24 2xl:h-40 xl:h-32 lg:h-24 h-14"
     version="1.1"
     viewBox="1.03 1 29.94 29.99"
   >
