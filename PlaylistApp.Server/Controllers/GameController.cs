@@ -22,6 +22,7 @@ public class GameController : Controller
     }
 
     [HttpGet("getallbycompany")]
+    // TODO: Come back once there is involved companies in the database
     public async Task<List<GameDTO>> GetAllGamesByCompany(int companyId)
     {
         return await gameService.GetAllGamesByCompany(companyId);
