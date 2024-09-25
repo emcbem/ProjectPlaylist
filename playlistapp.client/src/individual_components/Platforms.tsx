@@ -1,4 +1,3 @@
-import React from "react";
 import { PS5Icon } from "../assets/psLogo";
 import { XboxIcon } from "../assets/xboxLogo";
 import { SwitchIcon } from "../assets/swichLogo";

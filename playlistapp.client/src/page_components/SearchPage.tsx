@@ -1,6 +1,4 @@
 import React from 'react'
-import { Game } from '../App';
-
 // interface props {
 //     allGames: Game[];
 // }
