@@ -16,7 +16,6 @@ public class AchievementController : Controller
     }
 
     //TODO: Come back and test once there are achievements in the database
-
     [HttpGet("getachievementsbygame")]
     public async Task<List<AchievementDTO>> GetAchievementsByGame(int gameId)
     {
