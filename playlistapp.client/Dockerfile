@@ -1,7 +1,7 @@
 FROM node:20-alpine as builder
 WORKDIR /app
 COPY package.json . 
-RUN npm i
+RUN NODE_ENV=development npm i
 COPY . .
 ARG VITE_URL
 ENV VITE_URL $VITE_URL
