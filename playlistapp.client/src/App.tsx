@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import Navbar from "./component/Navbar";
+import Navbar from "./individual_components/Navbar";
 import axios from "axios";
-import Profile from "./Auth0/profile";
 import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "./Auth0/login";
-import CardCarousel from "./component/InfiniteCardScroll";
-import TempComponent from "./component/TempComponent";
+import HomePageNLI from "./page_components/HomePageNLI";
+
 
 const URL = "https://localhost:7041";
 
@@ -54,14 +52,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2">
       <Navbar />
-      <div className="flex text-8xl bg-white text-black justify-center text-center dark:bg-black dark:text-white">
-        <div className="w-1/2 my-20 font-bold">
-          Explore your gaming library like never before.
-        </div>
-      </div>
-      <CardCarousel list={games} reverse={false} />
-      <CardCarousel list={games} reverse={true} />
-      <TempComponent />
+      <HomePageNLI allGames={games} />
     </div>
   );
 }
