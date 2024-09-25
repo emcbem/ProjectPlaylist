@@ -16,16 +16,7 @@ public class UserGameService : IUserGameService
     }
     public async Task<int> AddUserGame(AddUserGameRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
-
-        var platformGame = await context.PlatformGames
-            .Where(x => x.Id == request.PlatformGameId)
-            .FirstOrDefaultAsync();
-
-        if (platformGame == null)
-        {
-            return 0;
-        }
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var User = await context.UserAccounts
             .Where(x => x.Guid == request.UserId)
@@ -39,9 +30,7 @@ public class UserGameService : IUserGameService
         var newUserGame = new UserGame()
         {
             DateAdded = DateTime.UtcNow,
-            PlatformGame = platformGame,
             PlatformGameId = request.PlatformGameId,
-            User = User,
             UserId = User.Id,
             TimePlayed = 0,
         };
@@ -53,7 +42,7 @@ public class UserGameService : IUserGameService
 
     public async Task<UserGameDTO> GetUserGameById(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
             .Where(x => x.Id == id)
@@ -68,7 +57,7 @@ public class UserGameService : IUserGameService
 
     public async Task<List<UserGameDTO>> GetUserGameByUser(Guid userId)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var User = await context.UserAccounts
             .Where(x => x.Guid == userId)
@@ -93,7 +82,7 @@ public class UserGameService : IUserGameService
 
     public async Task<bool> RemoveUserGame(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
             .Where(x => x.Id == id)
@@ -111,7 +100,7 @@ public class UserGameService : IUserGameService
 
     public async Task<UserGameDTO> UpdateUserGame(UpdateUserGameRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
             .Where(x => x.Id == request.Id)

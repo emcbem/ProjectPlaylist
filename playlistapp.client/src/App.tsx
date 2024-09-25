@@ -15,9 +15,11 @@ export interface Game {
   coverUrl: string;
 }
 
+console.log(import.meta.env.VITE_URL)
+
 const fetchAllGames = async () => {
   try {
-    const response = await axios.get<Game[]>(`${URL}/game/getall`);
+    const response = await axios.get<Game[]>(`${import.meta.env.VITE_URL}/game/getall`);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch games:", error);
@@ -29,7 +31,7 @@ function App() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated } = useAuth0();
+  //const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const getGames = async () => {

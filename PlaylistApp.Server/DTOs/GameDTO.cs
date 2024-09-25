@@ -11,7 +11,7 @@ public class GameDTO
     public DateTime? PublishDate { get; set; }
     public string? AgeRating { get; set; }
     public int? IdgbId { get; set; }
-    //Add list of companies
+    public List<CompanyDTO>? Companies { get; set; }
     public int? HoursPlayed { get; set; }
     public int? TotalOwned { get; set; }
 

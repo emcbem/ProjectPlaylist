@@ -17,7 +17,7 @@ public class PlatformGameService : IPlatformGameService
 
     public async Task<List<PlatformGameDTO>> GetAllPlatformGames(PlatformGameRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var platformGames =  await context.PlatformGames
             .Where(x => x.Game.Title.ToLower().Contains(request.Filter.ToLower()))

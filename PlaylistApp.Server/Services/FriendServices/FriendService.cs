@@ -16,7 +16,8 @@ public class FriendService : IFriendService
     }
     public async Task<bool> AcceptFriend(AcceptFriendRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
         var user = await context.Friends
             .Where(x => x.Id == request.FriendId)
             .FirstOrDefaultAsync();
@@ -35,7 +36,7 @@ public class FriendService : IFriendService
 
     public async Task<bool> AddFriend(AddFriendRequest request)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var baseUser = await context.UserAccounts
             .Where(x => x.Guid == request.BaseUserId)
@@ -72,7 +73,7 @@ public class FriendService : IFriendService
 
     public async Task<List<UserDTO>> GetAllFriendsByBaseId(Guid userId)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friends = await context.Friends
             .Include(x => x.Base)
@@ -103,7 +104,7 @@ public class FriendService : IFriendService
 
     public async Task<FriendDTO> GetFriendById(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = await context.Friends
             .Where(x => x.Id == id)
@@ -119,7 +120,7 @@ public class FriendService : IFriendService
 
     public async Task<bool> RemoveFriend(int id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = context.Friends.Where(x => x.Id == id);
 
