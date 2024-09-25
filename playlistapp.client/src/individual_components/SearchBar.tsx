@@ -2,12 +2,12 @@
 const SearchBar = () => {
   return (
     <div className="flex-grow mx-8 flex relative justify-center">
-      <div className="w-3/4 relative flex items-center">
+      <div className="sm:w-3/4 w-full relative flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="absolute w-6 h-6 top-2.5 left-2.5 text-slate-600"
+          className="absolute w-6 h-6 sm:top-2.5 sm:left-2.5 left-1 text-slate-600"
         >
           <path
             fillRule="evenodd"
@@ -17,8 +17,8 @@ const SearchBar = () => {
         </svg>
 
         <input
-          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 focus:ring-transparent focus:border-black dark:focus:border-white"
-          placeholder="Start your journey here..."
+          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white"
+          placeholder=""
         />
       </div>
     </div>

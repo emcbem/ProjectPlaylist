@@ -3,6 +3,8 @@ import Navbar from "./individual_components/Navbar";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import HomePageNLI from "./page_components/HomePageNLI";
+import { Route, Routes } from "react-router-dom";
+import SearchPage from "./page_components/SearchPage";
 
 
 const URL = "https://localhost:7041";
@@ -54,7 +56,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2">
       <Navbar />
-      <HomePageNLI allGames={games} />
+      <Routes>
+        <Route path="/" element={<HomePageNLI allGames={games} />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
     </div>
   );
 }
