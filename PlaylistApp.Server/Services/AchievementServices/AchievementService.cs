@@ -50,6 +50,11 @@ public class AchievementService : IAchievementService
             .Where(x => x.AchievementName.Contains(name))
             .ToListAsync();
 
+        if (!result.Any())
+        {
+            return new List<AchievementDTO>();
+        }
+
         return result.Select(x => x.ToDTO()).ToList();
     }
 }
