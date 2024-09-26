@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import child_process from "child_process";
 import { env } from "process";
+import dotenv from 'dotenv';
 
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== ""
@@ -44,8 +45,9 @@ const target = env.ASPNETCORE_HTTPS_PORT
   : "https://localhost:7041";
 
 // https://vitejs.dev/config/
-
+dotenv.config();
 const isNoCert = process.env.VITE_CERT === "true";
+console.log(isNoCert)
 
 export default defineConfig({
   plugins: [plugin()],

@@ -15,5 +15,5 @@ spec:
             solverName: duckdns
             config:
               tokenSecretRef:
-                name: ethane-duckdns-token
+                name: duckdns-token
                 key: token

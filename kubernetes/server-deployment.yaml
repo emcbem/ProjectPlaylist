@@ -22,7 +22,7 @@ spec:
         - containerPort: 8080
         env:
         - name: ConnectionStrings__ppdb
-          value: user id=postgres; password=postgres; server=playlist-db; database=playlistdb;
+          value: user id= postgres; password= postgres; server= playlist-db; database= postgres;
         - name: allowAll
           value: "true"
         - name: clientUrl
