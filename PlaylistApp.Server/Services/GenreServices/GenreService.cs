@@ -13,7 +13,7 @@ public class GenreService : IGenreService
         this.dbContextFactory = dbContextFactory;
     }
 
-    public async Task<List<GenreDTO>> GetAll()
+    public async Task<List<GenreDTO>> GetAllGenres()
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -27,7 +27,7 @@ public class GenreService : IGenreService
         return allGenres.Select(x => x.ToDTO()).ToList();   
     }
 
-    public async Task<GenreDTO> GetById(int GenreId)
+    public async Task<GenreDTO> GetGenreById(int GenreId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -43,19 +43,19 @@ public class GenreService : IGenreService
         return genre.ToDTO();
     }
 
-    public async Task<List<GenreDTO>> GetByname(string GenreName)
+    public async Task<GenreDTO> GetGenreByName(string GenreName)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var genre = await context.Genres
             .Where(x => x.GenreName == GenreName)
-            .ToListAsync();
+            .FirstOrDefaultAsync();
 
-        if (!genre.Any())
+        if (genre == null)
         {
-            return new List<GenreDTO>();
+            return new GenreDTO();
         }
 
-        return genre.Select(x => x.ToDTO()).ToList();  
+        return genre.ToDTO(); 
     }
 }
