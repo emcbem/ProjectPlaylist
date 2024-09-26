@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-prod
-  namespace: codebras  # Specify the namespace here
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -11,7 +10,10 @@ spec:
       name: letsencrypt-prod-key
     solvers:
     - dns01:
-        duckdns:
-          tokenSecretRef:
-            name: duckdns-secret  # Reference the secret containing your token
-            key: token
+        webhook:
+            groupName: acme.codebras.com
+            solverName: duckdns
+            config:
+              tokenSecretRef:
+                name: ethane-duckdns-token
+                key: token
