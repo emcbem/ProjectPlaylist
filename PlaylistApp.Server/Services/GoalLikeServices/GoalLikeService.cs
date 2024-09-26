@@ -30,9 +30,10 @@ public class GoalLikeService : IGoalLikeService
 
         GoalLike newGoalLike = new GoalLike()
         {
-            DateLiked = DateTime.Today,
+            DateLiked = DateTime.UtcNow,
             GoalId = request.GoalId,
-            UserId = user.Id
+            UserId = user.Id,
+            IsLike = request.IsLike
         };
 
         await context.AddAsync(newGoalLike);
@@ -54,6 +55,11 @@ public class GoalLikeService : IGoalLikeService
         }
 
         var goalLikes = await context.GoalLikes
+            .Include(x => x.User)
+            .Include(x => x.Goal)
+                .ThenInclude(x => x.Achievement)
+                    .ThenInclude(x => x.PlatformGame)
+                        .ThenInclude(x => x.Game)
             .Where(x => x.UserId == user.Id)
             .ToListAsync();
 
