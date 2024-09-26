@@ -6,7 +6,7 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink" 
 	width="600" 
 	height="600"
-	fill="white">
+	fill="black">
 
   <title>Abstract user icon</title>
 
@@ -16,7 +16,7 @@
     </clipPath>
   </defs>
   
-  <circle cx="300" cy="300" r="280" fill="black" />
+  <circle cx="300" cy="300" r="280" fill="white" />
   <circle cx="300" cy="230" r="100" />
   <circle cx="300" cy="550" r="190" clip-path="url(#circular-border)" />
 </svg>

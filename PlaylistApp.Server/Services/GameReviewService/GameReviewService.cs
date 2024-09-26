@@ -20,7 +20,7 @@ public class GameReviewService : IGameReviewService
 
         GameReview newGameReview = new GameReview()
         {
-            PublishDate = DateTime.Now,
+            PublishDate = DateTime.UtcNow,
             GameId = request.GameId,
             Rating = request.Rating,
             Review = request.Text,
@@ -32,12 +32,15 @@ public class GameReviewService : IGameReviewService
         return newGameReview.Id;
     }
 
-    public async Task<bool> DeleteGameReview(int GameReviewId)
+    public async Task<bool> DeleteGameReview(int gameReviewId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var gameReview = await context.GameReviews
-            .Where(x => x.Id == GameReviewId)
+            .Include(x => x.Game)
+            .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
+            .Where(x => x.Id == gameReviewId)
             .FirstOrDefaultAsync();
 
         if (gameReview == null)
@@ -50,12 +53,15 @@ public class GameReviewService : IGameReviewService
         return true;
     }
 
-    public async Task<List<GameReviewDTO>> GetAllGameReivewByGame(int GameId)
+    public async Task<List<GameReviewDTO>> GetAllGameReivewByGame(int gameId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var gameReviews = await context.GameReviews
-            .Where(x => x.GameId == GameId)
+            .Include(x => x.Game)
+            .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
+            .Where(x => x.GameId == gameId)
             .ToListAsync();
 
         if (!gameReviews.Any())
@@ -66,12 +72,15 @@ public class GameReviewService : IGameReviewService
         return gameReviews.Select(x => x.ToDTO()).ToList();
     }
 
-    public async Task<GameReviewDTO> GetGameReviewById(int GameReviewId)
+    public async Task<GameReviewDTO> GetGameReviewById(int gameReviewId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var gameReview = await context.GameReviews
-            .Where(x => x.Id == GameReviewId)
+            .Include(x => x.Game)
+            .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
+            .Where(x => x.Id == gameReviewId)
             .FirstOrDefaultAsync();
 
         if (gameReview == null)
@@ -87,6 +96,9 @@ public class GameReviewService : IGameReviewService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var gameReview = await context.GameReviews
+            .Include(x => x.Game)
+            .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.Id == request.GameReivewId)
             .FirstOrDefaultAsync();
 
@@ -95,6 +107,7 @@ public class GameReviewService : IGameReviewService
             return new GameReviewDTO();
         }
 
+        gameReview.LastEditDate = DateTime.UtcNow;
         context.Update(gameReview);
         await context.SaveChangesAsync();
         return gameReview.ToDTO();
