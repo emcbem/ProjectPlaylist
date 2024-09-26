@@ -45,7 +45,7 @@ const target = env.ASPNETCORE_HTTPS_PORT
 
 // https://vitejs.dev/config/
 
-const isNoCert = process.env.VITE_NO_CERT === "true";
+const isNoCert = process.env.VITE_CERT === "true";
 
 export default defineConfig({
   plugins: [plugin()],
@@ -63,10 +63,10 @@ export default defineConfig({
     },
     port: 5174,
     https: isNoCert
-      ? undefined
-      : {
+      ? {
           key: fs.readFileSync(keyFilePath),
           cert: fs.readFileSync(certFilePath),
-        },
+        }
+      : undefined,
   },
 });
