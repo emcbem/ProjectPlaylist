@@ -29,6 +29,7 @@ public class FriendService : IFriendService
 
         user.IsAccepted = true;
         user.AcceptedDate = DateTime.UtcNow;
+
         context.Friends.Update(user);
         await context.SaveChangesAsync();
 
