@@ -4,6 +4,7 @@ COPY package.json .
 RUN NODE_ENV=development npm i
 COPY . .
 ARG VITE_URL
+ARG VITE_NO_CERT
 ENV VITE_URL $VITE_URL
 
 RUN npm run build
