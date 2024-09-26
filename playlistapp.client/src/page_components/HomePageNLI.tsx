@@ -1,5 +1,4 @@
 import React from "react";
-import TempComponent from "../individual_components/TempComponent";
 import HorizontalRule from "../individual_components/HorizontalRule";
 import CardCarousel from "../individual_components/InfiniteCardScroll";
 import { Game } from "../App";

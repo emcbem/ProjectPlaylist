@@ -31,7 +31,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration["ppdb"]));
+builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration.GetConnectionString("ppdb")));
 
 builder.Services.AddSingleton<IAchievementService, AchievementService>();
 builder.Services.AddSingleton<ICompanyService, CompanyService>();
@@ -52,7 +52,6 @@ builder.Services.AddSingleton<IUserGameService, UserGameService>();
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();
 builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 builder.Services.AddSingleton<IUserService, UserService>();
-
 builder.Services.AddSingleton< IGDBGameService>();
 builder.Services.AddSingleton<IGDBGenreService>();
 builder.Services.AddSingleton<IGDBCompanyService>();
@@ -65,32 +64,36 @@ var igdb_client_secret = builder.Configuration["Client-Secret"];
 
 builder.Services.AddSingleton(new IGDBClient(igdb_client_id, igdb_client_secret));
 
+
+
+bool allowAll = builder.Configuration["allowAll"] == "true";
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("https://localhost:5174")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+            if (allowAll)
+            {
+                policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            }
+            else
+            {
+                policy.WithOrigins("https://localhost:5174")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            }
         });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin2",
-        policy =>
-        {
-            policy.WithOrigins("https://localhost:5173")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
-});
+
+
 
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
-app.UseCors("AllowSpecificOrigin2");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
