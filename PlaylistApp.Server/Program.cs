@@ -59,8 +59,8 @@ builder.Services.AddSingleton<IGDBCompanyService>();
 
 
 
-var igdb_client_id = builder.Configuration["Client-ID"];
-var igdb_client_secret = builder.Configuration["Client-Secret"];
+var igdb_client_id = builder.Configuration.GetValue<string>("Client-ID", "");
+var igdb_client_secret = builder.Configuration.GetValue<string>("Client-Secret", "");
 
 builder.Services.AddSingleton(new IGDBClient(igdb_client_id, igdb_client_secret));
 
