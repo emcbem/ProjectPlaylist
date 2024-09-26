@@ -17,7 +17,6 @@ public static class DTOConverter
             CoverUrl = game.CoverUrl,
             Description = game.Description,
             IdgbId = game.IdgbId,
-
             //TODO: Calculate hours plays
             //TODO: Calculate total total owned
 
@@ -142,6 +141,8 @@ public static class DTOConverter
             Rating = gameReview.Rating,
             Text = gameReview.Review,
             LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
+            Game = gameReview.Game.ToDTO(),
+            User = gameReview.User.ToDTO()
         };
     }
 
