@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: playlist-client
+  namespace: codebras
+spec:
+  selector:
+    app: playlist-client
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

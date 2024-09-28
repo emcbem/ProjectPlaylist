@@ -28,6 +28,8 @@ public class FriendService : IFriendService
         }
 
         user.IsAccepted = true;
+        user.AcceptedDate = DateTime.UtcNow;
+
         context.Friends.Update(user);
         await context.SaveChangesAsync();
 
@@ -58,12 +60,12 @@ public class FriendService : IFriendService
 
         var newFriend = new Friend()
         {
-            AcceptedDate = DateTime.Now,
+            AcceptedDate = DateTime.UtcNow,
             Base = baseUser,
             BaseId = baseUser.Id,
             Recieved = recievingUser,
             RecievedId = recievingUser.Id,
-            IsAccepted = true,
+            IsAccepted = false,
         };
 
         await context.Friends.AddAsync(newFriend);
@@ -77,26 +79,27 @@ public class FriendService : IFriendService
 
         var friends = await context.Friends
             .Include(x => x.Base)
+            .Include(x => x.Recieved)
             .Where(x => x.Base.Guid == userId)
             .ToListAsync();
 
-        if (friends is null)
+        if (!friends.Any())
         {
             return new List<UserDTO>();
         }
 
-        var friendDTOs = friends.Select(x => x.ToDTO()).ToList();
+        var friendDTOs = friends.Select(x => x.Recieved.ToDTO()).ToList();
 
         var userDTOs = friendDTOs.Select(x => new UserDTO
         {
-            Id = x.BaseUser!.Id,
-            Bio = x.BaseUser.Bio,
-            Strikes = x.BaseUser.Strikes,
-            AuthID = x.BaseUser.AuthID,
-            CreationDate = x.BaseUser.CreationDate,
-            ProfileURL = x.BaseUser.ProfileURL,
-            Username = x.BaseUser.Username,
-            XP = x.BaseUser.XP,
+            Id = x.Id,
+            AuthID = x.AuthID,
+            CreationDate = x.CreationDate,
+            Bio = x.Bio,
+            ProfileURL = x.ProfileURL,
+            Strikes = x.Strikes,
+            Username = x.Username,
+            XP = x.XP,  
         }).ToList();
 
         return userDTOs;
@@ -107,6 +110,8 @@ public class FriendService : IFriendService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -122,7 +127,11 @@ public class FriendService : IFriendService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var friend = context.Friends.Where(x => x.Id == id);
+        var friend = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
 
         if (friend == null)
         {

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playlist-client
+  namespace: codebras
+  labels:
+    app: playlist-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: playlist-client
+  template:
+    metadata:
+      labels:
+        app: playlist-client
+    spec:
+      containers:
+      - name: client
+        image: codebras/playlistclient:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: VITE_AUTH0_DOMAIN
+          value: dev-hto6puiswhque3fr.us.auth0.com
+        - name: VITE_AUTH0_CLIENT_ID
+          value: ubMKeoY2RUXas6SYMEwlzoX30ByMxpwt
+        - name: VITE_URL
+          value: https://api.projectplaylist.duckdns.org 

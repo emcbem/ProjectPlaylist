@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgdata-pvc
+  namespace: codebras
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # Should match the PV size
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playlist-db
+  namespace: codebras
+  labels:
+    app: playlist-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: playlist-db
+  template:
+    metadata:
+      labels:
+        app: playlist-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres # Replace with a secure password in production
+        - name: POSTGRES_DB
+          value: playlistdb
+        volumeMounts:
+        - name: pgdata
+          mountPath: /var/lib/postgresql/data
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: pgdata-pvc # Reference the PVC defined above
+      - name: init-script
+        configMap:
+          name: playlist-pg-init

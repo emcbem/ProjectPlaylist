@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import Navbar from "./individual_components/Navbar";
 import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
 import HomePageNLI from "./page_components/HomePageNLI";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 
 
-const URL = "https://localhost:7041";
 
 export interface Game {
   title: string;
