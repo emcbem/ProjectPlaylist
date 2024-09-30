@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TwitchIconCustom } from '../assets/twitchLogoCustom';
+import { TwitchIconCustom } from '../assets/TwitchLogoCustom';
 import { XboxIconCustom } from '../assets/xboxLogoCustom';
 import { PlusIcon } from '../assets/plusIcon';
 import { Link } from 'react-router-dom';
@@ -11,9 +11,14 @@ import { Link } from 'react-router-dom';
 const SearchPage: React.FC = ({ }) => {
     const iconsize = "30";
     const [isVisible, setIsVisible] = useState(false);
+    const [dropDownIsVisible, setdropDownIsVisible] = useState(false)
     const toggleDiv = () => {
         setIsVisible(!isVisible);
     };
+
+    const showToggle = () => {
+        setdropDownIsVisible(!dropDownIsVisible);
+    }
     return (
         <>
             <div className="min-h-screen bg-white">
@@ -59,30 +64,76 @@ const SearchPage: React.FC = ({ }) => {
 
 
                     <div className="col-span-3 m-5 w-full h-full p-5">
+
+                        <button id="dropdownDefaultButton" onClick={showToggle} data-dropdown-toggle="dropdown" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                        </button>
+
+                        <div id="dropdown" className={`${dropDownIsVisible ? `block ` : `hidden `} z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
+                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                <li>
+                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+
                         <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-2">
-                            <Link to="/view-game/1">
-                                <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-3 m-5">
-                                    <div className="w-full h-full col-span-1">
-                                        <img className="img img-fluid" src="https://images.igdb.com/igdb/image/upload/t_cover_big/co721v.webp" />
-                                    </div>
-                                    <div className="relative w-full h-full col-span-2 p-2">
-                                        <p className="text-xl">Game Title</p>
-                                        <p>Producer</p>
-                                        <div className="absolute bottom-2 left-2 flex flex-wrap">
-                                            <div className="me-2"><TwitchIconCustom width={iconsize} height={iconsize} /></div>
+                            {/* <Link to="/view-game/1"> */}
+                            <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-3 m-5 hover:scale-105">
+                                <div className="w-full h-full col-span-1">
+                                    <img className="img img-fluid "
+                                        src="https://images.igdb.com/igdb/image/upload/t_cover_big/co721v.webp" />
+                                </div>
+                                <div className="relative w-full h-full col-span-2 p-2">
+                                    <p className="text-xl">Game Title</p>
+                                    <p>Producer</p>
+                                    <div className="absolute bottom-2 left-2 flex flex-wrap">
+                                        <div className="me-2">
+                                            <TwitchIconCustom width={iconsize} height={iconsize} />
                                         </div>
-                                        <div className="absolute bottom-2 right-2 flex flex-wrap bg-blue-300 p-2 rounded-full">
-                                            <Link to="/blahhhh"><PlusIcon width={"20"} height={"20"} /></Link>
+                                    </div>
+                                    <div className="absolute bottom-2 right-2 flex flex-wrap bg-blue-300 p-2 rounded-full">
+                                        {/* <Link to="/blahhhh"> */}
+                                        <div id="dropdownDefaultButton" data-dropdown-toggle="dropdown" >
+                                            <PlusIcon width={"20"} height={"20"} />
+                                        </div>
+                                        {/* </Link> */}
+                                        <div id="dropdown" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                                <li>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
+                            {/* </Link> */}
                             <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-3 m-5">
                                 <div className="w-full h-full col-span-1">
-                                    <img className="img img-fluid" src="https://images.igdb.com/igdb/image/upload/t_cover_big/co721v.webp" />
+                                    <img className="img img-fluid lg:w-40 sm:w-32 sm:h-48 w-24 h-40 object-cover rounded-lg" src="https://images.igdb.com/igdb/image/upload/t_cover_big/znlm356k9dc2ajz0bafq.jpg" />
                                 </div>
                                 <div className="relative w-full h-full col-span-1">
-                                    <p className="text-xl">Game Title</p>
+                                    <p className="text-xl">Game Title <span className="text-gray-500 text-sm">(1996)</span></p>
                                     <p>Producer</p>
                                     <div className="absolute bottom-2 left-2 flex flex-wrap">
                                         <div className="me-2"><XboxIconCustom width={iconsize} height={iconsize} /></div>
