@@ -4,6 +4,7 @@ import axios from "axios";
 import HomePageNLI from "./page_components/HomePageNLI";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
+import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 
 
 
@@ -57,6 +58,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePageNLI allGames={games} />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/home" element={<HomePageLoggedIn allGames={games} />} />
       </Routes>
     </div>
   );
