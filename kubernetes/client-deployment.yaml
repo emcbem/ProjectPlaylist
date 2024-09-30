@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: codebras/playlistclient:latest
+        image: codebras/playlistclient:${TAG_ID}
         ports:
         - containerPort: 80
         env:

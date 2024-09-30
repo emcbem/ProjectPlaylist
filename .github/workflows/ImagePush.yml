@@ -20,16 +20,31 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}  # Set in your repository secrets
 
       - name: Build and push server image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./PlaylistApp.Server  # Path to server Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest
+        run: |
+          cd ./PlaylistApp.Server
+
+          docker build \
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest \
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{ github.run_number }}
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/playlistserver --all-tags
 
       - name: Build and push client image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./playlistapp.client  # Path to client Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest
+        run: |
+          cd ./playlistapp.client
+
+          docker build \
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest \
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{ github.run_number }}
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/playlistclient --all-tags
+
+      - name: Apply kubernetes
+        run: |
+          export TAG_ID=${{github.run_number}}
+
+          for file in ./kubernetes/*; do 
+            cat $file | envsubst | kubectl apply -f -
+          done
+
     
