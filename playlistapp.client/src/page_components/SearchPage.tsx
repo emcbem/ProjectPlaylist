@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TwitchIconCustom } from '../assets/twitchLogoCustom';
+import { TwitchIconCustom } from '../assets/TwitchLogoCustom';
 import { XboxIconCustom } from '../assets/xboxLogoCustom';
 import { PlusIcon } from '../assets/plusIcon';
 import { Link } from 'react-router-dom';
