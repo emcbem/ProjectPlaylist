@@ -25,7 +25,7 @@ jobs:
 
           docker build \
           -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{ github.run_number }}
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{ github.run_number }} .
 
           docker push ${{ secrets.DOCKER_USERNAME }}/playlistserver --all-tags
 
@@ -35,7 +35,7 @@ jobs:
 
           docker build \
           -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{ github.run_number }}
+          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{ github.run_number }} .
 
           docker push ${{ secrets.DOCKER_USERNAME }}/playlistclient --all-tags
 
