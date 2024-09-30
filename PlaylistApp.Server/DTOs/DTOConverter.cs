@@ -8,6 +8,11 @@ public static class DTOConverter
 {
     public static GameDTO ToDTO(this Game game)
     {
+        if (game is null)
+        {
+            return new GameDTO();
+        }
+
         return new GameDTO()
         {
             Id = game.Id,
@@ -25,6 +30,11 @@ public static class DTOConverter
 
     public static UserDTO ToDTO(this UserAccount user)
     {
+        if (user is null)
+        {
+            return new UserDTO();
+        }
+
         return new UserDTO()
         {
             Id = user.Id,
@@ -41,6 +51,11 @@ public static class DTOConverter
 
     public static PlatformDTO ToDTO(this Platform platform)
     {
+        if (platform is null)
+        {
+            return new PlatformDTO();
+        }
+
         return new PlatformDTO()
         {
             Id = platform.Id,
@@ -51,6 +66,11 @@ public static class DTOConverter
 
     public static PlatformGameDTO ToDTO(this PlatformGame platformGame)
     {
+        if (platformGame is null)
+        {
+            return new PlatformGameDTO();
+        }
+
         return new PlatformGameDTO()
         {
             id = platformGame.Id,
@@ -63,6 +83,11 @@ public static class DTOConverter
 
     public static AchievementDTO ToDTO(this Achievement achievement)
     {
+        if (achievement is null)
+        {
+            return new AchievementDTO();
+        }
+
         return new AchievementDTO()
         {
             ID = achievement.Id,
@@ -78,6 +103,11 @@ public static class DTOConverter
 
     public static FriendDTO ToDTO(this Friend friend)
     {
+        if (friend is null)
+        {
+            return new FriendDTO();
+        }
+
         return new FriendDTO()
         {
             Id = friend.Id,
@@ -90,6 +120,11 @@ public static class DTOConverter
 
     public static UserAchievementDTO ToDTO(this UserAchievement userAchievement)
     {
+        if (userAchievement is null)
+        {
+            return new UserAchievementDTO();
+        }
+
         return new UserAchievementDTO()
         {
             Id = userAchievement.Id,
@@ -104,6 +139,11 @@ public static class DTOConverter
 
     public static UserGameDTO ToDTO(this UserGame userGame)
     {
+        if (userGame is null)
+        {
+            return new UserGameDTO();
+        }
+
         return new UserGameDTO()
         {
             PlatformGame = userGame.PlatformGame.ToDTO(),
@@ -116,6 +156,11 @@ public static class DTOConverter
 
     public static GoalDTO ToDTO(this Goal goal)
     {
+        if (goal is null)
+        {
+            return new GoalDTO();
+        }
+
         return new GoalDTO()
         {
             Achievement = goal.Achievement.ToDTO(),
@@ -133,6 +178,11 @@ public static class DTOConverter
 
     public static GameReviewDTO ToDTO(this GameReview gameReview)
     {
+        if (gameReview is null)
+        {
+            return new GameReviewDTO();
+        }
+
         return new GameReviewDTO()
         {
             Dislikes = gameReview.ReviewLikes.Where(x => x.IsLike == false).Count(),
@@ -148,6 +198,11 @@ public static class DTOConverter
 
     public static ListDTO ToDTO(this List list)
     {
+        if (list is null)
+        {
+            return new ListDTO();
+        }
+
         return new ListDTO()
         {
             CreationDate = list.DateMade,
@@ -161,6 +216,11 @@ public static class DTOConverter
 
     public static ListGameDTO ToDTO(this ListGame listGame)
     {
+        if (listGame is null)
+        {
+            return new ListGameDTO();
+        }
+
         return new ListGameDTO()
         {
             DateAdded = listGame.DateAdded,
@@ -172,6 +232,11 @@ public static class DTOConverter
 
     public static UserPlatformDTO ToDTO(this UserPlatform userPlatform)
     {
+        if (userPlatform is null)
+        {
+            return new UserPlatformDTO();
+        }
+
         return new UserPlatformDTO()
         {
             GamerTag = userPlatform.Gamertag,
@@ -183,6 +248,11 @@ public static class DTOConverter
 
     public static GenreDTO ToDTO(this Genre genre)
     {
+        if (genre is null)
+        {
+            return new GenreDTO();
+        }
+
         return new GenreDTO()
         {
             id = genre.Id,
@@ -192,6 +262,11 @@ public static class DTOConverter
 
     public static CompanyDTO ToDTO(this Company company)
     {
+        if (company is null)
+        {
+            return new CompanyDTO();
+        }
+
         return new CompanyDTO()
         {
             Id = company.Id,

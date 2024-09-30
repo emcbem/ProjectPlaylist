@@ -31,13 +31,35 @@ public class GoalService : IGoalService
 
         Goal newGoal = new Goal()
         {
-            DateAdded = DateTime.Today,
+            DateAdded = DateTime.UtcNow,
             DateToAchieve = request.DateToAchieve,
             AchievementId = request.AchievementId,
             IsComplete = false,
             IsCurrent = request.IsCurrent,
-            UserId = user.Id
+            UserId = user.Id,
+            User = user
         };
+
+        if (newGoal is null)
+        {
+            return 0;
+        }
+
+        // Getting the users current goal and setting it to false if the one they just added is their new active one
+        if (newGoal.IsCurrent == true)
+        {
+            var currentGoal = await context.Goals
+                .Include(x => x.User)
+                .Where(x => x.User.Guid == newGoal.User.Guid)
+                .Where(x => x.IsCurrent == true)
+                .FirstOrDefaultAsync();
+
+            if (currentGoal is not null)
+            {
+                currentGoal.IsCurrent = false;
+                context.Update(currentGoal);
+            }
+        }
 
         await context.AddAsync(newGoal);
         await context.SaveChangesAsync();
@@ -68,6 +90,10 @@ public class GoalService : IGoalService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var goal = await context.Goals
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            .Include(x => x.User)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -93,6 +119,10 @@ public class GoalService : IGoalService
         }
 
         var goals = await context.Goals
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            .Include(x => x.User)
             .Where(x => x.UserId == user.Id)
             .ToListAsync();
 
@@ -108,12 +138,22 @@ public class GoalService : IGoalService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        Goal goal = new Goal()
+        var goal = await context.Goals
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            .Include(x => x.User)
+            .Where(x => x.Id == request.Id)
+            .FirstOrDefaultAsync();
+
+        if (goal is null)
         {
-            DateToAchieve = request.DateToAchieve,
-            IsComplete = request.IsComplete,
-            IsCurrent = request.IsCurrent,
-        };
+            return new GoalDTO();
+        }
+
+        goal.IsCurrent = request.IsCurrent;
+        goal.IsComplete = request.IsComplete;
+        goal.DateToAchieve = request.DateToAchieve;
 
         context.Update(goal);
         await context.SaveChangesAsync();
