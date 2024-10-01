@@ -18,15 +18,21 @@ public class UserAchievementLikeService : IUserAchievementLikeService
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        var usr = context.UserAccounts.Where(x => x.Guid == addRequest.UserId).FirstOrDefaultAsync();
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == addRequest.UserId)
+            .FirstOrDefaultAsync();
 
-        if (usr is null) { return false; }
+        if (user is null)
+        {
+            return false;
+        }
 
         AchievementLike achievementLike = new AchievementLike()
         {
-            UserId = usr.Id,
+            UserId = user.Id,
             UserAchievementId = addRequest.AchievementId,
             IsLike = addRequest.IsLike,
+            DateLiked = DateTime.UtcNow
         };
 
         await context.AddAsync(achievementLike);
@@ -37,25 +43,59 @@ public class UserAchievementLikeService : IUserAchievementLikeService
 
     public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid id)
     {
-        using var context = dbContextFactory.CreateDbContext();
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var usr = context.UserAccounts.Where(x => x.Guid == id).FirstOrDefaultAsync();
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == id)
+            .FirstOrDefaultAsync();
 
-        var UserAchievementLikes = await context.AchievementLikes.Where(x => x.UserId == usr.Id).ToListAsync();
+        if (user is null)
+        {
+            return new List<UserAchievementDTO>();
+        }
 
-        if (UserAchievementLikes is null) { return new List<UserAchievementDTO>(); }
+        var UserAchievementLikes = await context.AchievementLikes
+            .Include(x => x.UserAchievement)
+                .ThenInclude(x => x.Achievement)
+                    //.ThenInclude(x => x.PlatformGame)
+                    //    .ThenInclude(x => x.Game)
+                            //.ThenInclude(x => x.InvolvedCompanies)
+                            //    .ThenInclude(x => x.Company)
+            //.Include(x => x.UserAchievement)
+            //    .ThenInclude(x => x.Achievement)
+            //        .ThenInclude(x => x.PlatformGame)
+            //            .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.UserId == user.Id)
+            .ToListAsync();
 
-        // return UserAchievementLikes.Select(x => x.ToD)
-        return new List<UserAchievementDTO>();
+        if (UserAchievementLikes is null)
+        {
+            return new List<UserAchievementDTO>();
+        }
+
+        var userAchievements = UserAchievementLikes.Select(x => x.UserAchievement.ToDTO());
+
+        if (!userAchievements.Any())
+        {
+            return new List<UserAchievementDTO>();
+        }
+
+        return userAchievements.ToList();
     }
 
     public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLike removeRequest)
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        var achievementlike = await context.AchievementLikes.Where(x => x.Id == removeRequest.UserAchievementLikeId).FirstOrDefaultAsync();
+        var achievementlike = await context.AchievementLikes
+            .Where(x => x.Id == removeRequest.UserAchievementLikeId)
+            .FirstOrDefaultAsync();
 
-        if (achievementlike is null) { return false; }
+        if (achievementlike is null)
+        {
+            return false;
+        }
 
         context.AchievementLikes.Remove(achievementlike);
         await context.SaveChangesAsync();

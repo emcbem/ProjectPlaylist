@@ -20,9 +20,11 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var usr = await context.UserAccounts.Where(x => x.Guid == addRequest.UserGuid).FirstOrDefaultAsync();
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == addRequest.UserGuid)
+            .FirstOrDefaultAsync();
 
-        if (usr == null)
+        if (user == null)
         {
             throw new Exception("The user associated with this User Achievement was not found.");
         }
@@ -30,11 +32,13 @@ public class UserAchievementService : IUserAchievementService
         UserAchievement newAchievement = new UserAchievement()
         {
             AchievementId = addRequest.AchievementId,
-            UserId = usr.Id,
+            UserId = user.Id,
             IsSelfSubmitted = addRequest.IsSelfSubmitted,
-            DateAchieved = addRequest.DateAchieved,
+            DateAchieved = addRequest.DateAchieved.ToUniversalTime(),
         };
-        
+
+        await context.AddAsync(newAchievement);
+        await context.SaveChangesAsync();
         return newAchievement.Id;
     }
 
@@ -60,7 +64,18 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var userAchievements = await context.UserAchievements.Where(x => x.AchievementId == id).ToListAsync();
+        var userAchievements = await context.UserAchievements
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        //.ThenInclude(x => x.InvolvedCompanies)
+                        //    .ThenInclude(x => x.Company)
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.AchievementId == id)
+            .ToListAsync();
 
         if (userAchievements == null)
         {
@@ -74,7 +89,18 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var achievement = await context.UserAchievements.Where(x => x.AchievementId == id).FirstOrDefaultAsync();
+        var achievement = await context.UserAchievements
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            //.ThenInclude(x => x.InvolvedCompanies)
+            //    .ThenInclude(x => x.Company)
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.AchievementId == id)
+            .FirstOrDefaultAsync();
 
         if ( achievement is null)
         {
@@ -88,14 +114,27 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var user = await context.UserAccounts.Where(x => x.Guid == userId).FirstOrDefaultAsync();
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == userId)
+            .FirstOrDefaultAsync();
 
         if (user is null)
         {
             throw new Exception($"The user with id {userId} does not exist");
         }
 
-        var achievements = await context.UserAchievements.Where(x => x.UserId == user.Id).ToListAsync();
+        var achievements = await context.UserAchievements
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            //.ThenInclude(x => x.InvolvedCompanies)
+            //    .ThenInclude(x => x.Company)
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.UserId == user.Id)
+            .ToListAsync();
 
         if (achievements is null)
         {
@@ -109,7 +148,18 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var UserAchievementUnderChange = await context.UserAchievements.Where(x => x.Id == updatedRequest.Id).FirstOrDefaultAsync();
+        var UserAchievementUnderChange = await context.UserAchievements
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            //.ThenInclude(x => x.InvolvedCompanies)
+            //    .ThenInclude(x => x.Company)
+            .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.Id == updatedRequest.Id)
+            .FirstOrDefaultAsync();
 
         if (UserAchievementUnderChange is null) { return new UserAchievementDTO(); }
 
