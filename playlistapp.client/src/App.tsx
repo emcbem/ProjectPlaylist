@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 import { GameContextProvidor } from "./context/GameContext"
+import ViewGame from "./page_components/ViewGame";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePageNLI />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/home" element={<HomePageLoggedIn  />} />
+          <Route path="/view-game/:gameId" element={<ViewGame />} />
         </Routes>
       </div>
     </GameContextProvidor>
