@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pgdata-pvc
+  name: playlist-pvc
   namespace: codebras
 spec:
   accessModes:
@@ -44,11 +44,11 @@ spec:
         - name: pgdata
           mountPath: /var/lib/postgresql/data
         - name: init-script
-          mountPath: /docker-entrypoint-initdb.d/20240925.04.46.20.sql
+          mountPath: /docker-entrypoint-initdb.d
       volumes:
       - name: pgdata
         persistentVolumeClaim:
-          claimName: pgdata-pvc
+          claimName: playlist-pvc
       - name: init-script
         configMap:
           name: playlist-pg-init
