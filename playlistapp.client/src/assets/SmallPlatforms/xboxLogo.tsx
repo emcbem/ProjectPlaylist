@@ -1,8 +1,6 @@
 export const XboxIcon = () => (
   <svg
   className="transition-colors duration-300 fill-current group-hover:fill-[#FFFFFF] w-5 h-5 m-1"
-  width="800px"
-    height="800px"
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
   >
