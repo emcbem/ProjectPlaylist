@@ -15,8 +15,6 @@ const Profile: React.FC = () => {
     return <div>Loading ...</div>;
   }
 
-  console.log(user);
-
   return (
     isAuthenticated &&
     user && (

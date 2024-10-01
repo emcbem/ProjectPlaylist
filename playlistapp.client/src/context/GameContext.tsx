@@ -15,7 +15,6 @@ export const GameContextProvidor: FC<{ children: ReactNode }> = ({ children }) =
     const [isLoading, setLoading] = useState(true);
 
     const fetchAllGames = async () => {
-        console.log("trying to get games")
         try {
             const response = await axios.get<Game[]>(`${import.meta.env.VITE_URL}/game/getall`);
             return response.data;
@@ -37,8 +36,6 @@ export const GameContextProvidor: FC<{ children: ReactNode }> = ({ children }) =
             }
         };
         
-        console.log("Got some games")
-
         getGames();
     }, []);
 

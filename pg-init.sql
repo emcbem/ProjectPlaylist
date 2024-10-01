@@ -1,4 +1,4 @@
-
+create role postgres;
 
 --
 -- PostgreSQL database dump
