@@ -1,5 +1,4 @@
 import React from "react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { GameContext } from "../context/GameContext";
 import { GameContextInterface } from "../@types/game";
 import MasonryCards from "../individual_components/MasonryCards";
