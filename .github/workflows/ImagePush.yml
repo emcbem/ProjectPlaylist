@@ -19,6 +19,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  # Set in your repository secrets
           password: ${{ secrets.DOCKER_PASSWORD }}  # Set in your repository secrets
 
+      - name: Push playlist server
         uses: docker/build-push-action@v2
         with:
           context: ./PlaylistApp.Server  # Path to server Dockerfile
@@ -27,7 +28,7 @@ jobs:
             - ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest
             - ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{github.run_number}}
 
-
+      - name: Push playlist client
         uses: docker/build-push-action@v2
         with:
           context: ./playlistapp.client  # Path to server Dockerfile
