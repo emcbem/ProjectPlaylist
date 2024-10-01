@@ -2,11 +2,7 @@ import React, { useState } from 'react'
 import { TwitchIconCustom } from '../assets/TwitchLogoCustom';
 import { XboxIconCustom } from '../assets/xboxLogoCustom';
 import { PlusIcon } from '../assets/plusIcon';
-
-
-// interface props {
-//     allGames: Game[];
-// }
+import { Link } from 'react-router-dom';
 
 const SearchPage: React.FC = ({ }) => {
     const iconsize = "30";
@@ -16,9 +12,6 @@ const SearchPage: React.FC = ({ }) => {
         setIsVisible(!isVisible);
     };
 
-    const showToggle = () => {
-        setdropDownIsVisible(!dropDownIsVisible);
-    }
     return (
         <>
             <div className="min-h-screen bg-white">
@@ -47,7 +40,7 @@ const SearchPage: React.FC = ({ }) => {
 
                         <p className="text-xl mt-5 mb-1">Filter by Genre</p>
                         <div className="flex flex-wrap">
-                            <div className="rounded-full p-1 px-3 border-2 border-[#111111] m-1 hover:bg-gray-300">Arcade</div>
+                            <div className="rounded-full p-1 px-3 border-2 border-[#111111] m-1 hover:bg-black-300">Arcade</div>
                             <div className="rounded-full p-1 px-3 border-2 border-[#111111] m-1 hover:bg-gray-300">Fighting</div>
                             <div className="rounded-full p-1 px-3 border-2 border-[#111111] m-1 hover:bg-gray-300">Action</div>
                             <div className="rounded-full p-1 px-3 border-2 border-[#111111] m-1 hover:bg-gray-300">Shooter</div>
@@ -64,73 +57,48 @@ const SearchPage: React.FC = ({ }) => {
 
 
                     <div className="col-span-3 m-5 w-full h-full p-5">
-
-                        <button id="dropdownDefaultButton" onClick={showToggle} data-dropdown-toggle="dropdown" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                        </svg>
-                        </button>
-
-                        <div id="dropdown" className={`${dropDownIsVisible ? `block ` : `hidden `} z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
-                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                                </li>
-                            </ul>
-                        </div>
-
                         <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-2">
-                            {/* <Link to="/view-game/1"> */}
-                            <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-3 m-5 hover:scale-105">
-                                <div className="w-full h-full col-span-1">
-                                    <img className="img img-fluid "
+                            <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-5 m-5 ">
+                                <div className="w-full h-full col-span-2">
+                                    <img className="img img-fluid lg:w-40 lg:h-64 sm:w-32 sm:h-48 w-24 h-40 object-cover"
                                         src="https://images.igdb.com/igdb/image/upload/t_cover_big/co721v.webp" />
                                 </div>
-                                <div className="relative w-full h-full col-span-2 p-2">
-                                    <p className="text-xl">Game Title</p>
-                                    <p>Producer</p>
+                                <div className="relative w-full h-full col-span-3 p-2">
+                                    <Link to="/view-game/1">
+                                        <p className="text-2xl text-blue-600">Game Title</p>
+                                    </Link>
+                                    <p>Nintendo</p>
                                     <div className="absolute bottom-2 left-2 flex flex-wrap">
                                         <div className="me-2">
                                             <TwitchIconCustom width={iconsize} height={iconsize} />
                                         </div>
                                     </div>
-                                    <div className="absolute bottom-2 right-2 flex flex-wrap bg-blue-300 p-2 rounded-full">
-                                        {/* <Link to="/blahhhh"> */}
-                                        <div id="dropdownDefaultButton" data-dropdown-toggle="dropdown" >
+                                    <div className="absolute bottom-2 right-2 flex flex-wrap bg-gray-300 p-1 rounded-full">
+                                        <div id="dropdownDefaultButton" onClick={(event) => {
+                                            event.stopPropagation();
+                                            setdropDownIsVisible(!dropDownIsVisible);
+                                        }} data-dropdown-toggle="dropdown" className="p-3 hover:scale-110">
                                             <PlusIcon width={"20"} height={"20"} />
                                         </div>
-                                        {/* </Link> */}
-                                        <div id="dropdown" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                        <div id="dropdown" className={`${dropDownIsVisible ? `absolute mt-8` : `hidden `} z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
                                             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                                                 <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Library</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Wish List</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My List</a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {/* </Link> */}
                             <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-3 m-5">
                                 <div className="w-full h-full col-span-1">
-                                    <img className="img img-fluid lg:w-40 sm:w-32 sm:h-48 w-24 h-40 object-cover rounded-lg" src="https://images.igdb.com/igdb/image/upload/t_cover_big/znlm356k9dc2ajz0bafq.jpg" />
+                                    <img className="img img-fluid lg:w-40 lg:h-64 sm:w-32 sm:h-48 w-24 h-40 object-cover" src="https://images.igdb.com/igdb/image/upload/t_cover_big/znlm356k9dc2ajz0bafq.jpg" />
                                 </div>
                                 <div className="relative w-full h-full col-span-1">
                                     <p className="text-xl">Game Title <span className="text-gray-500 text-sm">(1996)</span></p>
