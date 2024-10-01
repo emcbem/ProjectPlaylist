@@ -26,4 +26,4 @@ spec:
         - name: VITE_AUTH0_CLIENT_ID
           value: ubMKeoY2RUXas6SYMEwlzoX30ByMxpwt
         - name: VITE_URL
-          value: https://api.projectplaylist.duckdns.org 
+          value: https://projectplaylist.duckdns.org/api
