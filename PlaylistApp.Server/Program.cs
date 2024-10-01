@@ -1,4 +1,5 @@
 using IGDB;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services.Achievement;
@@ -98,12 +99,22 @@ app.UseCors("AllowSpecificOrigin");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+var forwardOptions = new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    };
+forwardOptions.KnownNetworks.Clear(); // Clears known networks to avoid network restrictions
+forwardOptions.KnownProxies.Clear();  // Clears known proxies
+    
+app.UseForwardedHeaders(forwardOptions);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseAuthorization();
 
