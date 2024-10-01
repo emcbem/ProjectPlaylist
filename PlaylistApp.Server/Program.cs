@@ -98,6 +98,15 @@ app.UseCors("AllowSpecificOrigin");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+var forwardOptions = new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    };
+forwardOptions.KnownNetworks.Clear(); // Clears known networks to avoid network restrictions
+forwardOptions.KnownProxies.Clear();  // Clears known proxies
+    
+app.UseForwardedHeaders(forwardOptions);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -105,7 +114,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
