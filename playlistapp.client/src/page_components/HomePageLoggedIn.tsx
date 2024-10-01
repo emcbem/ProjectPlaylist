@@ -1,14 +1,13 @@
 import React from "react";
-import { Game } from "../App";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { GameContext } from "../context/GameContext";
+import { GameContextInterface } from "../@types/game";
 
-interface Props {
-  allGames: Game[];
-}
+const HomePageLoggedIn: React.FC = () => {
+  const { games } = React.useContext(GameContext) as GameContextInterface;
 
-const HomePageLoggedIn: React.FC<Props> = ({ allGames }) => {
-  const slicedArray = allGames.slice(0, 24);
-  const slicedArray2 = allGames.slice(25, 49);
+  const slicedArray = games.slice(0, 24);
+  const slicedArray2 = games.slice(25, 49);
 
   const items = slicedArray.map((games, index) => {
     const randomHeight = Math.floor(Math.random() * (300 - 200 + 1) + 200);
