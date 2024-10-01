@@ -16,7 +16,7 @@ public class PlatformGameController : Controller
         this.platformGameService = platformGameService;
     }
 
-    [HttpPost("GetAllPlatformGames")]
+    [HttpPost("getallplatformgames")]
     public async Task<List<PlatformGameDTO>> GetAllPlatformGame(PlatformGameRequest request)
     {
         return await platformGameService.GetAllPlatformGames(request);
