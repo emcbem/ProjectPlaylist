@@ -8,7 +8,6 @@ spec:
     storage: 1Gi  # Specify the size
   accessModes:
     - ReadWriteOnce  # Use ReadWriteOnce for hostPath
-  nfs:
+  storageClassName: playlist-storage
+  hostPath:
     path: /mnt/data/codebras 
-    server: nfs-subdir-external-provisioner
-  storageClassName: "playlist-storage"
