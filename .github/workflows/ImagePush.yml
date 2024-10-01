@@ -19,32 +19,29 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  # Set in your repository secrets
           password: ${{ secrets.DOCKER_PASSWORD }}  # Set in your repository secrets
 
-      - name: Build and push server image
-        run: |
-          cd ./PlaylistApp.Server
+        uses: docker/build-push-action@v2
+        with:
+          context: ./PlaylistApp.Server  # Path to server Dockerfile
+          push: true
+          tags: 
+            - ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest
+            - ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{github.run_number}}
 
-          docker build \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{ github.run_number }} .
 
-          docker push ${{ secrets.DOCKER_USERNAME }}/playlistserver --all-tags
-
-      - name: Build and push client image
-        run: |
-          cd ./playlistapp.client
-
-          docker build \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest \
-          -t ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{ github.run_number }} .
-
-          docker push ${{ secrets.DOCKER_USERNAME }}/playlistclient --all-tags
+        uses: docker/build-push-action@v2
+        with:
+          context: ./playlistapp.client  # Path to server Dockerfile
+          push: true
+          tags: 
+            - ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest
+            - ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{github.run_number}}
 
       - name: Apply kubernetes
         run: |
-          export TAG_ID=${{github.run_number}}
+          export TAG_NUM=${{github.run_number}}
 
           for file in ./kubernetes/*; do 
-            cat $file | envsubst | kubectl apply -f -
+            cat $file | envsubst | /home/ethane/.nix-profile/bin/kubectl apply -f -
           done
 
     
