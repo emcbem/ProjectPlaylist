@@ -6,7 +6,7 @@ type IconProps = {
 export const TwitchIconCustom: React.FC<IconProps> = ({width, height}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="transition-colors duration-300 fill-content group-hover:fill-white"
+    className="transition-colors duration-300 fill-content"
     viewBox="1 0 13.71 16"
     width={width + "px"}
     height={height + "px"}

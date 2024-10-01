@@ -23,7 +23,7 @@ public class ListService : IListService
             .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
 
-        if (user == null) 
+        if (user == null)
         {
             return 0;
         }
@@ -41,7 +41,7 @@ public class ListService : IListService
         return newList.Id;
     }
 
-    public async Task<bool> DelteList(int Id)
+    public async Task<bool> DeleteList(int Id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -59,11 +59,13 @@ public class ListService : IListService
         return true;
     }
 
-    public async Task<List<ListDTO>> GetAllListByuser(Guid userId)
+    public async Task<List<ListDTO>> GetAllListsByUser(Guid userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userLists = await context.Lists
+            .Include(x => x.User)
+            .Include(x => x.ListGames)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
@@ -72,7 +74,7 @@ public class ListService : IListService
             return new List<ListDTO>();
         }
 
-        return userLists.Select(x => x.ToDTO()).ToList();   
+        return userLists.Select(x => x.ToDTO()).ToList();
     }
 
     public async Task<List<ListDTO>> GetAllListsByName(string name)
@@ -80,15 +82,17 @@ public class ListService : IListService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var lists = await context.Lists
+            .Include(x => x.User)
+            .Include(x => x.ListGames)
             .Where(x => x.ListName == name)
             .ToListAsync();
 
-        if (lists.Any())
+        if (!lists.Any())
         {
             return new List<ListDTO>();
         }
 
-        return lists.Select(x => x.ToDTO()).ToList();  
+        return lists.Select(x => x.ToDTO()).ToList();
     }
 
     public async Task<ListDTO> GetListById(int Id)
@@ -96,6 +100,8 @@ public class ListService : IListService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var list = await context.Lists
+            .Include(x => x.User)
+            .Include(x => x.ListGames)
             .Where(x => x.Id == Id)
             .FirstOrDefaultAsync();
 
@@ -112,12 +118,45 @@ public class ListService : IListService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var list = await context.Lists
+            .Include(x => x.User)
+            .Include(x => x.ListGames)
             .Where(x => x.Id == request.ListId)
             .FirstOrDefaultAsync();
 
         if (list == null)
         {
             return new ListDTO();
+        }
+
+        list.ListName = request.ListName;
+        list.IsPublic = request.IsPublic;
+
+        if (request.GamesToRemove is not null && request.GamesToRemove.Count > 0)
+        {
+            var listGamesToRemove = request.GamesToRemove.Select(x => new ListGame()
+            {
+                DateAdded = x.DateAdded,
+                GameId = x.GameId,
+                ListId = x.ListId,
+            });
+            context.ListGames.RemoveRange(listGamesToRemove);
+            await context.SaveChangesAsync();
+        }
+
+
+        if (request.NewGames is not null && request.NewGames.Count > 0)
+        {
+            var listGamesToAdd = request.NewGames.Select(x => new ListGame()
+            {
+                DateAdded = DateTime.UtcNow,
+                GameId = x.Id,
+                ListId = request.ListId,
+            });
+
+            var filteredListGamesToAdd = listGamesToAdd.Where(x => list.ListGames.All(y => y.GameId != x.GameId));
+
+            context.ListGames.AddRange(filteredListGamesToAdd);
+            await context.SaveChangesAsync();
         }
 
         context.Update(list);

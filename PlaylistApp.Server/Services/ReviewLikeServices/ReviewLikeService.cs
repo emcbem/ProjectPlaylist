@@ -29,7 +29,7 @@ public class ReviewLikeService : IReviewLikeService
 
         ReviewLike newReviewLike = new ReviewLike()
         {
-            DateLiked = DateTime.Now,
+            DateLiked = DateTime.UtcNow,
             IsLike = request.IsLike,
             GameReviewId = request.GameReviewId,
             UserId = user.Id,
@@ -45,6 +45,8 @@ public class ReviewLikeService : IReviewLikeService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var gameReviews = await context.GameReviews
+            .Include(x => x.Game)
+            .Include(x => x.User)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 

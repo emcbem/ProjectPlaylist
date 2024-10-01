@@ -6,7 +6,7 @@ metadata:
   labels:
     app: playlist-client
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: playlist-client
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: codebras/playlistclient:latest
+        image: codebras/playlistclient:${TAG_ID}
         ports:
         - containerPort: 80
         env:
@@ -26,4 +26,4 @@ spec:
         - name: VITE_AUTH0_CLIENT_ID
           value: ubMKeoY2RUXas6SYMEwlzoX30ByMxpwt
         - name: VITE_URL
-          value: https://api.projectplaylist.duckdns.org 
+          value: https://projectplaylist.duckdns.org/api

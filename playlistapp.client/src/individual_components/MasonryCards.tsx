@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { Game } from "../App";
 import { PS5Icon } from "../assets/SmallPlatforms/psLogo";
 import { SteamIcon } from "../assets/SmallPlatforms/steamLogo";
 import { XboxIcon } from "../assets/SmallPlatforms/xboxLogo";
+import { Game } from "../@types/game";
 
 interface props {
   title: string;
