@@ -22,6 +22,7 @@ public static class DTOConverter
             CoverUrl = game.CoverUrl,
             Description = game.Description,
             IdgbId = game.IdgbId,
+            Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
             //TODO: Calculate hours plays
             //TODO: Calculate total total owned
 
