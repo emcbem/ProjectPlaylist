@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { Game } from "../App";
 import GameCard from "./GameCard";
+import { Game } from "../@types/game";
 
 interface props {
   list: Game[];
