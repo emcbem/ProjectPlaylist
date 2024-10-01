@@ -80,7 +80,7 @@ const SearchPage: React.FC = ({ }) => {
                                         <p>Nintendo</p>
                                         <div className="absolute bottom-2 left-2 flex flex-wrap">
                                             <div className="me-2">
-                                                <TwitchIconCustom width={iconsize} height={iconsize} />
+                                                {/* <TwitchIconCustom width={iconsize} height={iconsize} /> */}
                                             </div>
                                         </div>
                                         <div className="absolute bottom-2 right-2 flex flex-wrap bg-gray-300 p-1 rounded-full">
@@ -88,7 +88,7 @@ const SearchPage: React.FC = ({ }) => {
                                                 event.stopPropagation();
                                                 setdropDownIsVisible(!dropDownIsVisible);
                                             }} data-dropdown-toggle="dropdown" className="p-3 hover:scale-110">
-                                                <PlusIcon width={"20"} height={"20"} />
+                                                {/* <PlusIcon width={"20"} height={"20"} /> */}
                                             </div>
                                             <div id="dropdown" className={`${dropDownIsVisible ? `absolute mt-8` : `hidden `} z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
                                                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
