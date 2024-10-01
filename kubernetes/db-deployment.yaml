@@ -4,12 +4,12 @@ metadata:
   name: pgdata-pvc
   namespace: codebras
 spec:
-  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi # Should match the PV size
+      storage: 1Gi
+  storageClassName: "playlist-storage"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -37,18 +37,18 @@ spec:
         - name: POSTGRES_USER
           value: postgres
         - name: POSTGRES_PASSWORD
-          value: postgres # Replace with a secure password in production
+          value: postgres
         - name: POSTGRES_DB
           value: playlistdb
         volumeMounts:
         - name: pgdata
           mountPath: /var/lib/postgresql/data
         - name: init-script
-          mountPath: /docker-entrypoint-initdb.d
+          mountPath: /docker-entrypoint-initdb.d/20240925.04.46.20.sql
       volumes:
       - name: pgdata
         persistentVolumeClaim:
-          claimName: pgdata-pvc # Reference the PVC defined above
+          claimName: pgdata-pvc
       - name: init-script
         configMap:
           name: playlist-pg-init

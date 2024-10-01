@@ -6,7 +6,7 @@ metadata:
   labels:
     app: playlist-server
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: playlist-server
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: codebras/playlistserver:latest
+        image: codebras/playlistserver:${TAG_ID}
         ports:
         - containerPort: 8080
         env:
@@ -26,4 +26,4 @@ spec:
         - name: allowAll
           value: "true"
         - name: clientUrl
-          value: https://projectplaylist.duckdns.org # Updated client URL
+          value: https://api.projectplaylist.duckdns.org # Updated client URL

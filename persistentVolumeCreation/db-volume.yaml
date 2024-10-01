@@ -5,8 +5,10 @@ metadata:
   namespace: codebras
 spec:
   capacity:
-    storage: 1Gi # Adjust as needed
+    storage: 1Gi  # Specify the size
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
+    - ReadWriteOnce  # Use ReadWriteOnce for hostPath
+  nfs:
+    path: /mnt/data/codebras 
+    server: nfs-subdir-external-provisioner
+  storageClassName: "playlist-storage"

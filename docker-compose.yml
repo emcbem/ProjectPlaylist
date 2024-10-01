@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
     volumes:
-      - ./20240923.07.02.51.sql:/docker-entrypoint-initdb.d/A_init.sql
+      - ./20240925.04.46.20.sql:/docker-entrypoint-initdb.d/A_init.sql
 
   playlistserver:
     build: ./PlaylistApp.Server
