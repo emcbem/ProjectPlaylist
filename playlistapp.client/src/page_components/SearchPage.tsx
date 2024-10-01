@@ -65,16 +65,16 @@ const SearchPage: React.FC = ({ }) => {
 
 
 
-                            {games.map((g) => (
+                            {games.map((g, key) => (
 
 
-                                <div className="w-50 rounded border-2 border-[#111111] grid grid-cols-5 m-5 ">
+                                <div key={key} className="w-50 rounded border-2 border-[#111111] grid grid-cols-5 m-5 ">
                                     <div className="w-full h-full col-span-2">
                                         <img className="img img-fluid lg:w-40 lg:h-64 sm:w-32 sm:h-48 w-24 h-40 object-cover"
                                             src={g.coverUrl} />
                                     </div>
                                     <div className="relative w-full h-full col-span-3 p-2">
-                                        <Link to="/view-game/1">
+                                        <Link to={`/view-game/${g.id}`}>
                                             <p className="text-2xl text-blue-600">{g.title}</p>
                                         </Link>
                                         <p>Nintendo</p>
