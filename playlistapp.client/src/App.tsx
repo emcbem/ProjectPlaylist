@@ -6,8 +6,6 @@ import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 
-
-
 export interface Game {
   title: string;
   description: string;
@@ -53,7 +51,7 @@ function App() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2 z-10">
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePageNLI allGames={games} />} />
