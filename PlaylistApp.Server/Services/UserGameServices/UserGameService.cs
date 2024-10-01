@@ -22,7 +22,7 @@ public class UserGameService : IUserGameService
             .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
 
-        if (User == null)
+        if (User is null)
         {
             return 0;
         }
@@ -35,6 +35,21 @@ public class UserGameService : IUserGameService
             TimePlayed = 0,
         };
 
+        if (newUserGame is null)
+        {
+            return 0;
+        }
+
+        var possibleUserGame = await context.UserGames
+            .Where(x => x.UserId == newUserGame.UserId)
+            .Where(x => x.PlatformGameId == request.PlatformGameId)
+            .ToListAsync();
+
+        if (possibleUserGame.Count > 0)
+        {
+            return 0;
+        }
+
         await context.AddAsync(newUserGame);
         await context.SaveChangesAsync();
         return newUserGame.Id;
@@ -45,6 +60,13 @@ public class UserGameService : IUserGameService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+                    .ThenInclude(x => x.InvolvedCompanies)
+                        .ThenInclude(x => x.Company)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -69,6 +91,13 @@ public class UserGameService : IUserGameService
         }
 
         var userGames = await context.UserGames
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+                    .ThenInclude(x => x.InvolvedCompanies)
+                        .ThenInclude(x => x.Company)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
             .Where(x => x.UserId == User.Id)
             .ToListAsync();
 
@@ -103,7 +132,7 @@ public class UserGameService : IUserGameService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
-            .Where(x => x.Id == request.Id)
+            .Where(x => x.PlatformGameId == request.PlatformGameId)
             .FirstOrDefaultAsync();
 
         if (userGame == null)
@@ -111,16 +140,12 @@ public class UserGameService : IUserGameService
             return new UserGameDTO();
         }
 
-        UserGame newUserGame = new UserGame()
-        {
-            TimePlayed = request.TimePlayed,
-            DateAdded = request.DateAdded,
-            Id = request.Id,
-        };
+        userGame.TimePlayed = request.TimePlayed;
+        userGame.DateAdded = request.DateAdded.ToUniversalTime();
 
-        context.UserGames.Update(newUserGame);
+        context.UserGames.Update(userGame);
         await context.SaveChangesAsync();
 
-        return newUserGame.ToDTO();
+        return userGame.ToDTO();
     }
 }
