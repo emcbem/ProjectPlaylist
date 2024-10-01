@@ -26,4 +26,4 @@ spec:
         - name: allowAll
           value: "true"
         - name: clientUrl
-          value: https://api.projectplaylist.duckdns.org # Updated client URL
+          value: https://projectplaylist.duckdns.org/api # Updated client URL

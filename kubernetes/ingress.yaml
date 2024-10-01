@@ -23,13 +23,10 @@ spec:
             name: playlist-client
             port:
               number: 80
-  - host: api.projectplaylist.duckdns.org # Subdomain for the server API
-    http:
-      paths:
-      - path: /
+      - path: /api
         pathType: Prefix
         backend:
           service:
             name: playlist-server
             port:
-              number: 8080
+              number: 80
