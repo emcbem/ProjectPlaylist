@@ -70,6 +70,8 @@ public class UserPlatformService : IUserPlatformService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userPlatforms = await context.UserPlatforms
+            .Include(x => x.User)
+            .Include(x => x.Platform)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
@@ -85,28 +87,23 @@ public class UserPlatformService : IUserPlatformService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        if (request.ExternalPlatformId == null)
-        {
-            var userPlatform = new UserPlatform()
-            {
-                Gamertag = request.GamerTag!,
-                Id = request.Id,
-                IsPublic = request.IsPublic,
-            };
+        var userPlatform = await context.UserPlatforms
+            .Include(x => x.User)
+            .Include(x => x.Platform)
+            .Where(x => x.Id == request.Id)
+            .FirstOrDefaultAsync();
 
-            return userPlatform.ToDTO();
-        }
-        else
+        if (userPlatform is null)
         {
-            var userPlatform = new UserPlatform()
-            {
-                Gamertag = request.GamerTag!,
-                ExternalPlatformId = request.ExternalPlatformId,
-                Id = request.Id,
-                IsPublic = request.IsPublic,
-            };
-
-            return userPlatform.ToDTO();
+            return new UserPlatformDTO();
         }
+
+        userPlatform.ExternalPlatformId = request.ExternalPlatformId ?? userPlatform.ExternalPlatformId;
+        userPlatform.IsPublic = request.IsPublic;
+        userPlatform.Gamertag = request.GamerTag ?? userPlatform.Gamertag;
+       
+        context.Update(userPlatform);
+        await context.SaveChangesAsync();
+        return userPlatform.ToDTO();
     }
 }
