@@ -72,6 +72,7 @@ public class UserGenreService : IUserGenreService
         }
         
         var usrGenres = await context.UserGenres
+            .Include(x => x.Genre)
             .Where(x => x.UserId == usr.Id)
             .ToListAsync();
 
