@@ -23,8 +23,8 @@ public static class DTOConverter
             Description = game.Description,
             IdgbId = game.IdgbId,
             Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
-            //TODO: Calculate hours plays
-            //TODO: Calculate total total owned
+            HoursPlayed = game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)),
+            TotalOwned = game.PlatformGames.Sum(x => x.UserGames.Count)
 
         };
     }
@@ -109,9 +109,7 @@ public static class DTOConverter
             ImageURL = achievement.ImageUrl ?? "",
             Name = achievement.AchievementName,
             Description = achievement.AchievementDesc ?? "",
-            // TODO: Calculate this later
-            // Get the achievement and all of the users that have completed this achievement. 
-            // TotalTimeClaimed = achievement.
+            TotalTimeClaimed = achievement.UserAchievements.Count
         };
     }
 
