@@ -3,7 +3,7 @@ import HorizontalRule from "../individual_components/HorizontalRule";
 import CardCarousel from "../individual_components/InfiniteCardScroll";
 import ExpandingColumns from "../individual_components/Platforms";
 import { Link } from "react-router-dom";
-import { GameContext } from "../context/GameContext";
+import { GameContext } from "../contexts/GameContext";
 import { GameContextInterface } from "../@types/game";
 
 const HomePageNLI: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { GameContext } from "../context/GameContext";
+import { GameContext } from "../contexts/GameContext";
 import { GameContextInterface } from "../@types/game";
 import MasonryCards from "../individual_components/MasonryCards";
 

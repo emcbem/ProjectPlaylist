@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { TwitchIconCustom } from '../assets/TwitchLogoCustom';
 import { PlusIcon } from '../assets/plusIcon';
 import { Link } from 'react-router-dom';
-import { GameContext } from '../context/GameContext';
+import { GameContext } from '../contexts/GameContext';
 import { GameContextInterface } from '../@types/game';
 
 const SearchPage: React.FC = ({ }) => {

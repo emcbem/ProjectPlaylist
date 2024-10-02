@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GameContext } from "../context/GameContext";
+import { GameContext } from "../contexts/GameContext";
 import { Game, GameContextInterface } from "../@types/game";
 
 const ViewGame = () => {
