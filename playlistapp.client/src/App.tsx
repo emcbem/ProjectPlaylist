@@ -3,7 +3,6 @@ import HomePageNLI from "./page_components/HomePageNLI";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
-// import { GameContextProvidor } from "./contexts/GameContext";
 import { useAuth0 } from "@auth0/auth0-react"; import ViewGame from "./page_components/ViewGame";
 import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";

@@ -8,6 +8,7 @@ const ViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setgame] = useState<Game>();
 
+
   useEffect(() => {
     console.log(games);
     setgame(games.find((x) => x.id === Number(gameId)));

@@ -12,9 +12,9 @@ export const UserGameContextProvidor: FC<{ children: ReactNode }> = ({ children 
     const [error, seterror] = useState<string>("");
     const [isLoading, setisLoading] = useState<boolean>(false);
 
-    const fetchAllUserGames = async () => {
+    const fetchUserGamesByUserUuid = async () => {
         try {
-            const response = await axios.get<UserGame[]>(`${import.meta.env.VITE_URL}/game/getall`);
+            const response = await axios.get<UserGame[]>(`${import.meta.env.VITE_URL}/UserGame/getusergamebyuser/f776d4d8-a6f5-44db-9960-6165a1b1535b`);
             console.log(response)
             return response.data;
         } catch (error) {
@@ -26,7 +26,7 @@ export const UserGameContextProvidor: FC<{ children: ReactNode }> = ({ children 
     useEffect(() => {
         const getUserGames = async () => {
             try {
-                const data = await fetchAllUserGames();
+                const data = await fetchUserGamesByUserUuid();
                 setuserGames(data);
             } catch (err) {
                 seterror("Failed to fetch games");
@@ -39,7 +39,7 @@ export const UserGameContextProvidor: FC<{ children: ReactNode }> = ({ children 
     }, []);
 
     return (
-        <UserGameContext.Provider value={{ userGames, error, isLoading, fetchAllUserGames }}>
+        <UserGameContext.Provider value={{ userGames, error, isLoading, fetchAllUserGames: fetchUserGamesByUserUuid }}>
             {children}
         </UserGameContext.Provider>
     )
