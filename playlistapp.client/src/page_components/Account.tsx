@@ -7,8 +7,6 @@ import { UserGameContextInterface } from '../@types/usergame';
 const Account = () => {
     const { userGames } = React.useContext(UserGameContext) as UserGameContextInterface;
 
-    console.log(userGames)
-
     const { user, isAuthenticated } = useAuth0();
 
     return (
@@ -25,8 +23,12 @@ const Account = () => {
                     <p className="mt-8 text-6xl">Your Collection</p>
                     <HorizontalRule />
                     {userGames &&
-                        userGames.map((ug) =>
-                            <p>{Number(ug.Id)}</p>
+                        userGames.map((ug, key) =>
+                            <div key={key}>
+                                <img src={ug.platformGame.game.coverUrl} width={100}/>
+                                <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p>
+                                <p>Time Played: {ug.timePlayed}</p>
+                            </div>
                         )
                     }
                 </div>

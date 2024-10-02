@@ -14,8 +14,8 @@ export const UserGameContextProvidor: FC<{ children: ReactNode }> = ({ children 
 
     const fetchUserGamesByUserUuid = async () => {
         try {
-            const response = await axios.get<UserGame[]>(`${import.meta.env.VITE_URL}/UserGame/getusergamebyuser/f776d4d8-a6f5-44db-9960-6165a1b1535b`);
-            console.log(response)
+            const response = await axios.get<UserGame[]>(`${import.meta.env.VITE_URL}/UserGame/getusergamebyuser?userId=f776d4d8-a6f5-44db-9960-6165a1b1535b`);
+            console.log("response", response)
             return response.data;
         } catch (error) {
             console.error("Failed to fetch games:", error);

@@ -47,7 +47,7 @@ const target = env.ASPNETCORE_HTTPS_PORT
 // https://vitejs.dev/config/
 dotenv.config();
 const isNoCert = process.env.VITE_CERT === "true";
-console.log(isNoCert)
+
 
 export default defineConfig({
   plugins: [plugin()],
