@@ -74,6 +74,7 @@ public class UserAchievementService : IUserAchievementService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.AchievementId == id)
             .ToListAsync();
 
@@ -99,6 +100,7 @@ public class UserAchievementService : IUserAchievementService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.AchievementId == id)
             .FirstOrDefaultAsync();
 
@@ -133,6 +135,7 @@ public class UserAchievementService : IUserAchievementService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.UserId == user.Id)
             .ToListAsync();
 
@@ -158,6 +161,7 @@ public class UserAchievementService : IUserAchievementService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.Id == updatedRequest.Id)
             .FirstOrDefaultAsync();
 

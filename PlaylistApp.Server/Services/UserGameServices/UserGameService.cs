@@ -67,6 +67,7 @@ public class UserGameService : IUserGameService
             .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -98,6 +99,7 @@ public class UserGameService : IUserGameService
             .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.UserId == User.Id)
             .ToListAsync();
 

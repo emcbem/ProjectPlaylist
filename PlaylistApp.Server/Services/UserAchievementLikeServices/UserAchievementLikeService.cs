@@ -66,6 +66,7 @@ public class UserAchievementLikeService : IUserAchievementLikeService
             //        .ThenInclude(x => x.PlatformGame)
             //            .ThenInclude(x => x.Platform)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.UserId == user.Id)
             .ToListAsync();
 

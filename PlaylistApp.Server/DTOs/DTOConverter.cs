@@ -36,6 +36,20 @@ public static class DTOConverter
             return new UserDTO();
         }
 
+        if (user.UserImage is null)
+        {
+            return new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Bio = user.Bio ?? "",
+                Strikes = user.Strike,
+                XP = user.Xp,
+                CreationDate = user.JoinDate,
+                AuthID = user.AuthId,
+            };
+        }
+
         return new UserDTO()
         {
             Id = user.Id,
@@ -45,8 +59,7 @@ public static class DTOConverter
             XP = user.Xp,
             CreationDate = user.JoinDate,
             AuthID = user.AuthId,
-            //TODO: Get Image URL from Image Table
-            //ProfileURL = user.UserImage,
+            ProfileURL = user.UserImage.Url,
         };
     }
 

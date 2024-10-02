@@ -123,6 +123,7 @@ public class GoalService : IGoalService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Game)
             .Include(x => x.User)
+                .ThenInclude(X => X.UserImage)
             .Where(x => x.UserId == user.Id)
             .ToListAsync();
 
@@ -143,6 +144,7 @@ public class GoalService : IGoalService
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Game)
             .Include(x => x.User)
+                .ThenInclude(X => X.UserImage)
             .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync();
 
