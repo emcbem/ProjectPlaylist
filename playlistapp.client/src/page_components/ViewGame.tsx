@@ -10,7 +10,6 @@ const ViewGame = () => {
   const [game, setgame] = useState<Game>();
 
   useEffect(() => {
-    console.log(games);
     setgame(games.find((x) => x.id === Number(gameId)));
   }, [games]);
 
