@@ -4,7 +4,7 @@ interface props {
   index: number;
   cover: string;
   title: string;
-  publishDate: Date;
+  publishDate: string;
   description: string;
   ageRating: string;
 }

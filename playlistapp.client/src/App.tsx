@@ -7,14 +7,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ViewGame from "./page_components/ViewGame";
 import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
-import { UserGameContextProvidor } from "./contexts/UserGameContext";
+import { UserGameContextProvider } from "./contexts/UserGameContext";
 
 function App() {
   const { isAuthenticated } = useAuth0();
 
   return (
     <GameContextProvidor>
-      <UserGameContextProvidor>
+      <UserGameContextProvider>
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#EDBD68] to-[#602B53] p-2 z-50">
         <div className="dark:bg-black bg-white">
             <Navbar />
@@ -29,7 +29,7 @@ function App() {
             </Routes>
           </div>
       </div>
-      </UserGameContextProvidor>
+      </UserGameContextProvider>
     </GameContextProvidor>
   );
 }

@@ -16,9 +16,9 @@ const HomePageNLI: React.FC = () => {
           <div className="md:w-1/2 sm:w-3/4 w-5/6 sm:my-20 my-10 font-bold">
             Explore your gaming library like never before.
           </div>
-          
+
         </div>
-        
+
         <CardCarousel list={games} reverse={false} />
         <CardCarousel list={games} reverse={true} />
         <HorizontalRule />
@@ -27,8 +27,8 @@ const HomePageNLI: React.FC = () => {
         </div>
         <ExpandingColumns />
         <Link to="/search">
-            <button className="text-white">Search Page</button>
-          </Link>
+          <button className="text-white">Search Page</button>
+        </Link>
       </div>
     </>
   );

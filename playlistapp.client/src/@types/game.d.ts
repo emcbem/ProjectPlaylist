@@ -4,7 +4,7 @@ export interface Game {
     title: string;
     description: string;
     ageRating: string;
-    publishDate: Date;
+    publishDate: string;
     coverUrl: string;
 }
 

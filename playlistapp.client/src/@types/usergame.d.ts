@@ -14,4 +14,5 @@ export interface UserGameContextInterface {
     error: string;
     isLoading: boolean;
     fetchAllUserGames: (userGames: UserGame[]) => void;
+    addUserGame: (userGameId: number) => void;
 }
