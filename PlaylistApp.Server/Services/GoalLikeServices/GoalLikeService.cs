@@ -56,6 +56,7 @@ public class GoalLikeService : IGoalLikeService
 
         var goalLikes = await context.GoalLikes
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Include(x => x.Goal)
                 .ThenInclude(x => x.Achievement)
                     .ThenInclude(x => x.PlatformGame)

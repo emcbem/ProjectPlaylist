@@ -47,6 +47,7 @@ public class ReviewLikeService : IReviewLikeService
         var gameReviews = await context.GameReviews
             .Include(x => x.Game)
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 

@@ -23,8 +23,8 @@ public static class DTOConverter
             Description = game.Description,
             IdgbId = game.IdgbId,
             Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
-            //TODO: Calculate hours plays
-            //TODO: Calculate total total owned
+            HoursPlayed = game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)),
+            TotalOwned = game.PlatformGames.Sum(x => x.UserGames.Count)
 
         };
     }
@@ -36,6 +36,20 @@ public static class DTOConverter
             return new UserDTO();
         }
 
+        if (user.UserImage is null)
+        {
+            return new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Bio = user.Bio ?? "",
+                Strikes = user.Strike,
+                XP = user.Xp,
+                CreationDate = user.JoinDate,
+                AuthID = user.AuthId,
+            };
+        }
+
         return new UserDTO()
         {
             Id = user.Id,
@@ -45,8 +59,7 @@ public static class DTOConverter
             XP = user.Xp,
             CreationDate = user.JoinDate,
             AuthID = user.AuthId,
-            //TODO: Get Image URL from Image Table
-            //ProfileURL = user.UserImage,
+            ProfileURL = user.UserImage.Url,
         };
     }
 
@@ -96,9 +109,7 @@ public static class DTOConverter
             ImageURL = achievement.ImageUrl ?? "",
             Name = achievement.AchievementName,
             Description = achievement.AchievementDesc ?? "",
-            // TODO: Calculate this later
-            // Get the achievement and all of the users that have completed this achievement. 
-            // TotalTimeClaimed = achievement.
+            TotalTimeClaimed = achievement.UserAchievements.Count
         };
     }
 

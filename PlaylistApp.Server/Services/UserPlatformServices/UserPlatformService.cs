@@ -71,6 +71,7 @@ public class UserPlatformService : IUserPlatformService
 
         var userPlatforms = await context.UserPlatforms
             .Include(x => x.User)
+                .ThenInclude(X => X.UserImage)
             .Include(x => x.Platform)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
@@ -89,6 +90,7 @@ public class UserPlatformService : IUserPlatformService
 
         var userPlatform = await context.UserPlatforms
             .Include(x => x.User)
+                .ThenInclude(X => X.UserImage)
             .Include(x => x.Platform)
             .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync();
@@ -101,7 +103,7 @@ public class UserPlatformService : IUserPlatformService
         userPlatform.ExternalPlatformId = request.ExternalPlatformId ?? userPlatform.ExternalPlatformId;
         userPlatform.IsPublic = request.IsPublic;
         userPlatform.Gamertag = request.GamerTag ?? userPlatform.Gamertag;
-       
+
         context.Update(userPlatform);
         await context.SaveChangesAsync();
         return userPlatform.ToDTO();

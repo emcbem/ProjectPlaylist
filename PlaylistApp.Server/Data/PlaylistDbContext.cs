@@ -462,7 +462,7 @@ public partial class PlaylistDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.UserGenres)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("user_genre_user_id_fkey");
         });
 
