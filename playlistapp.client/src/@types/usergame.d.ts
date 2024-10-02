@@ -1,7 +1,12 @@
+import { PlatformGame } from "./platformGame";
+import { User } from "./userAccount";
+
 export interface UserGame {
-    Id: Number,
-    UserId: Number,
-    PlatformGameId: Number,
+    userGameId: Number,
+    platformGame: PlatformGame,
+    timePlayed: number,
+    User: User,
+    datAdded: Date,
 }
 
 export interface UserGameContextInterface {

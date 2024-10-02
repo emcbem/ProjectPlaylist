@@ -15,7 +15,6 @@ createRoot(document.getElementById("root")!).render(
         scope: "openid profile email",
       }}
     >
-      
       <StrictMode>
         <App />
       </StrictMode>
