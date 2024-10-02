@@ -1,7 +1,6 @@
-
 const SearchBar = () => {
   return (
-    <div className="flex-grow mx-8 flex relative justify-center">
+    <div className="flex-grow mx-8 flex relative justify-center z-20">
       <div className="sm:w-3/4 w-full relative flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

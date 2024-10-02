@@ -18,7 +18,7 @@ const Profile: React.FC = () => {
   return (
     isAuthenticated &&
     user && (
-      <div className="lg:w-[213.69px] flex justify-end">
+      <div className="lg:w-[213.69px] flex justify-end relative z-20">
         <div className="flex flex-row flex-shrink-0 h-14 w-14">
           <Menu>
             <MenuHandler>
