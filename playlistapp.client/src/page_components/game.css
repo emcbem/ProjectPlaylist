@@ -1,0 +1,11 @@
+.image-gradient {
+    mask-image: radial-gradient(ellipse at 50% 10%, white 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at top, white 1%, transparent 45%);
+}
+
+@media (prefers-color-scheme: dark) {
+    .image-gradient {
+        mask-image: radial-gradient(ellipse at 50% 10%, black 20%, transparent 80%);
+        -webkit-mask-image: radial-gradient(ellipse at top, black 1%, transparent 45%);
+    }
+}
