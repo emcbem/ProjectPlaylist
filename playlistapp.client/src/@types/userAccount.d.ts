@@ -8,3 +8,10 @@ export interface UserAccount {
     authID: string;
     profileURL: string | null;
 }
+
+export interface UserAccountContextInterface {
+    usr: UserAccount | undefined;
+    error: string;
+    isLoading: boolean;
+    getUserById: (userAccount: UserAccount) => void;
+}

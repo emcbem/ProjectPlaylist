@@ -13,7 +13,7 @@ export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({ child
 
     const fetchAllPlatformGames = async () => {
         try {
-            const response = await axios.get<PlatformGame[]>(`${import.meta.env.VITE_URL}/PlatformGame/getalltypes`);
+            const response = await axios.get<PlatformGame[]>(`${import.meta.env.VITE_URL}/getallplatformgames`);
             return response.data;
         } catch (error) {
             console.error("Failed to fetch games:", error);

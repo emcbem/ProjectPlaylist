@@ -1,18 +1,28 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { UserGame, UserGameContextInterface } from "../@types/usergame";
 import axios from "axios";
+import { GameContext } from "./GameContext";
+import { GameContextInterface } from "../@types/game";
+import { PlatformGameContextInterface } from "../@types/platformGame";
+import { PlatformGameContext } from "./PlatformGameContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
-
+export interface AddUserGameRequest {
+    UserId: string;
+    PlatformGameId: number;
+}
 
 export const UserGameContext = React.createContext<UserGameContextInterface | null>(
     null
 );
 
 export const UserGameContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    // const { games } = React.useContext(GameContext) as GameContextInterface;
+    const { games } = React.useContext(GameContext) as GameContextInterface;
+    const { platformGames } = React.useContext(PlatformGameContext) as PlatformGameContextInterface;
     const [userGames, setuserGames] = useState<UserGame[]>([]);
     const [error, seterror] = useState<string>("");
     const [isLoading, setisLoading] = useState<boolean>(false);
+    const { user, isAuthenticated } = useAuth0();
 
     const fetchUserGamesByUserUuid = async () => {
         try {
@@ -42,50 +52,24 @@ export const UserGameContextProvider: FC<{ children: ReactNode }> = ({ children 
     const addUserGame = (gameId: number) => {
         console.log("Adding usergame!", gameId);
 
-        // let currentGame = games.find(x => x.id === gameId);
-        // var idbg_idToAdd = currentGame?.idgb_id;
+        let currentGame = games.find(x => x.id === gameId);
+        
+        let platformGame = platformGames.find(x => x.GameId === gameId);
+        if (!platformGame) {
+            throw new Error(`No platform game with game id ${gameId}`);
+        }
 
-        // let gameToAddToGame: Game = {
-        //     id: 10000,
-        //     idgb_id: Number(idbg_idToAdd),
-        //     title: String(currentGame?.title),
-        //     description: String(currentGame?.description),
-        //     ageRating: String(currentGame?.ageRating),
-        //     publishDate: String(currentGame?.publishDate),
-        //     coverUrl: String(currentGame?.coverUrl)
-        // }
+        //let dateAdded = Date.now();
 
-        // let platform: Platform = { id: 1000, name: "platform", logoURL: "djfdjf.jpg" }
+        //let timePlayed = 0;
 
-        // let PlatformGame: PlatformGame = { 
-        //     id: 19209823,
-        //      game: gameToAddToGame,
-        //       platform: platform,
-        //        platformURL: "dlkdjf.com",
-        //         platformKey: "key" 
-        //     }
-
-        // let usr: User = {
-        //     id: 5,
-        //     username: "shusty",
-
-        // }
-        // let usr:User = {};
-
-        // let usrGame: UserGame = {
-        //     userGameId: 8347384,
-        //     platformGame: PlatformGame,
-        //     timePlayed: 0,
-        //     User: usr;
-
-        // }
-        // id: number;
-        //     game: Game;
-        //     platform: Platform;
-        //     platformURL: string;
-        //     platformKey: string;
-
-
+        let usrGameToAdd: AddUserGameRequest = {
+            UserId: "12345",
+            PlatformGameId: platformGame.Id
+        }
+        console.log(usrGameToAdd)
+        console.log(currentGame)
+        console.log(user, isAuthenticated)
 
         //let addUserGameRequestObj :AddUserGameRequest ={UserId: "1", PlatformGameId: 1};
         // console.log(gameToAddToGame)
