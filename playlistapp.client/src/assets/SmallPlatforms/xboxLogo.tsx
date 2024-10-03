@@ -1,6 +1,13 @@
-export const XboxIcon = () => (
+interface props {
+  height: number;
+  width: number;
+  darkColor?: string;
+  color? : string
+}
+
+export const XboxIcon: React.FC<props> = ({height, width, darkColor, color}) => (
   <svg
-  className="transition-colors duration-300 fill-current group-hover:fill-[#FFFFFF] w-5 h-5 m-1"
+  className={`w-[${width}px] h-[${height}px] m-1 ${color && darkColor ? `dark:fill-${darkColor} fill-${color}` : ''}`}
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
   >

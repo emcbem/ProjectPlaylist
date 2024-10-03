@@ -71,8 +71,6 @@ wwwroot/
 *.swo
 
 # Tailwind CSS
-tailwind.config.js
-postcss.config.js
 
 
 ## Ignore Visual Studio temporary files, build results, and
