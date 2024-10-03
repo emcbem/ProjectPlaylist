@@ -25,8 +25,8 @@ const Account = () => {
                     {userGames &&
                         userGames.map((ug, key) =>
                             <div key={key}>
-                                <img src={ug.platformGame.game.coverUrl} width={100}/>
-                                <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p>
+                                {/* <img src={ug.platformGame.game.coverUrl} width={100}/>
+                                <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p> */}
                                 <p>Time Played: {ug.timePlayed}</p>
                             </div>
                         )

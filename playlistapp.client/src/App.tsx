@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ViewGame from "./page_components/ViewGame";
 import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
-import { UserGameContextProvidor } from "./contexts/UserGameContext";
+import { UserGameContextProvider } from "./contexts/UserGameContext";
 import ShineBorder from "./components/ui/shine-border";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <GameContextProvidor>
-      <UserGameContextProvidor>
+      <UserGameContextProvider>
         <ShineBorder
           className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
           color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
@@ -39,7 +39,7 @@ function App() {
             </div>
           </div>
         </ShineBorder>
-      </UserGameContextProvidor>
+      </UserGameContextProvider>
     </GameContextProvidor>
   );
 }

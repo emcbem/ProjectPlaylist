@@ -1,7 +1,6 @@
-export interface Platform {
-    id: number;
-    name: string;
-    logoURL: string;
+export interface AddUserGameRequest {
+    UserId: string;
+    PlatformGameId: number;
 }
 
 export interface PlatformContextInterface {

@@ -17,12 +17,18 @@ const options: Intl.DateTimeFormatOptions = {
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
+  // const { addUserGame } = React.useContext(UserGameContext) as UserGameContextInterface;
+  // const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setgame] = useState<Game>();
 
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
   }, [games]);
+
+  // const addGameToLibrary = () => {
+  //   addUserGame(Number(gameId));
+  // }
 
   return (
     <>

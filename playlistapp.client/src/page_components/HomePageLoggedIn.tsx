@@ -2,6 +2,7 @@ import React from "react";
 import { GameContext } from "../contexts/GameContext";
 import { GameContextInterface } from "../@types/game";
 import MasonryCards from "../individual_components/MasonryCards";
+import { Link } from "react-router-dom";
 
 const HomePageLoggedIn: React.FC = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
@@ -18,6 +19,9 @@ const HomePageLoggedIn: React.FC = () => {
           <MasonryCards title={"Recommended"} games={slicedArray2} />
         </div>
       </div>
+      <Link to="/search">
+        <button className="text-white">Search Page</button>
+      </Link>
     </>
   );
 };
