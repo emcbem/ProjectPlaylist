@@ -38,4 +38,10 @@ public class UserController : Controller
     {
         return await userService.UpdateUser(request);
     }
+
+    [HttpGet("getuserbyauthid")]
+    public async Task<UserDTO> GetUserByAuthId(string authId)
+    {
+        return await userService.GetUserByAuthId(authId);
+    }
 }

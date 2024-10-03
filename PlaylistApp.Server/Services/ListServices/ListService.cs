@@ -30,7 +30,7 @@ public class ListService : IListService
 
         List newList = new List()
         {
-            DateMade = request.CreationDate,
+            DateMade = request.CreationDate.ToUniversalTime(),
             IsPublic = request.IsPublic,
             ListName = request.Name,
             UserId = user.Id,
