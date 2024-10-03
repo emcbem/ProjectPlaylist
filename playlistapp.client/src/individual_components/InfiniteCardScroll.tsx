@@ -43,7 +43,7 @@ const CardCarousel: React.FC<props> = ({ list, reverse }) => {
               index={index}
               cover={game.coverUrl}
               title={game.title}
-              publishDate={game.publishDate}
+              publishDate={String(game.publishDate)}
               description={game.description}
               ageRating={game.ageRating}
             />

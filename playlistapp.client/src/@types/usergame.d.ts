@@ -1,11 +1,11 @@
 import { PlatformGame } from "./platformGame";
-import { User } from "./userAccount";
+import { UserAccount } from "./userAccount";
 
 export interface UserGame {
     userGameId: Number,
     platformGame: PlatformGame,
     timePlayed: number,
-    User: User,
+    User: UserAccount,
     datAdded: Date,
 }
 
@@ -14,4 +14,5 @@ export interface UserGameContextInterface {
     error: string;
     isLoading: boolean;
     fetchAllUserGames: (userGames: UserGame[]) => void;
+    addUserGame: (userGameId: number) => void;
 }
