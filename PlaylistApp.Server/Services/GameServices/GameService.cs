@@ -17,7 +17,11 @@ public class GameService : IGameService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var games = await context.Games.ToListAsync();
+        var games = context.Games
+            .Include(x => x.InvolvedCompanies)
+                .ThenInclude(x => x.Company)
+            .Take(500)
+            .ToList();
 
         return games.Select(x => x.ToDTO()).ToList();
     }
