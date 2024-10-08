@@ -110,7 +110,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     companyLogo = new CompanyLogo();
 
                     companyLogo.Id = csv.GetField<long?>("id");
-                    
+
                     companyLogo.Url = csv.GetField("url");
 
                     companyLogos.Add(companyLogo);
@@ -169,6 +169,56 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return covers;
         }
 
+        public static List<ExternalGame> ParseExternalGameCsv(string externalGamePath)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            var externalGames = new List<IGDB.Models.ExternalGame>();
+
+            using (var reader = new StreamReader(externalGamePath))
+            using (var csv = new CsvReader(reader, config))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var externalGame = new IGDB.Models.ExternalGame();
+
+                    externalGame.Category = (ExternalCategory)csv.GetField<long?>("category");
+
+                    externalGame.Id
+                        = csv.GetField<long?>("id");
+
+                    externalGame.Uid = csv.GetField("uid");
+
+                    externalGames.Add(externalGame);
+                }
+            }
+            return externalGames;
+        }
+
+        public static List<Website> ParseWebsiteCsv(string websiteLocalPath)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            var websites = new List<IGDB.Models.Website>();
+
+            using (var reader = new StreamReader(websiteLocalPath))
+            using (var csv = new CsvReader(reader, config))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var website = new IGDB.Models.Website();
+
+                    website.Url = csv.GetField<string>("url");
+                    website.Id = csv.GetField<long?>("id");
+                    website.Category = (WebsiteCategory)csv.GetField<long?>("category");
+
+                    websites.Add(website);
+                }
+            }
+            return websites;
+        }
 
         public static List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
         {
@@ -198,6 +248,8 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.MultiplayerModes = new IdentitiesOrValues<MultiplayerMode>(ParseLongArray(csv.GetField<string>("multiplayer_modes")));
                     game.InvolvedCompanies = new IdentitiesOrValues<IGDB.Models.InvolvedCompany>(ParseLongArray(csv.GetField<string>("involved_companies")));
                     game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")));
+                    game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")));
+                    game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")));
                     // Example null check
                     if (string.IsNullOrWhiteSpace(game.Name))
                     {
