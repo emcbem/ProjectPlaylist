@@ -32,9 +32,9 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
           />
           <div className="dark:bg-[#252A2C] bg-[#D9D9D9]">
             <div className="flex flex-row p-2">
-              <PS5Icon height={20} width={20} />
-              <XboxIcon height={20} width={20} />
-              <SteamIcon height={20} width={20} />
+              <PS5Icon height={20} width={20} darkColor="white" color="black" />
+              <XboxIcon height={20} width={20} darkColor="white" color="black" />
+              <SteamIcon height={20} width={20} darkColor="white" color="black" />
             </div>
             <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
               {game.title}
