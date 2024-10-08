@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 import LogoutButton from "./logout";
+import { Link } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -15,12 +16,10 @@ const Profile: React.FC = () => {
     return <div>Loading ...</div>;
   }
 
-  console.log(user);
-
   return (
     isAuthenticated &&
     user && (
-      <div className="lg:w-[213.69px] flex justify-end">
+      <div className="lg:w-[213.69px] flex justify-end relative z-20">
         <div className="flex flex-row flex-shrink-0 h-14 w-14">
           <Menu>
             <MenuHandler>
@@ -44,14 +43,16 @@ const Profile: React.FC = () => {
               </MenuItem>
 
               <hr className="my-3" />
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                className="font-bold"
-              >
-                Account
-              </MenuItem>
+              <Link to="/account">
+                <MenuItem
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  className="font-bold"
+                >
+                  Account
+                </MenuItem>
+              </Link>
 
               <hr className="my-3" />
               <MenuItem

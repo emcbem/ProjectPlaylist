@@ -30,7 +30,7 @@ public class ListService : IListService
 
         List newList = new List()
         {
-            DateMade = request.CreationDate,
+            DateMade = request.CreationDate.ToUniversalTime(),
             IsPublic = request.IsPublic,
             ListName = request.Name,
             UserId = user.Id,
@@ -65,6 +65,7 @@ public class ListService : IListService
 
         var userLists = await context.Lists
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
@@ -83,6 +84,7 @@ public class ListService : IListService
 
         var lists = await context.Lists
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
             .Where(x => x.ListName == name)
             .ToListAsync();
@@ -101,6 +103,7 @@ public class ListService : IListService
 
         var list = await context.Lists
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
             .Where(x => x.Id == Id)
             .FirstOrDefaultAsync();
@@ -119,6 +122,7 @@ public class ListService : IListService
 
         var list = await context.Lists
             .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
             .Where(x => x.Id == request.ListId)
             .FirstOrDefaultAsync();

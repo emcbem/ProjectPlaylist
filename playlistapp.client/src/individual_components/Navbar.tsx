@@ -10,9 +10,9 @@ const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
 
   return (
-    <div className="bg-white dark:bg-black">
-      <nav className="bg-white dark:bg-black w-full flex items-center sm:px-8 px-4 pt-8 h-20 mb-2">
-        <div className="flex-shrink-0">
+    <div className="z-20">
+      <nav className="bg-white dark:bg-black w-full flex items-center sm:px-8 px-4 pt-8 h-20 mb-2 z-20">
+        <div className="flex-shrink-0 z-20">
           <a href="/">
             <img
               className="lg:h-14 md:h-12 sm:h-10 h-6 lg:block dark:hidden hidden"

@@ -4,13 +4,12 @@ export interface Game {
     title: string;
     description: string;
     ageRating: string;
-    publishDate: Date;
+    publishDate: string;
     coverUrl: string;
 }
 
 export interface GameContextInterface {
     games: Game[];
-    error: string;
+    error: string | undefined;
     isLoading: boolean;
-    fetchAllGames: (game: Game) => void;
 }

@@ -17,11 +17,16 @@ public class UserService : IUserService
     public async Task<bool> DeleteUserById(Guid userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
-        var user = await context.UserAccounts.Where(x => x.Guid == userId).FirstOrDefaultAsync();
+
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == userId)
+            .FirstOrDefaultAsync();
+
         if (user == null)
         {
             return false;
         }
+
         try
         {
             var result = context.UserAccounts.Remove(user);
@@ -34,34 +39,107 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<UserDTO> GetUserByAuthId(string authId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var user = await context.UserAccounts
+            .Include(x => x.UserGenres)
+            .Include(x => x.UserPlatforms)
+            .Include(x => x.Lists)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.InvolvedCompanies)
+                            .ThenInclude(x => x.Company)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.UserImage)
+            .Where(x => x.AuthId == authId)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return new UserDTO();
+        }
+
+        return user.ToDTO();    
+    }
+
     public async Task<UserDTO> GetUserById(Guid guid)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
-        var user = await context.UserAccounts.Where(x => x.Guid == guid).FirstOrDefaultAsync();
+
+        var user = await context.UserAccounts
+            .Include(x => x.UserGenres)
+            .Include(x => x.UserPlatforms)
+            .Include(x => x.Lists)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.InvolvedCompanies)
+                            .ThenInclude(x => x.Company)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.UserImage)
+            .Where(x => x.Guid == guid)
+            .FirstOrDefaultAsync();
+
         if (user == null)
         {
             return new UserDTO();
         }
+
         return user.ToDTO();
     }
 
     public async Task<List<UserDTO>> GetUsersByName(string username)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
-        var users = await context.UserAccounts.Where(x => x.Username.Contains(username)).ToListAsync();
+
+        var users = await context.UserAccounts
+            .Include(x => x.UserGenres)
+            .Include(x => x.UserPlatforms)
+            .Include(x => x.Lists)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.InvolvedCompanies)
+                            .ThenInclude(x => x.Company)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.UserImage)
+            .Where(x => x.Username.Contains(username))
+            .ToListAsync();
+
         if (!users.Any())
         {
             return new List<UserDTO>();
         }
+
         return users.Select(x => x.ToDTO()).ToList();
     }
 
     public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
+
         var userUnderChange = await context.UserAccounts
             .Include(x => x.UserGenres)
             .Include(x => x.UserPlatforms)
+            .Include(x => x.Lists)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.InvolvedCompanies)
+                            .ThenInclude(x => x.Company)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.UserImage)
             .Where(x => x.Guid == updateUserRequest.Guid)
             .FirstOrDefaultAsync();
         
@@ -71,7 +149,7 @@ public class UserService : IUserService
         }
 
         userUnderChange.Xp = updateUserRequest.XP;
-        userUnderChange.Username = updateUserRequest.UserName;
+        userUnderChange.Username = updateUserRequest.UserName ?? userUnderChange.Username;
         userUnderChange.Bio = updateUserRequest.Bio;
         userUnderChange.Strike = updateUserRequest.Strikes;
         userUnderChange.UserImageId = updateUserRequest.UserImageID;

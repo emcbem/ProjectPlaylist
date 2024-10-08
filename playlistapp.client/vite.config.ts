@@ -1,12 +1,11 @@
 import { fileURLToPath, URL } from "node:url";
-
 import { defineConfig } from "vite";
 import plugin from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
 import child_process from "child_process";
 import { env } from "process";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== ""
@@ -34,7 +33,7 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
       { stdio: "inherit" }
     ).status
   ) {
-    //throw new Error("Could not create certificate.");
+    // throw new Error("Could not create certificate.");
   }
 }
 
@@ -44,16 +43,16 @@ const target = env.ASPNETCORE_HTTPS_PORT
   ? env.ASPNETCORE_URLS.split(";")[0]
   : "https://localhost:7041";
 
-// https://vitejs.dev/config/
+// Load environment variables
 dotenv.config();
 const isNoCert = process.env.VITE_CERT === "true";
-console.log(isNoCert)
 
 export default defineConfig({
   plugins: [plugin()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // Add any additional aliases here
     },
   },
   server: {

@@ -4,6 +4,7 @@ import { PS5Icon } from "../assets/SmallPlatforms/psLogo";
 import { SteamIcon } from "../assets/SmallPlatforms/steamLogo";
 import { XboxIcon } from "../assets/SmallPlatforms/xboxLogo";
 import { Game } from "../@types/game";
+import { Link } from "react-router-dom";
 
 interface props {
   title: string;
@@ -18,13 +19,12 @@ const options: Intl.DateTimeFormatOptions = {
 
 const MasonryCards: React.FC<props> = ({ title, games }) => {
   const [expand, setExpand] = useState<boolean>(false);
-  const cards = games.map((game, index) => {
+  const cards = games.map((game) => {
     const randomHeight = Math.floor(Math.random() * (300 - 200 + 1) + 200);
     return (
-      <>
+      <Link to={`/view-game/${game.id}`} key={game.id}>
         <div className="rounded-lg overflow-hidden dark:text-white text-black">
           <img
-            key={index}
             src={game.coverUrl}
             className={`w-full sm:h-[${randomHeight}px] h-[${
               randomHeight / 2
@@ -32,9 +32,9 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
           />
           <div className="dark:bg-[#252A2C] bg-[#D9D9D9]">
             <div className="flex flex-row p-2">
-              <PS5Icon />
-              <XboxIcon />
-              <SteamIcon />
+              <PS5Icon height={20} width={20} />
+              <XboxIcon height={20} width={20} />
+              <SteamIcon height={20} width={20} />
             </div>
             <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
               {game.title}
@@ -53,7 +53,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
             </div>
           </div>
         </div>
-      </>
+      </Link>
     );
   });
 
@@ -62,7 +62,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
       <div
         className={`sm:mt-20 pt-10 font-bold lg:mx-20 md:mx-15 sm:mx-10 mx-5 pb-5 underline ${
           expand ? `sticky top-0` : ""
-        } z-20 bg-black`}
+        } z-20 dark:bg-black bg-white`}
       >
         {title}
       </div>

@@ -23,9 +23,8 @@ public static class DTOConverter
             Description = game.Description,
             IdgbId = game.IdgbId,
             Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
-            //TODO: Calculate hours plays
-            //TODO: Calculate total total owned
-
+            HoursPlayed = game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)),
+            TotalOwned = game.PlatformGames.Sum(x => x.UserGames.Count),
         };
     }
 
@@ -45,8 +44,10 @@ public static class DTOConverter
             XP = user.Xp,
             CreationDate = user.JoinDate,
             AuthID = user.AuthId,
-            //TODO: Get Image URL from Image Table
-            //ProfileURL = user.UserImage,
+            ProfileURL = user.UserImage?.Url ?? "",
+            Platforms = user.UserPlatforms.Select(x => x.Platform.ToDTO()).ToList(),
+            GameLists = user.Lists.Select(x => x.ToDTO()).ToList(),
+            UserGames = user.UserGames.Select(x => x.ToDTONoUser()).ToList(),
         };
     }
 
@@ -96,9 +97,7 @@ public static class DTOConverter
             ImageURL = achievement.ImageUrl ?? "",
             Name = achievement.AchievementName,
             Description = achievement.AchievementDesc ?? "",
-            // TODO: Calculate this later
-            // Get the achievement and all of the users that have completed this achievement. 
-            // TotalTimeClaimed = achievement.
+            TotalTimeClaimed = achievement.UserAchievements.Count
         };
     }
 
@@ -149,6 +148,22 @@ public static class DTOConverter
         {
             PlatformGame = userGame.PlatformGame.ToDTO(),
             User = userGame.User.ToDTO(),
+            TimePlayed = userGame.TimePlayed,
+            UserGameId = userGame.Id,
+            DateAdded = userGame.DateAdded,
+        };
+    }
+    public static UserGameDTO ToDTONoUser(this UserGame userGame)
+    {
+        if (userGame is null)
+        {
+            return new UserGameDTO();
+        }
+
+        return new UserGameDTO()
+        {
+            PlatformGame = userGame.PlatformGame.ToDTO(),
+            User = null,
             TimePlayed = userGame.TimePlayed,
             UserGameId = userGame.Id,
             DateAdded = userGame.DateAdded,

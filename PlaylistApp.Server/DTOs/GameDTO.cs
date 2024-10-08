@@ -12,7 +12,7 @@ public class GameDTO
     public string? AgeRating { get; set; }
     public int? IdgbId { get; set; }
     public List<CompanyDTO>? Companies { get; set; }
-    public int? HoursPlayed { get; set; }
+    public long? HoursPlayed { get; set; }
     public int? TotalOwned { get; set; }
 
 }

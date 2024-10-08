@@ -21,7 +21,8 @@ public class UserGenreService : IUserGenreService
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        var usr = await context.UserAccounts.Where(x => x.Guid == request.UserId)
+        var usr = await context.UserAccounts
+            .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
 
         if (usr == null) { return false; }
@@ -41,7 +42,8 @@ public class UserGenreService : IUserGenreService
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        var usr = await context.UserAccounts.Where(x => x.Guid == request.UserId)
+        var usr = await context.UserAccounts
+            .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
 
         if (usr == null) { return false; }
@@ -72,6 +74,7 @@ public class UserGenreService : IUserGenreService
         }
         
         var usrGenres = await context.UserGenres
+            .Include(x => x.Genre)
             .Where(x => x.UserId == usr.Id)
             .ToListAsync();
 
