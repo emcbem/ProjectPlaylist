@@ -9,20 +9,50 @@ import { GameDetails } from "@/individual_components/GameDetails";
 import GameImageBackground from "@/individual_components/GameImageBackground";
 import { UserGameContext } from "@/contexts/UserGameContext";
 import { UserGameContextInterface } from "@/@types/usergame";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { PlatformGameContext } from "@/contexts/PlatformGameContext";
+import { PlatformGameContextInterface } from "@/@types/platformGame";
+import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
 
-  const { userGames } = React.useContext(
+  const { platformGames, mutatePlatformGames } = React.useContext(
+    PlatformGameContext
+  ) as PlatformGameContextInterface;
+
+  const { AddUserGame } = React.useContext(
     UserGameContext
   ) as UserGameContextInterface;
 
+  const { usr } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
+
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setgame] = useState<Game>();
+  const [addUserGameRequest, setAddUserGameRequest] =
+    useState<AddUserGameRequest>();
+
+  useEffect(() => {
+    if (platformGames && usr && gameId) {
+      const platformGame = platformGames.find(
+        (x) => x && x.game.id && x.game.id === Number(gameId)
+      );
+      if (platformGame && usr.guid) {
+        setAddUserGameRequest({
+          userId: usr.guid,
+          platformGameId: platformGame.id,
+        });
+      }
+    }
+  }, [platformGames, usr, gameId]);
 
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
-  }, [games]);
+    mutatePlatformGames();
+  }, [games, gameId]);
 
   return (
     <>
@@ -34,11 +64,13 @@ const ViewGame = () => {
           <AddButton />
         </div>
       </div>
-      <button className="relative z-20 dark:text-white text-black">
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => addUserGameRequest && AddUserGame(addUserGameRequest)}
+        disabled={!addUserGameRequest}
+      >
         Add to Library
       </button>
-      <p>User games</p>
-      <div>{userGames && userGames.map((x) => x.platformGame.game.title)}</div>
     </>
   );
 };

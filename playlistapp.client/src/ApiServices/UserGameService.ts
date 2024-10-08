@@ -1,3 +1,4 @@
+import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
 import { UserGame } from "@/@types/usergame";
 import axios from "axios";
 
@@ -16,10 +17,30 @@ export const UserGameService = {
           },
         }
       );
-      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Failed to fetch user games:", error);
+      throw error;
+    }
+  },
+  AddUserGame: async (addUserGameRequest: AddUserGameRequest) => {
+    if (!addUserGameRequest) {
+      console.error("Add user game request is undefined or empty");
+      throw new Error("Add user game request must be provided");
+    }
+    try {
+      const response = await axios.post<UserGame>(
+        `${import.meta.env.VITE_URL}/UserGame/addusergame`,
+        addUserGameRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to add user game", error);
       throw error;
     }
   },
