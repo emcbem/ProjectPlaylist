@@ -39,5 +39,14 @@ namespace PlaylistApp.Server.Services.IGDBServices
             await context.SaveChangesAsync();
         }
 
+        public async Task UploadPlatformGamesToDatabase(List<PlatformGame> localPlatformGames)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.PlatformGames.AddRange(localPlatformGames);
+
+            await context.SaveChangesAsync();
+        }
+
     }
 }
