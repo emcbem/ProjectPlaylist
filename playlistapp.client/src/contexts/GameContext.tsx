@@ -7,8 +7,6 @@ export const GameContext = React.createContext<GameContextInterface | null>(
   null
 );
 
-console.log(import.meta.env.VITE_URL);
-
 export const GameContextProvidor: FC<{ children: ReactNode }> = ({
   children,
 }) => {

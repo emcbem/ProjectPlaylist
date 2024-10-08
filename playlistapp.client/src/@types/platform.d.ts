@@ -6,7 +6,6 @@ export interface Platform {
 
 export interface PlatformContextInterface {
     platforms: Platform[];
-    error: string;
+    error: string | undefined;
     isLoading: boolean;
-    fetchAllPlatforms: (platforms: Platform[]) => void;
 }

@@ -28,7 +28,7 @@ public class UserController : Controller
     }
 
     [HttpGet("getusersbyname")]
-    public async Task<List<UserDTO>> GetUsersByName(string username)
+    public async Task<UserDTO> GetUsersByName(string username)
     {
         return await userService.GetUsersByName(username);
     }
