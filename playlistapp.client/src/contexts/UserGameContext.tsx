@@ -17,8 +17,8 @@ export const UserGameContext = React.createContext<UserGameContextInterface | nu
 );
 
 export const UserGameContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const { games } = React.useContext(GameContext) as GameContextInterface;
-    const { platformGames } = React.useContext(PlatformGameContext) as PlatformGameContextInterface;
+    // const { games } = React.useContext(GameContext) as GameContextInterface;
+    // const { platformGames } = React.useContext(PlatformGameContext) as PlatformGameContextInterface;
     const [userGames, setuserGames] = useState<UserGame[]>([]);
     const [error, seterror] = useState<string>("");
     const [isLoading, setisLoading] = useState<boolean>(false);

@@ -2,33 +2,33 @@ import { Plus } from "@/assets/SmallPlatforms/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { useState } from "react";
 
-interface props {
-    area: string
-}
-
-const AddButton: React.FC<props> = ({area}) => {
+const AddButton: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   return (
-    <div
-      className="relative flex flex-row items-center bg-[#252A2C] dark:bg-[#D9D9D9] dark:text-black text-white rounded-lg text-start w-1/4 mr-4 h-32 justify-between p-8"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div>
-        <div className="text-3xl font-extrabold">Add To</div>
-        <div className="text-5xl font-extrabold">{area}</div>
+    <div className="flex flex-row lg:mx-28 mx-12 md:my-8 my-2">
+      <div
+        className="cursor-pointer relative flex flex-row items-center bg-[#252A2C] dark:bg-[#D9D9D9] dark:text-black text-white rounded-lg text-start sm:p-8 py-5 px-4
+                 2xl:w-[300px] xl:w-[200px] lg:w-[175px] md:w-[150px] w-fit 
+                 2xl:h-32 xl:h-24 lg:h-16 md:h-8 h-2
+                 justify-start md:justify-center"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div>
+          <div className="2xl:text-3xl xl:text-xl text-lg font-extrabold md:block hidden h-fit">
+            Save to
+          </div>
+          <div className="2xl:text-5xl xl:text-3xl text-xl font-extrabold h-fit">
+            Playlist
+          </div>
+        </div>
+        <div className="relative inline-block md:ml-4 ml-0">
+          <Plus height={50} width={50} darkColor="black" color="white" />
+        </div>
+        {isHovered && (
+          <BorderBeam borderWidth={5} duration={2} className="rounded-lg" />
+        )}
       </div>
-      <div className="relative inline-block ml-4">
-        <Plus height={50} width={50} darkColor="black" color="white" />
-      </div>
-      {isHovered && (
-        <BorderBeam
-          borderWidth={5}
-          duration={12}
-          delay={9}
-          className="rounded-lg"
-        />
-      )}
     </div>
   );
 };

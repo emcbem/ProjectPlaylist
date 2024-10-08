@@ -7,8 +7,8 @@ interface props {
 
 export const XboxIcon: React.FC<props> = ({height, width, darkColor, color}) => (
   <svg
-  className={`w-[${width}px] h-[${height}px] m-1 ${color && darkColor ? `dark:fill-${darkColor} fill-${color}` : ''}`}
-    viewBox="0 0 24 24"
+  className={`2xl:w-[${width}px] 2xl:h-[${height}px] xl:w-[${width-3}px] xl:h-[${height-3}px] lg:w-[${width-6}px] lg:h-[${height-6}px] md:w-[${width-9}px] md:h-[${height-9}px] sm:w-[${width-12}px] sm:h-[${height-12}px] w-[${width-15}px] h-[${height-15}px] m-1 ${color && darkColor ? `dark:fill-${darkColor} fill-${color}` : ''}`}
+  viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path d="m24 12c0-.001 0-.001 0-.002 0-3.618-1.606-6.861-4.144-9.054l-.015-.013c-1.91 1.023-3.548 2.261-4.967 3.713l-.004.004c.044.046.087.085.131.132 3.719 4.012 7.106 9.73 6.546 12.471 1.53-1.985 2.452-4.508 2.452-7.246 0-.002 0-.004 0-.006z" />

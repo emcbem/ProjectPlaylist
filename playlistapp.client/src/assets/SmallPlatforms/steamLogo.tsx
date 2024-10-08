@@ -9,7 +9,7 @@ interface props {
 export const SteamIcon: React.FC<props> = ({height, width, darkColor, color}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className={`w-[${width}px] h-[${height}px] m-1 ${color && darkColor ? `dark:fill-${darkColor} fill-${color}` : ''}`}
+    className={`2xl:w-[${width}px] 2xl:h-[${height}px] xl:w-[${width-3}px] xl:h-[${height-3}px] lg:w-[${width-6}px] lg:h-[${height-6}px] md:w-[${width-9}px] md:h-[${height-9}px] sm:w-[${width-12}px] sm:h-[${height-12}px] w-[${width-15}px] h-[${height-15}px] m-1 ${color && darkColor ? `dark:fill-${darkColor} fill-${color}` : ''}`}
     version="1.1"
     viewBox="1.03 1 29.94 29.99"
   >
