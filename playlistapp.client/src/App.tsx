@@ -7,40 +7,41 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ViewGame from "./page_components/ViewGame";
 import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
-import { UserGameContextProvider } from "./contexts/UserGameContext";
 import ShineBorder from "./components/ui/shine-border";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 function App() {
   const { isAuthenticated } = useAuth0();
+  const queryClient = new QueryClient();
 
   return (
-    <GameContextProvidor>
-      <UserGameContextProvider>
-        <ShineBorder
-          className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
-          color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
-          borderWidth={6}
-          duration={14}
-        >
-          <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
-            <div className="dark:bg-black bg-white w-full">
-              <Navbar />
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
-                  }
-                />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/view-game/:gameId" element={<ViewGame />} />
-                <Route path="/account" element={<Account />} />
-              </Routes>
+    <QueryClientProvider client={queryClient}>
+      <GameContextProvidor>
+          <ShineBorder
+            className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
+            color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
+            borderWidth={6}
+            duration={14}
+          >
+            <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
+              <div className="dark:bg-black bg-white w-full">
+                <Navbar />
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
+                    }
+                  />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/view-game/:gameId" element={<ViewGame />} />
+                  <Route path="/account" element={<Account />} />
+                </Routes>
+              </div>
             </div>
-          </div>
-        </ShineBorder>
-      </UserGameContextProvider>
-    </GameContextProvidor>
+          </ShineBorder>
+      </GameContextProvidor>
+    </QueryClientProvider>
   );
 }
 

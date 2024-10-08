@@ -9,6 +9,7 @@ interface props {
 
 const CardCarousel: React.FC<props> = ({ list, reverse }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  //console.log(list)
 
   useEffect(() => {
     const container = containerRef.current;
