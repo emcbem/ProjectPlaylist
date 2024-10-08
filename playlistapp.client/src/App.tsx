@@ -9,6 +9,7 @@ import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
 import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import AchievementsPage from "./page_components/Achievements";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/view-game/:gameId" element={<ViewGame />} />
                   <Route path="/account" element={<Account />} />
+                  <Route path="/achievements/:gameId" element={<AchievementsPage />} />
                 </Routes>
               </div>
             </div>
