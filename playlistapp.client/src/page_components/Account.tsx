@@ -3,7 +3,6 @@ import React from 'react'
 import HorizontalRule from '../individual_components/HorizontalRule';
 import { UserGameContext } from '../contexts/UserGameContext';
 import { UserGameContextInterface } from '../@types/usergame';
-import MasonryCardsUsrGame from '@/individual_components/MasonryCardsUsrGame';
 
 const Account = () => {
     const { userGames } = React.useContext(UserGameContext) as UserGameContextInterface;
@@ -24,16 +23,15 @@ const Account = () => {
                     <p className="mt-8 text-6xl">Your Collection</p>
                     <HorizontalRule />
 
-                    <MasonryCardsUsrGame title={"Your Collection"} games={userGames} />
-                    {/* {userGames &&
+                    {userGames &&
                         userGames.map((ug, key) =>
                             <div key={key}>
-                                <img src={ug.platformGame.game.coverUrl} width={100}/>
-                                <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p> 
+                                <img src={ug.platformGame.game.coverUrl} width={100} />
+                                <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p>
                                 <p>Time Played: {ug.timePlayed}</p>
                             </div>
                         )
-                    } */}
+                    }
                 </div>
             </div>
         )
