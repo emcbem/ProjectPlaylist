@@ -60,7 +60,7 @@ const ViewGame = () => {
         <GameImageBackground Game={game} />
         <div className="absolute top-1/3 lg:left-1/6 left-0 z-50 3xl:w-1/2 md:w-2/3 w-full">
           <GameDetails Game={game} />
-          <PlatformIconList />
+          <PlatformIconList GameId={game?.id}/>
           <AddButton />
         </div>
       </div>

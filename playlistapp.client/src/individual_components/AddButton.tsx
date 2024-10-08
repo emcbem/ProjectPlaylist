@@ -1,4 +1,4 @@
-import { Plus } from "@/assets/SmallPlatforms/plus";
+import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ const AddButton: React.FC = () => {
           </div>
         </div>
         <div className="relative inline-block md:ml-4 ml-0">
-          <Plus height={50} width={50} darkColor="black" color="white" />
+          <Plus height={50} width={50}  />
         </div>
         {isHovered && (
           <BorderBeam borderWidth={5} duration={2} className="rounded-lg" />

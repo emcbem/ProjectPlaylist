@@ -13,6 +13,7 @@ import { PlatformContextProvider } from "./contexts/PlatformContext";
 import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import { UserGameContextProvider } from "./contexts/UserGameContext";
+import AchievementsPage from "./page_components/Achievements";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -51,7 +52,8 @@ function App() {
                           element={<ViewGame />}
                         />
                         <Route path="/account" element={<Account />} />
-                      </Routes>
+                        <Route path="/achievements/:gameId" element={<AchievementsPage />} />
+                </Routes>
                     </div>
                   </div>
                 </ShineBorder>
