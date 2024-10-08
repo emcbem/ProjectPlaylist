@@ -7,11 +7,11 @@ export interface UserAccount {
     creationDate: string; // Consider using Date type if you prefer
     authID: string;
     profileURL: string | null;
+    guid: string | undefined;
 }
 
 export interface UserAccountContextInterface {
     usr: UserAccount | undefined;
-    error: string;
+    error: string | undefined;
     isLoading: boolean;
-    getUserById: (userAccount: UserAccount) => void;
 }

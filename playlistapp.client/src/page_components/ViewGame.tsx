@@ -7,28 +7,22 @@ import AddButton from "@/individual_components/AddButton";
 import PlatformIconList from "@/individual_components/PlatformIconList";
 import { GameDetails } from "@/individual_components/GameDetails";
 import GameImageBackground from "@/individual_components/GameImageBackground";
-import { PlatformGameContext } from "../contexts/PlatformGameContext";
-import { PlatformGameContextInterface } from "../@types/platformGame";
+import { UserGameContext } from "@/contexts/UserGameContext";
+import { UserGameContextInterface } from "@/@types/usergame";
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
-  const { platformGames, mutate } = React.useContext(
-    PlatformGameContext
-  ) as PlatformGameContextInterface;
 
-  // const { addUserGame } = React.useContext(UserGameContext) as UserGameContextInterface;
-  // const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { userGames } = React.useContext(
+    UserGameContext
+  ) as UserGameContextInterface;
+
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setgame] = useState<Game>();
 
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
-    mutate();
   }, [games]);
-
-  // const addGameToLibrary = () => {
-  //   addUserGame(Number(gameId));
-  // }
 
   return (
     <>
@@ -43,15 +37,8 @@ const ViewGame = () => {
       <button className="relative z-20 dark:text-white text-black">
         Add to Library
       </button>
-      <div>
-        {platformGames && platformGames.length > 0 ? (
-          platformGames.map((x) => (
-            <div key={x.game.id}>{x.game?.title ?? "Unknown Title"}</div>
-          ))
-        ) : (
-          <div>No games found</div>
-        )}
-      </div>
+      <p>User games</p>
+      <div>{userGames && userGames.map((x) => x.platformGame.game.title)}</div>
     </>
   );
 };

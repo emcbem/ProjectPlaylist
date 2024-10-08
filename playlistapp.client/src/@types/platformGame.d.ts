@@ -18,5 +18,5 @@ export interface PlatformGameContextInterface {
     platformGames: PlatformGame[];
     error: string | undefined;
     isLoading: boolean;
-    mutate: () => void;
+    mutatePlatformGames: () => void;
 }

@@ -46,6 +46,7 @@ public static class DTOConverter
             AuthID = user.AuthId,
             ProfileURL = user.UserImage?.Url ?? "",
             Platforms = user.UserPlatforms.Select(x => x.Platform.ToDTO()).ToList(),
+            Guid = user.Guid,
             GameLists = user.Lists.Select(x => x.ToDTO()).ToList(),
             UserGames = user.UserGames.Select(x => x.ToDTONoUser()).ToList(),
         };

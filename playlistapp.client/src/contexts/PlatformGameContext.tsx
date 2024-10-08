@@ -30,7 +30,7 @@ export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({
         platformGames: data ?? [],
         error: error?.message,
         isLoading: isPending,
-        mutate: mutateAsync,
+        mutatePlatformGames: mutateAsync,
       }}
     >
       {children}

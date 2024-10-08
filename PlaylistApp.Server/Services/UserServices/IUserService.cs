@@ -9,5 +9,5 @@ public interface IUserService
     public Task<bool> DeleteUserById(Guid userId);
     public Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest);
     public Task<UserDTO> GetUserByAuthId(string authId);
-    public Task<List<UserDTO>> GetUsersByName(string username);
+    public Task<UserDTO> GetUsersByName(string username);
 }

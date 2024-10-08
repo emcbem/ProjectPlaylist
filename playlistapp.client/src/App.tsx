@@ -11,6 +11,8 @@ import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { PlatformContextProvider } from "./contexts/PlatformContext";
 import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
+import { UserAccountContextProvider } from "./contexts/UserAccountContext";
+import { UserGameContextProvider } from "./contexts/UserGameContext";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -18,35 +20,46 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PlatformGameContextProvider>
-        <GameContextProvidor>
-          <PlatformContextProvider>
-            <ShineBorder
-              className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
-              color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
-              borderWidth={6}
-              duration={14}
-            >
-              <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
-                <div className="dark:bg-black bg-white w-full">
-                  <Navbar />
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
-                      }
-                    />
-                    <Route path="/search" element={<SearchPage />} />
-                    <Route path="/view-game/:gameId" element={<ViewGame />} />
-                    <Route path="/account" element={<Account />} />
-                  </Routes>
-                </div>
-              </div>
-            </ShineBorder>
-          </PlatformContextProvider>
-        </GameContextProvidor>
-      </PlatformGameContextProvider>
+      <UserAccountContextProvider>
+        <UserGameContextProvider>
+          <PlatformGameContextProvider>
+            <GameContextProvidor>
+              <PlatformContextProvider>
+                <ShineBorder
+                  className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
+                  color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
+                  borderWidth={6}
+                  duration={14}
+                >
+                  <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
+                    <div className="dark:bg-black bg-white w-full">
+                      <Navbar />
+                      <Routes>
+                        <Route
+                          path="/"
+                          element={
+                            isAuthenticated ? (
+                              <HomePageLoggedIn />
+                            ) : (
+                              <HomePageNLI />
+                            )
+                          }
+                        />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route
+                          path="/view-game/:gameId"
+                          element={<ViewGame />}
+                        />
+                        <Route path="/account" element={<Account />} />
+                      </Routes>
+                    </div>
+                  </div>
+                </ShineBorder>
+              </PlatformContextProvider>
+            </GameContextProvidor>
+          </PlatformGameContextProvider>
+        </UserGameContextProvider>
+      </UserAccountContextProvider>
     </QueryClientProvider>
   );
 }

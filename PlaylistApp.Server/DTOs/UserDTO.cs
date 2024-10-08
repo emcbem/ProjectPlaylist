@@ -12,6 +12,7 @@ public class UserDTO
     public DateTime CreationDate { get; set; }
     public string? AuthID { get; set; }
     public string? ProfileURL { get; set; }
+    public Guid Guid { get; set; }
     public List<UserGameDTO>? UserGames {get;set;}
     public List<ListDTO>? GameLists {get;set;}
     public List<PlatformDTO>? Platforms { get; set; }
