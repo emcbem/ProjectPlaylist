@@ -7,7 +7,9 @@ import { PS5Icon } from "@/assets/SmallPlatforms/psLogo";
 import { XboxIcon } from "@/assets/SmallPlatforms/xboxLogo";
 import { EpicIcon } from "@/assets/SmallPlatforms/epicLogo";
 import { SwitchIcon } from "@/assets/SmallPlatforms/swichLogo";
-import AddButton from "@/individual_components/AddButton";
+import AddButton from "../individual_components/AddButton";
+import { PlatformGameContext } from "../contexts/PlatformGameContext";
+import { PlatformGameContextInterface } from "../@types/platformGame";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -17,6 +19,10 @@ const options: Intl.DateTimeFormatOptions = {
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
+  const { platformGames, mutate } = React.useContext(
+    PlatformGameContext
+  ) as PlatformGameContextInterface;
+
   // const { addUserGame } = React.useContext(UserGameContext) as UserGameContextInterface;
   // const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { gameId } = useParams<{ gameId: string }>();
@@ -24,6 +30,7 @@ const ViewGame = () => {
 
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
+    mutate();
   }, [games]);
 
   // const addGameToLibrary = () => {
@@ -99,6 +106,15 @@ const ViewGame = () => {
       <button className="relative z-20 dark:text-white text-black">
         Add to Library
       </button>
+      <div>
+        {platformGames && platformGames.length > 0 ? (
+          platformGames.map((x) => (
+            <div key={x.game.id}>{x.game?.title ?? "Unknown Title"}</div>
+          ))
+        ) : (
+          <div>No games found</div>
+        )}
+      </div>
     </>
   );
 };

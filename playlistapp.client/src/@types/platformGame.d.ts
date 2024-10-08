@@ -3,20 +3,20 @@ import { Game } from "./game";
 import { Platform } from "./platform";
 
 export interface PlatformGame {
-    Id: number;
-    GameId: number;
-    PlatformId: number;
-    PlatformKey: string;
-    PlatformUrl: string;
-    Achievements: Achievement[];
-    Game: Game;
-    Platform: Platform;
-    UserGames: UserGame[];
+    id: number;
+    gameId: number;
+    platformId: number;
+    platformKey: string;
+    platformUrl: string;
+    achievements: Achievement[];
+    game: Game;
+    platform: Platform;
+    userGames: UserGame[];
 }
 
 export interface PlatformGameContextInterface {
     platformGames: PlatformGame[];
-    error: string;
+    error: string | undefined;
     isLoading: boolean;
-    fetchAllPlatformGames: (platformGames: PlatformGame[]) => void;
+    mutate: () => void;
 }
