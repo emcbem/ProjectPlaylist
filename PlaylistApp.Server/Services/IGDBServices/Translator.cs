@@ -1,4 +1,5 @@
 ﻿using IGDB.Models;
+using PlaylistApp.Server.Data;
 
 namespace PlaylistApp.Server.Services.IGDBServices
 {
@@ -74,5 +75,117 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
 
         }
+
+        public static List<Data.PlatformGame> TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(List<IGDB.Models.Game> igdbGames, List<ExternalGame> igdbExternalGames, List<Website> igdbWesites)
+        {
+            var websiteDict = igdbWesites.ToDictionary(x => x?.Id ?? 0);
+            var externalDict = igdbExternalGames.ToDictionary(x => x?.Id ?? 0);
+
+            //Sorry for doubting myself
+            var PlatformToExternalPlatformCategory = new Dictionary<int, ExternalCategory>()
+            {
+                {1, ExternalCategory.Steam},
+                {3, ExternalCategory.Steam},
+                {6, ExternalCategory.Steam},
+                {14, ExternalCategory.Steam},
+                {163, ExternalCategory.Steam},
+
+                {162, ExternalCategory.Oculus},
+                {384, ExternalCategory.Oculus},
+                {385, ExternalCategory.Oculus},
+                {387, ExternalCategory.Oculus},
+
+                {7, ExternalCategory.PlaystationStoreUS},
+                {8, ExternalCategory.PlaystationStoreUS},
+                {9, ExternalCategory.PlaystationStoreUS},
+                {46, ExternalCategory.PlaystationStoreUS},
+                {48, ExternalCategory.PlaystationStoreUS},
+                {165, ExternalCategory.PlaystationStoreUS},
+                {167, ExternalCategory.PlaystationStoreUS},
+
+
+                //{11, ExternalCategory.XBox},
+                //{12, ExternalCategory.Xbox},
+                //{49, ExternalCategory.Xbox},
+                //{169, ExternalCategory.Xbox},
+                //Figure out what the heck the different categories of xbox there are IF we figure out the xbox api
+
+            };
+
+            Website ? website = null;
+            ExternalGame? externalGame = null;
+            ExternalCategory externalCategory = ExternalCategory.Steam;
+
+            List<PlatformGame> platformGames = new();
+            PlatformGame platformGame;
+
+            foreach (var igdbGame in igdbGames)
+            {
+                foreach (var platformId in igdbGame.Platforms.Ids)
+                {
+                    platformGame = new Data.PlatformGame();
+
+                    platformGame.GameId = (int?)igdbGame.Id ?? -1;
+                    platformGame.PlatformId = (int)platformId;
+
+                    Website? igdbWebsite = igdbGame
+                       .Websites
+                       .Ids
+                       .Select(id => 
+                       {
+                           if(websiteDict.TryGetValue(id, out website))
+                           {
+                               return website;
+                           }
+                           else
+                           {
+                               throw new Exception("There was no website?");
+                           }
+                       })
+                       .FirstOrDefault(website => website.Category == WebsiteCategory.Official);
+
+                    if(website is not null)
+                    {
+                        platformGame.PlatformUrl = igdbWebsite?.Url;
+                    }
+
+                    if(PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
+                    {
+
+                        ExternalGame? foundExternalGame = igdbGame
+                            .ExternalGames
+                            .Ids
+                            .Select(id =>
+                            {
+                                if (externalDict.TryGetValue(id, out externalGame))
+                                {
+                                    return externalGame;
+                                }
+                                return null;
+                            })
+                            .FirstOrDefault(externalGame =>
+                            {
+                                if(externalGame is null)
+                                {
+                                    return false;
+                                }
+                                return externalGame.Category == externalCategory;
+                            });
+
+                        if (foundExternalGame != null)
+                        {
+                            platformGame.PlatformKey = foundExternalGame.Uid;
+                        }
+                    }
+
+                    platformGames.Add(platformGame);
+
+                }
+            }
+
+            return platformGames;
+        }
+
+
     }
 }

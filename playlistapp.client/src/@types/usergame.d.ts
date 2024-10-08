@@ -1,8 +1,9 @@
 import { PlatformGame } from "./platformGame";
+import { AddUserGameRequest } from "./Requests/addUserGameRequest";
 import { UserAccount } from "./userAccount";
 
 export interface UserGame {
-    userGameId: Number,
+    userGameId: number,
     platformGame: PlatformGame,
     timePlayed: number,
     User: UserAccount,
@@ -11,8 +12,7 @@ export interface UserGame {
 
 export interface UserGameContextInterface {
     userGames: UserGame[];
-    error: string;
+    error: string | undefined;
     isLoading: boolean;
-    fetchAllUserGames: (userGames: UserGame[]) => void;
-    addUserGame: (userGameId: number) => void;
+    AddUserGame: (gameRequest: AddUserGameRequest) => Promise<UserGame>;
 }

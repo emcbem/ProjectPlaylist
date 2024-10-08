@@ -95,11 +95,11 @@ public class UserService : IUserService
         return user.ToDTO();
     }
 
-    public async Task<List<UserDTO>> GetUsersByName(string username)
+    public async Task<UserDTO> GetUsersByName(string username)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var users = await context.UserAccounts
+        var user = await context.UserAccounts
             .Include(x => x.UserGenres)
             .Include(x => x.UserPlatforms)
             .Include(x => x.Lists)
@@ -113,14 +113,14 @@ public class UserService : IUserService
                     .ThenInclude(x => x.Platform)
             .Include(x => x.UserImage)
             .Where(x => x.Username.Contains(username))
-            .ToListAsync();
+            .FirstOrDefaultAsync();
 
-        if (!users.Any())
+        if (user is null)
         {
-            return new List<UserDTO>();
+            return new UserDTO();
         }
 
-        return users.Select(x => x.ToDTO()).ToList();
+        return user.ToDTO();
     }
 
     public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)

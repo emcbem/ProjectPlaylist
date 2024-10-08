@@ -1,46 +1,39 @@
-import React, { FC, ReactNode, useEffect, useState } from "react";
-import { PlatformGame, PlatformGameContextInterface } from "../@types/platformGame";
-import axios from "axios";
+import React, { FC, ReactNode } from "react";
+import { PlatformGameContextInterface } from "../@types/platformGame";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PlatformGameService } from "../ApiServices/PlatformGameService";
+import { PlatformGameRequest } from "@/@types/Requests/getPlatformGameRequest";
 
-export const PlatformGameContext = React.createContext<PlatformGameContextInterface | null>(
-    null
-);
+export const PlatformGameContext =
+  React.createContext<PlatformGameContextInterface | null>(null);
 
-export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
-    const [error, seterror] = useState<string>("");
-    const [isLoading, setisLoading] = useState<boolean>(false);
+export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const queryClient = useQueryClient();
 
-    const fetchAllPlatformGames = async () => {
-        try {
-            const response = await axios.get<PlatformGame[]>(`${import.meta.env.VITE_URL}/getallplatformgames`);
-            return response.data;
-        } catch (error) {
-            console.error("Failed to fetch games:", error);
-            throw error;
-        }
-    };
+  const request: PlatformGameRequest = {
+    PlatformId: 1,
+    Filter: "",
+  };
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await fetchAllPlatformGames();
-                setPlatformGames(data);
-            } catch (err) {
-                seterror("Failed to fetch games");
-            } finally {
-                setisLoading(false);
-            }
-        };
+  const { data, error, isPending, mutateAsync } = useMutation({
+    mutationFn: () => PlatformGameService.GetAllPlatformGames(request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["PlatformGame"] });
+    },
+  });
 
-        getData();
-    }, []);
-
-
-
-    return (
-        <PlatformGameContext.Provider value={{ platformGames, error, isLoading, fetchAllPlatformGames }}>
-            {children}
-        </PlatformGameContext.Provider>
-    )
-}
+  return (
+    <PlatformGameContext.Provider
+      value={{
+        platformGames: data ?? [],
+        error: error?.message,
+        isLoading: isPending,
+        mutatePlatformGames: mutateAsync,
+      }}
+    >
+      {children}
+    </PlatformGameContext.Provider>
+  );
+};

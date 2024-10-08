@@ -1,46 +1,25 @@
-import React, { FC, ReactNode, useEffect, useState } from "react";
-import { Platform, PlatformContextInterface } from "../@types/platform";
-import axios from "axios";
+import React, { FC, ReactNode } from "react";
+import { PlatformContextInterface } from "../@types/platform";
+import { PlatformService } from "../ApiServices/PlatformService";
+import { useQuery } from "@tanstack/react-query";
 
 export const PlatformContext = React.createContext<PlatformContextInterface | null>(
     null
 );
 
-export const PlatformContextProvider: FC<{children: ReactNode}> = ({children}) => {
-    const [platforms, setplatforms] = useState<Platform[]>([]);
-    const [error, seterror] = useState<string>("");
-    const [isLoading, setisLoading] = useState<boolean>(false);
+export const PlatformContextProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["Platform"],
+    queryFn: PlatformService.GetAllPlatforms,
+  });
 
-    const fetchAllPlatforms = async () => {
-        try {
-            const response = await axios.get<Platform[]>(`${import.meta.env.VITE_URL}/Platform/getallplatforms`);
-            return response.data;
-        } catch (error) {
-            console.error("Failed to fetch games:", error);
-            throw error;
-        }
-    };
-
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await fetchAllPlatforms();
-                setplatforms(data);
-            } catch (err) {
-                seterror("Failed to fetch games");
-            } finally {
-                setisLoading(false);
-            }
-        };
-
-        getData();
-    }, []);
-
-
-
-    return (
-        <PlatformContext.Provider value={{platforms, error, isLoading, fetchAllPlatforms}}>
-            {children}
-        </PlatformContext.Provider>
-    )
-}
+  return (
+    <PlatformContext.Provider
+      value={{ platforms: data ?? [], error: error?.message, isLoading: isLoading }}
+    >
+      {children}
+    </PlatformContext.Provider>
+  );
+};

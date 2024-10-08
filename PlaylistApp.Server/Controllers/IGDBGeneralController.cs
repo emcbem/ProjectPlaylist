@@ -72,11 +72,14 @@ public class IGDBGeneralController
     [HttpGet("uploadPlatformsGames")]
     public async Task UploadPlatformGames()
     {
-        var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
-        var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
-        var platformLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.PlatformLogos);
-        var igdbPlatformLogos = Parser.ParsePlatformLogoCsv(platformLogoUrl);
-        var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
-        await uploader.UploadPlatformsToDatabase(localPlatforms);
+        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+        var externalLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.ExternalGames);
+        var igdbExternalGames = Parser.ParseExternalGameCsv(externalLocalPath);
+        var websiteLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Websites);
+        var igdbWebsites = Parser.ParseWebsiteCsv(websiteLocalPath);
+        var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(igdbGames, igdbExternalGames, igdbWebsites);
+        await uploader.UploadPlatformGamesToDatabase(localPlatforms);
     }
+
 }

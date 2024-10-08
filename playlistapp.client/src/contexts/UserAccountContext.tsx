@@ -1,51 +1,23 @@
-import React, { FC, ReactNode, useEffect, useState } from "react";
+import React, { FC, ReactNode } from "react";
 import { UserAccountContextInterface } from "../@types/userAccount";
-import axios from "axios";
-import { UserAccount } from "../@types/userAccount";
+import { useQuery } from "@tanstack/react-query";
+import { UserAccountService } from "@/ApiServices/UserAccountService";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const UserAccountContext = React.createContext<UserAccountContextInterface | null>(
     null
 );
 
 export const UserAccountContextProvider: FC<{children: ReactNode}> = ({children}) => {
-    const [usr, setUserAccount] = useState<UserAccount>();
-    const [error, seterror] = useState<string>("");
-    const [isLoading, setisLoading] = useState<boolean>(false);
-    // const { user, isAuthenticated } = useAuth0();
+    const { user } = useAuth0();
 
-    const getUserById = async () => {
-        try {
-            const response = await axios.get<UserAccount>(`${import.meta.env.VITE_URL}/getusersbyname`, {
-                params: {
-                  userId: 'bar'
-                }
-              });
-            return response.data;
-        } catch (error) {
-            console.error("Failed to fetch games:", error);
-            throw error;
-        }
-    };
-
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await getUserById();
-                setUserAccount(data);
-            } catch (err) {
-                seterror("Failed to fetch games");
-            } finally {
-                setisLoading(false);
-            }
-        };
-
-        getData();
-    }, []);
-
-
+    const {data, isLoading, error} = useQuery({
+        queryKey: ["UserAccount"],
+        queryFn: () => UserAccountService.GetUserByAuthId(user?.email), 
+    })
 
     return (
-        <UserAccountContext.Provider value={{usr, error, isLoading, getUserById}}>
+        <UserAccountContext.Provider value={{usr: data, error: error?.message, isLoading}}>
             {children}
         </UserAccountContext.Provider>
     )
