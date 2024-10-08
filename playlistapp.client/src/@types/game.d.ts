@@ -10,6 +10,7 @@ export interface Game {
 
 export interface GameContextInterface {
     games: Game[];
+    game: Game | undefined;
     error: string | undefined;
     isLoading: boolean;
 }

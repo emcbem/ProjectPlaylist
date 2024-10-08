@@ -44,4 +44,24 @@ export const UserGameService = {
       throw error;
     }
   },
+  GetAllUserGamesByGame: async (gameId: number | undefined) => {
+    if (!gameId) {
+      console.error("Game id was not found");
+      throw new Error("Game id must be provided");
+    }
+    try {
+      const response = await axios.get<UserGame[]>(
+        `${import.meta.env.VITE_URL}/UserGame/getusergamebyid`,
+        {
+          params: {
+            userGameId: gameId,
+          },
+        }
+      );
+      return response.data
+    } catch (error) {
+      console.error("Failed to fetch user games:", error);
+      throw error;
+    }
+  }
 };

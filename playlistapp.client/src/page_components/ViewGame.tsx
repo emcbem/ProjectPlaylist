@@ -52,7 +52,7 @@ const ViewGame = () => {
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
     mutatePlatformGames();
-  }, [games, gameId]);
+  }, [games, gameId, mutatePlatformGames]);
 
   return (
     <>

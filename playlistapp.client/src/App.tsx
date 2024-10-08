@@ -13,6 +13,7 @@ import { PlatformContextProvider } from "./contexts/PlatformContext";
 import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import { UserGameContextProvider } from "./contexts/UserGameContext";
+import TestPage from "./page_components/TestPage";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -51,6 +52,7 @@ function App() {
                           element={<ViewGame />}
                         />
                         <Route path="/account" element={<Account />} />
+                        <Route path="/test" element={<TestPage />} />
                       </Routes>
                     </div>
                   </div>

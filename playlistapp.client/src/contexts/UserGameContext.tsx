@@ -5,33 +5,58 @@ import { UserGameService } from "@/ApiServices/UserGameService";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "./UserAccountContext";
 
+interface UserGameContextProps {
+  children: ReactNode;
+  gameId?: number;
+}
+
 export const UserGameContext =
   React.createContext<UserGameContextInterface | null>(null);
 
-export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
+export const UserGameContextProvider: FC<UserGameContextProps> = ({
   children,
+  gameId,
 }) => {
+  const queryClient = useQueryClient();
+
   const { usr } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["UserGame"],
+  const {
+    data: userGamesByUser,
+    isLoading: gettingByUserLoading,
+    error: gettingByUserError,
+  } = useQuery({
+    queryKey: ["UserGameByUser"],
     queryFn: () => UserGameService.GetAllUserGamesByUser(usr?.guid),
+  });
+
+  const {
+    data: userGamesByGame,
+    isLoading: gettingByGameLoading,
+    error: gettingByGameError,
+  } = useQuery({
+    queryKey: ["UserGameByGame"],
+    queryFn: () => UserGameService.GetAllUserGamesByGame(gameId),
+    enabled: gameId !== undefined,
   });
 
   const addUserGame = useMutation({
     mutationFn: UserGameService.AddUserGame,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["UserGame"]})
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["UserGame"] });
+    },
+  });
 
   return (
     <UserGameContext.Provider
-      value={{ userGames: data ?? [], error: error?.message, isLoading, AddUserGame: addUserGame.mutateAsync }}
+      value={{
+        userGames: userGamesByUser ?? userGamesByGame ?? [],
+        error: gettingByUserError?.message ?? gettingByGameError?.message,
+        isLoading: gettingByUserLoading ?? gettingByGameLoading,
+        AddUserGame: addUserGame.mutateAsync,
+      }}
     >
       {children}
     </UserGameContext.Provider>
