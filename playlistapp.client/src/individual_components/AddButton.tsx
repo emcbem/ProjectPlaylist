@@ -33,6 +33,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     useState<AddUserGameRequest>();
 
   useEffect(() => {
+    console.log("platformgames", platformGames)
     if (platformGames && usr && gameId) {
       const platformGame = platformGames.find(
         (x) => x && x.game.id && x.game.id === Number(gameId)
