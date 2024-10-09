@@ -1,10 +1,9 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode } from "react";
 import { UserGameContextInterface } from "../@types/usergame";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserGameService } from "@/ApiServices/UserGameService";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "./UserAccountContext";
-import { useGetAllUserGamesByGameQuery } from "@/hooks/useGetAllUserGamesByGameQuery";
 
 export const UserGameContext =
   React.createContext<UserGameContextInterface | null>(null);
@@ -27,14 +26,6 @@ export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
     queryFn: () => UserGameService.GetAllUserGamesByUser(usr?.guid),
   });
 
-  const [gameId, setGameId] = useState<number>(0)
-
-  const {
-    data: userGamesByGame,
-    isLoading: gettingByGameLoading,
-    error: gettingByGameError,
-  } = useGetAllUserGamesByGameQuery(gameId)
-
   const addUserGame = useMutation({
     mutationFn: UserGameService.AddUserGame,
     onSuccess: () => {
@@ -46,11 +37,9 @@ export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
     <UserGameContext.Provider
       value={{
         userGamesFromUser: userGamesByUser ?? [],
-        userGamesFromGame: userGamesByGame ?? [],
-        error: gettingByUserError?.message ?? gettingByGameError?.message,
-        isLoading: gettingByUserLoading ?? gettingByGameLoading,
+        error: gettingByUserError?.message,
+        isLoading: gettingByUserLoading,
         AddUserGame: addUserGame.mutateAsync,
-        SetGameId: setGameId
       }}
    
     >
