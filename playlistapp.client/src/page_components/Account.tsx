@@ -5,7 +5,7 @@ import { UserGameContext } from '../contexts/UserGameContext';
 import { UserGameContextInterface } from '../@types/usergame';
 
 const Account = () => {
-    const { userGames } = React.useContext(UserGameContext) as UserGameContextInterface;
+    const { userGames, isLoading, error } = React.useContext(UserGameContext) as UserGameContextInterface;
 
     const { user, isAuthenticated } = useAuth0();
 
@@ -22,8 +22,13 @@ const Account = () => {
                     </div>
                     <p className="mt-8 text-6xl">Your Collection</p>
                     <HorizontalRule />
+                    {
+                        isLoading && <div className="hover:animate-spin">
+                        Loading
+                      </div>
+                    }
 
-                    {userGames &&
+                    {!isLoading && userGames &&
                         userGames.map((ug, key) =>
                             <div key={key}>
                                 <img src={ug.platformGame.game.coverUrl} width={100} />
@@ -32,6 +37,8 @@ const Account = () => {
                             </div>
                         )
                     }
+
+                    { error && <p>Error: {error}</p>}
                 </div>
             </div>
         )
