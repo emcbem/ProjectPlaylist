@@ -6,4 +6,5 @@ namespace PlaylistApp.Server.Services.PlatformGameServices;
 public interface IPlatformGameService
 {
     public Task<List<PlatformGameDTO>> GetAllPlatformGames(PlatformGameRequest request);
+    public Task<List<PlatformGameDTO>> GetAllPlatformGamesByGame(int  gameId);
 }

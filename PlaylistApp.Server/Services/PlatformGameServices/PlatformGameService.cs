@@ -28,4 +28,17 @@ public class PlatformGameService : IPlatformGameService
 
         return platformGames.Select(x => x.ToDTO()).ToList();
     }
+
+    public async Task<List<PlatformGameDTO>> GetAllPlatformGamesByGame(int gameId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var platformGames = await context.PlatformGames
+            .Where(x => x.GameId == gameId)
+            .Include(x => x.Game)
+            .Include(x => x.Platform)
+            .ToListAsync();
+
+        return platformGames.Select(x => x.ToDTO()).ToList();
+    }
 }

@@ -14,6 +14,7 @@ import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import { UserGameContextProvider } from "./contexts/UserGameContext";
 import AchievementsPage from "./page_components/Achievements";
+import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
 
 function App() {
@@ -58,10 +59,14 @@ function App() {
                         />
                         <Route path="/account" element={<Account />} />
                         <Route
+                         
                           path="/achievements/:gameId"
+                         
                           element={<AchievementsPage />}
+                       
                         />
-                      </Routes>
+                        <Route path="/test/:gameId" element={<TestPage />} />
+                            </Routes>
                     </div>
                   </div>
                 </ShineBorder>
