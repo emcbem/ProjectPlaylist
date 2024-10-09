@@ -1,4 +1,3 @@
-import { PlatformContextInterface } from "@/@types/platform";
 import { PlatformGame, PlatformGameContextInterface } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
@@ -6,7 +5,6 @@ import { UserGameContextInterface } from "@/@types/usergame";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { PlatformContext } from "@/contexts/PlatformContext";
 import { PlatformGameContext } from "@/contexts/PlatformGameContext";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserGameContext } from "@/contexts/UserGameContext";
@@ -30,10 +28,6 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     PlatformGameContext
   ) as PlatformGameContextInterface;
 
-  const { platforms } = React.useContext(
-    PlatformContext
-  ) as PlatformContextInterface;
-
   const { AddUserGame } = React.useContext(
     UserGameContext
   ) as UserGameContextInterface;
@@ -46,7 +40,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     console.log("Sending in usr: ", usr);
     if (usr) {
       if (platformId && usr.guid) {
-        let newAddUserGameRequest: AddUserGameRequest = {
+        const newAddUserGameRequest: AddUserGameRequest = {
           userId: usr.guid,
           platformGameId: platformId,
         };

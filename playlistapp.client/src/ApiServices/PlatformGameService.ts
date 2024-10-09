@@ -30,6 +30,9 @@ export const PlatformGameService = {
       );
 
       return response.data;
-    } catch (error) {}
+    } catch (error) {
+      console.error("Failed to get platform games", error);
+      throw error;
+    }
   },
 };
