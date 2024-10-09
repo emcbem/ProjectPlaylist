@@ -2,7 +2,7 @@ import { Game, GameContextInterface } from "@/@types/game";
 import { GameContext } from "@/contexts/GameContext";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AchievementList from "./AchievementList";
+import AchievementList from "../individual_components/AchievementList";
 
 const AchievementsPage: React.FC = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;

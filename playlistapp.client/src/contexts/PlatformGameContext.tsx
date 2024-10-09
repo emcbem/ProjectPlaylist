@@ -11,18 +11,14 @@ export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
-
-  const request: PlatformGameRequest = {
-    PlatformId: 1,
-    Filter: "",
-  };
-
   const { data, error, isPending, mutateAsync } = useMutation({
-    mutationFn: () => PlatformGameService.GetAllPlatformGames(request),
+    mutationFn: PlatformGameService.GetAllPlatformGames,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["PlatformGame"] });
     },
   });
+
+  console.log(data)
 
   return (
     <PlatformGameContext.Provider
