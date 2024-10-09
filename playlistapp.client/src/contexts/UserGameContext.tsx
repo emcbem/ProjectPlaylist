@@ -1,21 +1,16 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import { UserGameContextInterface } from "../@types/usergame";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserGameService } from "@/ApiServices/UserGameService";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "./UserAccountContext";
-
-interface UserGameContextProps {
-  children: ReactNode;
-  gameId?: number;
-}
+import { useGetAllUserGamesByGameQuery } from "@/hooks/useGetAllUserGamesByGameQuery";
 
 export const UserGameContext =
   React.createContext<UserGameContextInterface | null>(null);
 
-export const UserGameContextProvider: FC<UserGameContextProps> = ({
+export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
   children,
-  gameId,
 }) => {
   const queryClient = useQueryClient();
 
@@ -32,15 +27,13 @@ export const UserGameContextProvider: FC<UserGameContextProps> = ({
     queryFn: () => UserGameService.GetAllUserGamesByUser(usr?.guid),
   });
 
+  const [gameId, setGameId] = useState<number>(0)
+
   const {
     data: userGamesByGame,
     isLoading: gettingByGameLoading,
     error: gettingByGameError,
-  } = useQuery({
-    queryKey: ["UserGameByGame"],
-    queryFn: () => UserGameService.GetAllUserGamesByGame(gameId),
-    enabled: gameId !== undefined,
-  });
+  } = useGetAllUserGamesByGameQuery(gameId)
 
   const addUserGame = useMutation({
     mutationFn: UserGameService.AddUserGame,
@@ -52,11 +45,14 @@ export const UserGameContextProvider: FC<UserGameContextProps> = ({
   return (
     <UserGameContext.Provider
       value={{
-        userGames: userGamesByUser ?? userGamesByGame ?? [],
+        userGamesFromUser: userGamesByUser ?? [],
+        userGamesFromGame: userGamesByGame ?? [],
         error: gettingByUserError?.message ?? gettingByGameError?.message,
         isLoading: gettingByUserLoading ?? gettingByGameLoading,
         AddUserGame: addUserGame.mutateAsync,
+        SetGameId: setGameId
       }}
+   
     >
       {children}
     </UserGameContext.Provider>

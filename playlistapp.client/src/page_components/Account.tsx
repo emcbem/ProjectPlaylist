@@ -5,7 +5,7 @@ import { UserGameContext } from '../contexts/UserGameContext';
 import { UserGameContextInterface } from '../@types/usergame';
 
 const Account = () => {
-    const { userGames, isLoading, error } = React.useContext(UserGameContext) as UserGameContextInterface;
+    const { userGamesFromUser, isLoading, error } = React.useContext(UserGameContext) as UserGameContextInterface;
 
     const { user, isAuthenticated } = useAuth0();
 
@@ -28,8 +28,8 @@ const Account = () => {
                       </div>
                     }
 
-                    {!isLoading && userGames &&
-                        userGames.map((ug, key) =>
+                    {!isLoading && userGamesFromUser &&
+                        userGamesFromUser.map((ug, key) =>
                             <div key={key}>
                                 <img src={ug.platformGame.game.coverUrl} width={100} />
                                 <p>Platform Game Id: {ug.platformGame.game.coverUrl}</p>

@@ -3,18 +3,12 @@ import { GameContextInterface } from "../@types/game";
 import { GameService } from "@/ApiServices/GameService";
 import { useQuery } from "@tanstack/react-query";
 
-interface GameContextProviderProps {
-  children: ReactNode;
-  gameId?: number;
-}
-
 export const GameContext = React.createContext<GameContextInterface | null>(
   null
 );
 
-export const GameContextProvidor: FC<GameContextProviderProps> = ({
+export const GameContextProvidor: FC<{ children: ReactNode }> = ({
   children,
-  gameId
 }) => {
   const {
     data: AllGames,
@@ -31,8 +25,7 @@ export const GameContextProvidor: FC<GameContextProviderProps> = ({
     error: gettingGameByIdError,
   } = useQuery({
     queryKey: ["GameById"],
-    queryFn: () => GameService.GetGameById(gameId),
-    enabled: gameId !== undefined
+    queryFn: () => GameService.GetGameById(0)
   });
 
   return (

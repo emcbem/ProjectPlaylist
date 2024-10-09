@@ -53,9 +53,12 @@ function App() {
                           element={<ViewGame />}
                         />
                         <Route path="/account" element={<Account />} />
-                        <Route path="/achievements/:gameId" element={<AchievementsPage />} />
-                        <Route path="/test" element={<TestPage />} />
-                </Routes>
+                        <Route
+                          path="/achievements/:gameId"
+                          element={<AchievementsPage />}
+                        />
+                        <Route path="/test/:gameId" element={<TestPage />} />
+                      </Routes>
                     </div>
                   </div>
                 </ShineBorder>
