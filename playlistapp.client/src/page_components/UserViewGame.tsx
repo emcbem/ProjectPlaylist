@@ -21,7 +21,7 @@ const ViewGame = () => {
     <>
       <div className="min-h-screen bg-white dark:bg-black">
         <GameImageBackground Game={game} />
-        <div className="absolute top-1/3 lg:left-1/6 left-0 z-50 3xl:w-1/2 md:w-2/3 w-full">
+        <div className="absolute top-3/4 lg:left-1/6 left-0 z-50 3xl:w-1/2 md:w-2/3 w-full">
           <GameDetails Game={game} />
           <PlatformIconList GameId={game?.id} />
           <AddButton gameId={gameId} />

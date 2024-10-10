@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { PS5Icon } from "../assets/SmallPlatforms/psLogo";
-import { SteamIcon } from "../assets/SmallPlatforms/steamLogo";
-import { XboxIcon } from "../assets/SmallPlatforms/xboxLogo";
+import { PS5Icon } from "../assets/ViewGameSVGs/psLogo";
+import { SteamIcon } from "../assets/ViewGameSVGs/steamLogo";
+import { XboxIcon } from "../assets/ViewGameSVGs/xboxLogo";
 import { Game } from "../@types/game";
 import { Link } from "react-router-dom";
 
@@ -33,8 +33,18 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
           <div className="dark:bg-[#252A2C] bg-[#D9D9D9]">
             <div className="flex flex-row p-2">
               <PS5Icon height={20} width={20} darkColor="white" color="black" />
-              <XboxIcon height={20} width={20} darkColor="white" color="black" />
-              <SteamIcon height={20} width={20} darkColor="white" color="black" />
+              <XboxIcon
+                height={20}
+                width={20}
+                darkColor="white"
+                color="black"
+              />
+              <SteamIcon
+                height={20}
+                width={20}
+                darkColor="white"
+                color="black"
+              />
             </div>
             <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
               {game.title}

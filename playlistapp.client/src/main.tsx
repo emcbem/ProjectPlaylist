@@ -14,6 +14,8 @@ createRoot(document.getElementById("root")!).render(
         redirect_uri: window.location.origin,
         scope: "openid profile email",
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <StrictMode>
         <App />

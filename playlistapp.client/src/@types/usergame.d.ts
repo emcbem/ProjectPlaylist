@@ -1,4 +1,5 @@
 import { PlatformGame } from "./platformGame";
+import { AddUserGameRequest } from "./Requests/addUserGameRequest";
 import { UserAccount } from "./userAccount";
 
 export interface UserGame {
@@ -10,7 +11,8 @@ export interface UserGame {
 }
 
 export interface UserGameContextInterface {
-    userGames: UserGame[];
+    userGamesFromUser: UserGame[];
     error: string | undefined;
     isLoading: boolean;
+    AddUserGame: (gameRequest: AddUserGameRequest) => Promise<UserGame>;
 }
