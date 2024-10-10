@@ -39,36 +39,36 @@ function App() {
                   <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
                     <div className="dark:bg-black bg-white w-full">
                       <Navbar />
-                      <Routes>
-                        <Route
-                          path="/"
-                          element={
-                            isAuthenticated ? (
-                              <HomePageLoggedIn />
-                            ) : (
-                              <HomePageNLI />
-                            )
-                          }
-                        />
-                        <Route path="/search" element={<SearchPage />} />
-                        <Route
-                          path="/view-game/:gameId"
-                          element={<ViewGame />}
-                        />
-                        <Route
-                          path="/user-view-game/:gameId"
-                          element={<UserViewGame />}
-                        />
-                        <Route path="/account" element={<Account />} />
-                        <Route
-                         
-                          path="/achievements/:gameId"
-                         
-                          element={<AchievementsPage />}
-                       
-                        />
-                        <Route path="/test/:userGameId" element={<TestPage />} />
-                            </Routes>
+                        <Routes>
+                          <Route
+                            path="/"
+                            element={
+                              isAuthenticated ? (
+                                <HomePageLoggedIn />
+                              ) : (
+                                <HomePageNLI />
+                              )
+                            }
+                          />
+                          <Route path="/search" element={<SearchPage />} />
+                          <Route
+                            path="/view-game/:gameId"
+                            element={<ViewGame />}
+                          />
+                          <Route
+                            path="/user-view-game/:gameId"
+                            element={<UserViewGame />}
+                          />
+                          <Route path="/account" element={<Account />} />
+                          <Route
+
+                            path="/achievements/:gameId"
+
+                            element={<AchievementsPage />}
+
+                          />
+                          <Route path="/test/:userGameId" element={<TestPage />} />
+                        </Routes>
                     </div>
                   </div>
                 </ShineBorder>
