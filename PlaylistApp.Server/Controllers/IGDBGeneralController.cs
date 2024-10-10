@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
+using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.IGDBServices;
 using System;
 using System.Formats.Asn1;
@@ -22,11 +23,13 @@ public class IGDBGeneralController
 {
     private readonly DownloadCsv downloader;
     private readonly UploadData uploader;
+    private readonly IGameService gameService;
 
-    public IGDBGeneralController(DownloadCsv downloader, UploadData uploader)
+    public IGDBGeneralController(DownloadCsv downloader, UploadData uploader, IGameService gameService)
     {
         this.downloader = downloader;
         this.uploader = uploader;
+        this.gameService = gameService;
     }
 
     //Don't uncomment unless you need to reseed the database with games!
@@ -78,8 +81,17 @@ public class IGDBGeneralController
         var igdbExternalGames = Parser.ParseExternalGameCsv(externalLocalPath);
         var websiteLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Websites);
         var igdbWebsites = Parser.ParseWebsiteCsv(websiteLocalPath);
-        var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(igdbGames, igdbExternalGames, igdbWebsites);
+        var localGames = await uploader.GetAllGames();
+        var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(localGames, igdbGames, igdbExternalGames, igdbWebsites);
         await uploader.UploadPlatformGamesToDatabase(localPlatforms);
     }
 
+    [HttpGet("uploadGenres")]
+    public async Task UploadGenres()
+    {
+        var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
+        var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
+        var localGenres = Translator.TranslateIGDBGenresIntoPersonalData();
+        await uploader.UploadGenresToDatabase(localGenres);
+    }
 }
