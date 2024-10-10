@@ -6,7 +6,7 @@ export interface UserGame {
     userGameId: number,
     platformGame: PlatformGame,
     timePlayed: number,
-    User: UserAccount,
+    user: UserAccount,
     datAdded: Date,
 }
 

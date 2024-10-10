@@ -55,15 +55,13 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     }
   };
 
-  const [platformGames, setPlatfromGames] = useState<PlatformGame[]>([]);
+const [platformGames, setPlatformGames] = useState<PlatformGame[]>([])
 
-  useEffect(() => {
-    PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
-      (x) => {
-        setPlatfromGames(x ?? []);
-      }
-    );
-  }, []);
+useEffect(()=>
+{
+  PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(x => {setPlatformGames(x?? [])})
+}, [])
+
 
   useEffect(() => {
     mutatePlatformGames({

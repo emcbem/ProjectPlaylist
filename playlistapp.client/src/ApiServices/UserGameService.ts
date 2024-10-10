@@ -1,4 +1,6 @@
+import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
+import { updateUserGameRequest } from "@/@types/Requests/updateUserGameRequest";
 import { UserGame } from "@/@types/usergame";
 import axios from "axios";
 
@@ -86,6 +88,31 @@ export const UserGameService = {
     } catch (error) {
       console.error("Failed to delete selected user game: ", error);
       throw error;
+    }
+  },
+  UpdateUserGame: async (updateUserGameRequest: updateUserGameRequest) => {
+    if (!updateUserGameRequest) {
+      console.error("Update user game request was not found");
+      throw new Error("Update user game request must be provided");
+    }
+    try {
+      const response = await axios.patch<PlatformGame>(
+        `${import.meta.env.VITE_URL}/UserGame/updateusergame`,
+        updateUserGameRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Failed to update user game", error.response?.data || error.message);
+      } else {
+        console.error("An unexpected error occurred", error);
+      }
+      throw error; 
     }
   },
 };
