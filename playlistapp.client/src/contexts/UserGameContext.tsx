@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserGameService } from "@/ApiServices/UserGameService";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "./UserAccountContext";
+import toast from "react-hot-toast";
 
 export const UserGameContext =
   React.createContext<UserGameContextInterface | null>(null);
@@ -29,6 +30,7 @@ export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
   const addUserGame = useMutation({
     mutationFn: UserGameService.AddUserGame,
     onSuccess: () => {
+      toast.success("Game added!")
       queryClient.invalidateQueries({ queryKey: ["UserGame"] });
     },
   });

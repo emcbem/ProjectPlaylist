@@ -12,6 +12,13 @@ namespace PlaylistApp.Server.Services.IGDBServices
             this.dbContextFactory = dbContextFactory;
         }
 
+        public async Task<List<Data.Game>> GetAllGames()
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            return await context.Games.ToListAsync();
+        }
+
         public async Task UploadGamesToDatabase(List<Data.Game> localGames)
         {
             var context = await dbContextFactory.CreateDbContextAsync();
@@ -48,5 +55,23 @@ namespace PlaylistApp.Server.Services.IGDBServices
             await context.SaveChangesAsync();
         }
 
+        internal async Task UploadAcievementsToDatabase(List<Data.Achievement> achievementLists)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.Achievements.AddRange(achievementLists);
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UploadGenresToDatabase(List<Data.Genre> localGenres)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.Genres.AddRange(localGenres);
+
+            await context.SaveChangesAsync();
+
+        }
     }
 }

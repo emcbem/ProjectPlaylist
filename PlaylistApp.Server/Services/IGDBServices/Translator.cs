@@ -1,5 +1,6 @@
 ﻿using IGDB.Models;
 using PlaylistApp.Server.Data;
+using PlaylistApp.Server.DTOs;
 
 namespace PlaylistApp.Server.Services.IGDBServices
 {
@@ -76,10 +77,20 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         }
 
-        public static List<Data.PlatformGame> TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(List<IGDB.Models.Game> igdbGames, List<ExternalGame> igdbExternalGames, List<Website> igdbWesites)
+        public static List<Data.Genre> TranslateIGDBGenresIntoPersonalData(List<IGDB.Models.Genre> igdbGenres)
+        {
+            return igdbGenres.Select(x => new Data.Genre()
+            {
+                Id = (int?)x.Id ?? -1,
+                GenreName = x.Name,
+            }).ToList() ;
+        }
+
+        public static List<Data.PlatformGame> TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(List<Data.Game> localGames, List<IGDB.Models.Game> igdbGames, List<ExternalGame> igdbExternalGames, List<Website> igdbWesites)
         {
             var websiteDict = igdbWesites.ToDictionary(x => x?.Id ?? 0);
             var externalDict = igdbExternalGames.ToDictionary(x => x?.Id ?? 0);
+            var localGameDict = localGames.ToDictionary(x => x!.IdgbId!, x => x.Id);
 
             //Sorry for doubting myself
             var PlatformToExternalPlatformCategory = new Dictionary<int, ExternalCategory>()
@@ -112,28 +123,37 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
             };
 
-            Website ? website = null;
+            Website? website = null;
             ExternalGame? externalGame = null;
             ExternalCategory externalCategory = ExternalCategory.Steam;
 
             List<PlatformGame> platformGames = new();
             PlatformGame platformGame;
+            int gameId;
+            int i = 3;
 
             foreach (var igdbGame in igdbGames)
             {
                 foreach (var platformId in igdbGame.Platforms.Ids)
                 {
                     platformGame = new Data.PlatformGame();
+                    if (localGameDict.TryGetValue((int)igdbGame!.Id!, out gameId))
+                    {
+                        platformGame.GameId = gameId;
+                    }
+                    else
+                    {
+                        continue;
+                    }
 
-                    platformGame.GameId = (int?)igdbGame.Id ?? -1;
                     platformGame.PlatformId = (int)platformId;
-
+                    platformGame.Id = i;
                     Website? igdbWebsite = igdbGame
                        .Websites
                        .Ids
-                       .Select(id => 
+                       .Select(id =>
                        {
-                           if(websiteDict.TryGetValue(id, out website))
+                           if (websiteDict.TryGetValue(id, out website))
                            {
                                return website;
                            }
@@ -144,12 +164,12 @@ namespace PlaylistApp.Server.Services.IGDBServices
                        })
                        .FirstOrDefault(website => website.Category == WebsiteCategory.Official);
 
-                    if(website is not null)
+                    if (website is not null)
                     {
                         platformGame.PlatformUrl = igdbWebsite?.Url;
                     }
 
-                    if(PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
+                    if (PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
                     {
 
                         ExternalGame? foundExternalGame = igdbGame
@@ -165,7 +185,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                             })
                             .FirstOrDefault(externalGame =>
                             {
-                                if(externalGame is null)
+                                if (externalGame is null)
                                 {
                                     return false;
                                 }
@@ -179,6 +199,8 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     }
 
                     platformGames.Add(platformGame);
+
+                    i++;
 
                 }
             }
