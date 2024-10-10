@@ -5,12 +5,18 @@ interface props {
   Title: string;
   Description: string;
   Rareity: string;
+  showAddButton: boolean;
 }
 
-const AchievementList: React.FC<props> = ({ Title, Description, Rareity }) => {
+const AchievementList: React.FC<props> = ({
+  Title,
+  Description,
+  Rareity,
+  showAddButton,
+}) => {
   return (
     <>
-      <li className="py-3 sm:pb-4">
+      <li className="py-3 sm:pb-4 ">
         <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <div className="flex-shrink-0">
             <img
@@ -32,7 +38,7 @@ const AchievementList: React.FC<props> = ({ Title, Description, Rareity }) => {
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
-              <Plus height={25} width={25} />
+              {showAddButton && <Plus height={25} width={25} />}
             </div>
           </div>
         </div>

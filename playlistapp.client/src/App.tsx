@@ -32,10 +32,12 @@ function App() {
                   className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
                   color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
                   borderWidth={6}
-                  duration={14}
+                  duration={30}
                 >
                   <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
+                    
                     <div className="dark:bg-black bg-white w-full">
+                      
                       <Navbar />
                       <Routes>
                         <Route
@@ -59,14 +61,11 @@ function App() {
                         />
                         <Route path="/account" element={<Account />} />
                         <Route
-                         
                           path="/achievements/:gameId"
-                         
-                          element={<AchievementsPage />}
-                       
+                          element={<AchievementsPage showAddButton={true} />}
                         />
                         <Route path="/test/:gameId" element={<TestPage />} />
-                            </Routes>
+                      </Routes>
                     </div>
                   </div>
                 </ShineBorder>

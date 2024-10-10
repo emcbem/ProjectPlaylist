@@ -4,7 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AchievementList from "../individual_components/AchievementList";
 
-const AchievementsPage: React.FC = () => {
+interface props {
+  showAddButton: boolean
+}
+
+const AchievementsPage: React.FC<props> = (props) => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setgame] = useState<Game>();
@@ -15,35 +19,40 @@ const AchievementsPage: React.FC = () => {
 
   return (
     <div className="flex-grow w-full dark:text-white text-black">
-      <div className="mt-10 pt-10 font-bold mx-auto max-w-screen-xl pb-5 underline md:text-5xl sm:text-4xl text-3xl">
+      {/* <div className="mt-10 pt-10 font-bold mx-auto max-w-screen-xl pb-5 underline md:text-5xl sm:text-4xl text-3xl">
         {`Achievements for ${game?.title}`}
-      </div>
+      </div> */}
       <div className="mx-auto max-w-screen-xl">
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           <AchievementList
             Title={"Participation Ribbon"}
             Description={"Create a contestant"}
             Rareity={"31.61% (145.00)"}
+            showAddButton={props.showAddButton}
           />
           <AchievementList
             Title={"Initial Deposit"}
             Description={"Insert a cash box into a cashout station"}
             Rareity={"71.17% (64.00)"}
+            showAddButton={props.showAddButton}
           />
           <AchievementList
             Title={"Med Student"}
             Description={"Revive a teammate"}
             Rareity={"90.61% (50.00)"}
+            showAddButton={props.showAddButton}
           />
           <AchievementList
             Title={"Returning Contestant"}
             Description={"Play 3 rounds of Quick Cash"}
             Rareity={"70.61% (65.00)"}
+            showAddButton={props.showAddButton}
           />
           <AchievementList
             Title={"Green Light"}
             Description={"Play 10 rounds with a Light Build"}
             Rareity={"31.17% (147.00)"}
+            showAddButton={props.showAddButton}
           />
         </ul>
       </div>

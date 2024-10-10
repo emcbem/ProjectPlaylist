@@ -1,12 +1,13 @@
-import { PlatformContextInterface } from "@/@types/platform";
-import { PlatformGame, PlatformGameContextInterface } from "@/@types/platformGame";
+import {
+  PlatformGame,
+  PlatformGameContextInterface,
+} from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserGameContextInterface } from "@/@types/usergame";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { PlatformContext } from "@/contexts/PlatformContext";
 import { PlatformGameContext } from "@/contexts/PlatformGameContext";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserGameContext } from "@/contexts/UserGameContext";
@@ -29,10 +30,6 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   const { mutatePlatformGames } = React.useContext(
     PlatformGameContext
   ) as PlatformGameContextInterface;
-
-  const { platforms } = React.useContext(
-    PlatformContext
-  ) as PlatformContextInterface;
 
   const { AddUserGame } = React.useContext(
     UserGameContext
@@ -58,13 +55,15 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     }
   };
 
-const [platformGames, setPlatfromGames] = useState<PlatformGame[]>([])
+  const [platformGames, setPlatfromGames] = useState<PlatformGame[]>([]);
 
-useEffect(()=>
-{
-  PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(x => {setPlatfromGames(x?? [])})
-}, [])
-
+  useEffect(() => {
+    PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
+      (x) => {
+        setPlatfromGames(x ?? []);
+      }
+    );
+  }, []);
 
   useEffect(() => {
     mutatePlatformGames({
@@ -72,7 +71,6 @@ useEffect(()=>
       platformID: 1,
     });
   }, []);
-
 
   return (
     <>
