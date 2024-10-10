@@ -279,5 +279,10 @@ namespace PlaylistApp.Server.Services.IGDBServices
             // Convert to long[] and handle any potential parsing errors
             return stringArray.Select(long.Parse).ToArray();
         }
+
+        internal static object ParseGenreCsv(string genreLocalPath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,9 +12,7 @@ export interface UserGame {
 
 export interface UserGameContextInterface {
     userGamesFromUser: UserGame[];
-    userGamesFromGame: UserGame[];
     error: string | undefined;
     isLoading: boolean;
     AddUserGame: (gameRequest: AddUserGameRequest) => Promise<UserGame>;
-    SetGameId: (gameId: number) => void;
 }

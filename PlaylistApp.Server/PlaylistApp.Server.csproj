@@ -24,4 +24,8 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CSVs\" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,6 @@ import React, { FC, ReactNode } from "react";
 import { PlatformGameContextInterface } from "../@types/platformGame";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PlatformGameService } from "../ApiServices/PlatformGameService";
-import { PlatformGameRequest } from "@/@types/Requests/getPlatformGameRequest";
 
 export const PlatformGameContext =
   React.createContext<PlatformGameContextInterface | null>(null);
@@ -17,8 +16,6 @@ export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({
       queryClient.invalidateQueries({ queryKey: ["PlatformGame"] });
     },
   });
-
-  console.log(data)
 
   return (
     <PlatformGameContext.Provider
