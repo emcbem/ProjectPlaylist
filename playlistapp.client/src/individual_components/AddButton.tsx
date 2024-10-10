@@ -41,7 +41,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     console.log("Adding user game of platform id: ", platformId);
     if (usr) {
       if (platformId && usr.guid) {
-        let newAddUserGameRequest: AddUserGameRequest = {
+        const newAddUserGameRequest: AddUserGameRequest = {
           userId: usr.guid,
           platformGameId: platformId,
         };
