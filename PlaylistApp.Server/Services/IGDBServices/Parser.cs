@@ -220,6 +220,28 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return websites;
         }
 
+        public static List<IGDB.Models.Genre> ParseGenreCsv(string genreLocalPath)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            var genres = new List<IGDB.Models.Genre>();
+
+            using (var reader = new StreamReader(genreLocalPath))
+            using (var csv = new CsvReader(reader, config))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var genre = new IGDB.Models.Genre();
+                    genre.Name = csv.GetField<string>("name");
+                    genre.Id = csv.GetField<long?>("id");
+                    genres.Add(genre);
+                }
+            }
+
+            return genres ?? [];
+        }
+
         public static List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
@@ -280,9 +302,6 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return stringArray.Select(long.Parse).ToArray();
         }
 
-        internal static object ParseGenreCsv(string genreLocalPath)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

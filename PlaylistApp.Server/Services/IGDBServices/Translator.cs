@@ -77,6 +77,15 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         }
 
+        public static List<Data.Genre> TranslateIGDBGenresIntoPersonalData(List<IGDB.Models.Genre> igdbGenres)
+        {
+            return igdbGenres.Select(x => new Data.Genre()
+            {
+                Id = (int?)x.Id ?? -1,
+                GenreName = x.Name,
+            }).ToList() ;
+        }
+
         public static List<Data.PlatformGame> TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(List<Data.Game> localGames, List<IGDB.Models.Game> igdbGames, List<ExternalGame> igdbExternalGames, List<Website> igdbWesites)
         {
             var websiteDict = igdbWesites.ToDictionary(x => x?.Id ?? 0);
@@ -114,7 +123,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
             };
 
-            Website ? website = null;
+            Website? website = null;
             ExternalGame? externalGame = null;
             ExternalCategory externalCategory = ExternalCategory.Steam;
 
@@ -142,9 +151,9 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     Website? igdbWebsite = igdbGame
                        .Websites
                        .Ids
-                       .Select(id => 
+                       .Select(id =>
                        {
-                           if(websiteDict.TryGetValue(id, out website))
+                           if (websiteDict.TryGetValue(id, out website))
                            {
                                return website;
                            }
@@ -155,12 +164,12 @@ namespace PlaylistApp.Server.Services.IGDBServices
                        })
                        .FirstOrDefault(website => website.Category == WebsiteCategory.Official);
 
-                    if(website is not null)
+                    if (website is not null)
                     {
                         platformGame.PlatformUrl = igdbWebsite?.Url;
                     }
 
-                    if(PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
+                    if (PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
                     {
 
                         ExternalGame? foundExternalGame = igdbGame
@@ -176,7 +185,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                             })
                             .FirstOrDefault(externalGame =>
                             {
-                                if(externalGame is null)
+                                if (externalGame is null)
                                 {
                                     return false;
                                 }
@@ -199,9 +208,6 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return platformGames;
         }
 
-        internal static object TranslateIGDBGenresIntoPersonalData()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
