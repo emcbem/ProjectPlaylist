@@ -64,9 +64,14 @@ namespace PlaylistApp.Server.Services.IGDBServices
             await context.SaveChangesAsync();
         }
 
-        internal async Task UploadGenresToDatabase(object localGenres)
+        public async Task UploadGenresToDatabase(List<Data.Genre> localGenres)
         {
-            throw new NotImplementedException();
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.Genres.AddRange(localGenres);
+
+            await context.SaveChangesAsync();
+
         }
     }
 }

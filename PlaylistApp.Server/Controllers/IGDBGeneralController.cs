@@ -91,7 +91,7 @@ public class IGDBGeneralController
     {
         var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
         var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
-        var localGenres = Translator.TranslateIGDBGenresIntoPersonalData();
+        var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenre);
         await uploader.UploadGenresToDatabase(localGenres);
     }
 }
