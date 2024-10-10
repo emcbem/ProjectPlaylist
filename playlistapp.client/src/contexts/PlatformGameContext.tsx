@@ -17,8 +17,6 @@ export const PlatformGameContextProvider: FC<{ children: ReactNode }> = ({
     },
   });
 
-  console.log(data)
-
   return (
     <PlatformGameContext.Provider
       value={{

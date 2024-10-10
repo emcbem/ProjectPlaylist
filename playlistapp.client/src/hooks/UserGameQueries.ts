@@ -1,12 +1,11 @@
 import { UserGameService } from "@/ApiServices/UserGameService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import keys from "@/QueryKeys/UserGameKeys"
 
 export const UserGameQueries = {
   useGetAllUserGamesByUserGameIdQuery: (userGameId: number) => {
-    console.log("gameId: ", userGameId);
-
     return useQuery({
-      queryKey: ["UserGameByGame"],
+      queryKey: keys.UserGameByGame,
       queryFn: () => UserGameService.GetAllUserGamesByUserGameId(userGameId),
     });
     /*
@@ -14,4 +13,20 @@ export const UserGameQueries = {
     const { data: userGameFromGame, isLoading, error } = useGetAllUserGamesByGameQuery(Number(gameId));
     */
   },
+
+  useDeleteUserGame: (userGameId: number) => {
+    const queryClient = useQueryClient();
+    console.log("userGameId: ", userGameId);
+
+    return useMutation({
+      mutationFn: () => UserGameService.DeleteUserGame(userGameId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.DeleteUserGame });
+        console.log("User game deleted successfully.");
+      },
+      onError: (error) => {
+        console.error("Error deleting user game: ", error);
+      }
+    });
+  }
 };
