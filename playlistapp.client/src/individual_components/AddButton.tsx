@@ -1,3 +1,4 @@
+
 import { PlatformGame, PlatformGameContextInterface } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
@@ -37,7 +38,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   ) as UserAccountContextInterface;
 
   const handleMenuItemClick = async (platformId: number) => {
-    console.log("Sending in usr: ", usr);
+    console.log("Adding user game of platform id: ", platformId);
     if (usr) {
       if (platformId && usr.guid) {
         const newAddUserGameRequest: AddUserGameRequest = {
@@ -118,7 +119,7 @@ useEffect(()=>
                   className="font-bold"
                   key={x.platformId}
                   onClick={() => {
-                    handleMenuItemClick(x.platform.id);
+                    handleMenuItemClick(x.id);
                   }}
                 >
                   {x.platform.name}
