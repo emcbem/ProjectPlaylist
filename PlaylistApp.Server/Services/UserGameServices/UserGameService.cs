@@ -134,7 +134,12 @@ public class UserGameService : IUserGameService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var userGame = await context.UserGames
-            .Where(x => x.PlatformGameId == request.PlatformGameId)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Platform)
+            .Include(x => x.User)
+            .Where(x => x.Id == request.UserGameId)
             .FirstOrDefaultAsync();
 
         if (userGame == null)
