@@ -34,7 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.CustomSchemaIds(type => type.FullName.Replace(".", "_"));
 });
-
+builder.Services.AddHttpClient();
 builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration.GetConnectionString("ppdb")));
 
 builder.Services.AddSingleton<IAchievementService, AchievementService>();
@@ -56,9 +56,8 @@ builder.Services.AddSingleton<IUserGameService, UserGameService>();
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();
 builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton< IGDBGameService>();
-builder.Services.AddSingleton<IGDBGenreService>();
-builder.Services.AddSingleton<IGDBCompanyService>();
+
+
 builder.Services.AddSingleton<DownloadCsv>();
 builder.Services.AddSingleton<UploadData>();
 
