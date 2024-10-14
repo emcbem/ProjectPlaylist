@@ -3,21 +3,18 @@ import { useParams } from "react-router-dom";
 import { GameContext } from "../contexts/GameContext";
 import { Game, GameContextInterface } from "../@types/game";
 import Vibrant from "node-vibrant";
-import DotPattern from "@/components/ui/dot-pattern";
-import { cn } from "@/lib/utils";
 import Tabs from "@/individual_components/Tabs";
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setGame] = useState<Game>();
-  const [colors, setColors] = useState<string[]>([]); // State to store colors
+  const [colors, setColors] = useState<string[]>([]);
 
   useEffect(() => {
     const foundGame = games.find((x) => x.id === Number(gameId));
     setGame(foundGame);
 
-    // Extract colors once the game is found
     if (foundGame) {
       getColors(
         `https:${foundGame.coverUrl.replace(/t_cover_big/g, "t_1080p")}`
@@ -25,11 +22,10 @@ const ViewGame = () => {
     }
   }, [games, gameId]);
 
-  // Function to get predominant colors
   const getColors = async (imageUrl: string) => {
     try {
       const palette = await Vibrant.from(imageUrl).getPalette();
-      const dominantColor = palette.Vibrant?.hex || "#ffffff"; // Fallback to white
+      const dominantColor = palette.Vibrant?.hex || "#ffffff";
       const colorsArray = [
         dominantColor,
         palette.LightVibrant?.hex || "#ffffff",
@@ -40,7 +36,7 @@ const ViewGame = () => {
       ];
       setColors(colorsArray);
     } catch (error) {
-      console.error("Error extracting colors:", error);
+      console.error("Error extracting colors:", error, colors);
     }
   };
 
