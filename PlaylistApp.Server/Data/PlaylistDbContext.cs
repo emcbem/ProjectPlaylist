@@ -383,8 +383,8 @@ public partial class PlaylistDbContext : DbContext
 
             entity.ToTable("user_account", "playlistdb");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AuthId).HasColumnName("auth_id");
+            entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+			entity.Property(e => e.AuthId).HasColumnName("auth_id");
             entity.Property(e => e.Bio).HasColumnName("bio");
             entity.Property(e => e.Guid).HasColumnName("guid");
             entity.Property(e => e.JoinDate).HasColumnName("join_date");

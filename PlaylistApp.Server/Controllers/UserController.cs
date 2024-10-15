@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserServices;
 
@@ -43,5 +45,13 @@ public class UserController : Controller
     public async Task<UserDTO> GetUserByAuthId(string authId)
     {
         return await userService.GetUserByAuthId(authId);
+    }
+
+    [HttpPost("addnewuser")]
+    public async Task<IResult> AddNewUser([FromBody] AddUserRequest addUserRequest)
+    {
+        await userService.AddUser(addUserRequest);
+
+        return Results.Ok("User was created");
     }
 }
