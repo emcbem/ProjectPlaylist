@@ -67,7 +67,7 @@ function App() {
 
                             path="/achievements/:gameId"
 
-                            element={<AchievementsPage showAddButton={true}/>}
+                            element={<AchievementsPage />}
 
                           />
                           <Route path="/test/:platformGameId" element={<TestPage />} />

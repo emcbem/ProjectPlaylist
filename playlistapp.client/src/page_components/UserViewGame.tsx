@@ -1,16 +1,14 @@
 import { useParams } from "react-router-dom";
-import Vibrant from "node-vibrant";
 import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/hooks/GameQueries";
-import { useState } from "react";
 
 const ViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
   const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
 
-  const [colors, setColors] = useState<string[]>([]);
+  // const [colors, setColors] = useState<string[]>([]);
 
   // const getColors = async (imageUrl: string) => {
   //   try {
