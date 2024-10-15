@@ -9,8 +9,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: playlist-storage
-  volumeName: playlist-volume
 ---
 apiVersion: apps/v1
 kind: Deployment
