@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlaylistApp.Server.Data;
 
 public partial class InvolvedCompany
 {
+    [Key]
     public int Id { get; set; }
 
     public int GameId { get; set; }

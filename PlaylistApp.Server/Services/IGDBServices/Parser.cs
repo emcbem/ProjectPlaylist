@@ -29,7 +29,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     var companyLogoId = csv.GetField<long?>("logo");
                     company.Logo = companyLogoId.HasValue ? new IdentityOrValue<IGDB.Models.CompanyLogo>(companyLogoId.Value) : new IdentityOrValue<IGDB.Models.CompanyLogo>(-1);
                     company.Slug = csv.GetField("slug");
-                    company.Published = new IdentitiesOrValues<IGDB.Models.Game>(ParseLongArray(csv.GetField<string>("published")));
+                    company.Published = new IdentitiesOrValues<IGDB.Models.Game>(ParseLongArray(csv.GetField<string?>("published")!));
                     company.Name = csv.GetField("name");
                     company.Description = csv.GetField("description");
                     company.StartDate = csv.GetField<DateTime?>("start_date") ?? new DateTime();
@@ -183,7 +183,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 {
                     var externalGame = new IGDB.Models.ExternalGame();
 
-                    externalGame.Category = (ExternalCategory)csv.GetField<long?>("category");
+                    externalGame.Category = (ExternalCategory)csv.GetField<long?>("category")!;
 
                     externalGame.Id
                         = csv.GetField<long?>("id");
@@ -212,7 +212,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
                     website.Url = csv.GetField<string>("url");
                     website.Id = csv.GetField<long?>("id");
-                    website.Category = (WebsiteCategory)csv.GetField<long?>("category");
+                    website.Category = (WebsiteCategory)csv.GetField<long?>("category")!;
 
                     websites.Add(website);
                 }
@@ -241,6 +241,32 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
             return genres ?? [];
         }
+        public static List<IGDB.Models.InvolvedCompany> ParseInvolvedCompanyCsv(string involvedCompanyPath)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            var involvedCompanies = new List<IGDB.Models.InvolvedCompany>();
+
+            using (var reader = new StreamReader(involvedCompanyPath))
+            using (var csv = new CsvReader(reader, config))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var involvedCompany = new IGDB.Models.InvolvedCompany();
+                    involvedCompany.Developer = csv.GetField<string?>("developer") == "t";
+                    involvedCompany.Publisher = csv.GetField<string?>("publisher") == "t";
+                    var companyId = csv.GetField<long?>("company");
+
+                    involvedCompany.Company = companyId.HasValue ?  new IdentityOrValue<IGDB.Models.Company>(companyId.Value) : new IdentityOrValue<IGDB.Models.Company>(-1);
+                    var gameId = csv.GetField<long?>("game");
+                    involvedCompany.Game = gameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(gameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
+
+                    involvedCompanies.Add(involvedCompany);
+                }
+            }
+            return involvedCompanies;
+        }
 
         public static List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
         {
@@ -259,19 +285,19 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.Name = csv.GetField<string>("name");
                     game.Summary = csv.GetField<string>("summary");
                     game.Category = (Category)(csv.GetField<long>("category"));
-                    game.PlayerPerspectives = new IdentitiesOrValues<PlayerPerspective>(ParseLongArray(csv.GetField<string>("player_perspectives")));
-                    game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")));
-                    game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")));
-                    game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")));
+                    game.PlayerPerspectives = new IdentitiesOrValues<PlayerPerspective>(ParseLongArray(csv.GetField<string>("player_perspectives")!));
+                    game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")!));
+                    game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")!));
+                    game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")!));
                     game.FirstReleaseDate = csv.GetField<DateTimeOffset?>("first_release_date");
-                    game.Platforms = new IdentitiesOrValues<IGDB.Models.Platform>(ParseLongArray(csv.GetField<string>("platforms")));
+                    game.Platforms = new IdentitiesOrValues<IGDB.Models.Platform>(ParseLongArray(csv.GetField<string>("platforms")!));
                     var coverId = csv.GetField<long?>("cover");
                     game.Cover = coverId.HasValue ? new IdentityOrValue<Cover>(coverId.Value) : new IdentityOrValue<Cover>(-1);
-                    game.MultiplayerModes = new IdentitiesOrValues<MultiplayerMode>(ParseLongArray(csv.GetField<string>("multiplayer_modes")));
-                    game.InvolvedCompanies = new IdentitiesOrValues<IGDB.Models.InvolvedCompany>(ParseLongArray(csv.GetField<string>("involved_companies")));
-                    game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")));
-                    game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")));
-                    game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")));
+                    game.MultiplayerModes = new IdentitiesOrValues<MultiplayerMode>(ParseLongArray(csv.GetField<string>("multiplayer_modes")!));
+                    game.InvolvedCompanies = new IdentitiesOrValues<IGDB.Models.InvolvedCompany>(ParseLongArray(csv.GetField<string>("involved_companies")!));
+                    game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")!));
+                    game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")!));
+                    game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
                     // Example null check
                     if (string.IsNullOrWhiteSpace(game.Name))
                     {
@@ -301,6 +327,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             // Convert to long[] and handle any potential parsing errors
             return stringArray.Select(long.Parse).ToArray();
         }
+
 
 
     }

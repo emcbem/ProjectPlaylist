@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlaylistApp.Server.Data;
 
 public partial class UserAccount
 {
+    [Key]
     public int Id { get; set; }
 
     public string AuthId { get; set; } = null!;
