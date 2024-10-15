@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
     user && (
       <div className="lg:w-[213.69px] flex justify-end relative z-20">
         <div className="flex flex-row flex-shrink-0 h-14 w-14">
-          <Menu>
+          <Menu placement="bottom-start">
             <MenuHandler>
               <img
                 src={user.picture ? user.picture : UserPFP}
@@ -43,7 +43,7 @@ const Profile: React.FC = () => {
               </MenuItem>
 
               <hr className="my-3" />
-              <Link to="/account">
+              <Link to="/account" reloadDocument>
                 <MenuItem
                   placeholder={undefined}
                   onPointerEnterCapture={undefined}
