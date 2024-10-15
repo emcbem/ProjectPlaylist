@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 import { useAuth0 } from "@auth0/auth0-react";
-import Account from "./page_components/Account";
+import Account from "./page_components/Account/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
 import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";

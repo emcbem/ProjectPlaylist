@@ -1,6 +1,6 @@
 import { Game } from '@/@types/game';
 import { PlusIcon } from '@/assets/plusIcon';
-import { TwitchIconCustom } from '@/assets/TwitchLogoCustom';
+import { TwitchIconCustom } from '@/assets/CustomPlatformIcons/TwitchLogoCustom';
 import { FC, useState } from 'react'
 import { Link } from 'react-router-dom';
 

@@ -1,29 +1,42 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react'
-import HorizontalRule from '../individual_components/HorizontalRule';
-import { UserGameContext } from '../contexts/UserGameContext';
-import { UserGameContextInterface } from '../@types/usergame';
+import HorizontalRule from '../../individual_components/HorizontalRule';
+import { UserGameContext } from '../../contexts/UserGameContext';
+import { UserGameContextInterface } from '../../@types/usergame';
 import "./Account.modules.scss"
-import PlatformIconList from '@/individual_components/PlatformIconList';
 import { Link } from 'react-router-dom';
+import { UserAccountContext } from '@/contexts/UserAccountContext';
+import { UserAccountContextInterface } from '@/@types/userAccount';
+import PlatformGamerTags from './PlatformGamerTags';
 
 const Account = () => {
     const { userGamesFromUser, isLoading } = React.useContext(UserGameContext) as UserGameContextInterface;
 
     const { user, isAuthenticated } = useAuth0();
 
+    const { usr } = React.useContext(
+        UserAccountContext
+    ) as UserAccountContextInterface;
+
+    console.log(usr)
+
     return (
         isAuthenticated &&
         user && (
             <div className="min-h-screen bg-white dark:bg-black dark:text-white">
                 <div className="m-8">
-                    <div className="text-4xl">Welcome Back, {user.nickname}</div>
                     <HorizontalRule />
                     <div className="flex flex-wrap">
                         <img className="rounded-full" src={user.picture} />
-                        <p className="text-4xl ms-8">Lvl 100</p>
+                        <div>
+
+                            <p className="text-4xl ms-8">{user.nickname}</p>
+                            <p className="text-2xl ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
+                        </div>
                     </div>
-                    <PlatformIconList GameId={undefined} />
+
+                    <PlatformGamerTags />
+
                     <p className="mt-8 text-6xl">Your Collection</p>
                     {isLoading &&
                         <div className="relative w-3/4">
@@ -77,7 +90,7 @@ const Account = () => {
                     }
 
                     <p className="mt-8 text-6xl">You Playlists</p>
-                    
+
 
 
 
