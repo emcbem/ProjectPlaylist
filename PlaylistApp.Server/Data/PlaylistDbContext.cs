@@ -162,7 +162,7 @@ public partial class PlaylistDbContext : DbContext
 
             entity.ToTable("game_genre", "playlistdb");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.GenreId).HasColumnName("genre_id");
 
@@ -263,7 +263,7 @@ public partial class PlaylistDbContext : DbContext
 
             entity.ToTable("involved_company", "playlistdb");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.IsDeveloper).HasColumnName("is_developer");
