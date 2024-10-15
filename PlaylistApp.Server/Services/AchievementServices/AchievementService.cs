@@ -13,7 +13,7 @@ public class AchievementService : IAchievementService
         this.dbContextFactory = dbContextFactory;
     }
 
-    public async Task<List<AchievementDTO>> GetAchievementsByGame(int id)
+    public async Task<List<AchievementDTO>> GetAchievementsByGame(int platformGameId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -22,11 +22,10 @@ public class AchievementService : IAchievementService
                 .ThenInclude(x => x.Platform)
              .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Game)
-            .Where(x => x.Id == id)
-            .Select(x => x.ToDTO())
+            .Where(x => x.PlatformGameId == platformGameId)
             .ToListAsync();
 
-        return result;
+        return result.Select(x => x.ToDTO()).ToList();
     }
 
     public async Task<AchievementDTO> GetAchievementById(int id)
@@ -39,7 +38,6 @@ public class AchievementService : IAchievementService
             .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Platform)
             .Where(x => x.Id == id)
-            .Select(x => x.ToDTO())
             .FirstOrDefaultAsync();
 
         if (result == null)
@@ -47,7 +45,7 @@ public class AchievementService : IAchievementService
             return new AchievementDTO();
         }
 
-        return result;
+        return result.ToDTO();
     }
 
     public async Task<List<AchievementDTO>> GetAchievementsByName(string name)

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AchievementList from "./AchievementList";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 
@@ -15,16 +14,16 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
       <a
         href="#"
         onClick={onClick}
-        className={`inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg hover:text-gray-600 dark:hover:text-gray-300 group ${
+        className={`inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg hover:text-black dark:hover:text-gray-300 group ${
           isActive
-            ? "text-gray-300 border-gray-300 dark:border-gray-300"
-            : "text-gray-500 border-transparent hover:border-gray-300"
+            ? "text-black border-black dark:border-white dark:text-white"
+            : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
         }`}
       >
         <svg
           className={`w-4 h-4 me-2 ${
-            isActive ? "text-blue-600" : "text-gray-400"
-          } group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300`}
+            isActive ? "text-black dark:text-white" : "text-gray-500"
+          } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white`}
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -39,9 +38,14 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 };
 
 const Tabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("Tab 1");
+  const [activeTab, setActiveTab] = useState<string>("Reviews");
 
-  const tabs = ["Reviews", "Your Stats", "Your Achievements", "Global Leaderboard"];
+  const tabs = [
+    "Reviews",
+    "Your Stats",
+    "Your Achievements",
+    "Global Leaderboard",
+  ];
 
   return (
     <div className="w-full">
@@ -57,12 +61,28 @@ const Tabs: React.FC = () => {
       </ul>
 
       <div className="mt-4 w-full">
-      {activeTab === "Reviews" && (
+        {activeTab === "Reviews" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
-            <Review UserName={"Stinky123"} Comment={"Goodness I LOVE THIS GAME!!!"} Score={10} />
-            <Review UserName={"BigPHAT"} Comment={"Yeah I really recommend this"} Score={7} />
-            <Review UserName={"TheEpicCritical"} Comment={"Pshh, overrated if you ask me LOL"} Score={5} />
-            <Review UserName={"TheDepartmentOfSwagerculture"} Comment={"Game crashes everytime...."} Score={1} />
+            <Review
+              UserName={"Stinky123"}
+              Comment={"Goodness I LOVE THIS GAME!!!"}
+              Score={10}
+            />
+            <Review
+              UserName={"BigPHAT"}
+              Comment={"Yeah I really recommend this"}
+              Score={7}
+            />
+            <Review
+              UserName={"TheEpicCritical"}
+              Comment={"Pshh, overrated if you ask me LOL"}
+              Score={5}
+            />
+            <Review
+              UserName={"TheDepartmentOfSwagerculture"}
+              Comment={"Game crashes everytime...."}
+              Score={1}
+            />
           </div>
         )}
         {activeTab === "Your Stats" && (

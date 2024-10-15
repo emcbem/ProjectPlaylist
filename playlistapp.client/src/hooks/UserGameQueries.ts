@@ -34,7 +34,7 @@ export const UserGameQueries = {
 
     const handleDelete = (id: number) => {
     deleteUserGame(id);
-  };
+    };
     */
   },
 

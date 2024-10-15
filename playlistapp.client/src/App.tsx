@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 import { useAuth0 } from "@auth0/auth0-react";
-import ViewGame from "./page_components/ViewGame";
 import Account from "./page_components/Account";
 import { GameContextProvidor } from "./contexts/GameContext";
 import ShineBorder from "./components/ui/shine-border";
@@ -55,7 +54,7 @@ function App() {
                           <Route path="/search" element={<SearchPage />} />
                           <Route
                             path="/view-game/:gameId"
-                            element={<ViewGame />}
+                            element={<UserViewGame />}
                           />
                           <Route
                             path="/user-view-game/:gameId"
@@ -69,7 +68,7 @@ function App() {
                             element={<AchievementsPage showAddButton={true}/>}
 
                           />
-                          <Route path="/test/:userGameId" element={<TestPage />} />
+                          <Route path="/test/:platformGameId" element={<TestPage />} />
                         </Routes>
                     </div>
                   </div>
