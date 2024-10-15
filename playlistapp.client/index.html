@@ -14,40 +14,6 @@
     />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <style>
-      @keyframes infinite-scroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
-      }
-
-      @keyframes infinite-scroll-reverse {
-        0% {
-          transform: translateX(-100%);
-        }
-        100% {
-          transform: translateX(0%);
-        }
-      }
-
-
-      .animate-infinite-container {
-        width: 100%;
-        overflow: hidden;
-        transition: 5s linear;
-        transform: translateX(0%);
-      }
-
-      .animate-infinite-scroll {
-        animation: infinite-scroll 1500s linear infinite;
-      }
-
-      .animate-infinite-scroll-reverse {
-        animation: infinite-scroll-reverse 1500s linear infinite;
-      }
-      
       .custom-gradient {
         background: linear-gradient(to bottom, #edbd68, #602b53);
       }

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import AchievementList from "../individual_components/AchievementList";
 
 interface props {
-  showAddButton: boolean
+  showAddButton: boolean;
 }
 
 const AchievementsPage: React.FC<props> = (props) => {
@@ -16,6 +16,8 @@ const AchievementsPage: React.FC<props> = (props) => {
   useEffect(() => {
     setgame(games.find((x) => x.id === Number(gameId)));
   }, [games]);
+
+  console.log(game);
 
   return (
     <div className="flex-grow w-full dark:text-white text-black">
