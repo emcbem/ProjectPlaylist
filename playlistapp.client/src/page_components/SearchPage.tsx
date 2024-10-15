@@ -8,12 +8,20 @@ import { GameQueries } from '@/hooks/GameQueries';
 const SearchPage: React.FC = () => {
     const [location] = useState(useLocation());
     const [query] = useState<string>(location.state?.query)
+
     const [isVisible, setIsVisible] = useState(false);
-    const { games } = React.useContext(GameContext) as GameContextInterface;
 
+    const { games, isLoading } = React.useContext(GameContext) as GameContextInterface;
     const { data:gamesByName } = GameQueries.useGetAllGamesByNameQuery(query);
-
     const [gamesAfterFilter, setgamesAfterFilter] = useState<Game[]>([]);
+
+
+    // const {data} = useInfiniteQuery({
+    //     queryKey: ['games'],
+    //     queryFn: GameService.GetAllGames,
+    //     initialPageParam: 0,
+    //     getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    //   })
 
     const toggleDiv = () => {
         setIsVisible(!isVisible);
@@ -28,6 +36,10 @@ const SearchPage: React.FC = () => {
         }
 
     }, [query, gamesByName, games])
+
+    if (isLoading) {
+        return <div>Loading ...</div>
+    }
 
 
 
