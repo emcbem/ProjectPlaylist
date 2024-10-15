@@ -3,9 +3,8 @@ WORKDIR /app
 COPY package.json . 
 RUN NODE_ENV=development npm i
 COPY . .
-ARG VITE_URL
 ARG VITE_CERT
-ENV VITE_URL $VITE_URL
+ENV VITE_URL "https://api.projectplaylist.duckdns.org"
 
 RUN npm run build
 
