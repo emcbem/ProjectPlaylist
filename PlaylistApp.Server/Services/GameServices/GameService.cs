@@ -81,7 +81,7 @@ public class GameService : IGameService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var games = await context.Games
-            .Where(x => x.Title == name)
+            .Where(x => x.Title.ToLower().Contains(name.ToLower()))
             .ToListAsync();
 
         return games.Select(x => x.ToDTO()).ToList();
