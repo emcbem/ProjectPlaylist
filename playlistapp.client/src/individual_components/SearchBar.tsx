@@ -17,7 +17,6 @@ const SearchBar: React.FC = () => {
   }, [location]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log("Query in handleKeyPress: ", query)
     if (e.key === 'Enter') {
       if (location.pathname === '/search') {
         navigate(0);
