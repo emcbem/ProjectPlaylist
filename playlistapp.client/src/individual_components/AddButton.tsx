@@ -145,7 +145,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             >
               {platformGames
                 .filter((x) => x.game.id == Number(gameId))
-                .map((x) => (
+                .map((x, index) => (
                   <>
                     <MenuItem
                       placeholder={undefined}
@@ -161,7 +161,11 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                     >
                       {x.platform.name}
                     </MenuItem>
-                    <hr className="my-3" />
+                    {index != platformGames.length - 1 ? (
+                      <hr className="my-3" />
+                    ) : (
+                      ""
+                    )}
                   </>
                 ))}
             </MenuList>
