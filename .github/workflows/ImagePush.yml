@@ -41,6 +41,10 @@ jobs:
       - name: Apply kubernetes
         run: |
           export TAG_ID=${{github.run_number}}
+          export DB_USER_ID=${{secrets.DB_USER_ID}}
+          export DB_PASSWORD=${{secrets.DB_PASSWORD}}
+          export DB_SERVER=${{secrets.DB_SERVER}}
+          export DB_DB=${{secrets.DB_DB}}
 
           for file in ./kubernetes/*; do 
             cat $file | envsubst | /home/ethane/.nix-profile/bin/kubectl apply -f -

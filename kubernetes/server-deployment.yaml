@@ -22,8 +22,8 @@ spec:
         - containerPort: 8080
         env:
         - name: ConnectionStrings__ppdb
-          value: user id= postgres; password= postgres; server= playlist-db; database= playlistdb;
+          value: user id= ${DB_USER_ID}; password= ${DB_PASSWORD}; server= ${DB_SERVER}; database= ${DB_DB};
         - name: allowAll
           value: "true"
         - name: clientUrl
-          value: https://projectplaylist.duckdns.org/api # Updated client URL
+          value: https://projectplaylist.duckdns.org/
