@@ -1,27 +1,36 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
 
+const SearchBar: React.FC = () => {
+  const location = useLocation(); 
   const navigate = useNavigate();
-  //let params = new URLSearchParams(url.search);
-  const [query, setQuery] = useState("");
+
+  const [query, setQuery] = useState<string>(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("q") || "";
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setQuery(params.get("q") || "");
+  }, [location]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // This is perfectly safe in react, it correctly detect the keys
-    console.log(e.key)
-    if (e.key == 'Enter') {
+    console.log("Query in handleKeyPress: ", query)
+    if (e.key === 'Enter') {
+      if (location.pathname === '/search') {
+        navigate(0);
+      }
       navigate("/search", {
         state: {
-          query 
+          query
         }
       });
     }
-  }
-
+  };
 
   return (
-
     <div className="flex-grow mx-8 flex relative justify-center z-20">
       <div className="sm:w-3/4 w-full relative flex items-center">
         <svg
@@ -38,14 +47,14 @@ const SearchBar = () => {
         </svg>
 
         <input
-          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white"
+          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white dark:text-white"
           placeholder=""
           onKeyDown={handleKeyPress}
           onChange={(e) => setQuery(e.target.value)}
+          value={query}
         />
       </div>
     </div>
-
   );
 };
 
