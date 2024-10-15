@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AchievementList from "./AchievementList";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 
@@ -39,7 +38,7 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 };
 
 const Tabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("Tab 1");
+  const [activeTab, setActiveTab] = useState<string>("Reviews");
 
   const tabs = ["Reviews", "Your Stats", "Your Achievements", "Global Leaderboard"];
 

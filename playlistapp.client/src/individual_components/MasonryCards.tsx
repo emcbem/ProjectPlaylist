@@ -23,27 +23,27 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
     const randomHeight = Math.floor(Math.random() * (300 - 200 + 1) + 200);
     return (
       <Link to={`/view-game/${game.id}`} key={game.id}>
-        <div className="rounded-lg overflow-hidden dark:text-white text-black">
+        <div className="rounded-lg overflow-hidden text-white dark:text-black">
           <img
             src={game.coverUrl}
             className={`w-full sm:h-[${randomHeight}px] h-[${
               randomHeight / 2
             }px] object-cover`}
           />
-          <div className="dark:bg-[#252A2C] bg-[#D9D9D9]">
+          <div className="bg-[#252A2C] dark:bg-[#D9D9D9]">
             <div className="flex flex-row p-2">
-              <PS5Icon height={20} width={20} darkColor="white" color="black" />
+              <PS5Icon height={20} width={20} darkColor="black" color="white" />
               <XboxIcon
                 height={20}
                 width={20}
-                darkColor="white"
-                color="black"
+                darkColor="black"
+                color="white"
               />
               <SteamIcon
                 height={20}
                 width={20}
-                darkColor="white"
-                color="black"
+                darkColor="black"
+                color="white"
               />
             </div>
             <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">

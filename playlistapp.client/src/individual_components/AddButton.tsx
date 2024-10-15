@@ -74,25 +74,25 @@ useEffect(()=>
     <>
       <Menu placement="bottom-end">
         <MenuHandler>
-          <button className="flex flex-row lg:mx-28 mx-12 md:my-8 my-2">
+          <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-[#252A2C] dark:bg-[#D9D9D9] dark:text-black text-white rounded-lg text-start sm:p-8 py-5 px-4
-            2xl:w-[300px] xl:w-[200px] lg:w-[175px] md:w-[150px] w-fit 
-            2xl:h-32 xl:h-24 lg:h-16 md:h-8 h-2
-            justify-start md:justify-center"
+              className="cursor-pointer relative flex flex-row items-center bg-[#252A2C] dark:bg-[#D9D9D9] dark:text-black text-white rounded-lg text-start 
+            2xl:w-44 w-fit 
+            md:h-12 h-2
+            justify-center"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
               <div>
-                <div className="2xl:text-3xl xl:text-xl text-lg font-extrabold md:block hidden h-fit">
+                {/* <div className="2xl:text-3xl xl:text-xl text-lg font-extrabold md:block hidden h-fit">
                   Save to
-                </div>
-                <div className="2xl:text-5xl xl:text-3xl text-xl font-extrabold h-fit">
-                  Playlist
+                </div> */}
+                <div className="2xl:text-2xl xl:text-3xl text-xl font-extrabold h-fit">
+                  Library
                 </div>
               </div>
-              <div className="relative inline-block md:ml-4 ml-0">
-                <Plus height={50} width={50} />
+              <div className="relative inline-block">
+                <Plus height={20} width={20} />
               </div>
               {isHovered && (
                 <BorderBeam

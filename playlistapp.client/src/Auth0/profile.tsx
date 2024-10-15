@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
     user && (
       <div className="lg:w-[213.69px] flex justify-end relative z-20">
         <div className="flex flex-row flex-shrink-0 h-14 w-14">
-          <Menu>
+          <Menu placement="bottom-start">
             <MenuHandler>
               <img
                 src={user.picture ? user.picture : UserPFP}

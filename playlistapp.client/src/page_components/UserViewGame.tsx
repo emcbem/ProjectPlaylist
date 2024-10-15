@@ -4,6 +4,7 @@ import { GameContext } from "../contexts/GameContext";
 import { Game, GameContextInterface } from "../@types/game";
 import Vibrant from "node-vibrant";
 import Tabs from "@/individual_components/Tabs";
+import AddButton from "@/individual_components/AddButton";
 
 const ViewGame = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
@@ -64,6 +65,9 @@ const ViewGame = () => {
             <h1 className="dark:text-white text-black text-base line-clamp-3">
               {game?.description}
             </h1>
+            <div>
+              <AddButton gameId={gameId} />
+            </div>
             <div className="border-b border-gray-200 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
                 <Tabs />
