@@ -4,7 +4,6 @@ import ExpandingColumns from "../individual_components/Platforms";
 import { Link } from "react-router-dom";
 import { GameMarquee } from "@/individual_components/Marquee";
 
-
 const HomePageNLI: React.FC = () => {
   return (
     <>

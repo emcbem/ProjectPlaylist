@@ -43,7 +43,7 @@ const Profile: React.FC = () => {
               </MenuItem>
 
               <hr className="my-3" />
-              <Link to="/account">
+              <Link to="/account" reloadDocument>
                 <MenuItem
                   placeholder={undefined}
                   onPointerEnterCapture={undefined}
