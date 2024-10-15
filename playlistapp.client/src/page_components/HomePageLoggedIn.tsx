@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 const HomePageLoggedIn: React.FC = () => {
   const { games } = React.useContext(GameContext) as GameContextInterface;
 
-  const slicedArray = games.slice(0, 48);
-  const slicedArray2 = games.slice(49, 97);
+  const slicedArray = games.filter((item) => !!item.coverUrl).slice(0, 48);
+  const slicedArray2 = games.filter((item) => !!item.coverUrl).slice(49, 97);
 
   return (
     <>

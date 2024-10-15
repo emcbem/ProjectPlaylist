@@ -17,6 +17,7 @@ import {
   MenuItem,
   MenuList,
 } from "@material-tailwind/react";
+import { ChevronUpIcon } from "@heroicons/react/24/solid";
 import React, { useEffect } from "react";
 import { useState } from "react";
 
@@ -26,6 +27,8 @@ interface props {
 
 const AddButton: React.FC<props> = ({ gameId }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [openMenu, setOpenMenu] = React.useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<PlatformGame>();
 
   const { mutatePlatformGames } = React.useContext(
     PlatformGameContext
@@ -55,13 +58,15 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     }
   };
 
-const [platformGames, setPlatformGames] = useState<PlatformGame[]>([])
+  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
-useEffect(()=>
-{
-  PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(x => {setPlatformGames(x?? [])})
-}, [])
-
+  useEffect(() => {
+    PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
+      (x) => {
+        setPlatformGames(x ?? []);
+      }
+    );
+  }, []);
 
   useEffect(() => {
     mutatePlatformGames({
@@ -88,7 +93,7 @@ useEffect(()=>
                   Save to
                 </div> */}
                 <div className="2xl:text-2xl xl:text-3xl text-xl font-extrabold h-fit">
-                  Library
+                  Add
                 </div>
               </div>
               <div className="relative inline-block">
@@ -109,33 +114,71 @@ useEffect(()=>
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
-          {platformGames
-            .filter((x) => x.game.id == Number(gameId))
-            .map((x) => (
-              <>
-                <MenuItem
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  className="font-bold"
-                  key={x.platformId}
-                  onClick={() => {
-                    handleMenuItemClick(x.id);
-                  }}
-                >
-                  {x.platform.name}
-                </MenuItem>
-                <hr className="my-3" />
-              </>
-            ))}
-
+          <Menu
+            placement="right-start"
+            open={openMenu}
+            handler={setOpenMenu}
+            allowHover
+            offset={15}
+          >
+            <MenuHandler className="flex items-center justify-between font-bold">
+              <MenuItem
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                {!selectedPlatform
+                  ? "Select Platform"
+                  : selectedPlatform.platform.name}
+                <ChevronUpIcon
+                  strokeWidth={2.5}
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    openMenu ? "rotate-90" : ""
+                  }`}
+                />
+              </MenuItem>
+            </MenuHandler>
+            <MenuList
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              {platformGames
+                .filter((x) => x.game.id == Number(gameId))
+                .map((x) => (
+                  <>
+                    <MenuItem
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                      className="font-bold"
+                      key={x.platformId}
+                      onClick={() => {
+                        setSelectedPlatform(
+                          platformGames.find((pGame) => x.id == pGame.id)
+                        );
+                      }}
+                    >
+                      {x.platform.name}
+                    </MenuItem>
+                    <hr className="my-3" />
+                  </>
+                ))}
+            </MenuList>
+          </Menu>
+          <hr className="my-3" />
           <MenuItem
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            className="font-bold"
+            className={`font-bold ${
+              !selectedPlatform ? "text-gray-500 cursor-default" : ``
+            }`}
+            onClick={() => {
+              selectedPlatform ? handleMenuItemClick(selectedPlatform.id) : "";
+            }}
           >
-            Wishlist
+            Add to My Library
           </MenuItem>
         </MenuList>
       </Menu>

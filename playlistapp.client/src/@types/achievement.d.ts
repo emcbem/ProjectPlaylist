@@ -1,11 +1,8 @@
-
 export interface Achievement {
-    Id: number;
-    PlatformGameId: number;
-    ImageUrl: string;
-    AchievementName: string;
-    AchievementDesc: string;
-    Goals: string;
-    PlatformGame: PlatformGame;
-    //UserAchievements: UserAchievement;
+    id: number;
+    platformGameId: number;
+    imageUrl: string;
+    name: string;
+    description: string;
+    platformGame: PlatformGame;
 }
