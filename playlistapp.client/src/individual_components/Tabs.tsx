@@ -93,10 +93,7 @@ const Tabs: React.FC = () => {
         )}
         {activeTab === "Your Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col w-full">
-            <span className="underline">Earned Achievements</span>
-            <AchievementsPage showAddButton={false} />
-            <span className="underline">Not Earned Achievements</span>
-            <AchievementsPage showAddButton={true} />
+            <AchievementsPage />
           </div>
         )}
         {activeTab === "Global Leaderboard" && <div>Global Leaderboards</div>}

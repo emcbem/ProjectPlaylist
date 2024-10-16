@@ -5,7 +5,7 @@ import keys from "@/QueryKeys/AchievementKeys";
 export const AchievementQueries = {
   useGetAchievementByPlatformGameId: (platformGameId: number) => {
     return useQuery({
-      queryKey: keys.GetAchievementByGame,
+      queryKey: keys.GetAchievementByGame(platformGameId),
       queryFn: () =>
         AchievementService.GetAchievementsByPlatformGame(platformGameId),
     });

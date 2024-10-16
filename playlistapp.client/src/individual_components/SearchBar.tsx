@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 const SearchBar: React.FC = () => {
-  const location = useLocation(); 
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [query, setQuery] = useState<string>(() => {

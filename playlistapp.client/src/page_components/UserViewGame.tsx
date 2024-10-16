@@ -1,53 +1,39 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GameContext } from "../contexts/GameContext";
-import { Game, GameContextInterface } from "../@types/game";
-import Vibrant from "node-vibrant";
 import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
+import { GameQueries } from "@/hooks/GameQueries";
 
 const ViewGame = () => {
-  const { games } = React.useContext(GameContext) as GameContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
-  const [game, setGame] = useState<Game>();
-  const [colors, setColors] = useState<string[]>([]);
 
-  useEffect(() => {
-    const foundGame = games.find((x) => x.id === Number(gameId));
-    setGame(foundGame);
+  const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
 
-    if (foundGame) {
-      getColors(
-        `https:${foundGame.coverUrl.replace(/t_cover_big/g, "t_1080p")}`
-      );
-    }
-  }, [games, gameId]);
+  // const [colors, setColors] = useState<string[]>([]);
 
-  const getColors = async (imageUrl: string) => {
-    try {
-      const palette = await Vibrant.from(imageUrl).getPalette();
-      const dominantColor = palette.Vibrant?.hex || "#ffffff";
-      const colorsArray = [
-        dominantColor,
-        palette.LightVibrant?.hex || "#ffffff",
-        palette.DarkVibrant?.hex || "#000000",
-        palette.Muted?.hex || "#ffffff",
-        palette.LightMuted?.hex || "#ffffff",
-        palette.DarkMuted?.hex || "#000000",
-      ];
-      setColors(colorsArray);
-    } catch (error) {
-      console.error("Error extracting colors:", error, colors);
-    }
-  };
+  // const getColors = async (imageUrl: string) => {
+  //   try {
+  //     const palette = await Vibrant.from(imageUrl).getPalette();
+  //     const dominantColor = palette.Vibrant?.hex || "#ffffff";
+  //     const colorsArray = [
+  //       dominantColor,
+  //       palette.LightVibrant?.hex || "#ffffff",
+  //       palette.DarkVibrant?.hex || "#000000",
+  //       palette.Muted?.hex || "#ffffff",
+  //       palette.LightMuted?.hex || "#ffffff",
+  //       palette.DarkMuted?.hex || "#000000",
+  //     ];
+  //     setColors(colorsArray);
+  //   } catch (error) {
+  //     console.error("Error extracting colors:", error, colors);
+  //   }
+  // };
+
+  // if (game) {
+  //   getColors(`https:${game.coverUrl.replace(/t_cover_big/g, "t_1080p")}`);
+  // }
 
   return (
     <>
-      {/* <DotPattern
-        className={cn(
-          "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)]"
-        )}
-      /> */}
       <div className="flex flex-grow w-full dark:text-white text-black justify-center mt-28">
         <div className="flex flex-row w-1/2">
           <img

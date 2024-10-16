@@ -16,6 +16,7 @@ import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
 import { Toaster } from 'react-hot-toast';
+import MyLibrary from "./page_components/MyLibrary";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -61,11 +62,12 @@ function App() {
                             element={<UserViewGame />}
                           />
                           <Route path="/account" element={<Account />} />
+                          <Route path="/library" element={<MyLibrary />} />
                           <Route
 
                             path="/achievements/:gameId"
 
-                            element={<AchievementsPage showAddButton={true}/>}
+                            element={<AchievementsPage />}
 
                           />
                           <Route path="/test/:platformGameId" element={<TestPage />} />
