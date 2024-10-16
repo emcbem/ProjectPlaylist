@@ -1,4 +1,5 @@
 ﻿using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.UserServices;
@@ -10,4 +11,5 @@ public interface IUserService
     public Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest);
     public Task<UserDTO> GetUserByAuthId(string authId);
     public Task<UserDTO> GetUsersByName(string username);
+    public Task AddUser(AddUserRequest addUserRequest);
 }

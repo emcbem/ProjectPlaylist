@@ -73,5 +73,23 @@ namespace PlaylistApp.Server.Services.IGDBServices
             await context.SaveChangesAsync();
 
         }
+
+        public async Task UploadInvolvedCompaniesToDatabase(List<InvolvedCompany> localInvolvedCompanies)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.InvolvedCompanies.AddRange(localInvolvedCompanies);
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UploadGameGenres(List<GameGenre> localGameGenres)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+
+            context.GameGenres.AddRange(localGameGenres);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

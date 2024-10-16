@@ -1,19 +1,21 @@
 import { Plus } from "@/assets/trophies/plus";
-import Img from "../assets/trophies/finals.png";
 
 interface props {
   Title: string;
   Description: string;
-  Rareity: string;
   showAddButton: boolean;
+  imageUrl: string;
 }
 
-const AchievementList: React.FC<props> = ({
+const AchievementCard: React.FC<props> = ({
   Title,
   Description,
-  Rareity,
   showAddButton,
+  imageUrl,
 }) => {
+  // console.log("Title", Title);
+  // console.log("Description", Description);
+  // console.log("imageUrl", imageUrl);
   return (
     <>
       <li className="py-3 sm:pb-4 ">
@@ -21,7 +23,7 @@ const AchievementList: React.FC<props> = ({
           <div className="flex-shrink-0">
             <img
               className="w-12 h-12 rounded-full"
-              src={Img}
+              src={imageUrl}
               alt="Neil image"
             />
           </div>
@@ -34,9 +36,6 @@ const AchievementList: React.FC<props> = ({
             </p>
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
-            {Rareity}
-          </div>
-          <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
               {showAddButton && <Plus height={25} width={25} />}
             </div>
@@ -47,4 +46,4 @@ const AchievementList: React.FC<props> = ({
   );
 };
 
-export default AchievementList;
+export default AchievementCard;

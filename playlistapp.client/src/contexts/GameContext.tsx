@@ -28,15 +28,21 @@ export const GameContextProvidor: FC<{ children: ReactNode }> = ({
     queryFn: () => GameService.GetGameById(0)
   });
 
-  
+  const { data: getGamesByQuery, isLoading: gettingGamesByQueryLoading, error: getGamesByQueryError } = useQuery({
+    queryKey: ["Game"],
+    queryFn: () => GameService.GetGamesByQuery("")
+  })
+
+
 
   return (
     <GameContext.Provider
       value={{
         games: AllGames ?? [],
         game: GetGameById ?? undefined,
-        error: gettingAllGamesError?.message ?? gettingGameByIdError?.message,
-        isLoading: gettingAllGamesLoading ?? gettingGameByIdLoading
+        gamesByQuery: getGamesByQuery ?? [],
+        error: gettingAllGamesError?.message ?? gettingGameByIdError?.message ?? getGamesByQueryError?.message,
+        isLoading: gettingAllGamesLoading ?? gettingGameByIdLoading ?? gettingGamesByQueryLoading
       }}
     >
       {children}

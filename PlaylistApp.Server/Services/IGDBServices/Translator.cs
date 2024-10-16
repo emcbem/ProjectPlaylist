@@ -1,6 +1,7 @@
 ﻿using IGDB.Models;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PlaylistApp.Server.Services.IGDBServices
 {
@@ -24,7 +25,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         public static List<Data.Company> TranslateIGDBCompaniesIntoPersonalData(List<IGDB.Models.Company> igdbCompanies, List<IGDB.Models.CompanyLogo> igdbLogos)
         {
-            var logoDict = igdbLogos.ToDictionary(x => x.Id);
+            var logoDict = igdbLogos.ToDictionary(x => (int)x!.Id!);
             CompanyLogo? logo = null;
 
             return igdbCompanies.Select(igdbCompany =>
@@ -37,7 +38,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 company.CompanyName = igdbCompany.Name.Substring(0, Math.Min(igdbCompany.Name.Length, 64));
 
 
-                if (logoDict.TryGetValue(igdbCompany.Logo.Id, out logo))
+                if (logoDict.TryGetValue((int)igdbCompany!.Logo!.Id!, out logo))
                 {
                     company.LogoUrl = logo.Url;
                 }
@@ -51,7 +52,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         public static List<Data.Platform> TranslateIGDBPlatformsIntoPersonalData(List<IGDB.Models.Platform> igdbPlatforms, List<PlatformLogo> igdbPlatformLogos)
         {
-            var logoDict = igdbPlatformLogos.ToDictionary(x => x.Id);
+            var logoDict = igdbPlatformLogos.ToDictionary(x => (long)x.Id!);
             PlatformLogo? logo = null;
 
             return igdbPlatforms.Select(igdbPlatform =>
@@ -62,7 +63,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 platform.Id = (int?)igdbPlatform.Id ?? -1;
                 platform.PlatformName = igdbPlatform.Name.Substring(0, Math.Min(igdbPlatform.Name.Length, 40)); ;
 
-                if (logoDict.TryGetValue(igdbPlatform.PlatformLogo.Id, out logo))
+                if (logoDict.TryGetValue((long)igdbPlatform.PlatformLogo.Id!, out logo))
                 {
                     platform.LogoUrl = logo.Url;
                 }
@@ -83,14 +84,61 @@ namespace PlaylistApp.Server.Services.IGDBServices
             {
                 Id = (int?)x.Id ?? -1,
                 GenreName = x.Name,
-            }).ToList() ;
+            }).ToList();
+        }
+
+        public static List<Data.InvolvedCompany> TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(List<IGDB.Models.InvolvedCompany> igdbInvolvedCompanies, List<Data.Game> localGames)
+        {
+            var localGameDict = localGames.ToDictionary(x => x.IdgbId is not null ? (int)x.IdgbId : -1, x => x!.Id);
+            int gameId;
+
+
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+            return (List<Data.InvolvedCompany>)igdbInvolvedCompanies.Select(x =>
+            {
+                if (localGameDict.TryGetValue((int)x.Game.Id!, out gameId))
+                {
+
+                    return new Data.InvolvedCompany()
+                    {
+                        CompanyId = (int)x.Company.Id!,
+                        IsDeveloper = x.Developer,
+                        IsPublisher = x.Publisher,
+                        GameId = gameId
+                    };
+                }
+                return null;
+            }).Where(x => x is not null).ToList();
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+        }
+
+        public static List<Data.GameGenre> TranslateIGDBGamesIntoLocalGameGenres(List<IGDB.Models.Game> igdbGames, List<Data.Game> localGames)
+        {
+            var localGameDict = localGames.ToDictionary(x => x.IdgbId is not null ? (int)x.IdgbId : -1, x => x!.Id);
+            int gameId;
+
+            return igdbGames.Select(x =>
+            {
+                if (localGameDict.TryGetValue((int)x.Id!, out gameId))
+                {
+                    return x.Genres.Ids.Select(y =>
+                    {
+                        return new GameGenre()
+                        {
+                            GameId = gameId,
+                            GenreId = (int)y
+                        };
+                    }).ToList(); 
+                }
+                return null;
+            }).Where(x => x is not null).ToList().SelectMany(x => x!).ToList();
         }
 
         public static List<Data.PlatformGame> TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(List<Data.Game> localGames, List<IGDB.Models.Game> igdbGames, List<ExternalGame> igdbExternalGames, List<Website> igdbWesites)
         {
             var websiteDict = igdbWesites.ToDictionary(x => x?.Id ?? 0);
             var externalDict = igdbExternalGames.ToDictionary(x => x?.Id ?? 0);
-            var localGameDict = localGames.ToDictionary(x => x!.IdgbId!, x => x.Id);
+            var localGameDict = localGames.ToDictionary(x => (int)x.IdgbId!, x => x.Id);
 
             //Sorry for doubting myself
             var PlatformToExternalPlatformCategory = new Dictionary<int, ExternalCategory>()

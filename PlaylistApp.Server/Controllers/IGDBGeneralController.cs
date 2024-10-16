@@ -11,6 +11,7 @@ using PlaylistApp.Server.Services.IGDBServices;
 using System;
 using System.Formats.Asn1;
 using System.Globalization;
+using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -93,5 +94,25 @@ public class IGDBGeneralController
         var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
         var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenre);
         await uploader.UploadGenresToDatabase(localGenres);
+    }
+
+    [HttpGet("uploadInvolvedCompany")]
+    public async Task UploadInvolvedCompany()
+    {
+        var involvedCompanyPath = await downloader.DownloadCSV(IGDBClient.Endpoints.InvolvedCompanies);
+        var igdbInvolvedCompany = Parser.ParseInvolvedCompanyCsv(involvedCompanyPath);
+        var localGames = await uploader.GetAllGames();
+        var localInvolvedCompanies = Translator.TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(igdbInvolvedCompany, localGames);
+        await uploader.UploadInvolvedCompaniesToDatabase(localInvolvedCompanies);
+    }
+
+    [HttpGet("uploadGameGenres")]
+    public async Task UploadGameGenres()
+    {
+        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+        var localGames = await uploader.GetAllGames();
+        var localGameGenres = Translator.TranslateIGDBGamesIntoLocalGameGenres(igdbGames, localGames);
+        await uploader.UploadGameGenres(localGameGenres);
     }
 }
