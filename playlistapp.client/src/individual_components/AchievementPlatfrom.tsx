@@ -56,7 +56,7 @@ const AchievementPlatfrom: React.FC<props> = ({
         </AccordionHeader>
         <AccordionBody>
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {achievements &&
+            {achievements && achievements.length > 0 ? (
               achievements.map((achievement, index) => {
                 return (
                   <AchievementCard
@@ -67,7 +67,10 @@ const AchievementPlatfrom: React.FC<props> = ({
                     imageUrl={achievement.imageURL}
                   />
                 );
-              })}
+              })
+            ) : (
+              <span>No Achievements</span>
+            )}
           </ul>
         </AccordionBody>
       </Accordion>
