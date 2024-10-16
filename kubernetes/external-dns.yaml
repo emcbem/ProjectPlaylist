@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: codebras
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      containers:
+        - name: external-dns
+          image: bitnami/external-dns:latest
+          args:
+            - --source=service
+            - --source=ingress
+            - --provider=duckdns  # Change this to your DNS provider
+            - --domain-filter=projectplaylist.duckdns.org  # Your domain
+            - --txt-owner-id=project-playlist-txt  # Unique identifier for TXT records
+            - --policy=upsert-only  # Adjust policy as needed
+          env:
+            - name: DUCKDNS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: projectplaylist-duckdns-secret
+                  key: token  # Secret containing your DuckDNS token
