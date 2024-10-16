@@ -38,7 +38,7 @@ const ViewGame = () => {
         <div className="flex flex-row w-1/2">
           <img
             src={game?.coverUrl.replace(/t_cover_big/g, "t_1080p")}
-            className="w-60 h-96 object-cover rounded-lg shadow-xl"
+            className="w-60 h-96 object-cover rounded-lg shadow-xl sticky top-10"
             alt={`${game?.title} cover`}
           />
           <div className="flex flex-col ml-5">
