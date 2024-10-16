@@ -13,7 +13,7 @@ export const UserAccountContextProvider: FC<{children: ReactNode}> = ({children}
 
     const {data, isLoading, error} = useQuery({
         queryKey: ["UserAccount"],
-        queryFn: () => UserAccountService.GetUserByAuthId(user?.email), 
+        queryFn: () => UserAccountService.GetUserByUsername(user?.email), 
     })
 
     return (

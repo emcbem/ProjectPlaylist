@@ -1,5 +1,5 @@
 import { PlatformGame } from "@/@types/platformGame";
-import { PlatformGameRequest } from "@/@types/Requests/getPlatformGameRequest";
+import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGameRequest";
 import axios from "axios";
 
 export const PlatformGameService = {

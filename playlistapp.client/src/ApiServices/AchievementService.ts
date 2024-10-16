@@ -18,11 +18,6 @@ export const AchievementService = {
       console.error("Failed to fetch achievements: ", error);
       throw error;
     }
-    /*
-        const allAchievements = AchievementQueries.useGetAchievementByPlatformGameId(
-        Number(platformGameId)
-        ).data;
-    */
   },
   GetAchievementById: async (achievementId: number) => {
     try {
@@ -40,9 +35,6 @@ export const AchievementService = {
       console.error("Failed to fetch achievement: ", error);
       throw error;
     }
-    /*
-        const achievement = AchievementQueries.useGetAchievementById(achievementId).data;
-    */
   },
   GetAchievementByName: async (achievementName: string) => {
     try {
@@ -60,8 +52,5 @@ export const AchievementService = {
       console.error("Failed to fetch achievement: ", error);
       throw error;
     }
-    /*
-        const achievementByName = AchievementQueries.useGetAchievementByName(achievementName).data;
-    */
   },
 };
