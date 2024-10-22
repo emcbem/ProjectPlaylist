@@ -1,5 +1,7 @@
 import Avatar from "../assets/user.svg";
 import AvatarInverted from "../assets/userInverted.svg";
+import { ThumbsUp } from "../assets/ThumbsUp.tsx";
+import { ThumbsDown } from "@/assets/ThumbsDown.tsx";
 
 interface props {
   UserName: string;
@@ -25,15 +27,19 @@ const Review: React.FC<props> = ({ UserName, Comment, Score }) => {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="md:text-2xl sm:text-xl text-lg font-medium text-gray-900  dark:text-gray-400">
+            <p className="text-sm font-medium text-gray-900  dark:text-gray-400">
               {UserName}
             </p>
-            <p className="md:text-lg sm:text-base text-sm text-gray-500 dark:text-white">
+            <p className="md:text-lg sm:text-base text-sm text-gray-500 dark:text-white line-clamp-3">
               {Comment}
             </p>
           </div>
+        </div>
+        <div className="flex justify-end items-center mt-5">
+          <ThumbsUp />
+          <ThumbsDown />
           <div
-            className={`inline-flex items-center md:text-lg sm:text-base text-sm font-semibold ${
+            className={`flex justify-end items-center md:text-lg sm:text-base text-sm font-semibold mx-2 ${
               Score <= 10 && Score >= 8
                 ? `text-yellow-500`
                 : Score <= 7 && Score >= 6
