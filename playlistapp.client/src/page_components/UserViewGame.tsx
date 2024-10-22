@@ -6,6 +6,7 @@ import { GameQueries } from "@/hooks/GameQueries";
 const ViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
+
   const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
 
   // const [colors, setColors] = useState<string[]>([]);
@@ -56,7 +57,7 @@ const ViewGame = () => {
             </div>
             <div className="border-b border-gray-200 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-                <Tabs />
+                <Tabs gameId={Number(gameId)} userId={0} />
               </ul>
             </div>
           </div>
