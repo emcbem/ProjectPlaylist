@@ -1,6 +1,6 @@
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { GameReviewService } from "@/ApiServices/GameReviewService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameReviewKeys";
 
 export const GameReviewQueries = {
@@ -16,4 +16,10 @@ export const GameReviewQueries = {
       },
     });
   },
+  useGetGameReviewById: (gameReviewId: number) => {
+    return useQuery({
+        queryKey: keys.GetGameReviewById,
+        queryFn: () => GameReviewService.GetGameReviewById(gameReviewId),
+    })
+  }
 };

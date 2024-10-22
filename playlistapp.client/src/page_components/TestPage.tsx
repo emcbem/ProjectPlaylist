@@ -30,9 +30,13 @@ const TestPage = () => {
     addGameReview()
   }
 
+  const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
+  console.log("GameReviewById: ", GameReviewById)
+
   return (
     isAuthenticated &&
-    user && (
+    user && 
+    GameReviewById && (
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
         <div>
@@ -42,6 +46,10 @@ const TestPage = () => {
           <button onClick={handleAddGameReview}>
             Add Review To Game
           </button>
+        </div>
+        <div>
+          <p>You are viewing game review with id: {GameReviewById.id}</p>
+          <p>You are viewing game: {GameReviewById.game.title}</p>
         </div>
       </div>
     )
