@@ -146,7 +146,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
               {platformGames
                 .filter((x) => x.game.id == Number(gameId))
                 .map((x, index) => (
-                  <>
+                  <div key={x.platformId}>
                     <MenuItem
                       placeholder={undefined}
                       onPointerEnterCapture={undefined}
@@ -166,7 +166,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                     ) : (
                       ""
                     )}
-                  </>
+                  </div>
                 ))}
             </MenuList>
           </Menu>

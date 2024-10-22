@@ -1,12 +1,12 @@
 
 import { List } from "@/@types/list";
 import { AddListRequest } from "@/@types/Requests/addListRequest";
+import { UpdateListRequest } from "@/@types/Requests/UpdateRequests/updateListRequest";
 import axios from "axios";
 
 export const ListService = {
 
     AddList: async (listRequest: AddListRequest) => {
-        console.log(listRequest)
         try {
             const response = await axios.post<number>(
                 `${import.meta.env.VITE_URL}/list/addlist`,
@@ -42,7 +42,6 @@ export const ListService = {
 
     GetListByListId: async (listId: number) => {
         try {
-            console.log(listId)
             const response = await axios.get<List>(`${import.meta.env.VITE_URL}/list/getlistbyid`,
                 {
                     params: {
@@ -50,7 +49,24 @@ export const ListService = {
                     },
                 }
             );
-            console.log('response')
+            return response.data;
+        } catch (error) {
+            console.error("Failed to fetch list:", error);
+            throw error;
+        }
+    },
+
+    UpdateListQuery: async (listRequest: UpdateListRequest) => {
+        try {
+            const response = await axios.patch<List>(`${import.meta.env.VITE_URL}/list/updatelist`,
+                listRequest,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            console.log('response from updating list')
             console.log(response.data)
             return response.data;
         } catch (error) {
