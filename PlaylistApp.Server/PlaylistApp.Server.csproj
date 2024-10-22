@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CSVs\**" />
+    <Content Remove="CSVs\**" />
+    <EmbeddedResource Remove="CSVs\**" />
+    <None Remove="CSVs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="IGDB" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -22,10 +29,6 @@
     <ProjectReference Include="..\playlistapp.client\playlistapp.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CSVs\" />
   </ItemGroup>
 
 </Project>
