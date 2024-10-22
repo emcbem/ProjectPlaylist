@@ -6,7 +6,7 @@ export interface GameReview {
     publishDate: Date,
     game: Game,
     user: UserAccount,
-    test: string,
+    text: string,
     id: number,
     likes: number,
     dislikes: number,

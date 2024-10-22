@@ -31,7 +31,8 @@ const TestPage = () => {
   }
 
   const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
-  console.log("GameReviewById: ", GameReviewById)
+
+  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(Number(gameId)).data;
 
   return (
     isAuthenticated &&
@@ -51,6 +52,13 @@ const TestPage = () => {
           <p>You are viewing game review with id: {GameReviewById.id}</p>
           <p>You are viewing game: {GameReviewById.game.title}</p>
         </div>
+        <div>
+            {AllGameReviewsForGame?.map((x) => (
+              <div key={x.id}>
+                {x.id}: {x.text}
+              </div>
+            ))}
+          </div>
       </div>
     )
   );

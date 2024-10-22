@@ -18,8 +18,14 @@ export const GameReviewQueries = {
   },
   useGetGameReviewById: (gameReviewId: number) => {
     return useQuery({
-        queryKey: keys.GetGameReviewById,
-        queryFn: () => GameReviewService.GetGameReviewById(gameReviewId),
-    })
-  }
+      queryKey: keys.GetGameReviewById,
+      queryFn: () => GameReviewService.GetGameReviewById(gameReviewId),
+    });
+  },
+  useGetAllGameReviewsByGame: (gameId: number) => {
+    return useQuery({
+      queryKey: keys.GetAllGameReviewsByGame,
+      queryFn: () => GameReviewService.GetAllGameReviewsByGame(gameId),
+    });
+  },
 };

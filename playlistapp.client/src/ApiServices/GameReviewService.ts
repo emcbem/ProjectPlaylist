@@ -36,4 +36,20 @@ export const GameReviewService = {
       throw error;
     }
   },
+  GetAllGameReviewsByGame: async (gameId: number) => {
+    try {
+      const response = await axios.get<GameReview[]>(
+        `${import.meta.env.VITE_URL}/GameReview/getallgamereviewsbygame`,
+        {
+          params: {
+            gameId: gameId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get all reviews for game: ", error);
+      throw error;
+    }
+  },
 };
