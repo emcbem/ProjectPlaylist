@@ -11,6 +11,9 @@ spec:
     privateKeySecretRef:
       name: duckdns-issuer-account-key
     solvers:
+    - http01:
+        ingress:
+          class: nginx
     - webhook:
         config:
           apiUrl: https:projectplaylist.duckdns.org
