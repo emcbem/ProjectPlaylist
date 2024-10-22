@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: duckdns-issuer
+  namespace: codebras
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: codebras2023@gmail.com
+    privateKeySecretRef:
+      name: duckdns-issuer-account-key
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+    - webhook:
+        config:
+          apiUrl: https:projectplaylist.duckdns.org
+          tokenSecretRef:
+            name: projectplaylist-duckdns-secret
+            key: token
