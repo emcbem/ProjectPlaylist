@@ -209,7 +209,8 @@ public static class DTOConverter
             Text = gameReview.Review,
             LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
             Game = gameReview.Game.ToDTO(),
-            User = gameReview.User.ToDTO()
+            User = gameReview.User.ToDTO(),
+            Id = gameReview.Id
         };
     }
 

@@ -1,150 +1,64 @@
-import { AddUserAchievementRequest } from "@/@types/Requests/AddRequests/addUserAchievementRequest";
-import { UpdateUserAchievementRequest } from "@/@types/Requests/UpdateRequests/updateUserAchievementRequest";
+import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 const TestPage = () => {
   const { user, isAuthenticated } = useAuth0();
-  const { userAchievementId } = useParams<{ userAchievementId: string }>();
+  const { gameId } = useParams<{ gameId: string }>();
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
-  const addUserAchievementRequest: AddUserAchievementRequest = {
-    dateAchieved: new Date(),
-    userGuid: usr?.guid ?? "",
-    isSelfSubmitted: true,
-    achievementId: Number(userAchievementId),
-  };
-
-  const updateUserAchievementRequest: UpdateUserAchievementRequest = {
-    dateAchieved: new Date(),
-    id: 3,
-    isSelfSubmitted: true,
-  };
+  const newGameReview: AddGameReviewRequest = {
+    gameId: Number(gameId),
+    rating: 5,
+    text: "this is a test review",
+    userId: usr?.id ?? 0,
+  }
 
   const {
-    mutate,
-    data: newUserAchievementId,
-    isPending: isLoading,
-    isError,
-    isSuccess,
-  } = UserAchievementQueries.useAddUserAchievement(addUserAchievementRequest);
+    mutate: addGameReview,
+    data: newGameReviewId,
+    isPending: isAddingGameReview,
+    isError: isAddingGameReviewError,
+    isSuccess: isAddingGameReviewSuccess,
+  } = GameReviewQueries.useAddGameReview(newGameReview);
 
-  const {
-    mutate: updateUserAchievement,
-    data: updatedUserAchievement,
-    isPending: isUpdating,
-    isError: isUpdatingError,
-    isSuccess: isUpdatingSuccess,
-  } = UserAchievementQueries.useUpdateUserAchievement(
-    updateUserAchievementRequest
-  );
+  const handleAddGameReview = () => {
+    addGameReview()
+  }
 
-  const {
-    mutate: deleteUserAchievement,
-    data: deletedUserAchievement,
-    isPending: isDeleting,
-    isError: isDeletingError,
-    isSuccess: isDeletingSuccess,
-  } = UserAchievementQueries.useDeleteUserAchievement(3);
+  const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
 
-  const UserAchievementByAchievementId =
-    UserAchievementQueries.useGetUserAchievementByAchievementId(
-      Number(userAchievementId)
-    ).data;
-
-  const UserAchievementById =
-    UserAchievementQueries.useGetUserAchievementById(3).data;
-
-  const UserAchievementByUserId =
-    UserAchievementQueries.useGetUserAchievementByUserId(
-      "f776d4d8-a6f5-44db-9960-6165a1b1535d"
-    ).data;
-
-  const handleAddUserAchievement = () => {
-    mutate();
-  };
-
-  const handleUpdateUserAchievement = () => {
-    updateUserAchievement();
-  };
-
-  const handleDeleteUserAchievement = async () => {
-    try {
-      const result = await deleteUserAchievement(); // Capture the result
-      console.log("Deletion result: ", result); // Log the result
-    } catch (error) {
-      console.error("Error deleting user achievement: ", error);
-    }
-  };
+  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(Number(gameId)).data;
 
   return (
     isAuthenticated &&
-    user && (
+    user && 
+    GameReviewById && (
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
         <div>
-          {isLoading && <p>Adding user achievement...</p>}
-          {isSuccess && <p>New User Achievement Id: {newUserAchievementId}</p>}
-          {isError && <p>Failed to add user achievement.</p>}
-          <button onClick={handleAddUserAchievement}>
-            Add User Achievement
+          {isAddingGameReview && <p>Adding review to game...</p>}
+          {isAddingGameReviewSuccess && <p>New Game Review Id: {newGameReviewId}</p>}
+          {isAddingGameReviewError && <p>Failed to add review to game.</p>}
+          <button onClick={handleAddGameReview}>
+            Add Review To Game
           </button>
         </div>
         <div>
-          User Achievements for achievement {userAchievementId}
-          <div>
-            {UserAchievementByAchievementId?.map((x) => (
-              <div key={x.achievement.id}>
-                {x.achievement.id}: {x.achievement.name}
+          <p>You are viewing game review with id: {GameReviewById.id}</p>
+          <p>You are viewing game: {GameReviewById.game.title}</p>
+        </div>
+        <div>
+            {AllGameReviewsForGame?.map((x) => (
+              <div key={x.id}>
+                {x.id}: {x.text}
               </div>
             ))}
           </div>
-        </div>
-        <div>
-          <p>
-            User Achievement at id 3: {UserAchievementById?.achievement.name}
-          </p>
-        </div>
-        <div>
-          User Achievements for f776d4d8-a6f5-44db-9960-6165a1b1535d
-          <div>
-            {UserAchievementByUserId?.map((x) => (
-              <div key={x.achievement.id}>
-                {x.achievement.id}: {x.achievement.name}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          {isUpdating && <p>Updating user achievement...</p>}
-          {isUpdatingSuccess && (
-            <p>
-              New User Achievement Date:{" "}
-              {updatedUserAchievement?.dateAchieved.toString()}
-            </p>
-          )}
-          {isUpdatingError && <p>Failed to update user achievement.</p>}
-          <button onClick={handleUpdateUserAchievement}>
-            Update User Achievement
-          </button>
-        </div>
-        <div>
-          {isDeleting && <p>Deleting user achievement...</p>}
-          {isDeletingSuccess && (
-            <p>
-              User Achievement deleted successfully:{" "}
-              {deletedUserAchievement.toString()}
-            </p>
-          )}
-          {isDeletingError && <p>Failed to delete user achievement.</p>}
-          <button onClick={handleDeleteUserAchievement}>
-            Delete User Achievement
-          </button>
-        </div>
       </div>
     )
   );

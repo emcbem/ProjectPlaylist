@@ -18,6 +18,16 @@ public class GameReviewService : IGameReviewService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
+        var potentialGameReview = await context.GameReviews
+            .Where(x => x.UserId == request.UserId)
+            .Where(x => x.GameId == request.GameId)
+            .FirstOrDefaultAsync();
+
+        if (potentialGameReview != null)
+        {
+            return 0;
+        }
+
         GameReview newGameReview = new GameReview()
         {
             PublishDate = DateTime.UtcNow,

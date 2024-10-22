@@ -9,19 +9,23 @@ const AchievementsPage: React.FC = () => {
   const { data: platformGames } =
     PlatformGameQueries.useGetAllPlatformGamesByGameId(Number(gameId));
 
-  // console.log(gameId);
+  console.log("pfg", platformGames);
 
   return (
     <div className="flex-grow w-full dark:text-white text-black">
       <div className="mx-auto max-w-screen-xl">
-        {platformGames?.map((item, index) => (
-          <AchievementPlatfrom
-            key={index}
-            gameId={Number(gameId)}
-            platformGame={item}
-            showAddButton={true}
-          />
-        ))}
+        {platformGames ? (
+          platformGames.map((item, index) => (
+            <AchievementPlatfrom
+              key={index}
+              gameId={Number(gameId)}
+              platformGame={item}
+              showAddButton={true}
+            />
+          ))
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </div>
   );
