@@ -16,6 +16,7 @@ const PlaylistLists = () => {
     ) as UserAccountContextInterface;
     const { data: lists } = ListQueries.useGetListsByUserId(usr?.guid ?? "");
 
+
     const handleAddNewList = async () => {
         const newList: AddListRequest = {
             userId: String(usr?.guid),
@@ -28,6 +29,8 @@ const PlaylistLists = () => {
 
         navigate(`/list/${id}`)
     }
+
+    console.log(lists)
 
     return (
         <>
@@ -89,19 +92,20 @@ const PlaylistLists = () => {
             <div style={{ height: '300px' }}></div>
 
             <div className="flex flex-row mt-8">
-                {lists?.map((list, key) => (
+                {lists && lists?.map((list, key) => (
                     <div className="w-1/3" key={key}>
                         <div className="relative mx-5">
                             {/* Eventually loop through the first few games in the list */}
                             {(
                                 <div className="grid grid-cols-2 gap-4">
-                                    {list.listGames && list.listGames.map((ug, key) => (
+                                    {list.games && list.games.map((ug, key) => (
                                         <div key={key} className="relative">
-                                            <img
-                                                src={ug.platformGame.game.coverUrl}
+                                            <p>{ug[0]}</p>
+                                            {/* <img
+                                                src={ug.gam}
                                                 className="w-full h-full object-cover"
                                                 style={{ aspectRatio: '1 / 1' }} // Ensures the image is square
-                                            />
+                                            /> */}
                                         </div>
                                     ))}
                                 </div>
