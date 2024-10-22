@@ -109,7 +109,7 @@ public class GameReviewService : IGameReviewService
             .Include(x => x.Game)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
-            .Where(x => x.Id == request.GameReivewId)
+            .Where(x => x.Id == request.GameReviewId)
             .FirstOrDefaultAsync();
 
         if (gameReview == null)
@@ -118,6 +118,8 @@ public class GameReviewService : IGameReviewService
         }
 
         gameReview.LastEditDate = DateTime.UtcNow;
+        gameReview.Rating = request.Rating;
+        gameReview.Review = request.ReviewText;
         context.Update(gameReview);
         await context.SaveChangesAsync();
         return gameReview.ToDTO();

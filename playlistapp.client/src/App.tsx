@@ -17,6 +17,7 @@ import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
 import { Toaster } from 'react-hot-toast';
 import MyLibrary from "./page_components/MyLibrary";
+import Playlist from "./page_components/List/Playlist";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -63,6 +64,7 @@ function App() {
                           />
                           <Route path="/account" element={<Account />} />
                           <Route path="/library" element={<MyLibrary />} />
+                          <Route path="/list/:listId" element={<Playlist />} />
                           <Route
 
                             path="/achievements/:gameId"

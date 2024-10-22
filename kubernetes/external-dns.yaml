@@ -19,13 +19,8 @@ spec:
           args:
             - --source=service
             - --source=ingress
-            - --provider=duckdns  # Change this to your DNS provider
+            - --provider=webhook  # Change to 'webhook' to use the DuckDNS webhook provider
             - --domain-filter=projectplaylist.duckdns.org  # Your domain
             - --txt-owner-id=project-playlist-txt  # Unique identifier for TXT records
             - --policy=upsert-only  # Adjust policy as needed
-          env:
-            - name: DUCKDNS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: projectplaylist-duckdns-secret
-                  key: token  # Secret containing your DuckDNS token
+          # Remove the environment variable for DuckDNS token if not needed
