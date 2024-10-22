@@ -64,22 +64,22 @@ const Tabs: React.FC = () => {
         {activeTab === "Reviews" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
             <Review
-              UserName={"Stinky123"}
+              UserName={"Z0mb13Slaya00"}
               Comment={"Goodness I LOVE THIS GAME!!!"}
               Score={10}
             />
             <Review
-              UserName={"BigPHAT"}
+              UserName={"Emcbem"}
               Comment={"Yeah I really recommend this"}
               Score={7}
             />
             <Review
-              UserName={"TheEpicCritical"}
+              UserName={"ShustyDaw92"}
               Comment={"Pshh, overrated if you ask me LOL"}
               Score={5}
             />
             <Review
-              UserName={"TheDepartmentOfSwagerculture"}
+              UserName={"The_Rizzen"}
               Comment={"Game crashes everytime...."}
               Score={1}
             />
