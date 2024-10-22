@@ -1,24 +1,38 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react'
-import HorizontalRule from '../../individual_components/HorizontalRule';
-import { UserGameContext } from '../../contexts/UserGameContext';
-import { UserGameContextInterface } from '../../@types/usergame';
 import "./Account.modules.scss"
 import { Link } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import PlatformGamerTags from './PlatformGamerTags';
+import { UserGameContext } from '../../contexts/UserGameContext';
+import { UserGameContextInterface } from '../../@types/usergame';
 import { UserAccountContext } from '@/contexts/UserAccountContext';
 import { UserAccountContextInterface } from '@/@types/userAccount';
-import PlatformGamerTags from './PlatformGamerTags';
-
+import HorizontalRule from '../../individual_components/HorizontalRule';
+import PlaylistLists from './PlaylistLists';
 const Account = () => {
     const { userGamesFromUser, isLoading } = React.useContext(UserGameContext) as UserGameContextInterface;
 
     const { user, isAuthenticated } = useAuth0();
 
+    // const { mutate } = ListQueries.useAddListQuery();
+
     const { usr } = React.useContext(
         UserAccountContext
     ) as UserAccountContextInterface;
 
-    console.log(usr)
+    // const handleAddNewList = () => {
+
+    //     const newList: AddListRequest = {
+    //         userId: String(usr?.guid),
+    //         name: "NewList",
+    //         isPublic: true,
+    //         creationDate: new Date()
+    //     }
+
+    //     mutate(newList);
+
+    // }
+
 
     return (
         isAuthenticated &&
@@ -91,12 +105,9 @@ const Account = () => {
                         </div>
                     }
 
-                    <p className="mt-8 text-6xl">You Playlists</p>
+                    <p className="mt-8 text-6xl">Your Playlists</p>
+                    <PlaylistLists />
 
-
-
-
-                    {/* {error && <p>Error: {error}</p>} */}
                 </div>
             </div>
         )
