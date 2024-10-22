@@ -2,6 +2,7 @@ import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameRevie
 import { GameReviewService } from "@/ApiServices/GameReviewService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameReviewKeys";
+import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 
 export const GameReviewQueries = {
   useAddGameReview: (addGameReviewRequest: AddGameReviewRequest) => {
@@ -26,6 +27,16 @@ export const GameReviewQueries = {
     return useQuery({
       queryKey: keys.GetAllGameReviewsByGame,
       queryFn: () => GameReviewService.GetAllGameReviewsByGame(gameId),
+    });
+  },
+  useUpdateGameReview: (updateGameReviewRequest: UpdateGameReviewRequest) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        GameReviewService.UpdateGameReview(updateGameReviewRequest),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.UpdateGameReview });
+      },
     });
   },
 };
