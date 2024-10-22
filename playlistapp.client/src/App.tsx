@@ -70,7 +70,7 @@ function App() {
                             element={<AchievementsPage />}
 
                           />
-                          <Route path="/test/:userAchievementId" element={<TestPage />} />
+                          <Route path="/test/:gameId" element={<TestPage />} />
                         </Routes>
                     </div>
                   </div>
