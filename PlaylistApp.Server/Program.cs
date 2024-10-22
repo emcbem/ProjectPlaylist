@@ -16,6 +16,7 @@ using PlaylistApp.Server.Services.ListServices;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.PlatformServices;
 using PlaylistApp.Server.Services.ReviewLikeServices;
+using PlaylistApp.Server.Services.SyncServices;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 using PlaylistApp.Server.Services.UserAchievementServices;
 using PlaylistApp.Server.Services.UserGameServices;
@@ -35,7 +36,10 @@ builder.Services.AddSwaggerGen(c =>
     c.CustomSchemaIds(type => type.FullName.Replace(".", "_"));
 });
 builder.Services.AddHttpClient();
-builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration.GetConnectionString("ppdb")));
+builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration.GetConnectionString("ppdb"), builder =>
+{
+    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+}));
 
 builder.Services.AddSingleton<IAchievementService, AchievementService>();
 builder.Services.AddSingleton<ICompanyService, CompanyService>();
@@ -56,6 +60,7 @@ builder.Services.AddSingleton<IUserGameService, UserGameService>();
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();
 builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<SyncService>();
 
 
 builder.Services.AddSingleton<DownloadCsv>();
