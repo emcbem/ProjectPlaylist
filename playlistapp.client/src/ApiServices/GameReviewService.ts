@@ -72,4 +72,20 @@ export const GameReviewService = {
       throw error;
     }
   },
+  DeleteGameReview: async (gameReviewId: number) => {
+    try {
+      const response = await axios.delete<boolean>(
+        `${import.meta.env.VITE_URL}/GameReview/deletegamereview`,
+        {
+          params: {
+            gameReviewId: gameReviewId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to delete game review: ", error);
+      throw error;
+    }
+  },
 };
