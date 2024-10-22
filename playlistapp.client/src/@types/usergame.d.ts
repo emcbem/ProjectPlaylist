@@ -1,5 +1,5 @@
 import { PlatformGame } from "./platformGame";
-import { AddUserGameRequest } from "./Requests/addUserGameRequest";
+import { AddUserGameRequest } from "./Requests/AddRequests/addUserGameRequest";
 import { UserAccount } from "./userAccount";
 
 export interface UserGame {

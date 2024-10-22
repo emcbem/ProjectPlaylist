@@ -2,7 +2,7 @@ import {
   PlatformGame,
   PlatformGameContextInterface,
 } from "@/@types/platformGame";
-import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
+import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserGameContextInterface } from "@/@types/usergame";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";

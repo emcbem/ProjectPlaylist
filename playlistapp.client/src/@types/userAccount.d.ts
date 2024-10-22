@@ -4,10 +4,10 @@ export interface UserAccount {
     bio: string;
     strikes: number | null;
     xp: number | null;
-    creationDate: string; // Consider using Date type if you prefer
+    creationDate: Date;
     authID: string;
     profileURL: string | null;
-    guid: string | undefined;
+    guid: string;
 }
 
 export interface UserAccountContextInterface {

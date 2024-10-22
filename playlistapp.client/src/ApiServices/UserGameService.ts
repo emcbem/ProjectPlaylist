@@ -1,12 +1,11 @@
 import { PlatformGame } from "@/@types/platformGame";
-import { AddUserGameRequest } from "@/@types/Requests/addUserGameRequest";
-import { updateUserGameRequest } from "@/@types/Requests/updateUserGameRequest";
+import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
+import { updateUserGameRequest } from "@/@types/Requests/UpdateRequests/updateUserGameRequest";
 import { UserGame } from "@/@types/usergame";
 import axios from "axios";
 
 export const UserGameService = {
   GetAllUserGamesByUser: async (userId: string | undefined) => {
-    console.log("Getting all user games by user id: ", userId);
     if (!userId) {
       console.error("User id is undefined or empty");
       throw new Error("User Id must be provided.");
@@ -20,7 +19,6 @@ export const UserGameService = {
           },
         }
       );
-      console.log("Response from getting user games: ", response.data);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch user games:", error);
@@ -28,7 +26,6 @@ export const UserGameService = {
     }
   },
   AddUserGame: async (addUserGameRequest: AddUserGameRequest) => {
-    console.log("Adding user game request: ", addUserGameRequest);
     if (!addUserGameRequest) {
       console.error("Add user game request is undefined or empty");
       throw new Error("Add user game request must be provided");
@@ -43,7 +40,6 @@ export const UserGameService = {
           },
         }
       );
-      console.log("Response adding user game request: ", response);
       return response.data;
     } catch (error) {
       console.error("Failed to add user game", error);

@@ -45,6 +45,7 @@ jobs:
           export DB_PASSWORD=${{secrets.DB_PASSWORD}}
           export DB_SERVER=${{secrets.DB_SERVER}}
           export DB_DB=${{secrets.DB_DB}}
+          export DUCKDNS_TOKEN=$(echo -n "${{ secrets.DUCKDNS_TOKEN }}" | base64)
 
           for file in ./kubernetes/*; do 
             cat $file | envsubst | /home/ethane/.nix-profile/bin/kubectl apply -f -

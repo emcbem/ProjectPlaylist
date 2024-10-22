@@ -1,64 +1,64 @@
-import { AchievementQueries } from "@/hooks/AchievementQueries";
+import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 const TestPage = () => {
   const { user, isAuthenticated } = useAuth0();
-  const { platformGameId } = useParams<{ platformGameId: string }>();
+  const { gameId } = useParams<{ gameId: string }>();
+  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
-  const allAchievements = AchievementQueries.useGetAchievementByPlatformGameId(
-    Number(platformGameId)
-  ).data;
+  const newGameReview: AddGameReviewRequest = {
+    gameId: Number(gameId),
+    rating: 5,
+    text: "this is a test review",
+    userId: usr?.id ?? 0,
+  }
 
-  const achievement = AchievementQueries.useGetAchievementById(45).data;
-  const achievementByName = AchievementQueries.useGetAchievementByName(
-    "End of the First Mother"
-  ).data;
+  const {
+    mutate: addGameReview,
+    data: newGameReviewId,
+    isPending: isAddingGameReview,
+    isError: isAddingGameReviewError,
+    isSuccess: isAddingGameReviewSuccess,
+  } = GameReviewQueries.useAddGameReview(newGameReview);
 
-  console.log(achievementByName);
+  const handleAddGameReview = () => {
+    addGameReview()
+  }
+
+  const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
+
+  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(Number(gameId)).data;
 
   return (
     isAuthenticated &&
-    user && (
+    user && 
+    GameReviewById && (
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
         <div>
-          <p>{platformGameId}</p>
-          {allAchievements ? (
-            allAchievements.length > 0 ? (
-              allAchievements.map((x) => <p key={x.id}>{x.name}</p>)
-            ) : (
-              <p>No achievements found.</p>
-            )
-          ) : (
-            <p>Loading achievements...</p>
-          )}
+          {isAddingGameReview && <p>Adding review to game...</p>}
+          {isAddingGameReviewSuccess && <p>New Game Review Id: {newGameReviewId}</p>}
+          {isAddingGameReviewError && <p>Failed to add review to game.</p>}
+          <button onClick={handleAddGameReview}>
+            Add Review To Game
+          </button>
         </div>
         <div>
-          <p>Achievement 45</p>
-          {achievement ? (
-            <div>
-              <p>{`Name: ${achievement.name}`}</p>
-              <p>{`Description: ${achievement.description}`}</p>
-            </div>
-          ) : (
-            <p>Loading achievement 45...</p>
-          )}
+          <p>You are viewing game review with id: {GameReviewById.id}</p>
+          <p>You are viewing game: {GameReviewById.game.title}</p>
         </div>
         <div>
-          <p>Achievement By Name: End of the First Mother</p>
-          <div>
-            {achievementByName ? (
-              achievementByName.length > 0 ? (
-                achievementByName.map((x) => <p key={x.id}>{x.name}</p>)
-              ) : (
-                <p>No achievements found.</p>
-              )
-            ) : (
-              <p>Loading achievements...</p>
-            )}
+            {AllGameReviewsForGame?.map((x) => (
+              <div key={x.id}>
+                {x.id}: {x.text}
+              </div>
+            ))}
           </div>
-        </div>
       </div>
     )
   );

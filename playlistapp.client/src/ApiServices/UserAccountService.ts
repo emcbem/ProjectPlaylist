@@ -2,7 +2,7 @@ import { UserAccount } from "@/@types/userAccount";
 import axios from "axios";
 
 export const UserAccountService = {
-  GetUserByAuthId: async (name: string | undefined): Promise<UserAccount> => {
+  GetUserByUsername: async (name: string | undefined): Promise<UserAccount> => {
 
     if (!name) {
       console.error("Username is undefined or empty");
