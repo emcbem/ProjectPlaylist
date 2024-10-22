@@ -67,6 +67,7 @@ public class ListService : IListService
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
+                .ThenInclude(x => x.Game)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
@@ -86,6 +87,7 @@ public class ListService : IListService
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
+                .ThenInclude(x => x.Game)
             .Where(x => x.ListName == name)
             .ToListAsync();
 
@@ -105,6 +107,7 @@ public class ListService : IListService
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
+                .ThenInclude(x => x.Game)
             .Where(x => x.Id == Id)
             .FirstOrDefaultAsync();
 
@@ -124,6 +127,7 @@ public class ListService : IListService
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
+                .ThenInclude(x => x.Game)
             .Where(x => x.Id == request.ListId)
             .FirstOrDefaultAsync();
 
@@ -140,7 +144,9 @@ public class ListService : IListService
             var listGamesToRemove = request.GamesToRemove.Select(x => new ListGame()
             {
                 DateAdded = x.DateAdded,
-                GameId = x.GameId,
+                Game = new Data.Game{
+                    Id = x.Game!.Id
+                },
                 ListId = x.ListId,
             });
             context.ListGames.RemoveRange(listGamesToRemove);

@@ -1,4 +1,5 @@
 import { AddListRequest } from "@/@types/Requests/addListRequest";
+import { UpdateListRequest } from "@/@types/Requests/UpdateRequests/updateListRequest";
 import { ListService } from "@/ApiServices/ListService";
 import ListKeys from "@/QueryKeys/ListKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,6 +33,15 @@ export const ListQueries = {
         })
     },
 
-    // useUpdateListQuery: ()
+    useUpdateListQuery: () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: (updateListRequest: UpdateListRequest) => ListService.UpdateListQuery(updateListRequest),
+            onSuccess: () => {
+                toast.success("List updated!")
+                queryClient.invalidateQueries({ queryKey: [ListKeys.Lists] });
+            },
+        });
+    }
 
 }

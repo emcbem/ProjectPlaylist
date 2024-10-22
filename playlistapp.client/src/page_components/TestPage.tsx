@@ -40,7 +40,14 @@ const TestPage = () => {
     isError: isUpdatingGameReviewError,
     isSuccess: isupdatingGameReviewSuccess,
   } = GameReviewQueries.useUpdateGameReview(updateGameReviewRequest);
-  console.log("updatedGameReview: ", updatedGameReview)
+
+  const {
+    mutate: deleteGameReview,
+    data: deletedGameReview,
+    isPending: isDeletingGameReview,
+    isError: isDeletingGameReviewError,
+    isSuccess: isDeletingGameReviewSuccess
+  } = GameReviewQueries.useDeleteGameReview(8);
 
   const handleAddGameReview = () => {
     addGameReview();
@@ -48,6 +55,10 @@ const TestPage = () => {
 
   const handleUpdateGameReview = () => {
     updateGameReview();
+  };
+
+  const handleDeleteGameReview = () => {
+    deleteGameReview();
   }
 
   const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
@@ -88,6 +99,14 @@ const TestPage = () => {
           )}
           {isUpdatingGameReviewError && <p>Failed to update game review.</p>}
           <button onClick={handleUpdateGameReview}>Update Game Review</button>
+        </div>
+        <div>
+          {isDeletingGameReview && <p>Deleting game review...</p>}
+          {isDeletingGameReviewSuccess && (
+            <p>Is deleted: {deletedGameReview}</p>
+          )}
+          {isDeletingGameReviewError && <p>Failed to delete game review.</p>}
+          <button onClick={handleDeleteGameReview}>Delete Game Review</button>
         </div>
       </div>
     )

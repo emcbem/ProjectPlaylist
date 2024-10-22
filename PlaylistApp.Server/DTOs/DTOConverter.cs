@@ -242,7 +242,7 @@ public static class DTOConverter
         return new ListGameDTO()
         {
             DateAdded = listGame.DateAdded,
-            GameId = listGame.GameId,
+            Game = listGame.Game.ToDTO(),
             Id = listGame.Id,
             ListId = listGame.ListId,
         };
