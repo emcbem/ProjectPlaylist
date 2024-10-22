@@ -41,7 +41,7 @@ public class GameReviewController : Controller
         return await gameReviewService.GetGameReviewById(gameReviewId);
     }
 
-    [HttpPost("updategamereview")]
+    [HttpPatch("updategamereview")]
     public async Task<GameReviewDTO> UpdateGameReview(UpdateGameReviewRequest request)
     {
         return await gameReviewService.UpdateGameReview(request);

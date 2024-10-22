@@ -2,7 +2,7 @@
 
 public class UpdateGameReviewRequest
 {
-    public int GameReivewId { get; set; }   
+    public int GameReviewId { get; set; }   
     public int Rating { get; set; } 
     public string? ReviewText { get; set; }  
 }
