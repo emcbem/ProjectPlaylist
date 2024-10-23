@@ -53,12 +53,12 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         return true;
     }
 
-    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid id)
+    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
-            .Where(x => x.Guid == id)
+            .Where(x => x.Guid == userId)
             .FirstOrDefaultAsync();
 
         if (user is null)
