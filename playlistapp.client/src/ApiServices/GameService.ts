@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Game } from "../@types/game";
+import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
 
 export const GameService = {
   GetAllGames: async (): Promise<Game[]> => {
@@ -36,22 +37,40 @@ export const GameService = {
     }
   },
 
-
   GetGamesByQuery: async (query: string | undefined): Promise<Game[]> => {
-    console.log("Getting games by query: ", query)
+    console.log("Getting games by query: ", query);
     try {
-        const response = await axios.get<Game[]>(
-            `${import.meta.env.VITE_URL}/Game/getgamebyname`, {
-            params: {
-                gameName: query
-            }
+      const response = await axios.get<Game[]>(
+        `${import.meta.env.VITE_URL}/Game/getgamebyname`,
+        {
+          params: {
+            gameName: query,
+          },
         }
-        );
-        console.log(response.data)
-        return response.data;
+      );
+      console.log(response.data);
+      return response.data;
     } catch (error) {
-        console.error("Failed to fetch games with query:", error);
-        throw error;
+      console.error("Failed to fetch games with query:", error);
+      throw error;
     }
-}
+  },
+
+  GetFilteredGamesByRequest: async (request: GetGamesRequest) => {
+    console.log("Getting games from a request");
+    try {
+      const response = await axios.post<Game[]>(
+        `${import.meta.env.VITE_URL}/Game/filtergamesbyrequest`,
+        {
+          params: {
+            request
+          }
+        }
+      )
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch games with query:", error);
+      throw error;
+    }
+  },
 };
