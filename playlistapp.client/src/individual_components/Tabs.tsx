@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
+import { useParams } from "react-router-dom";
+import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 
 interface TabProps {
   TabName: string;
   isActive: boolean;
   onClick: () => void;
 }
-
 
 const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   return (
@@ -40,8 +41,12 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 };
 
 const Tabs = () => {
-  const [activeTab, setActiveTab] = useState<string>("Reviews");
+  const { gameId } = useParams<{ gameId: string }>();
+  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(
+    Number(gameId)
+  ).data;
 
+  const [activeTab, setActiveTab] = useState<string>("Reviews");
 
   const tabs = [
     "Reviews",
@@ -67,34 +72,13 @@ const Tabs = () => {
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
-              <Review
-                UserName={"Z0mb13Slaya00"}
-                Comment={
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-                }
-                Score={10}
-              />
-              <Review
-                UserName={"Emcbem"}
-                Comment={
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-                }
-                Score={7}
-              />
-              <Review
-                UserName={"ShustyDaw92"}
-                Comment={
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-                }
-                Score={5}
-              />
-              <Review
-                UserName={"The_Rizzen"}
-                Comment={
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-                }
-                Score={1}
-              />
+              {AllGameReviewsForGame && AllGameReviewsForGame?.length > 0 ? (
+                AllGameReviewsForGame?.map((review) => (
+                  <Review review={review} />
+                ))
+              ) : (
+                <p>No reviews yet</p>
+              )}
             </div>
             <ReviewModal />
           </>

@@ -1,7 +1,7 @@
 ﻿namespace PlaylistApp.Server.Requests.DeleteRequests;
 
-public class RemoveUserAchievementLike
+public class RemoveUserAchievementLikeRequest
 {
     public Guid userId { get; set; }
-    public int UserAchievementLikeId { get; set; }
+    public int UserAchievementId { get; set; }
 }

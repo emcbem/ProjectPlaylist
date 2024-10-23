@@ -1,4 +1,5 @@
 import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/addUserAchievementLikeRequest";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementLikeQueries } from "@/hooks/UserAchievementLikeQueries";
@@ -15,6 +16,11 @@ const TestPage = () => {
     userAchievementId: Number(userAchievementId),
     userId: usr?.guid ?? "",
     isLike: true,
+  };
+
+  const removeUserAchievementLikeRequest: RemoveUserAchievementLikeRequest = {
+    userAchievementId: Number(userAchievementId),
+    userId: usr?.guid ?? "",
   };
 
   const {
@@ -36,9 +42,23 @@ const TestPage = () => {
     usr?.guid ?? ""
   );
 
+  const {
+    mutate: removeAchievementLike,
+    data: oldUserAchievementLike,
+    isPending: isRemoving,
+    isError: isRemovingError,
+    isSuccess: isRemovingSuccess,
+  } = UserAchievementLikeQueries.useRemoveAchievementLike(
+    removeUserAchievementLikeRequest
+  );
+
   const handleAddUserAchievementLike = () => {
     adduserAchievementLike();
   };
+
+  const handleRemoveUserAchievementLike = () => {
+    removeAchievementLike();
+  }
 
   return (
     isAuthenticated &&
@@ -54,7 +74,17 @@ const TestPage = () => {
           </button>
         </div>
         <div>
-          {isFetching && <p>Fetching all achievement likes for {usr?.username}...</p>}
+          {isRemoving && <p>Removing like on achievement...</p>}
+          {isRemovingSuccess && <p>Is removed: {String(oldUserAchievementLike)}</p>}
+          {isRemovingError && <p>Failed to remove like on achievement.</p>}
+          <button onClick={handleRemoveUserAchievementLike}>
+            Remove Like on Achievement
+          </button>
+        </div>
+        <div>
+          {isFetching && (
+            <p>Fetching all achievement likes for {usr?.username}...</p>
+          )}
           {isFetchingSuccess && (
             <div>
               {userAchievementLikes?.map((x) => (

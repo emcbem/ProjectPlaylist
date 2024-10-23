@@ -22,7 +22,10 @@ const ReviewModal = () => {
 
   const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
 
-  const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(review!);
+  const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(
+    review!,
+    Number(gameId)
+  );
 
   const openModal = () => {
     setIsOpen(true);
@@ -36,7 +39,11 @@ const ReviewModal = () => {
     setVal(newValue as number);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleAddGameReview = () => {
+    addGameReview();
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (game && usr)
@@ -47,7 +54,7 @@ const ReviewModal = () => {
         text: reviewText,
       });
 
-    addGameReview();
+    await handleAddGameReview();
 
     closeModal();
   };

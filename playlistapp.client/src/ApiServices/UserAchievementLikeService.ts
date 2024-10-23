@@ -1,4 +1,5 @@
 import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/addUserAchievementLikeRequest";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
 import { UserAchievement } from "@/@types/userAchievement";
 import axios from "axios";
 
@@ -47,6 +48,33 @@ export const UserAchievementLikeService = {
       return response.data;
     } catch (error) {
       console.error("Failed to get user achievement like: ", error);
+      throw error;
+    }
+  },
+  RemoveUserAchievementLike: async (
+    removeUserAchievementLikeRequest: RemoveUserAchievementLikeRequest
+  ) => {
+    if (!removeUserAchievementLikeRequest) {
+      console.error(
+        "Remove user achievemet like request is undefined or empty"
+      );
+      throw new Error("remove user achievement like request must be provided");
+    }
+    try {
+      const resonse = await axios.post<boolean>(
+        `${
+          import.meta.env.VITE_URL
+        }/UserAchievementLike/removeuserachievementlike`,
+        removeUserAchievementLikeRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return resonse.data;
+    } catch (error) {
+      console.error("Failed to remove user achievement like");
       throw error;
     }
   },
