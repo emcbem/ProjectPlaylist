@@ -16,10 +16,12 @@ export const GameReviewQueries = {
       onSuccess: () => {
         toast.success("Added Review!");
         queryClient.invalidateQueries({
-          queryKey: [keys.AddGameReview],
+          queryKey: keys.AddGameReview,
+          refetchType: "all",
         });
         queryClient.invalidateQueries({
-          queryKey: [keys.GetAllGameReviewsByGame(gameId)],
+          queryKey: keys.GetAllGameReviewsByGame(gameId),
+          refetchType: "all",
         });
       },
       onError: (error) => {
