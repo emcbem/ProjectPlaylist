@@ -1,76 +1,47 @@
-import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
+import { ListGame } from '@/@types/listgame';
 import { ListQueries } from '@/hooks/ListQueries';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import EditListComponent from './EditListComponent';
 
 const Playlist = () => {
   const { listId } = useParams<{ listId: string }>();
-  const { data: list } = ListQueries.useGetListByListId(listId ?? "");
-  const { mutateAsync } = ListQueries.useUpdateListQuery();
-  const [showEditNameBox, setshowEditNameBox] = useState<boolean>(false);
+  const { data: list, isLoading } = ListQueries.useGetListByListId(listId ?? "");
   const { pathname } = useLocation();
+
+  const [listGames, setlistGames] = useState<ListGame[] | undefined>(list?.games);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+    setlistGames(list?.games)
+  }, [pathname, list]);
 
-  const handleClick = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
-    console.log(event.detail);
-    switch (event.detail) {
-      case 2: {
-        setshowEditNameBox(true);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  };
-
-  {/* Update Name Stuff */ }
-  const [value, setValue] = useState('');
-  const [isEmpty, setIsEmpty] = useState(true);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setValue(newValue);
-    setIsEmpty(newValue.length === 0);
-  };
-
-  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (!isEmpty) {
-        var updatedList: UpdateListRequest = {
-          listId: list?.id ?? -1,
-          listName: value,
-          newGames: list?.games ?? [],
-          gamesToRemove: [],
-          isPublic: list?.isPublic ?? false,
-        }
-
-        await mutateAsync(updatedList);
-        setshowEditNameBox(false);
-      }
-    }
-  };
-  {/* End Update Name Stuff */ }
-
-  console.log("LIST GAMES: ", list)
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-black dark:text-white">
       <div className="grid justify-items-center ">
-        <div style={{ maxWidth: '1200px' }} className='w-full mt-8 customGradient'>
-          <div className="">
-            <p onClick={handleClick} className={`${showEditNameBox ? "hidden" : ""} text-5xl`}>{list?.name}</p>
-            <input type="text" value={value} className={`${showEditNameBox ? "" : "hidden"} bg-inherit text-5xl`} onChange={handleChange} onKeyDown={handleKeyPress} />
-            <p>{list?.id}</p>
-            <p>User Id: {list?.ownerName}</p>
-            <p>{list?.games[0].name}</p>
-            {list?.games && list.games.map((game, key) => (
-              <p key={key}>Game Id: {game.gameId}</p>
-            ))}
-          </div>
+        <div style={{ maxWidth: '1200px' }} className='w-full mt-8'>
+
+            <EditListComponent list={list} />
+
+            <p>List Id: {list?.id}</p>
+            <p>User: {list?.ownerName}</p>
+
+            <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-2 gap-2">
+              {listGames && listGames?.map((g, key) => (
+                <div key={key} className="w-50 m-5 dark:border-[#ffffff]">
+                  <Link to={`/view-game/${g.id}`}>
+                    {/* lg:w-50 lg:h-85 sm:w-60 sm:h-48 w-24 h-80 */}
+                    <img className="img img-fluid w-full h-full object-cover" src={g.game.coverUrl} style={{ aspectRatio: '3 / 4' }} />
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+
         </div>
       </div>
     </div >

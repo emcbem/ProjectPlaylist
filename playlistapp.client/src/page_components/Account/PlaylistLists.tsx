@@ -7,13 +7,11 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 const PlaylistLists = () => {
-    const [dropDownIsVisible, setDropDownIsVisible] = useState(false)
-    const { mutateAsync } = ListQueries.useAddListQuery();
-    const [showModal, setShowModal] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { usr } = React.useContext(
-        UserAccountContext
-    ) as UserAccountContextInterface;
+    const [dropDownIsVisible, setDropDownIsVisible] = useState(false)
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const { mutateAsync } = ListQueries.useAddListQuery();
+    const { usr } = React.useContext(UserAccountContext) as UserAccountContextInterface;
     const { data: lists } = ListQueries.useGetListsByUserId(usr?.guid ?? "");
 
 
@@ -89,23 +87,20 @@ const PlaylistLists = () => {
                     </div>
                 </div>
             </div>
-            <div style={{ height: '300px' }}></div>
 
-            <div className="flex flex-row mt-8">
+            <div className="flex flex-row">
                 {lists && lists?.map((list, key) => (
                     <div className="w-1/3" key={key}>
                         <div className="relative mx-5">
-                            {/* Eventually loop through the first few games in the list */}
                             {(
                                 <div className="grid grid-cols-2 gap-4">
-                                    {list.games && list.games.map((ug, key) => (
+                                    {list.games && list.games.slice(0,4).map((ug, key) => (
                                         <div key={key} className="relative">
-                                            <p>{ug[0]}</p>
-                                            {/* <img
-                                                src={ug.gam}
+                                            <img
+                                                src={ug.game.coverUrl}
                                                 className="w-full h-full object-cover"
                                                 style={{ aspectRatio: '1 / 1' }} // Ensures the image is square
-                                            /> */}
+                                            />
                                         </div>
                                     ))}
                                 </div>
