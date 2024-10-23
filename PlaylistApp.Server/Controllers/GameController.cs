@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.Game;
 
 namespace PlaylistApp.Server.Controllers;
@@ -43,5 +44,11 @@ public class GameController : Controller
     public async Task<List<GameDTO>> GetGamesByName(string gameName)
     {
         return await gameService.GetGameByName(gameName);
+    }
+
+    [HttpPost("filtergamesbyrequest")]
+    public async Task<List<GameDTO>> FilterGamesByRequest(GetGamesRequest request)
+    {
+        return await gameService.GetGamesByFilter(request);
     }
 }
