@@ -1,5 +1,5 @@
 export interface AddUserAchievementLikeRequest {
-  achievementId: number;
+  userAchievementId: number;
   userId: string;
   isLike: boolean;
 }

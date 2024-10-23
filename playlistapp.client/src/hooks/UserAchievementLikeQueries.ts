@@ -1,7 +1,7 @@
 import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/addUserAchievementLikeRequest";
 import { UserAchievementLikeService } from "@/ApiServices/UserAchievementLikeService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import keys from "@/QueryKeys/UserAchievementLikeKeys"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import keys from "@/QueryKeys/UserAchievementLikeKeys";
 
 export const UserAchievementLikeQueries = {
   useAddUserAchievementLike: (
@@ -9,10 +9,20 @@ export const UserAchievementLikeQueries = {
   ) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => 
-            UserAchievementLikeService.AddUserAchievementLike(addUserAchievementLikeRequest),
-        onSuccess: () => 
-            queryClient.invalidateQueries({ queryKey: keys.AddUserAchievementLike})        
-    })
+      mutationFn: () =>
+        UserAchievementLikeService.AddUserAchievementLike(
+          addUserAchievementLikeRequest
+        ),
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: keys.AddUserAchievementLike,
+        }),
+    });
   },
+  useGetUserAchievementLikesFromUserId: (userId: string) => {
+    return useQuery({
+        queryKey: keys.GetUserAchievementLikeFromUserId,
+        queryFn: () => UserAchievementLikeService.GetUserAchievementLikesFromUserId(userId)
+    })
+  }
 };

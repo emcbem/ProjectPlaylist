@@ -3,6 +3,7 @@ import { GameReviewService } from "@/ApiServices/GameReviewService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameReviewKeys";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
+import toast from "react-hot-toast";
 
 export const GameReviewQueries = {
   useAddGameReview: (addGameReviewRequest: AddGameReviewRequest) => {
@@ -10,6 +11,7 @@ export const GameReviewQueries = {
     return useMutation({
       mutationFn: () => GameReviewService.AddGameReview(addGameReviewRequest),
       onSuccess: () => {
+        toast.success("Added Review!");
         queryClient.invalidateQueries({ queryKey: keys.AddGameReview });
       },
       onError: (error) => {

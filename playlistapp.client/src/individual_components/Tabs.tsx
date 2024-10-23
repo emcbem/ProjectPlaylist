@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
-import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
 
 interface TabProps {
   TabName: string;
@@ -11,10 +9,6 @@ interface TabProps {
   onClick: () => void;
 }
 
-interface TabsProps {
-  gameId: number;
-  userId: number;
-}
 
 const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   return (
@@ -45,11 +39,9 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   );
 };
 
-const Tabs: React.FC<TabsProps> = ({ gameId }) => {
+const Tabs = () => {
   const [activeTab, setActiveTab] = useState<string>("Reviews");
-  const { usr } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
+
 
   const tabs = [
     "Reviews",
@@ -104,7 +96,7 @@ const Tabs: React.FC<TabsProps> = ({ gameId }) => {
                 Score={1}
               />
             </div>
-            <ReviewModal gameId={gameId} userId={Number(usr?.id)} />
+            <ReviewModal />
           </>
         )}
         {activeTab === "Your Stats" && (

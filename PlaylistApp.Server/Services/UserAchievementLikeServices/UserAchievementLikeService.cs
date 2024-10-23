@@ -27,10 +27,22 @@ public class UserAchievementLikeService : IUserAchievementLikeService
             return false;
         }
 
+        var possibleAchievementLike = await context.AchievementLikes
+            .Where(x => x.UserId == user.Id)
+            .Where(x => x.UserAchievementId == addRequest.UserAchievementId)
+            .FirstOrDefaultAsync();
+
+        if (possibleAchievementLike is not null)
+        {
+            Console.WriteLine("User has already liked this achievement");
+            return false;
+        }
+
+
         AchievementLike achievementLike = new AchievementLike()
         {
             UserId = user.Id,
-            UserAchievementId = addRequest.AchievementId,
+            UserAchievementId = addRequest.UserAchievementId,
             IsLike = addRequest.IsLike,
             DateLiked = DateTime.UtcNow
         };
@@ -41,12 +53,12 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         return true;
     }
 
-    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid id)
+    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
-            .Where(x => x.Guid == id)
+            .Where(x => x.Guid == userId)
             .FirstOrDefaultAsync();
 
         if (user is null)
