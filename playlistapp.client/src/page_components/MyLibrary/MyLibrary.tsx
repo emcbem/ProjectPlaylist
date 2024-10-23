@@ -7,7 +7,7 @@ import GridAndListIcons from './GridAndListIcons';
 
 const MyLibrary = () => {
     const { userGamesFromUser, isLoading } = React.useContext(UserGameContext) as UserGameContextInterface;
-    const [isListView, setIsListView] = useState<boolean>(false);
+    const [isListView, setIsListView] = useState<boolean>(true);
 
     if (isLoading) {
         return <>Loading ...</>

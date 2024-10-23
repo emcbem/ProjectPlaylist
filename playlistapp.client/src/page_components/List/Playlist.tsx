@@ -23,23 +23,33 @@ const Playlist = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-black dark:text-white">
       <div className="grid justify-items-center ">
-        <div style={{ maxWidth: '1200px' }} className='w-full mt-8'>
+        <div className=' w-full h-full'>
 
+          <div style={{ maxWidth: '1200px' }} className='w-full mt-8 bg-gray-600'>
             <EditListComponent list={list} />
 
             <p>List Id: {list?.id}</p>
             <p>User: {list?.ownerName}</p>
+            <p>{list?.games.length} Games</p>
+          </div>
+        </div>
+        <div style={{ maxWidth: '1200px' }} className='w-full mt-8'>
 
-            <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-2 gap-2">
-              {listGames && listGames?.map((g, key) => (
-                <div key={key} className="w-50 m-5 dark:border-[#ffffff]">
-                  <Link to={`/view-game/${g.id}`}>
-                    {/* lg:w-50 lg:h-85 sm:w-60 sm:h-48 w-24 h-80 */}
-                    <img className="img img-fluid w-full h-full object-cover" src={g.game.coverUrl} style={{ aspectRatio: '3 / 4' }} />
-                  </Link>
-                </div>
-              ))}
-            </div>
+          <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-2 gap-2">
+            {listGames && listGames?.map((g, key) => (
+              <div key={key} className="w-50 m-5 dark:border-[#ffffff]">
+                <Link key={key} to={`/user-view-game/${g.gameId}`} className="m-2 w-36">
+                  <div className="overflow-hidden">
+                    <img
+                      className="img img-fluid w-full h-auto object-cover"
+                      src={g.game.coverUrl}
+                      style={{ aspectRatio: '3 / 4' }}
+                    />
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
 
 
         </div>
