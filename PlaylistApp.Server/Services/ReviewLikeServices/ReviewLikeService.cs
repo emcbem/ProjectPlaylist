@@ -27,6 +27,16 @@ public class ReviewLikeService : IReviewLikeService
             return false;
         }
 
+        var possibleLike = await context.ReviewLikes
+            .Where(x => x.User.Guid == request.Userid)
+            .Where(x => x.GameReviewId == request.GameReviewId)
+            .FirstOrDefaultAsync();
+
+        if (possibleLike is not null)
+        {
+            return false;
+        }
+
         ReviewLike newReviewLike = new ReviewLike()
         {
             DateLiked = DateTime.UtcNow,
