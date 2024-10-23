@@ -27,12 +27,18 @@ const TestPage = () => {
     addUserAchievementLikeRequest
   );
 
-  console.log("isSuccess: ", isAddingSuccess)
-  console.log("newUserAchievementLike: ", newUserAchievementLike)
+  const {
+    data: userAchievementLikes,
+    isPending: isFetching,
+    isError: isFetchingError,
+    isSuccess: isFetchingSuccess,
+  } = UserAchievementLikeQueries.useGetUserAchievementLikesFromUserId(
+    usr?.guid ?? ""
+  );
 
   const handleAddUserAchievementLike = () => {
     adduserAchievementLike();
-  }
+  };
 
   return (
     isAuthenticated &&
@@ -43,7 +49,22 @@ const TestPage = () => {
           {isAdding && <p>Adding like to achievement...</p>}
           {isAddingSuccess && <p>Is liked: {String(newUserAchievementLike)}</p>}
           {isAddingError && <p>Failed to add like to achievement.</p>}
-          <button onClick={handleAddUserAchievementLike}>Add Like to Achievement</button>
+          <button onClick={handleAddUserAchievementLike}>
+            Add Like to Achievement
+          </button>
+        </div>
+        <div>
+          {isFetching && <p>Fetching all achievement likes for {usr?.username}...</p>}
+          {isFetchingSuccess && (
+            <div>
+              {userAchievementLikes?.map((x) => (
+                <div key={x.id}>
+                  {x.id}: {x.achievement.name}
+                </div>
+              ))}
+            </div>
+          )}
+          {isFetchingError && <p>Failed to get achievement likes.</p>}
         </div>
       </div>
     )
