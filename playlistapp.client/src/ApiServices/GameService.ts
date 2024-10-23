@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Game } from "../@types/game";
 import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
-import { parseArgs } from "util";
 
 export const GameService = {
   GetAllGames: async (): Promise<Game[]> => {
