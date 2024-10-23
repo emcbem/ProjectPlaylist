@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { PS5Icon } from "../assets/ViewGameSVGs/psLogo";
-import { SteamIcon } from "../assets/ViewGameSVGs/steamLogo";
-import { XboxIcon } from "../assets/ViewGameSVGs/xboxLogo";
 import { Game } from "../@types/game";
 import { Link } from "react-router-dom";
 
@@ -23,15 +20,15 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
     const randomHeight = Math.floor(Math.random() * (300 - 200 + 1) + 200);
     return (
       <Link to={`/view-game/${game.id}`} key={game.id}>
-        <div className="rounded-lg overflow-hidden text-white dark:text-black">
+        <div className="rounded-lg overflow-hidden text-white dark:text-white">
           <img
             src={game.coverUrl}
             className={`w-full sm:h-[${randomHeight}px] h-[${
               randomHeight / 2
             }px] object-cover`}
           />
-          <div className="bg-[#252A2C] dark:bg-[#D9D9D9]">
-            <div className="flex flex-row p-2">
+          <div className="bg-clay-200 dark:bg-clay-400 pt-3">
+            {/* <div className="flex flex-row p-2">
               <PS5Icon height={20} width={20} darkColor="black" color="white" />
               <XboxIcon
                 height={20}
@@ -45,7 +42,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
                 darkColor="black"
                 color="white"
               />
-            </div>
+            </div> */}
             <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
               {game.title}
             </div>

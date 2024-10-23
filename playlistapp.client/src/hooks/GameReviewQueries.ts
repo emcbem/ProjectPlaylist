@@ -3,14 +3,24 @@ import { GameReviewService } from "@/ApiServices/GameReviewService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameReviewKeys";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
+import toast from "react-hot-toast";
 
 export const GameReviewQueries = {
-  useAddGameReview: (addGameReviewRequest: AddGameReviewRequest) => {
+  useAddGameReview: (
+    addGameReviewRequest: AddGameReviewRequest,
+    gameId: number
+  ) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => GameReviewService.AddGameReview(addGameReviewRequest),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.AddGameReview });
+        toast.success("Added Review!");
+        queryClient.invalidateQueries({
+          queryKey: [keys.AddGameReview],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [keys.GetAllGameReviewsByGame(gameId)],
+        });
       },
       onError: (error) => {
         console.error("Error adding review to game: ", error);
@@ -48,7 +58,7 @@ export const GameReviewQueries = {
   },
   useGetAllGameReviewsByGame: (gameId: number) => {
     return useQuery({
-      queryKey: keys.GetAllGameReviewsByGame,
+      queryKey: keys.GetAllGameReviewsByGame(gameId),
       queryFn: () => GameReviewService.GetAllGameReviewsByGame(gameId),
     });
     /*

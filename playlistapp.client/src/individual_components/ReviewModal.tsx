@@ -1,21 +1,31 @@
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { GameQueries } from "@/hooks/GameQueries";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 import Slider from "@mui/material/Slider";
-import { FC, useRef, useState } from "react";
+import React from "react";
+import { useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
-interface Props {
-  gameId: number;
-  userId: number;
-}
-
-const ReviewModal: FC<Props> = ({ gameId, userId }) => {
+const ReviewModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [val, setVal] = useState<number>(0);
   const [reviewText, setReviewText] = useState<string>("");
   const [review, setReview] = useState<AddGameReviewRequest>();
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(review!);
+  const { gameId } = useParams<{ gameId: string }>();
+  const { usr } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
+
+  const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+
+  const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(
+    review!,
+    Number(gameId)
+  );
 
   const openModal = () => {
     setIsOpen(true);
@@ -29,19 +39,22 @@ const ReviewModal: FC<Props> = ({ gameId, userId }) => {
     setVal(newValue as number);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleAddGameReview = () => {
+    addGameReview();
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    setReview({
-      gameId: gameId,
-      userId: userId,
-      rating: val,
-      text: reviewText,
-    });
+    if (game && usr)
+      setReview({
+        gameId: game?.id,
+        userId: usr?.id,
+        rating: val,
+        text: reviewText,
+      });
 
-    console.log("review", review);
-
-    addGameReview();
+    await handleAddGameReview();
 
     closeModal();
   };
@@ -56,7 +69,7 @@ const ReviewModal: FC<Props> = ({ gameId, userId }) => {
     <>
       <button
         onClick={openModal}
-        className="rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2"
+        className="rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
         type="button"
       >
         Leave a review
@@ -72,47 +85,49 @@ const ReviewModal: FC<Props> = ({ gameId, userId }) => {
       >
         <div
           ref={modalRef}
-          className={`relative mx-auto w-full max-w-[24rem] rounded-lg overflow-hidden shadow-sm bg-white transition-transform duration-300 ${
+          className={`relative mx-auto w-full max-w-[48rem] h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
             isOpen ? "scale-100" : "scale-95"
           }`}
         >
-          <div className="relative m-2.5 items-center flex justify-center text-white h-24 rounded-md bg-slate-800">
-            <h3 className="text-2xl">Leave a review</h3>
+          <div className="mx-5 ">
+            <img
+              src={game?.coverUrl.replace(/t_cover_big/g, "t_1080p")}
+              className="w-40 h-64 object-cover rounded-lg shadow-xl sticky top-10"
+              alt={`${game?.title} cover`}
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 p-6 mx-5"
+          >
             <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-slate-600">
-                Rating
-              </label>
+              <label className="block mb-2 text-sm text-white">Rating</label>
               <Slider
                 aria-label="Rating"
                 onChange={handleChange}
                 valueLabelDisplay="auto"
                 step={1}
                 marks
-                min={0}
+                min={1}
                 max={10}
                 sx={{
                   width: 300,
-                  color: "#1e293b",
+                  color: "#b9baba",
                 }}
               />
             </div>
             <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-slate-600">
-                Review
-              </label>
-              <input
-                type="text"
-                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2"
+              <label className="block mb-2 text-sm text-white ">Review</label>
+              <textarea
+                className="resize-y w-full rounded-md bg-transparent placeholder:white text-white text-sm border border-white px-3 py-5  focus:border-white focus:ring-0"
                 placeholder="Your Review"
                 onChange={(e) => setReviewText(e.target.value)}
               />
             </div>
-            <div className="p-6 pt-0">
+            <div className="p-6 pb-0">
               <button
-                className="w-full rounded-md bg-slate-800 py-2 px-4 text-sm text-white"
+                className="w-full rounded-md bg-clay-950 py-2 px-4 text-sm text-white"
                 type="submit"
               >
                 Submit

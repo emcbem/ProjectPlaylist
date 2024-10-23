@@ -1,112 +1,100 @@
-import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
-import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
+import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/addUserAchievementLikeRequest";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { UserAchievementLikeQueries } from "@/hooks/UserAchievementLikeQueries";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 const TestPage = () => {
   const { user, isAuthenticated } = useAuth0();
-  const { gameId } = useParams<{ gameId: string }>();
+  const { userAchievementId } = useParams<{ userAchievementId: string }>();
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
-  const newGameReview: AddGameReviewRequest = {
-    gameId: Number(gameId),
-    rating: 5,
-    text: "this is a test review",
-    userId: usr?.id ?? 0,
+  const addUserAchievementLikeRequest: AddUserAchievementLikeRequest = {
+    userAchievementId: Number(userAchievementId),
+    userId: usr?.guid ?? "",
+    isLike: true,
   };
 
-  const updateGameReviewRequest: UpdateGameReviewRequest = {
-    gameReviewId: 8,
-    rating: 10,
-    reviewText: "New Review Text",
+  const removeUserAchievementLikeRequest: RemoveUserAchievementLikeRequest = {
+    userAchievementId: Number(userAchievementId),
+    userId: usr?.guid ?? "",
   };
 
   const {
-    mutate: addGameReview,
-    data: newGameReviewId,
-    isPending: isAddingGameReview,
-    isError: isAddingGameReviewError,
-    isSuccess: isAddingGameReviewSuccess,
-  } = GameReviewQueries.useAddGameReview(newGameReview);
+    mutate: adduserAchievementLike,
+    data: newUserAchievementLike,
+    isPending: isAdding,
+    isError: isAddingError,
+    isSuccess: isAddingSuccess,
+  } = UserAchievementLikeQueries.useAddUserAchievementLike(
+    addUserAchievementLikeRequest
+  );
 
   const {
-    mutate: updateGameReview,
-    data: updatedGameReview,
-    isPending: isUpdatingGameReview,
-    isError: isUpdatingGameReviewError,
-    isSuccess: isupdatingGameReviewSuccess,
-  } = GameReviewQueries.useUpdateGameReview(updateGameReviewRequest);
+    data: userAchievementLikes,
+    isPending: isFetching,
+    isError: isFetchingError,
+    isSuccess: isFetchingSuccess,
+  } = UserAchievementLikeQueries.useGetUserAchievementLikesFromUserId(
+    usr?.guid ?? ""
+  );
 
   const {
-    mutate: deleteGameReview,
-    data: deletedGameReview,
-    isPending: isDeletingGameReview,
-    isError: isDeletingGameReviewError,
-    isSuccess: isDeletingGameReviewSuccess
-  } = GameReviewQueries.useDeleteGameReview(8);
+    mutate: removeAchievementLike,
+    data: oldUserAchievementLike,
+    isPending: isRemoving,
+    isError: isRemovingError,
+    isSuccess: isRemovingSuccess,
+  } = UserAchievementLikeQueries.useRemoveAchievementLike(
+    removeUserAchievementLikeRequest
+  );
 
-  const handleAddGameReview = () => {
-    addGameReview();
+  const handleAddUserAchievementLike = () => {
+    adduserAchievementLike();
   };
 
-  const handleUpdateGameReview = () => {
-    updateGameReview();
-  };
-
-  const handleDeleteGameReview = () => {
-    deleteGameReview();
+  const handleRemoveUserAchievementLike = () => {
+    removeAchievementLike();
   }
-
-  const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
-
-  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(
-    Number(gameId)
-  ).data;
 
   return (
     isAuthenticated &&
-    user &&
-    GameReviewById && (
+    user && (
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
         <div>
-          {isAddingGameReview && <p>Adding review to game...</p>}
-          {isAddingGameReviewSuccess && (
-            <p>New Game Review Id: {newGameReviewId}</p>
+          {isAdding && <p>Adding like to achievement...</p>}
+          {isAddingSuccess && <p>Is liked: {String(newUserAchievementLike)}</p>}
+          {isAddingError && <p>Failed to add like to achievement.</p>}
+          <button onClick={handleAddUserAchievementLike}>
+            Add Like to Achievement
+          </button>
+        </div>
+        <div>
+          {isRemoving && <p>Removing like on achievement...</p>}
+          {isRemovingSuccess && <p>Is removed: {String(oldUserAchievementLike)}</p>}
+          {isRemovingError && <p>Failed to remove like on achievement.</p>}
+          <button onClick={handleRemoveUserAchievementLike}>
+            Remove Like on Achievement
+          </button>
+        </div>
+        <div>
+          {isFetching && (
+            <p>Fetching all achievement likes for {usr?.username}...</p>
           )}
-          {isAddingGameReviewError && <p>Failed to add review to game.</p>}
-          <button onClick={handleAddGameReview}>Add Review To Game</button>
-        </div>
-        <div>
-          <p>You are viewing game review with id: {GameReviewById.id}</p>
-          <p>You are viewing game: {GameReviewById.game.title}</p>
-        </div>
-        <div>
-          {AllGameReviewsForGame?.map((x) => (
-            <div key={x.id}>
-              {x.id}: {x.text}
+          {isFetchingSuccess && (
+            <div>
+              {userAchievementLikes?.map((x) => (
+                <div key={x.id}>
+                  {x.id}: {x.achievement.name}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div>
-          {isUpdatingGameReview && <p>Updating game review...</p>}
-          {isupdatingGameReviewSuccess && (
-            <p>New Game Review Text: {updatedGameReview.text}</p>
           )}
-          {isUpdatingGameReviewError && <p>Failed to update game review.</p>}
-          <button onClick={handleUpdateGameReview}>Update Game Review</button>
-        </div>
-        <div>
-          {isDeletingGameReview && <p>Deleting game review...</p>}
-          {isDeletingGameReviewSuccess && (
-            <p>Is deleted: {deletedGameReview}</p>
-          )}
-          {isDeletingGameReviewError && <p>Failed to delete game review.</p>}
-          <button onClick={handleDeleteGameReview}>Delete Game Review</button>
+          {isFetchingError && <p>Failed to get achievement likes.</p>}
         </div>
       </div>
     )

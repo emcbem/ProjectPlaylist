@@ -8,6 +8,6 @@ public interface IUserAchievementLikeService
 {
     public Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid id);
     public Task<bool> AddUserAchievementLike(AddUserAchievementLike addRequest);
-    public Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLike removeRequest);
+    public Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest removeRequest);
 
 }

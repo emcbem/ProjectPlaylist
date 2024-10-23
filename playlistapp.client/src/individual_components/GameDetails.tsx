@@ -18,7 +18,7 @@ export const GameDetails: React.FC<props> = ({ Game }) => {
         {Game?.title}
       </h1>
       <h1 className="dark:text-yellow-500 2xl:text-2xl xl:text-xl text-base font-extrabold lg:mx-28 mx-12 2xl:mt-8 xl:mt-6 lg:mt-4 mt-2 ">
-        Ratings: 9.25/10 - Leave your own.
+        9.25/10 - Leave a rating
       </h1>
       <h1 className="w-3/4 dark:text-white text-black 2xl:text-2xl xl:text-xl text-base font-extrabold lg:mx-28 mx-12 2xl:mt-8 xl:mt-6 lg:mt-4 mt-2 line-clamp-3">
         {Game?.description}

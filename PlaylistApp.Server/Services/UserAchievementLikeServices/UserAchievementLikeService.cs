@@ -27,10 +27,22 @@ public class UserAchievementLikeService : IUserAchievementLikeService
             return false;
         }
 
+        var possibleAchievementLike = await context.AchievementLikes
+            .Where(x => x.UserId == user.Id)
+            .Where(x => x.UserAchievementId == addRequest.UserAchievementId)
+            .FirstOrDefaultAsync();
+
+        if (possibleAchievementLike is not null)
+        {
+            Console.WriteLine("User has already liked this achievement");
+            return false;
+        }
+
+
         AchievementLike achievementLike = new AchievementLike()
         {
             UserId = user.Id,
-            UserAchievementId = addRequest.AchievementId,
+            UserAchievementId = addRequest.UserAchievementId,
             IsLike = addRequest.IsLike,
             DateLiked = DateTime.UtcNow
         };
@@ -41,12 +53,12 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         return true;
     }
 
-    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid id)
+    public async Task<List<UserAchievementDTO>> GetAchievementUserLikesFromUserId(Guid userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
-            .Where(x => x.Guid == id)
+            .Where(x => x.Guid == userId)
             .FirstOrDefaultAsync();
 
         if (user is null)
@@ -57,14 +69,6 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         var UserAchievementLikes = await context.AchievementLikes
             .Include(x => x.UserAchievement)
                 .ThenInclude(x => x.Achievement)
-                    //.ThenInclude(x => x.PlatformGame)
-                    //    .ThenInclude(x => x.Game)
-                            //.ThenInclude(x => x.InvolvedCompanies)
-                            //    .ThenInclude(x => x.Company)
-            //.Include(x => x.UserAchievement)
-            //    .ThenInclude(x => x.Achievement)
-            //        .ThenInclude(x => x.PlatformGame)
-            //            .ThenInclude(x => x.Platform)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Where(x => x.UserId == user.Id)
@@ -85,12 +89,23 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         return userAchievements.ToList();
     }
 
-    public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLike removeRequest)
+    public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest removeRequest)
     {
         using var context = dbContextFactory.CreateDbContext();
 
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == removeRequest.userId)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            Console.WriteLine("No user was found");
+            return false;
+        }
+
         var achievementlike = await context.AchievementLikes
-            .Where(x => x.Id == removeRequest.UserAchievementLikeId)
+            .Where(x => x.UserAchievementId == removeRequest.UserAchievementId)
+            .Where(x => x.UserId == user.Id)
             .FirstOrDefaultAsync();
 
         if (achievementlike is null)
