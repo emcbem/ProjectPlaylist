@@ -2,6 +2,7 @@ import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/add
 import { UserAchievementLikeService } from "@/ApiServices/UserAchievementLikeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserAchievementLikeKeys";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
 
 export const UserAchievementLikeQueries = {
   useAddUserAchievementLike: (
@@ -21,8 +22,24 @@ export const UserAchievementLikeQueries = {
   },
   useGetUserAchievementLikesFromUserId: (userId: string) => {
     return useQuery({
-        queryKey: keys.GetUserAchievementLikeFromUserId,
-        queryFn: () => UserAchievementLikeService.GetUserAchievementLikesFromUserId(userId)
-    })
-  }
+      queryKey: keys.GetUserAchievementLikeFromUserId,
+      queryFn: () =>
+        UserAchievementLikeService.GetUserAchievementLikesFromUserId(userId),
+    });
+  },
+  useRemoveAchievementLike: (
+    removeUserAchievementLikeRequest: RemoveUserAchievementLikeRequest
+  ) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        UserAchievementLikeService.RemoveUserAchievementLike(
+          removeUserAchievementLikeRequest
+        ),
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: keys.RemoveAchievementLike,
+        }),
+    });
+  },
 };

@@ -28,8 +28,8 @@ public class UserAchievementLikeController : Controller
         return await userAchievementLikeService.GetAchievementUserLikesFromUserId(userId);
     }
 
-    [HttpDelete("removeuserachievementlike")]
-    public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLike request)
+    [HttpPost("removeuserachievementlike")]
+    public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest request)
     {
         return await userAchievementLikeService.RemoveUserAchievementLike(request);
     }
