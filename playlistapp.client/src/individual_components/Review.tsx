@@ -27,10 +27,10 @@ const Review: React.FC<props> = ({ UserName, Comment, Score }) => {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900  dark:text-gray-400">
+            <p className="text-sm font-medium text-clay-950  dark:text-clay-900">
               {UserName}
             </p>
-            <p className="md:text-lg sm:text-base text-sm text-gray-500 dark:text-white line-clamp-3">
+            <p className="md:text-lg sm:text-base text-sm text-black dark:text-white line-clamp-3">
               {Comment}
             </p>
           </div>

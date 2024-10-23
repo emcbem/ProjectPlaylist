@@ -46,7 +46,7 @@ const TestPage = () => {
     data: deletedGameReview,
     isPending: isDeletingGameReview,
     isError: isDeletingGameReviewError,
-    isSuccess: isDeletingGameReviewSuccess
+    isSuccess: isDeletingGameReviewSuccess,
   } = GameReviewQueries.useDeleteGameReview(8);
 
   const handleAddGameReview = () => {
@@ -59,7 +59,7 @@ const TestPage = () => {
 
   const handleDeleteGameReview = () => {
     deleteGameReview();
-  }
+  };
 
   const GameReviewById = GameReviewQueries.useGetGameReviewById(8).data;
 

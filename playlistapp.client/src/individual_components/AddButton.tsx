@@ -81,7 +81,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
         <MenuHandler>
           <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-[#252A2C] dark:bg-[#D9D9D9] dark:text-black text-white rounded-lg text-start 
+              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start 
             2xl:w-44 w-fit 
             md:h-12 h-2
             justify-center"
