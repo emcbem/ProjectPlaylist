@@ -47,7 +47,7 @@ const ViewGame = () => {
               {game?.title}
             </h1>
             <h1 className="text-yellow-500 text-base font-extrabold my-3">
-              Ratings: 9.25/10 - Leave your own.
+              9.25/10 - Leave a rating
             </h1>
             <h1 className="dark:text-white text-black text-base line-clamp-3">
               {game?.description}
