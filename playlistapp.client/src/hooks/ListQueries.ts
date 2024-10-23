@@ -19,6 +19,17 @@ export const ListQueries = {
         });
     },
 
+    useUpdatListQuery: () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: (luc: UpdateListRequest) => ListService.UpdateListQuery(luc),
+            onSuccess: () => {
+                toast.success("List updated!")
+                queryClient.invalidateQueries({ queryKey: [ListKeys.AddListKey] });
+            },
+        });
+    },
+
     useGetListsByUserId: (userId: string) => {
         return useQuery({
             queryKey: ListKeys.GetListKey,
