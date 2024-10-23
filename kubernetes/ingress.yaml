@@ -4,17 +4,16 @@ metadata:
   name: playlist-ingress
   namespace: codebras
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" # Ensure cert-manager is set up for Let's Encrypt
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/hsts: "false"
-    external-dns.alpha.kubernetes.io/hostname: projectplaylist.duckdns.org
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-project-playlist-production
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   tls:
   - hosts:
-    - projectplaylist.duckdns.org # Frontend Client
-    - api.projectplaylist.duckdns.org # Backend Server
-    secretName: playlist-tls
+      - projectplaylist.duckdns.org # Frontend Client
+      - api.projectplaylist.duckdns.org # Backend Server
+    secretName: playlist-tls-production
   rules:
   - host: projectplaylist.duckdns.org # Main domain for the client
     http:

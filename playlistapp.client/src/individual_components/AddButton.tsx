@@ -43,16 +43,12 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   ) as UserAccountContextInterface;
 
   const handleMenuItemClick = async (platformId: number) => {
-    console.log("Adding user game of platform id: ", platformId);
     if (usr) {
       if (platformId && usr.guid) {
         const newAddUserGameRequest: AddUserGameRequest = {
           userId: usr.guid,
           platformGameId: platformId,
         };
-
-        console.log("request", newAddUserGameRequest);
-
         await AddUserGame(newAddUserGameRequest);
       }
     }

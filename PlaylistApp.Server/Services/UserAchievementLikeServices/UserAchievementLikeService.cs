@@ -27,10 +27,22 @@ public class UserAchievementLikeService : IUserAchievementLikeService
             return false;
         }
 
+        var possibleAchievementLike = await context.AchievementLikes
+            .Where(x => x.UserId == user.Id)
+            .Where(x => x.UserAchievementId == addRequest.UserAchievementId)
+            .FirstOrDefaultAsync();
+
+        if (possibleAchievementLike is not null)
+        {
+            Console.WriteLine("User has already liked this achievement");
+            return false;
+        }
+
+
         AchievementLike achievementLike = new AchievementLike()
         {
             UserId = user.Id,
-            UserAchievementId = addRequest.AchievementId,
+            UserAchievementId = addRequest.UserAchievementId,
             IsLike = addRequest.IsLike,
             DateLiked = DateTime.UtcNow
         };
