@@ -13,7 +13,7 @@ spec:
   - hosts:
       - projectplaylist.duckdns.org # Frontend Client
       - api.projectplaylist.duckdns.org # Backend Server
-    secretName: playlist-tls-production
+    secretName: cert-manager-webhook-duckdns-project-playlist-webhook-tls
   rules:
   - host: projectplaylist.duckdns.org # Main domain for the client
     http:

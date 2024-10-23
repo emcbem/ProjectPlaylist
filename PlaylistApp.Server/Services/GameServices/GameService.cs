@@ -108,13 +108,13 @@ public class GameService : IGameService
 		if (request.CompanyIds is not null && request.CompanyIds.Count() > 0)
 		{
 			query = query.Where(x => x.InvolvedCompanies.Any(y => request.CompanyIds.Contains(y.CompanyId)));
-
 		}
 
 		if(request.GenreIds is not null && request.GenreIds.Count() > 0)
 		{
 			query = query.Where(x => x.GameGenres.Any(y => request.GenreIds.Contains(y.GenreId)));
 		}
+
 		switch (request.OrderingMethod)
 		{
 			case Data.Enums.OrderingMethod.HighestRating:
