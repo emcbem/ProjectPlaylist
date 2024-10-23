@@ -16,7 +16,7 @@ import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
 import { Toaster } from 'react-hot-toast';
-import MyLibrary from "./page_components/MyLibrary";
+import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
 
 function App() {
