@@ -20,4 +20,12 @@ export const GameQueries = {
       queryFn: () => GameService.GetGameById(query),
     });
   },
+
+  // useFilterGameQuery: (request: GetGamesRequest) => {
+  //   return useQuery(
+  //     {
+  //       queryKey: keys.
+  //     }
+  //   )
+  // }
 };
