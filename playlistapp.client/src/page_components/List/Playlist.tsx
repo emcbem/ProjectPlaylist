@@ -1,15 +1,18 @@
 import { ListGame } from '@/@types/listgame';
 import { ListQueries } from '@/hooks/ListQueries';
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import EditListComponent from './EditListComponent';
 import './Playlist.modules.scss';
+import GridAndListIcons from '../../individual_components/GridAndListIcons';
+import PlaylistListView from './PlaylistListView';
+import PlaylistGridView from './PlaylistGridView';
 
 const Playlist = () => {
   const { listId } = useParams<{ listId: string }>();
   const { data: list, isLoading } = ListQueries.useGetListByListId(listId ?? "");
   const { pathname } = useLocation();
-
+  const [isListView, setIsListView] = useState<boolean>(true);
   const [listGames, setlistGames] = useState<ListGame[] | undefined>(list?.games);
 
   useEffect(() => {
@@ -30,22 +33,16 @@ const Playlist = () => {
             <p className="me-8 text-xl text-clay-900">{list?.ownerName}</p>
             <p className="text-xl text-clay-900">{list?.games.length} Games</p>
           </div>
-
-          <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-3 grid-cols-3 gap-1">
-            {listGames && listGames?.map((g, key) => (
-              <div key={key} className="w-50 m-2 dark:border-[#ffffff]">
-                <Link key={key} to={`/user-view-game/${g.gameId}`} className="">
-                  <div className="overflow-hidden">
-                    <img
-                      className="img img-fluid w-full h-auto object-cover"
-                      src={g.game.coverUrl}
-                      style={{ aspectRatio: '3 / 4' }}
-                    />
-                  </div>
-                </Link>
-              </div>
-            ))}
+          <div className='ms-auto w-full'>
+            <GridAndListIcons isListView={isListView} setIsListView={setIsListView} />
           </div>
+
+          {!isListView ? (
+            <PlaylistListView games={listGames} />
+          ) : (
+            <PlaylistGridView listGames={listGames} />
+          )
+          }
 
 
         </div>
