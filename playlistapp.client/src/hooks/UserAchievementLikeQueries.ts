@@ -2,7 +2,7 @@ import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/add
 import { UserAchievementLikeService } from "@/ApiServices/UserAchievementLikeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserAchievementLikeKeys";
-import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/removeUserAchievementLikeRequest";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
 
 export const UserAchievementLikeQueries = {
   useAddUserAchievementLike: (
