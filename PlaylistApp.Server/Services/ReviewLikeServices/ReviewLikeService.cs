@@ -27,6 +27,16 @@ public class ReviewLikeService : IReviewLikeService
             return false;
         }
 
+        var possibleLike = await context.ReviewLikes
+            .Where(x => x.User.Guid == request.Userid)
+            .Where(x => x.GameReviewId == request.GameReviewId)
+            .FirstOrDefaultAsync();
+
+        if (possibleLike is not null)
+        {
+            return false;
+        }
+
         ReviewLike newReviewLike = new ReviewLike()
         {
             DateLiked = DateTime.UtcNow,
@@ -44,19 +54,18 @@ public class ReviewLikeService : IReviewLikeService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var gameReviews = await context.GameReviews
-            .Include(x => x.Game)
-            .Include(x => x.User)
-                .ThenInclude(x => x.UserImage)
+        var likedGameReview = await context.ReviewLikes
+            .Include(x => x.GameReview)
+                .ThenInclude(x => x.Game)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
-        if (!gameReviews.Any()) 
+        if (!likedGameReview.Any()) 
         {
             return new List<GameReviewDTO>();
         }
 
-        return gameReviews.Select(x => x.ToDTO()).ToList(); 
+        return likedGameReview.Select(x => x.GameReview.ToDTO()).ToList(); 
     }
 
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)

@@ -19,10 +19,10 @@ import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
+const queryClient = new QueryClient();
 
 function App() {
   const { isAuthenticated } = useAuth0();
-  const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
