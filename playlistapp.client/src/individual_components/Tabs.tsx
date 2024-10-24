@@ -42,9 +42,10 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 
 const Tabs = () => {
   const { gameId } = useParams<{ gameId: string }>();
-  const AllGameReviewsForGame = GameReviewQueries.useGetAllGameReviewsByGame(
-    Number(gameId)
-  ).data;
+
+  const {data: AllGameReviewsForGame} = GameReviewQueries.useGetAllGameReviewsByGame(
+    parseInt(gameId??"1")
+  );
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
 
@@ -69,6 +70,8 @@ const Tabs = () => {
       </ul>
 
       <div className="mt-4 w-full">
+
+        {/* REVIEWS HERE!!! */}
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
@@ -83,6 +86,8 @@ const Tabs = () => {
             <ReviewModal />
           </>
         )}
+
+
         {activeTab === "Your Stats" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
             <span>Hours Played: 200</span>
