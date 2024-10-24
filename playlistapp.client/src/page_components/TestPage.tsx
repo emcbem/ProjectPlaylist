@@ -1,4 +1,5 @@
 import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLikeRequest";
+import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { ReviewLikeQueries } from "@/hooks/ReviewLikeQueries";
@@ -17,6 +18,11 @@ const TestPage = () => {
     userId: usr?.guid ?? "",
   };
 
+  const removeReviewLikeRequest: RemoveReviewLikeRequest = {
+    gameReviewId: Number(gameReviewId),
+    userId: usr?.guid ?? "",
+  };
+
   const {
     mutate: AddReviewLike,
     data: newReviewLike,
@@ -32,8 +38,20 @@ const TestPage = () => {
     isSuccess: isGettingSuccess,
   } = ReviewLikeQueries.useGetAllReviewLikesByUser(usr?.guid ?? "");
 
+  const {
+    mutate: RemoveReviewLike,
+    data: removedReviewLike,
+    isPending: isDeleting,
+    isError: isDeletingError,
+    isSuccess: isDeletingSuccess,
+  } = ReviewLikeQueries.useRemoveReviewLike(removeReviewLikeRequest);
+
   const handleAddReviewLike = () => {
     AddReviewLike();
+  };
+
+  const handleDeleteReviewLike = () => {
+    RemoveReviewLike();
   };
 
   return (
@@ -48,15 +66,27 @@ const TestPage = () => {
           <button onClick={handleAddReviewLike}>Add Like to Review</button>
         </div>
         <div>
-          {isGetting && <p>Getting all review likes for user {usr?.username}...</p>}
-          {isGettingSuccess &&             <div>
+          {isGetting && (
+            <p>Getting all review likes for user {usr?.username}...</p>
+          )}
+          {isGettingSuccess && (
+            <div>
               {allReviewLikes?.map((x) => (
                 <div key={x.id}>
                   {x.id}: {x.game.title}, Rating: {x.rating}, Text: {x.text}
                 </div>
               ))}
-            </div>}
+            </div>
+          )}
           {isGettingError && <p>Failed to add like to Review.</p>}
+        </div>
+        <div>
+          {isDeleting && <p>Removing like from Review...</p>}
+          {isDeletingSuccess && <p>Is removed: {String(removedReviewLike)}</p>}
+          {isDeletingError && <p>Failed to remove like from Review.</p>}
+          <button onClick={handleDeleteReviewLike}>
+            Remove Like from Review
+          </button>
         </div>
       </div>
     )

@@ -1,5 +1,5 @@
 import { AddUserAchievementLikeRequest } from "@/@types/Requests/AddRequests/addUserAchievementLikeRequest";
-import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/RemoveUserAchievementLikeRequest";
+import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/removeUserAchievementLikeRequest";
 import { UserAchievement } from "@/@types/userAchievement";
 import axios from "axios";
 
