@@ -5,17 +5,16 @@ import { ListQueries } from '@/hooks/ListQueries';
 import { MenuItem } from '@material-tailwind/react';
 import React from 'react'
 
-
 interface props {
     lists: List[] | undefined;
     gameId: string | undefined;
     userGuid: string | undefined;
 }
 
-
 const AddButtonListMenuItem: React.FC<props> = ({ lists, gameId, userGuid }) => {
     const { mutateAsync: updateListMutation } = ListQueries.useUpdateListQuery();
     const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+    
     const handleListMenuItemClick = async (listId: number) => {
         const listToUpdate = lists?.filter(x => x.id === listId) || [];
         const selectedList = listToUpdate[0];
