@@ -2,6 +2,7 @@
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.ReviewLikeServices;
 
 namespace PlaylistApp.Server.Controllers;
@@ -32,5 +33,11 @@ public class ReviewLikeController : Controller
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)
     {
         return await reviewLikeService.RemoveReviewLike(request);
+    }
+
+    [HttpPatch("updatereviewlike")]
+    public async Task<bool> UpdateReviewLike(UpdateReviewLikeRequest request)
+    {
+        return await reviewLikeService.UpdateReviewLike(request);
     }
 }

@@ -1,6 +1,6 @@
 
 import { List } from "@/@types/list";
-import { AddListRequest } from "@/@types/Requests/addListRequest";
+import { AddListRequest } from "@/@types/Requests/AddRequests/addListRequest";
 import { UpdateListRequest } from "@/@types/Requests/UpdateRequests/updateListRequest";
 import axios from "axios";
 

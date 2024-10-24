@@ -1,5 +1,6 @@
 import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLikeRequest";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
+import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { ReviewLikeQueries } from "@/hooks/ReviewLikeQueries";
@@ -20,6 +21,12 @@ const TestPage = () => {
 
   const removeReviewLikeRequest: RemoveReviewLikeRequest = {
     gameReviewId: Number(gameReviewId),
+    userId: usr?.guid ?? "",
+  };
+
+  const updateReviewLikeRequest: UpdateReviewLikeRequest = {
+    gameReviewId: Number(gameReviewId),
+    isLike: false,
     userId: usr?.guid ?? "",
   };
 
@@ -46,6 +53,14 @@ const TestPage = () => {
     isSuccess: isDeletingSuccess,
   } = ReviewLikeQueries.useRemoveReviewLike(removeReviewLikeRequest);
 
+  const {
+    mutate: UpdateReviewLike,
+    data: updatedReviewLike,
+    isPending: isUpdating,
+    isError: isUpdatingError,
+    isSuccess: isUpdatingSuccess,
+  } = ReviewLikeQueries.useUpdateReviewLike(updateReviewLikeRequest);
+
   const handleAddReviewLike = () => {
     AddReviewLike();
   };
@@ -53,6 +68,10 @@ const TestPage = () => {
   const handleDeleteReviewLike = () => {
     RemoveReviewLike();
   };
+
+  const handleUpdateReviewLike = () => {
+    UpdateReviewLike();
+  }
 
   return (
     isAuthenticated &&
@@ -86,6 +105,14 @@ const TestPage = () => {
           {isDeletingError && <p>Failed to remove like from Review.</p>}
           <button onClick={handleDeleteReviewLike}>
             Remove Like from Review
+          </button>
+        </div>
+        <div>
+          {isUpdating && <p>Updating like on Review...</p>}
+          {isUpdatingSuccess && <p>Is updated: {String(updatedReviewLike)}</p>}
+          {isUpdatingError && <p>Failed to update like on Review.</p>}
+          <button onClick={handleUpdateReviewLike}>
+            Update Like on Review
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { AddListRequest } from "@/@types/Requests/addListRequest";
+import { AddListRequest } from "@/@types/Requests/AddRequests/addListRequest";
 import { UpdateListRequest } from "@/@types/Requests/UpdateRequests/updateListRequest";
 import { ListService } from "@/ApiServices/ListService";
 import ListKeys from "@/QueryKeys/ListKeys";

@@ -3,6 +3,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.ReviewLikeServices;
 
@@ -60,12 +61,12 @@ public class ReviewLikeService : IReviewLikeService
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
-        if (!likedGameReview.Any()) 
+        if (!likedGameReview.Any())
         {
             return new List<GameReviewDTO>();
         }
 
-        return likedGameReview.Select(x => x.GameReview.ToDTO()).ToList(); 
+        return likedGameReview.Select(x => x.GameReview.ToDTO()).ToList();
     }
 
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)
@@ -83,6 +84,26 @@ public class ReviewLikeService : IReviewLikeService
         }
 
         context.Remove(reviewLike);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UpdateReviewLike(UpdateReviewLikeRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var reviewLike = await context.ReviewLikes
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.GameReviewId == request.GameReviewId)
+            .FirstOrDefaultAsync();
+
+        if (reviewLike == null || reviewLike.IsLike == request.IsLike)
+        {
+            return false;
+        }
+
+        reviewLike.IsLike = request.IsLike;
+        context.Update(reviewLike);
         await context.SaveChangesAsync();
         return true;
     }

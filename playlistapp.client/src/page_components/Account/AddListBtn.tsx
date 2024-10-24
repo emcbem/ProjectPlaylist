@@ -1,4 +1,4 @@
-import { AddListRequest } from '@/@types/Requests/addListRequest';
+import { AddListRequest } from '@/@types/Requests/AddRequests/addListRequest';
 import { PlusIcon } from '@/assets/plusIcon'
 import { ListQueries } from '@/hooks/ListQueries';
 import { User } from '@auth0/auth0-react';

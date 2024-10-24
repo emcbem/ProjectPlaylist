@@ -3,6 +3,7 @@ import { ReviewLikeService } from "@/ApiServices/ReviewLikeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/ReviewLikeKeys";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
+import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
 
 export const ReviewLikeQueries = {
   useAddReviewLike: (addReviewLikeRequest: AddReviewLikeRequest) => {
@@ -73,5 +74,14 @@ export const ReviewLikeQueries = {
         RemoveReviewLike();
     };
     */
+  },
+  useUpdateReviewLike: (updateReviewLikeRequest: UpdateReviewLikeRequest) => {
+    const queryclient = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        ReviewLikeService.updateReviewLike(updateReviewLikeRequest),
+      onSuccess: () =>
+        queryclient.invalidateQueries({ queryKey: keys.UpdateReviewLike }),
+    });
   },
 };

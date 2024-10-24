@@ -1,3 +1,7 @@
+import { ListGame } from "./listgame";
+import { Platform } from "./platform";
+import { UserGame } from "./usergame";
+
 export interface UserAccount {
     id: number;
     username: string;
@@ -8,6 +12,9 @@ export interface UserAccount {
     authID: string;
     profileURL: string | null;
     guid: string;
+    userGames: UserGame[];
+    gameLists: ListGame[];
+    platforms: Platform[]
 }
 
 export interface UserAccountContextInterface {

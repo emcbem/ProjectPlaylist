@@ -1,6 +1,7 @@
 import { GameReview } from "@/@types/gameReview";
 import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLikeRequest";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
+import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
 import axios from "axios";
 
 export const ReviewLikeService = {
@@ -65,6 +66,29 @@ export const ReviewLikeService = {
       return response.data;
     } catch (error) {
       console.error("Failed to remove like from game review: ", error);
+      throw error;
+    }
+  },
+  updateReviewLike: async (
+    updateReviewLikeRequest: UpdateReviewLikeRequest
+  ) => {
+    if (!updateReviewLikeRequest) {
+      console.error("Update review like request is undefined or empty");
+      throw new Error("Update review like request must be provided");
+    }
+    try {
+      const response = await axios.patch<boolean>(
+        `${import.meta.env.VITE_URL}/ReviewLike/updatereviewlike`,
+        updateReviewLikeRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to update like on review: ", error);
       throw error;
     }
   },
