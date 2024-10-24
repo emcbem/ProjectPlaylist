@@ -1,5 +1,4 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import UserPFP from "../assets/user.svg";
 import {
   Menu,
   MenuHandler,
@@ -8,9 +7,16 @@ import {
 } from "@material-tailwind/react";
 import LogoutButton from "./logout";
 import { Link } from "react-router-dom";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import React from "react";
 
 const Profile: React.FC = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  const { usr } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -18,15 +24,15 @@ const Profile: React.FC = () => {
 
   return (
     isAuthenticated &&
-    user && (
+    usr && (
       <div className="lg:w-[213.69px] flex justify-end relative z-20">
         <div className="flex flex-row flex-shrink-0 h-14 w-14">
           <Menu placement="bottom-start">
             <MenuHandler>
               <img
-                src={user.picture ? user.picture : UserPFP}
-                alt={user.name}
-                className="rounded-full"
+                src={usr.profileURL!}
+                alt={usr.username}
+                className="rounded-full border-2 border-clay-700 bg-clay-600"
               />
             </MenuHandler>
             <MenuList
@@ -39,7 +45,7 @@ const Profile: React.FC = () => {
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
               >
-                Welcome back, {user.name}!
+                Welcome back, {usr.username}!
               </MenuItem>
 
               <hr className="my-3" />
@@ -55,14 +61,16 @@ const Profile: React.FC = () => {
               </Link>
 
               <hr className="my-3" />
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                className="font-bold"
-              >
-                My Library
-              </MenuItem>
+              <Link to="/library" reloadDocument>
+                <MenuItem
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  className="font-bold"
+                >
+                  My Library
+                </MenuItem>
+              </Link>
 
               <hr className="my-3" />
               <MenuItem

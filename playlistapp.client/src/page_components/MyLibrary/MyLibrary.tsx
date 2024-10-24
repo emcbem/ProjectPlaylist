@@ -3,7 +3,7 @@ import { UserGameContext } from '@/contexts/UserGameContext';
 import React, { useState } from 'react'
 import MyLibraryGridView from './MyLibraryGridView';
 import MyLibraryListView from './MyLibraryListView';
-import GridAndListIcons from './GridAndListIcons';
+import GridAndListIcons from '../../individual_components/GridAndListIcons';
 
 const MyLibrary = () => {
     const { userGamesFromUser, isLoading } = React.useContext(UserGameContext) as UserGameContextInterface;
