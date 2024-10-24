@@ -15,9 +15,10 @@ import { UserGameContextProvider } from "./contexts/UserGameContext";
 import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
+import { SearchBarProvider } from "./contexts/SearchBarContext";
 const queryClient = new QueryClient();
 
 function App() {
@@ -30,18 +31,17 @@ function App() {
           <PlatformGameContextProvider>
             <GameContextProvidor>
               <PlatformContextProvider>
-                <Toaster />
-                <ShineBorder
-                  className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
-                  color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
-                  borderWidth={6}
-                  duration={30}
-                >
-                  <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
-                    
-                    <div className="dark:bg-black bg-white w-full">
-                      
-                      <Navbar />
+                <SearchBarProvider>
+                  <Toaster />
+                  <ShineBorder
+                    className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
+                    color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
+                    borderWidth={6}
+                    duration={30}
+                  >
+                    <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
+                      <div className="dark:bg-black bg-white w-full">
+                        <Navbar />
                         <Routes>
                           <Route
                             path="/"
@@ -66,17 +66,18 @@ function App() {
                           <Route path="/library" element={<MyLibrary />} />
                           <Route path="/list/:listId" element={<Playlist />} />
                           <Route
-
                             path="/achievements/:gameId"
-
                             element={<AchievementsPage />}
-
                           />
-                          <Route path="/test/:gameReviewId" element={<TestPage />} />
+                          <Route
+                            path="/test/:userAchievementId"
+                            element={<TestPage />}
+                          />
                         </Routes>
+                      </div>
                     </div>
-                  </div>
-                </ShineBorder>
+                  </ShineBorder>
+                </SearchBarProvider>
               </PlatformContextProvider>
             </GameContextProvidor>
           </PlatformGameContextProvider>

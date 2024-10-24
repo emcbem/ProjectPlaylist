@@ -23,7 +23,8 @@ const SearchBar: React.FC = () => {
       }
       navigate("/search", {
         state: {
-          query
+          query,
+          
         }
       });
     }

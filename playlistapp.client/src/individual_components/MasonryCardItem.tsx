@@ -1,5 +1,5 @@
 import { Game } from "@/@types/game";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 
 const options: Intl.DateTimeFormatOptions = {
