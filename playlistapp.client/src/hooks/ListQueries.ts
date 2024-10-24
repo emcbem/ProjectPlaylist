@@ -14,7 +14,7 @@ export const ListQueries = {
             mutationFn: (newList: AddListRequest) => ListService.AddList(newList),
             onSuccess: () => {
                 toast.success("List added!")
-                queryClient.invalidateQueries({ queryKey: [ListKeys.AddListKey] });
+                queryClient.invalidateQueries({ queryKey: ListKeys.AddListKey });
             },
         });
     },
