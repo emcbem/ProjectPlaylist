@@ -28,7 +28,7 @@ public class ReviewLikeController : Controller
         return await reviewLikeService.GetAllByUser(userId);
     }
 
-    [HttpDelete("removereviewlike")]
+    [HttpPost("removereviewlike")]
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)
     {
         return await reviewLikeService.RemoveReviewLike(request);
