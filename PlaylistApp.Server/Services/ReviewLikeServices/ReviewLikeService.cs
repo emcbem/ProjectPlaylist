@@ -54,19 +54,18 @@ public class ReviewLikeService : IReviewLikeService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var gameReviews = await context.GameReviews
-            .Include(x => x.Game)
-            .Include(x => x.User)
-                .ThenInclude(x => x.UserImage)
+        var likedGameReview = await context.ReviewLikes
+            .Include(x => x.GameReview)
+                .ThenInclude(x => x.Game)
             .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
-        if (!gameReviews.Any()) 
+        if (!likedGameReview.Any()) 
         {
             return new List<GameReviewDTO>();
         }
 
-        return gameReviews.Select(x => x.ToDTO()).ToList(); 
+        return likedGameReview.Select(x => x.GameReview.ToDTO()).ToList(); 
     }
 
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)

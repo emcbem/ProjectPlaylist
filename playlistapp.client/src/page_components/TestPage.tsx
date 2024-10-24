@@ -1,7 +1,7 @@
 import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { ReivewLikeQueries } from "@/hooks/ReviewLikeQueries";
+import { ReviewLikeQueries } from "@/hooks/ReviewLikeQueries";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -23,7 +23,14 @@ const TestPage = () => {
     isPending: isAdding,
     isError: isAddingError,
     isSuccess: isAddingSuccess,
-  } = ReivewLikeQueries.useAddReviewLike(addReviewLikeRequest);
+  } = ReviewLikeQueries.useAddReviewLike(addReviewLikeRequest);
+
+  const {
+    data: allReviewLikes,
+    isPending: isGetting,
+    isError: isGettingError,
+    isSuccess: isGettingSuccess,
+  } = ReviewLikeQueries.useGetAllReviewLikesByUser(usr?.guid ?? "");
 
   const handleAddReviewLike = () => {
     AddReviewLike();
@@ -39,6 +46,17 @@ const TestPage = () => {
           {isAddingSuccess && <p>Is liked: {String(newReviewLike)}</p>}
           {isAddingError && <p>Failed to add like to Review.</p>}
           <button onClick={handleAddReviewLike}>Add Like to Review</button>
+        </div>
+        <div>
+          {isGetting && <p>Getting all review likes for user {usr?.username}...</p>}
+          {isGettingSuccess &&             <div>
+              {allReviewLikes?.map((x) => (
+                <div key={x.id}>
+                  {x.id}: {x.game.title}, Rating: {x.rating}, Text: {x.text}
+                </div>
+              ))}
+            </div>}
+          {isGettingError && <p>Failed to add like to Review.</p>}
         </div>
       </div>
     )
