@@ -1,5 +1,4 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import UserPFP from "../assets/user.svg";
 import {
   Menu,
   MenuHandler,
@@ -62,14 +61,16 @@ const Profile: React.FC = () => {
               </Link>
 
               <hr className="my-3" />
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                className="font-bold"
-              >
-                My Library
-              </MenuItem>
+              <Link to="/library" reloadDocument>
+                <MenuItem
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  className="font-bold"
+                >
+                  My Library
+                </MenuItem>
+              </Link>
 
               <hr className="my-3" />
               <MenuItem
