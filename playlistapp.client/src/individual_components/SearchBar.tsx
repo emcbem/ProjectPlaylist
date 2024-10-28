@@ -1,32 +1,17 @@
-import { useEffect, useState } from "react";
+import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
 const SearchBar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [query, setQuery] = useState<string>(() => {
-    const params = new URLSearchParams(location.search);
-    return params.get("q") || "";
-  });
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setQuery(params.get("q") || "");
-  }, [location]);
+  const searchBarContext = useSearchBarContext();
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (location.pathname === '/search') {
-        navigate(0);
+      if (location.pathname != '/search') {
+        navigate("/search");
       }
-      navigate("/search", {
-        state: {
-          query,
-          
-        }
-      });
     }
   };
 
@@ -50,8 +35,8 @@ const SearchBar: React.FC = () => {
           className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white dark:text-white"
           placeholder=""
           onKeyDown={handleKeyPress}
-          onChange={(e) => setQuery(e.target.value)}
-          value={query}
+          onChange={(e) => searchBarContext.setSearchQuery(e.target.value)}
+          value={searchBarContext.searchQuery}
         />
       </div>
     </div>

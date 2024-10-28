@@ -2,7 +2,10 @@ import { SearchBarContextInterface } from "@/@types/searchbar";
 import React, { FC, ReactNode, useState } from "react";
 
 export const SearchBarContext =
-  React.createContext<SearchBarContextInterface | null>(null);
+  React.createContext<SearchBarContextInterface>({
+    searchQuery: "",
+    setSearchQuery: () => {}
+  });
 
 export const SearchBarProvider: FC<{ children: ReactNode }> = ({
   children,

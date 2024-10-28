@@ -47,7 +47,7 @@ public class GameController : Controller
     }
 
     [HttpPost("filtergamesbyrequest")]
-    public async Task<List<GameDTO>> FilterGamesByRequest(GetGamesRequest request)
+    public async Task<List<GameDTO>> FilterGamesByRequest([FromBody] GetGamesRequest request)
     {
         return await gameService.GetGamesByFilter(request);
     }

@@ -56,17 +56,19 @@ export const GameService = {
     }
   },
 
-  GetFilteredGamesByRequest: async (request: GetGamesRequest) => {
-    console.log("Getting games from a request");
+  GetFilteredGamesByRequest: async (request: GetGamesRequest): Promise<Game[]> => {
+    console.log("Getting games from a request with title: " + request.title);
+    console.log(request)
     try {
       const response = await axios.post<Game[]>(
-        `${import.meta.env.VITE_URL}/Game/filtergamesbyrequest`,
-        {
-          params: {
+        `${import.meta.env.VITE_URL}/game/filtergamesbyrequest`,
+        
+          
             request
-          }
-        }
+          
+        
       )
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Failed to fetch games with query:", error);
