@@ -6,7 +6,6 @@ import { UserGameContext } from '../../contexts/UserGameContext';
 import { UserGameContextInterface } from '../../@types/usergame';
 import { UserAccountContext } from '@/contexts/UserAccountContext';
 import { UserAccountContextInterface } from '@/@types/userAccount';
-import HorizontalRule from '../../individual_components/HorizontalRule';
 import PlaylistLists from './PlaylistLists';
 import LibraryLoading from './LibraryViewsComponents/LibraryLoading';
 import LibraryList from './LibraryViewsComponents/LibraryList';
@@ -25,7 +24,7 @@ const Account = () => {
         user && (
             <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center" >
                 <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
-                    <HorizontalRule />
+                    
 
                     <div className="flex flex-wrap">
                         <img className="rounded-full" src={user.picture} />
@@ -47,9 +46,7 @@ const Account = () => {
                     {!isLoading && userGamesFromUser.length <= 0 &&
                         <LibraryListNoGames />
                     }
-                    
-
-                    
+                
                     <PlaylistLists />
                 </div>
 
