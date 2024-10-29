@@ -12,7 +12,7 @@ const LibraryList: FC<props> = ({ userGamesFromUser }) => {
             <div className="flex flex-nowrap overflow-hidden relative">
                 {userGamesFromUser && (
                     userGamesFromUser.slice(0, 5).map((ug, key) => (
-                        <div key={key} className="m-2">
+                        <div key={key} className="m-2 flex-shrink-0">
                             <img src={ug.platformGame.game.coverUrl} width={150} style={{ aspectRatio: '3 / 4' }} className="object-cover" />
                         </div>
                     )))

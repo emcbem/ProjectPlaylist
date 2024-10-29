@@ -26,10 +26,10 @@ const PlaylistLists = () => {
                 <AddListBtn usr={usr} />
             </div>
 
-            <div className="flex flex-row">
+            <div className="flex flex-row overflow-x-auto flex-wrap">
                 {lists && lists.map((list, key) => (
                     <div className="xl:w-1/5 lg:w-1/5 md:w-1/2" key={key}>
-                        <div className="relative mx-5">
+                        <div className="relative mx-5 mb-4">
                             <div className="grid grid-cols-2 gap-4">
                                 {list.games.concat(Array(4).fill(fillGame)).slice(0, 4).map((ug, key) => (
                                     <div key={key} className="relative">
