@@ -1,7 +1,8 @@
 const UserAchievementLikeKeys = {
     AddUserAchievementLike: ["UserAchievementLike", "AddUserAchievementLike"] as const,
     GetUserAchievementLikeFromUserId: ["UserAchievementLike", "GetUserAchievementLikeFromUserId"] as const,
-    RemoveAchievementLike: ["UserAchievementLike", "RemoveUserAchievementLike"]
+    RemoveUserAchievementLike: ["UserAchievementLike", "RemoveUserAchievementLike"] as const,
+    UpdateUserAchievementLike: ["UserAchievementLike", "UpdateUserAchievementLike"] as const,
 }
 
 export default UserAchievementLikeKeys
