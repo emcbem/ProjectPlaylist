@@ -3,6 +3,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.ReviewLikeServices;
@@ -67,6 +68,32 @@ public class ReviewLikeService : IReviewLikeService
         }
 
         return likedGameReview.Select(x => x.GameReview.ToDTO()).ToList();
+    }
+
+    public async Task<ReviewLikeDTO> GetReviewLike(GetReviewLikeRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == request.UserId)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return new ReviewLikeDTO();
+        }
+
+        var reviewLike = await context.ReviewLikes
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.GameReviewId == request.GameReviewId)
+            .FirstOrDefaultAsync();
+
+        if (reviewLike is null)
+        {
+            return new ReviewLikeDTO();
+        }
+
+        return reviewLike.ToDTO();
     }
 
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)

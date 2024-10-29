@@ -1,7 +1,9 @@
 import { GameReview } from "@/@types/gameReview";
 import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLikeRequest";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
+import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLikeRequest";
 import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
+import { ReviewLike } from "@/@types/reviewLike";
 import axios from "axios";
 
 export const ReviewLikeService = {
@@ -89,6 +91,27 @@ export const ReviewLikeService = {
       return response.data;
     } catch (error) {
       console.error("Failed to update like on review: ", error);
+      throw error;
+    }
+  },
+  getReviewLike: async (getReviewLikeRequest: GetReviewLikeRequest) => {
+    if (!getReviewLikeRequest) {
+      console.error("Get review like request is undefined or empty");
+      throw new Error("Get review like request must be provided");
+    }
+    try {
+      const response = await axios.post<ReviewLike>(
+        `${import.meta.env.VITE_URL}/ReviewLike/getreviewlike`,
+        getReviewLikeRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get review like");
       throw error;
     }
   },
