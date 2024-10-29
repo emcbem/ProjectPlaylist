@@ -31,7 +31,7 @@ const Playlist = () => {
           <EditListComponent list={list} />
           <div className="flex flex-row justify-left align-middle mt-4 mb-3">
             <p className="me-8 text-xl text-clay-900">{list?.ownerName}</p>
-            <p className="text-xl text-clay-900">{list?.games.length} Games</p>
+            <p className="text-xl text-clay-900">{list?.games.length} {list?.games.length === 1 ? "Game" : "Games"}</p>
           </div>
           <div className='ms-auto w-full'>
             <GridAndListIcons isListView={isListView} setIsListView={setIsListView} />

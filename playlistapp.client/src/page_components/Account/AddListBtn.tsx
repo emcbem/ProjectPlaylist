@@ -33,7 +33,7 @@ const AddListBtn: FC<Props> = ({ usr }) => {
     }
 
     return (
-        <div className="flex flex-wrap bg-gray-300 p-1 rounded-full w-fit ">
+        <div className="flex flex-wrap bg-gray-300 p-1 rounded-full w-fit h-fit ">
             <div id="dropdownDefaultButton" role="button" className="p-3 hover:scale-110" onClick={(event) => {
                 event.stopPropagation();
                 setDropDownIsVisible(!dropDownIsVisible);
