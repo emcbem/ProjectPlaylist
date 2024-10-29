@@ -3,6 +3,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.UserAchievementLikeServices;
@@ -88,6 +89,25 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         }
 
         return userAchievements.ToList();
+    }
+
+    public async Task<UserAchievementLikeDTO> GetUserAchievementLike(GetUserAchievementLikeRequest getRequest)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var userAchievementLike = await context.AchievementLikes
+            .Include(x => x.UserAchievement)
+            .Include(x => x.User)  
+            .Where(x => x.User.Guid == getRequest.UserId)
+            .Where(x => x.UserAchievementId == getRequest.UserAchievementId)
+            .FirstOrDefaultAsync();
+
+        if (userAchievementLike is null)
+        {
+            return new UserAchievementLikeDTO();
+        }
+
+        return userAchievementLike.ToDTO();
     }
 
     public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest removeRequest)

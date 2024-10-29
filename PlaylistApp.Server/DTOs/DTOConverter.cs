@@ -313,4 +313,21 @@ public static class DTOConverter
             User = reviewLike.User.ToDTO()
         };
     }
+
+    public static UserAchievementLikeDTO ToDTO(this AchievementLike userAchievementLike)
+    {
+        if (userAchievementLike is null)
+        {
+            return new UserAchievementLikeDTO();
+        }
+
+        return new UserAchievementLikeDTO()
+        {
+            Id = userAchievementLike.Id,
+            DateLiked = userAchievementLike.DateLiked,
+            IsLike = userAchievementLike.IsLike,
+            UserAchievementId = userAchievementLike.UserAchievementId,
+            UserId = userAchievementLike.User.Guid,
+        };
+    }
 }

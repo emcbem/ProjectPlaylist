@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserAchievementLikeKeys";
 import { RemoveUserAchievementLikeRequest } from "@/@types/Requests/DeleteRequests/removeUserAchievementLikeRequest";
 import { UpdateUserAchievementLikeRequest } from "@/@types/Requests/UpdateRequests/updateUserAchievementLikeRequest";
+import { GetUserAchievementLikeRequest } from "@/@types/Requests/GetRequests/getUserAchievementLike";
 
 export const UserAchievementLikeQueries = {
   useAddUserAchievementLike: (
@@ -129,5 +130,16 @@ export const UserAchievementLikeQueries = {
       updateAchievementLike();
     }
     */
+  },
+  useGetuserAchievementLike: (
+    getUserAchievementLikeRequest: GetUserAchievementLikeRequest
+  ) => {
+    return useQuery({
+      queryFn: () =>
+        UserAchievementLikeService.GetUserAchievementLike(
+          getUserAchievementLikeRequest
+        ),
+      queryKey: keys.GetUserAchievementLike,
+    });
   },
 };
