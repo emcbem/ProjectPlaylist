@@ -19,14 +19,14 @@ export const GameContextProvidor: FC<{ children: ReactNode }> = ({
     queryFn: GameService.GetAllGames,
   });
 
-  const {
-    data: GetGameById,
-    isLoading: gettingGameByIdLoading,
-    error: gettingGameByIdError,
-  } = useQuery({
-    queryKey: ["GameById"],
-    queryFn: () => GameService.GetGameById(0)
-  });
+  // const {
+  //   data: GetGameById,
+  //   isLoading: gettingGameByIdLoading,
+  //   error: gettingGameByIdError,
+  // } = useQuery({
+  //   queryKey: ["GameById"],
+  //   queryFn: () => GameService.GetGameById(1)
+  // });
 
   const { data: getGamesByQuery, isLoading: gettingGamesByQueryLoading, error: getGamesByQueryError } = useQuery({
     queryKey: ["Game"],
@@ -39,10 +39,10 @@ export const GameContextProvidor: FC<{ children: ReactNode }> = ({
     <GameContext.Provider
       value={{
         games: AllGames ?? [],
-        game: GetGameById ?? undefined,
+        game: undefined,
         gamesByQuery: getGamesByQuery ?? [],
-        error: gettingAllGamesError?.message ?? gettingGameByIdError?.message ?? getGamesByQueryError?.message,
-        isLoading: gettingAllGamesLoading ?? gettingGameByIdLoading ?? gettingGamesByQueryLoading
+        error: gettingAllGamesError?.message ?? "" ?? getGamesByQueryError?.message,
+        isLoading: gettingAllGamesLoading ?? false ?? gettingGamesByQueryLoading
       }}
     >
       {children}

@@ -25,6 +25,7 @@ export const UserGameContextProvider: FC<{ children: ReactNode }> = ({
   } = useQuery({
     queryKey: ["UserGameByUser"],
     queryFn: () => UserGameService.GetAllUserGamesByUser(usr?.guid),
+    enabled: !!usr?.guid,
   });
 
   const addUserGame = useMutation({

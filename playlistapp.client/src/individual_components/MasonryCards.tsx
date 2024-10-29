@@ -39,8 +39,8 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
           }}
         >
           <Masonry gutter="10px">
-            {games.map((g) => (
-              <MasonryCardItem game={g} />
+            {games.map((g, key) => (
+              <MasonryCardItem game={g} key={key} />
             ))}
           </Masonry>
         </ResponsiveMasonry>

@@ -59,9 +59,9 @@ const Tabs = () => {
   return (
     <div className="w-full">
       <ul className="flex space-x-2">
-        {tabs.map((tab) => (
+        {tabs.map((tab, key) => (
           <Tab
-            key={tab}
+            key={key}
             TabName={tab}
             isActive={tab === activeTab}
             onClick={() => setActiveTab(tab)}
@@ -76,8 +76,8 @@ const Tabs = () => {
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
               {AllGameReviewsForGame && AllGameReviewsForGame?.length > 0 ? (
-                AllGameReviewsForGame?.map((review) => (
-                  <Review review={review} />
+                AllGameReviewsForGame?.map((review, key) => (
+                  <Review review={review} key={key} />
                 ))
               ) : (
                 <p>No reviews yet</p>
