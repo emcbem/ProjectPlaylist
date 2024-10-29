@@ -25,8 +25,8 @@ export const GameQueries = {
   useFilterGameQuery: (request: GetGamesRequest) => {
     return useQuery(
       {
-        queryKey: keys.QueriedGames,
-        queryFn: () => GameService.GetFilteredGamesByRequest(request)
+        queryKey: keys.QueriedGames(request),
+        queryFn: () => GameService.GetFilteredGamesByRequest(request),
       }
     )
   }

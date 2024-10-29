@@ -9,7 +9,7 @@ interface CardGamesListProps {
 const CardGamesList: FC<CardGamesListProps> = ({ games }) => {
     return (
         <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-2">
-            {games.map((g, key) => (
+            {games.map((g, key) => {return (
                 <div key={key} className="w-50 rounded border-2 border-[#111111] grid grid-cols-5 m-5 dark:border-[#ffffff]">
                     <div className="w-full h-full col-span-2">
                         <img className="img img-fluid lg:w-40 lg:h-50 sm:w-40 sm:h-48 w-24 h-40 object-cover" src={g.coverUrl} />
@@ -40,7 +40,7 @@ const CardGamesList: FC<CardGamesListProps> = ({ games }) => {
                         </div> */}
                     </div>
                 </div>
-            ))}
+            )})}
         </div>
     )
 }
