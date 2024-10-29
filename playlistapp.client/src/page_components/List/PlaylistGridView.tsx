@@ -7,6 +7,15 @@ interface props {
 }
 
 const PlaylistGridView: FC<props> = ({ listGames }) => {
+
+    if (!listGames || listGames.length <= 0) {
+        return (
+            <div>
+                <p className="text-lg">Looks like you don't have any games added to this playlist yet...</p>
+            </div>
+        )
+    }
+
     return (
         <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-3 grid-cols-3 gap-1">
             {listGames && listGames?.map((g, key) => (

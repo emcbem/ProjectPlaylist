@@ -8,7 +8,6 @@ import { UserAccountContext } from '@/contexts/UserAccountContext';
 import { UserAccountContextInterface } from '@/@types/userAccount';
 import HorizontalRule from '../../individual_components/HorizontalRule';
 import PlaylistLists from './PlaylistLists';
-import loadingDotsGif from '@/assets/LoadingIcons/LoadingDots.gif';
 import LibraryLoading from './LibraryViewsComponents/LibraryLoading';
 import LibraryList from './LibraryViewsComponents/LibraryList';
 import LibraryListNoGames from './LibraryViewsComponents/LibraryListNoGames';
@@ -25,8 +24,6 @@ const Account = () => {
         isAuthenticated &&
         user && (
             <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center" >
-
-                <img src={loadingDotsGif} width={20} />
                 <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
                     <HorizontalRule />
 
@@ -52,7 +49,7 @@ const Account = () => {
                     }
                     
 
-                    <p className="mt-8 text-6xl">Your Playlists</p>
+                    
                     <PlaylistLists />
                 </div>
 
