@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/ReviewLikeKeys";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
 import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
+import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLikeRequest";
 
 export const ReviewLikeQueries = {
   useAddReviewLike: (addReviewLikeRequest: AddReviewLikeRequest) => {
@@ -83,5 +84,43 @@ export const ReviewLikeQueries = {
       onSuccess: () =>
         queryclient.invalidateQueries({ queryKey: keys.UpdateReviewLike }),
     });
+    /*
+      const updateReviewLikeRequest: UpdateReviewLikeRequest = {
+      gameReviewId: Number(gameReviewId),
+      isLike: false,
+      userId: usr?.guid ?? "",
+    };
+
+      const {
+      mutate: UpdateReviewLike,
+      data: updatedReviewLike,
+      isPending: isUpdating,
+      isError: isUpdatingError,
+      isSuccess: isUpdatingSuccess,
+    } = ReviewLikeQueries.useUpdateReviewLike(updateReviewLikeRequest);
+
+      const handleUpdateReviewLike = () => {
+      UpdateReviewLike();
+    }
+    */
+  },
+  useGetReviewLike: (getReviewLikeRequest: GetReviewLikeRequest) => {
+    return useQuery({
+      queryFn: () => ReviewLikeService.getReviewLike(getReviewLikeRequest),
+      queryKey: keys.GetReviewLike,
+    });
+    /*
+      const getReviewLikeRequest: GetReviewLikeRequest = {
+      gameReviewId: Number(gameReviewId),
+      userId: usr?.guid ?? "",
+    };
+
+      const {
+      data: reviewLike,
+      isError: isFetchingError,
+      isPending: isFetching,
+      isSuccess: isFetchingSuccess,
+    } = ReviewLikeQueries.useGetReviewLike(getReviewLikeRequest);
+    */
   },
 };

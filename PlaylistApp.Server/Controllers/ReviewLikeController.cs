@@ -2,6 +2,7 @@
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.ReviewLikeServices;
 
@@ -39,5 +40,11 @@ public class ReviewLikeController : Controller
     public async Task<bool> UpdateReviewLike(UpdateReviewLikeRequest request)
     {
         return await reviewLikeService.UpdateReviewLike(request);
+    }
+
+    [HttpPost("getreviewlike")]
+    public async Task<ReviewLikeDTO> GetReviewLike(GetReviewLikeRequest request)
+    {
+        return await reviewLikeService.GetReviewLike(request);
     }
 }
