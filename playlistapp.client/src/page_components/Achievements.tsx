@@ -12,13 +12,12 @@ const AchievementsPage: React.FC = () => {
   console.log("pfg", platformGames);
 
   return (
-    <div className="flex-grow w-full dark:text-white text-black">
+    <div className=" dark:text-white text-black">
       <div className="">
         {platformGames ? (
           platformGames.map((item, index) => (
             <AchievementPlatfrom
               key={index}
-              gameId={Number(gameId)}
               platformGame={item}
               showAddButton={true}
             />

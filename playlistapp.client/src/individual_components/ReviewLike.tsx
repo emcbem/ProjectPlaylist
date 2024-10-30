@@ -73,7 +73,7 @@ const ReviewLike: FC<{
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`w-5 h-5 mx-2 transition-transform duration-300 hover:translate-y-[-8px] hover:fill-green-600 cursor-pointer ${
+          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 hover:translate-y-[-8px] hover:fill-green-600 cursor-pointer ${
             usr && reviewLike?.isLike == true
               ? "translate-y-[-8px] fill-green-600"
               : "fill-black dark:fill-white"
@@ -93,7 +93,7 @@ const ReviewLike: FC<{
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`w-5 h-5 mx-2 transition-transform duration-300 hover:translate-y-[8px] hover:fill-red-600 cursor-pointer transform -scale-x-100 ${
+          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 hover:translate-y-[8px] hover:fill-red-600 cursor-pointer transform -scale-x-100 ${
             usr && reviewLike?.isLike == false
               ? "translate-y-[8px] fill-red-600"
               : "fill-black dark:fill-white"

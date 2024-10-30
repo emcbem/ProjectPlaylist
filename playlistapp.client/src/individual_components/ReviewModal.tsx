@@ -33,7 +33,7 @@ const ReviewModal = () => {
   const handleChange = (_: Event, newValue: number | number[]) => {
     setVal(newValue as number);
   };
-  
+
   // MUTATION HERE!!
   const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(
     review!,
@@ -71,6 +71,7 @@ const ReviewModal = () => {
       <button
         onClick={openModal}
         className="rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
+        // className="rounded-md bg-clay-200 dark:bg-clay-600 sm:py-2 px-1 sm:px-4 sm:text-base w-28 h-8 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
         type="button"
       >
         Leave a review
