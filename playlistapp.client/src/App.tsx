@@ -11,7 +11,6 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { PlatformContextProvider } from "./contexts/PlatformContext";
 import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
-import { UserGameContextProvider } from "./contexts/UserGameContext";
 import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
 import UserViewGame from "./page_components/UserViewGame";
@@ -27,7 +26,6 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserAccountContextProvider>
-        <UserGameContextProvider>
           <PlatformGameContextProvider>
             <GameContextProvidor>
               <PlatformContextProvider>
@@ -81,7 +79,6 @@ function App() {
               </PlatformContextProvider>
             </GameContextProvidor>
           </PlatformGameContextProvider>
-        </UserGameContextProvider>
       </UserAccountContextProvider>
     </QueryClientProvider>
   );

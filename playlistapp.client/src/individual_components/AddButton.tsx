@@ -4,13 +4,11 @@ import {
 } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserGameContextInterface } from "@/@types/usergame";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { PlatformGameContext } from "@/contexts/PlatformGameContext";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserGameContext } from "@/contexts/UserGameContext";
 import {
   Menu,
   MenuHandler,
@@ -23,6 +21,7 @@ import { useState } from "react";
 import { ListQueries } from "@/hooks/ListQueries";
 import loadingDotsGif from "../assets/LoadingIcons/icons8-3-dots.gif";
 import AddButtonListMenuItem from "./AddButtonListMenuItem";
+import { UserGameQueries } from "@/hooks/UserGameQueries";
 
 interface props {
   gameId: string | undefined;
@@ -32,31 +31,29 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [openMenu, setOpenMenu] = React.useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformGame>();
+  const [addUserGameRequest, setAddUserGameRequest] = useState<AddUserGameRequest>();
 
   const { mutatePlatformGames } = React.useContext(
     PlatformGameContext
   ) as PlatformGameContextInterface;
 
-  const { AddUserGame } = React.useContext(
-    UserGameContext
-  ) as UserGameContextInterface;
-
-  const { usr } = React.useContext(
+  const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { data: lists, isLoading: listIsLoading } =
-    ListQueries.useGetListsByUserId(usr?.guid ?? "");
+  const { mutateAsync: AddUserGame } = UserGameQueries.useAddUserGame(addUserGameRequest);
 
-  const handleMenuItemClick = async (platformId: number) => {
-    if (usr) {
-      if (platformId && usr.guid) {
-        const newAddUserGameRequest: AddUserGameRequest = {
-          userId: usr.guid,
-          platformGameId: platformId,
-        };
-        await AddUserGame(newAddUserGameRequest);
-      }
+  const { data: lists, isLoading: listIsLoading } =
+    ListQueries.useGetListsByUserId(userGuid ?? "");
+
+  const handleMenuItemClick = async (platformGameId: number) => {
+    if (platformGameId && usr && usr.guid) {
+      const newAddUserGameRequest: AddUserGameRequest = {
+        userId: usr.guid,
+        platformGameId: platformGameId,
+      };
+      setAddUserGameRequest(newAddUserGameRequest)
+      await AddUserGame();
     }
   };
 
@@ -88,9 +85,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
               onMouseLeave={() => setIsHovered(false)}
             >
               <div>
-                <div className="text-2xl font-extrabold h-fit">
-                  Add
-                </div>
+                <div className="text-2xl font-extrabold h-fit">Add</div>
               </div>
               <div className="relative inline-block">
                 <Plus height={20} width={20} />
@@ -196,7 +191,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
           <AddButtonListMenuItem
             lists={lists}
             gameId={gameId}
-            userGuid={usr?.guid}
+            userGuid={userGuid}
           />
         </MenuList>
       </Menu>

@@ -11,6 +11,7 @@ export const UserAccountContext = React.createContext<UserAccountContextInterfac
 
 export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const { user } = useAuth0();
+    // console.log("User from auth0", user)
 
     const [storedUserGuid, setStoredUserGuid] = useSessionStorage<string | undefined>("userGuid", undefined);
 
@@ -20,6 +21,7 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({ childr
         queryKey: ["UserAccount"],
         queryFn: () => UserAccountService.GetUserByUsername(user?.email),
     })
+    // console.log("User from query", data)
 
     // update session storage
     useEffect(() => {

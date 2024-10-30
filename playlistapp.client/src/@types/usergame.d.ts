@@ -1,5 +1,4 @@
 import { PlatformGame } from "./platformGame";
-import { AddUserGameRequest } from "./Requests/AddRequests/addUserGameRequest";
 import { UserAccount } from "./userAccount";
 
 export interface UserGame {
@@ -8,11 +7,4 @@ export interface UserGame {
     timePlayed: number,
     user: UserAccount,
     datAdded: Date,
-}
-
-export interface UserGameContextInterface {
-    userGamesFromUser: UserGame[];
-    error: string | undefined;
-    isLoading: boolean;
-    AddUserGame: (gameRequest: AddUserGameRequest) => Promise<UserGame>;
 }
