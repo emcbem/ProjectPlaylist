@@ -34,4 +34,18 @@ export const PlatformGameService = {
       throw error;
     }
   },
+  GetPlatformGamesById: async (platformGameId: number) => {
+    try {
+      const response = await axios.get<PlatformGame[]>(
+        `${
+          import.meta.env.VITE_URL
+        }/PlatformGame/getplatformgamebyid/${platformGameId}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get platform game by platform game Id", error);
+      throw error;
+    }
+  },
 };

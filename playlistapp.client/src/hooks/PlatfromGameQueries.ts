@@ -9,4 +9,10 @@ export const PlatformGameQueries = {
       queryFn: () => PlatformGameService.GetAllPlatfromGamesByGameId(gameId),
     });
   },
+  useGetPlatformGamesById: (platformGameId: number) => {
+    return useQuery({
+      queryKey: keys.PlatformGameByGameId,
+      queryFn: () => PlatformGameService.GetPlatformGamesById(platformGameId),
+    });
+  },
 };
