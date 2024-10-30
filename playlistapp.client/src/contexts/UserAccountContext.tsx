@@ -10,11 +10,13 @@ export const UserAccountContext = React.createContext<UserAccountContextInterfac
 
 export const UserAccountContextProvider: FC<{children: ReactNode}> = ({children}) => {
     const { user } = useAuth0();
+    // console.log("User from auth0", user)
 
     const {data, isLoading, error} = useQuery({
         queryKey: ["UserAccount"],
         queryFn: () => UserAccountService.GetUserByUsername(user?.email), 
     })
+    // console.log("User from query", data)
 
     return (
         <UserAccountContext.Provider value={{usr: data, error: error?.message, isLoading}}>
