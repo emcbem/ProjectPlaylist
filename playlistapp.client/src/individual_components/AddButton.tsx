@@ -1,16 +1,10 @@
-import {
-  PlatformGame,
-  PlatformGameContextInterface,
-} from "@/@types/platformGame";
+import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserGameContextInterface } from "@/@types/usergame";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { PlatformGameContext } from "@/contexts/PlatformGameContext";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserGameContext } from "@/contexts/UserGameContext";
 import {
   Menu,
   MenuHandler,
@@ -21,9 +15,11 @@ import { ChevronUpIcon } from "@heroicons/react/24/solid";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { ListQueries } from "@/hooks/ListQueries";
-import loadingDotsGif from '../assets/LoadingIcons/icons8-3-dots.gif';
+import loadingDotsGif from "../assets/LoadingIcons/icons8-3-dots.gif";
 import AddButtonListMenuItem from "./AddButtonListMenuItem";
-
+import { UserGameQueries } from "@/hooks/UserGameQueries";
+import { PlatformGameQueries } from "@/hooks/PlatfromGameQueries";
+import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGameRequest";
 
 interface props {
   gameId: string | undefined;
@@ -33,36 +29,37 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [openMenu, setOpenMenu] = React.useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformGame>();
+  const [addUserGameRequest, setAddUserGameRequest] =
+    useState<AddUserGameRequest>();
+  const [platformGameRequest] = useState<PlatformGameRequest>({
+    Filter: "",
+    PlatformId: 1,
+  });
+  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
-  const { mutatePlatformGames } = React.useContext(
-    PlatformGameContext
-  ) as PlatformGameContextInterface;
-
-  const { AddUserGame } = React.useContext(
-    UserGameContext
-  ) as UserGameContextInterface;
-
-  const { usr } = React.useContext(
+  const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { data: lists, isLoading: listIsLoading } = ListQueries.useGetListsByUserId(usr?.guid ?? "");
+  const { mutateAsync: AddUserGame } =
+    UserGameQueries.useAddUserGame(addUserGameRequest);
 
+  const { mutateAsync: mutatePlatformGames } =
+    PlatformGameQueries.useGetAllPlatformGames(platformGameRequest);
 
-  const handleMenuItemClick = async (platformId: number) => {
-    if (usr) {
-      if (platformId && usr.guid) {
-        const newAddUserGameRequest: AddUserGameRequest = {
-          userId: usr.guid,
-          platformGameId: platformId,
-        };
-        await AddUserGame(newAddUserGameRequest);
-      }
+  const { data: lists, isLoading: listIsLoading } =
+    ListQueries.useGetListsByUserId(userGuid ?? "");
+
+  const handleMenuItemClick = async (platformGameId: number) => {
+    if (platformGameId && usr && usr.guid) {
+      const newAddUserGameRequest: AddUserGameRequest = {
+        userId: usr.guid,
+        platformGameId: platformGameId,
+      };
+      setAddUserGameRequest(newAddUserGameRequest);
+      await AddUserGame();
     }
   };
-
-
-  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
   useEffect(() => {
     PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
@@ -73,10 +70,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   }, []);
 
   useEffect(() => {
-    mutatePlatformGames({
-      filter: "",
-      platformID: 1,
-    });
+    mutatePlatformGames();
   }, []);
 
   return (
@@ -85,20 +79,12 @@ const AddButton: React.FC<props> = ({ gameId }) => {
         <MenuHandler>
           <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start 
-            2xl:w-44 w-fit 
-            md:h-12 h-2
-            justify-center"
+              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start w-44 h-12 justify-center"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
               <div>
-                {/* <div className="2xl:text-3xl xl:text-xl text-lg font-extrabold md:block hidden h-fit">
-                  Save to
-                </div> */}
-                <div className="2xl:text-2xl xl:text-3xl text-xl font-extrabold h-fit">
-                  Add
-                </div>
+                <div className="text-2xl font-extrabold h-fit">Add</div>
               </div>
               <div className="relative inline-block">
                 <Plus height={20} width={20} />
@@ -149,14 +135,16 @@ const AddButton: React.FC<props> = ({ gameId }) => {
               {platformGames
                 .filter((x) => x.game.id == Number(gameId))
                 .map((x, index) => (
-                  <div key={x.platformId}>
+                  <div key={index}>
                     <MenuItem
                       placeholder={undefined}
                       onPointerEnterCapture={undefined}
                       onPointerLeaveCapture={undefined}
                       className="font-bold"
-                      key={x.platformId}
-                      onClick={() => {
+                      key={x.platform.id}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
                         setSelectedPlatform(
                           platformGames.find((pGame) => x.id == pGame.id)
                         );
@@ -187,17 +175,23 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             Add to My Library
           </MenuItem>
           <hr className="my-3" />
-          {listIsLoading && <MenuItem
-            disabled={true}
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-            className={`font-bold text-gray-900`}
-            onClick={() => { }}
-          >
-            <img src={loadingDotsGif} width={20} />
-          </MenuItem>}
-          <AddButtonListMenuItem lists={lists} gameId={gameId} userGuid={usr?.guid} />
+          {listIsLoading && (
+            <MenuItem
+              disabled={true}
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+              className={`font-bold text-gray-900`}
+              onClick={() => { }}
+            >
+              <img src={loadingDotsGif} width={20} />
+            </MenuItem>
+          )}
+          <AddButtonListMenuItem
+            lists={lists}
+            gameId={gameId}
+            userGuid={userGuid}
+          />
         </MenuList>
       </Menu>
     </>

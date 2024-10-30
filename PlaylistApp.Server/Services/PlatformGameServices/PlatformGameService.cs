@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IGDB.Models;
+using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.GetRequests;
@@ -40,5 +41,23 @@ public class PlatformGameService : IPlatformGameService
             .ToListAsync();
 
         return platformGames.Select(x => x.ToDTO()).ToList();
+    }
+
+    public async Task<PlatformGameDTO> GetPlatformGamesById(int platformGameId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var platformGame = await context.PlatformGames
+            .Where(x => x.Id == platformGameId)
+            .Include(x => x.Game)
+            .Include(x => x.Platform)
+            .FirstOrDefaultAsync();
+
+        if (platformGame == null)
+        {
+            return new PlatformGameDTO();
+        }
+
+        return platformGame.ToDTO();
     }
 }

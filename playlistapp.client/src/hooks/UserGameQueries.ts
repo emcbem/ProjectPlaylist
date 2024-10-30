@@ -1,6 +1,8 @@
 import { UserGameService } from "@/ApiServices/UserGameService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserGameKeys";
+import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
+import { updateUserGameRequest } from "@/@types/Requests/UpdateRequests/updateUserGameRequest";
 
 export const UserGameQueries = {
   useGetAllUserGamesByUserGameIdQuery: (userGameId: number) => {
@@ -13,7 +15,6 @@ export const UserGameQueries = {
     const { data: userGameFromGame, isLoading, error } = useGetAllUserGamesByGameQuery(Number(gameId));
     */
   },
-
   useDeleteUserGame: () => {
     const queryClient = useQueryClient();
 
@@ -37,19 +38,18 @@ export const UserGameQueries = {
     };
     */
   },
-
-  useUpdateUserGame: () => {
+  useUpdateUserGame: (updateUserGameRequest: updateUserGameRequest) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: UserGameService.UpdateUserGame,
+      mutationFn: () => UserGameService.UpdateUserGame(updateUserGameRequest),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.UpdateUserGame})
-        console.log("User game updated successfully")
+        queryClient.invalidateQueries({ queryKey: keys.UpdateUserGame });
+        console.log("User game updated successfully");
       },
       onError: (error) => {
-        console.error("Error updating user game: ", error)
-      }
+        console.error("Error updating user game: ", error);
+      },
     });
     /*
     const { mutate: updateUserGame, isPending: isUpdating } =
@@ -67,5 +67,21 @@ export const UserGameQueries = {
     }
   };
     */
-  }
+  },
+  useGetAllUserGamesByUser: (userId: string) => {
+    return useQuery({
+      queryFn: () => UserGameService.GetAllUserGamesByUser(userId),
+      queryKey: keys.GetAllUserGamesByUser,
+    });
+  },
+  useAddUserGame: (addUserGameRequest: AddUserGameRequest | undefined) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: () => UserGameService.AddUserGame(addUserGameRequest),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.AddUserGame });
+      },
+    });
+  },
 };

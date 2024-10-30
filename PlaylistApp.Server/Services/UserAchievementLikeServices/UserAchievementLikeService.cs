@@ -3,6 +3,8 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.UserAchievementLikeServices;
 
@@ -89,6 +91,25 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         return userAchievements.ToList();
     }
 
+    public async Task<UserAchievementLikeDTO> GetUserAchievementLike(GetUserAchievementLikeRequest getRequest)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var userAchievementLike = await context.AchievementLikes
+            .Include(x => x.UserAchievement)
+            .Include(x => x.User)  
+            .Where(x => x.User.Guid == getRequest.UserId)
+            .Where(x => x.UserAchievementId == getRequest.UserAchievementId)
+            .FirstOrDefaultAsync();
+
+        if (userAchievementLike is null)
+        {
+            return new UserAchievementLikeDTO();
+        }
+
+        return userAchievementLike.ToDTO();
+    }
+
     public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest removeRequest)
     {
         using var context = dbContextFactory.CreateDbContext();
@@ -114,6 +135,39 @@ public class UserAchievementLikeService : IUserAchievementLikeService
         }
 
         context.AchievementLikes.Remove(achievementlike);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> UpdateUserAchievementLike(UpdateUserAchievementLikeRequest updateRequest)
+    {
+        using var context = dbContextFactory.CreateDbContext();
+
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == updateRequest.UserId)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return false;
+        }
+
+        var achievementLike = await context.AchievementLikes
+            .Where(x => x.UserAchievementId == updateRequest.UserAchievementId)
+            .Where(x => x.UserId == user.Id)
+            .FirstOrDefaultAsync();
+
+        if (achievementLike is null)
+        {
+            Console.WriteLine("No achievement like was found");
+            return false;
+        }
+
+        achievementLike.DateLiked = DateTime.Today.ToUniversalTime();
+        achievementLike.IsLike = updateRequest.IsLike;
+
+        context.Update(achievementLike);
         await context.SaveChangesAsync();
 
         return true;

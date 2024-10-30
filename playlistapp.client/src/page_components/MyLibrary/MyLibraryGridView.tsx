@@ -10,7 +10,7 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
     return (
         <div className="flex flex-wrap">
             {games.map((ug, key) => (
-                <Link key={key} to={`/user-view-game/${ug.platformGame.gameId}`} className="m-2 w-36">
+                <Link key={key} to={`/user-view-game/${ug.platformGame.game.id}`} className="m-2 w-36">
                     <div className="overflow-hidden">
                         <img
                             className="img img-fluid w-full h-auto object-cover"

@@ -294,4 +294,40 @@ public static class DTOConverter
             Slug = company.Slug,
         };
     }
+
+    public static ReviewLikeDTO ToDTO(this ReviewLike reviewLike)
+    {
+        if (reviewLike is null)
+        {
+            return new ReviewLikeDTO();
+        }
+
+        return new ReviewLikeDTO()
+        {
+            DateLiked = reviewLike.DateLiked,
+            GameReviewId = reviewLike.GameReviewId,
+            GameReviewed = reviewLike.GameReview.ToDTO(),
+            Id = reviewLike.Id,
+            IsLike = reviewLike.IsLike,
+            UserId = reviewLike.User.Guid,
+            User = reviewLike.User.ToDTO()
+        };
+    }
+
+    public static UserAchievementLikeDTO ToDTO(this AchievementLike userAchievementLike)
+    {
+        if (userAchievementLike is null)
+        {
+            return new UserAchievementLikeDTO();
+        }
+
+        return new UserAchievementLikeDTO()
+        {
+            Id = userAchievementLike.Id,
+            DateLiked = userAchievementLike.DateLiked,
+            IsLike = userAchievementLike.IsLike,
+            UserAchievementId = userAchievementLike.UserAchievementId,
+            UserId = userAchievementLike.User.Guid,
+        };
+    }
 }

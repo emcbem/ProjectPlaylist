@@ -13,7 +13,7 @@ const AchievementsPage: React.FC = () => {
 
   return (
     <div className="flex-grow w-full dark:text-white text-black">
-      <div className="mx-auto max-w-screen-xl">
+      <div className="">
         {platformGames ? (
           platformGames.map((item, index) => (
             <AchievementPlatfrom

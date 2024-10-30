@@ -42,6 +42,17 @@ export const ListQueries = {
                 queryClient.invalidateQueries({ queryKey: ListKeys.Lists });
             },
         });
+    },
+
+    useDeleteListQuery: () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: (listId: number) => ListService.DeleteListQuery(listId),
+            onSuccess: () => {
+                toast.success("List removed!")
+                queryClient.invalidateQueries({ queryKey: ListKeys.Lists })
+            }
+        })
     }
 
 }

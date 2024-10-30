@@ -8,13 +8,7 @@ export const Plus: React.FC<props> = ({ height, width }) => (
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
-    className={`2xl:w-[${width}px] 2xl:h-[${height}px] xl:w-[${
-      width - 15
-    }px] xl:h-[${height - 15}px] lg:w-[${width - 20}px] lg:h-[${
-      height - 20
-    }px] w-[${width - 25}px] h-[${
-      height - 25
-    }px]  md:m-1 ml-1 mb-1 fill-current`}
+    className={`w-[${width}px] h-[${height}px] m-1 ml-1 mb-1 fill-current`}
   >
     <path
       fillRule="evenodd"

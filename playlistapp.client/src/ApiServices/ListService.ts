@@ -73,5 +73,21 @@ export const ListService = {
             console.error("Failed to fetch list:", error);
             throw error;
         }
+    },
+
+    DeleteListQuery: async (listId: number) => {
+        try {
+            const resonse = await axios.delete<boolean>(`${import.meta.env.VITE_URL}/list/deletelist`,
+                {
+                    params: {
+                      listId: listId,
+                    },
+                  }
+            );
+            return resonse.data;
+        } catch (error) {
+            console.error("Failed to remove user achievement like");
+            throw error;
+        }
     }
 }

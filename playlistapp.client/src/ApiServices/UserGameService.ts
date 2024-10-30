@@ -25,7 +25,7 @@ export const UserGameService = {
       throw error;
     }
   },
-  AddUserGame: async (addUserGameRequest: AddUserGameRequest) => {
+  AddUserGame: async (addUserGameRequest: AddUserGameRequest | undefined) => {
     if (!addUserGameRequest) {
       console.error("Add user game request is undefined or empty");
       throw new Error("Add user game request must be provided");

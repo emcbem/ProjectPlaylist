@@ -3,7 +3,7 @@ import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGa
 import axios from "axios";
 
 export const PlatformGameService = {
-  GetAllPlatformGames: async (platformGameRequest: PlatformGameRequest) => {
+  GetAllPlatformGames: async (platformGameRequest: PlatformGameRequest | undefined) => {
     try {
       const response = await axios.post<PlatformGame[]>(
         `${import.meta.env.VITE_URL}/PlatformGame/getallplatformgames`,
@@ -31,6 +31,20 @@ export const PlatformGameService = {
       return response.data;
     } catch (error) {
       console.error("Failed to get platform games", error);
+      throw error;
+    }
+  },
+  GetPlatformGamesById: async (platformGameId: number) => {
+    try {
+      const response = await axios.get<PlatformGame[]>(
+        `${
+          import.meta.env.VITE_URL
+        }/PlatformGame/getplatformgamebyid/${platformGameId}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get platform game by platform game Id", error);
       throw error;
     }
   },
