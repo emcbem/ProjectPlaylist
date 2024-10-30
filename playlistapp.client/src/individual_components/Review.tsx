@@ -1,15 +1,16 @@
-import { ThumbsUp } from "../assets/ThumbsUp.tsx";
-import { ThumbsDown } from "@/assets/ThumbsDown.tsx";
 import { GameReview } from "@/@types/gameReview.js";
+import ReviewLike from "./ReviewLike.tsx";
 
 interface props {
   review: GameReview;
 }
 
 const Review: React.FC<props> = ({ review }) => {
+
+
   return (
     <>
-      <li className="py-3 sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
+      <li className="py-3 w-full sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
         <div className="flex space-x-4 rtl:space-x-reverse">
           <div className="flex-shrink-0">
             <img
@@ -44,10 +45,8 @@ const Review: React.FC<props> = ({ review }) => {
             </p>
           </div>
         </div>
-        <div className="flex justify-end items-center mt-5">
-          <ThumbsUp />
-          <ThumbsDown />
-        </div>
+
+        <ReviewLike gameReviewId={review.id} />
       </li>
     </>
   );
