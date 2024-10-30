@@ -9,7 +9,6 @@ import { GameContextProvidor } from "./contexts/GameContext";
 import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { PlatformContextProvider } from "./contexts/PlatformContext";
-import { PlatformGameContextProvider } from "./contexts/PlatformGameContext";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
@@ -26,7 +25,6 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserAccountContextProvider>
-          <PlatformGameContextProvider>
             <GameContextProvidor>
               <PlatformContextProvider>
                 <SearchBarProvider>
@@ -78,7 +76,6 @@ function App() {
                 </SearchBarProvider>
               </PlatformContextProvider>
             </GameContextProvidor>
-          </PlatformGameContextProvider>
       </UserAccountContextProvider>
     </QueryClientProvider>
   );

@@ -1,13 +1,9 @@
-import {
-  PlatformGame,
-  PlatformGameContextInterface,
-} from "@/@types/platformGame";
+import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { PlatformGameContext } from "@/contexts/PlatformGameContext";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import {
   Menu,
@@ -22,6 +18,8 @@ import { ListQueries } from "@/hooks/ListQueries";
 import loadingDotsGif from "../assets/LoadingIcons/icons8-3-dots.gif";
 import AddButtonListMenuItem from "./AddButtonListMenuItem";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
+import { PlatformGameQueries } from "@/hooks/PlatfromGameQueries";
+import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGameRequest";
 
 interface props {
   gameId: string | undefined;
@@ -31,17 +29,23 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [openMenu, setOpenMenu] = React.useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformGame>();
-  const [addUserGameRequest, setAddUserGameRequest] = useState<AddUserGameRequest>();
-
-  const { mutatePlatformGames } = React.useContext(
-    PlatformGameContext
-  ) as PlatformGameContextInterface;
+  const [addUserGameRequest, setAddUserGameRequest] =
+    useState<AddUserGameRequest>();
+  const [platformGameRequest] = useState<PlatformGameRequest>({
+    Filter: "",
+    PlatformId: 1,
+  });
+  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
   const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { mutateAsync: AddUserGame } = UserGameQueries.useAddUserGame(addUserGameRequest);
+  const { mutateAsync: AddUserGame } =
+    UserGameQueries.useAddUserGame(addUserGameRequest);
+
+  const { mutateAsync: mutatePlatformGames } =
+    PlatformGameQueries.useGetAllPlatformGames(platformGameRequest);
 
   const { data: lists, isLoading: listIsLoading } =
     ListQueries.useGetListsByUserId(userGuid ?? "");
@@ -52,12 +56,10 @@ const AddButton: React.FC<props> = ({ gameId }) => {
         userId: usr.guid,
         platformGameId: platformGameId,
       };
-      setAddUserGameRequest(newAddUserGameRequest)
+      setAddUserGameRequest(newAddUserGameRequest);
       await AddUserGame();
     }
   };
-
-  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
   useEffect(() => {
     PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
@@ -68,10 +70,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
   }, []);
 
   useEffect(() => {
-    mutatePlatformGames({
-      filter: "",
-      platformID: 1,
-    });
+    mutatePlatformGames();
   }, []);
 
   return (

@@ -3,7 +3,7 @@ import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGa
 import axios from "axios";
 
 export const PlatformGameService = {
-  GetAllPlatformGames: async (platformGameRequest: PlatformGameRequest) => {
+  GetAllPlatformGames: async (platformGameRequest: PlatformGameRequest | undefined) => {
     try {
       const response = await axios.post<PlatformGame[]>(
         `${import.meta.env.VITE_URL}/PlatformGame/getallplatformgames`,

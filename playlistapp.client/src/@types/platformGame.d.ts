@@ -13,10 +13,3 @@ export interface PlatformGame {
     platform: Platform;
     userGames: UserGame[];
 }
-
-export interface PlatformGameContextInterface {
-    platformGames: PlatformGame[];
-    error: string | undefined;
-    isLoading: boolean;
-    mutatePlatformGames: (newAddUserGameRequest) => Promise;
-}
