@@ -1,5 +1,3 @@
-import { Plus } from "@/assets/trophies/plus";
-
 interface props {
   Title: string;
   Description: string;

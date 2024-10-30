@@ -16,7 +16,6 @@ import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
-import { ThemeProvider } from "@material-tailwind/react";
 const queryClient = new QueryClient();
 
 function App() {
