@@ -2,6 +2,24 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    fontSize: {
+      xxxs: ["6px", "8px"],
+      xxs: ["8px", "12px"],
+      tiny: ["11.2px", "16px"],
+      xs: ["12px", "16px"],
+      sm: ["14px", "20px"],
+      base: ["16px", "24px"],
+      lg: ["18px", "28px"],
+      xl: ["20px", "28px"],
+      "2xl": ["24px", "32px"],
+      "3xl": ["30px", "36px"],
+      "4xl": ["36px", "40px"],
+      "5xl": ["48px", "1"],
+      "6xl": ["60px", "1"],
+      "7xl": ["72px", "1"],
+      "8xl": ["96px", "1"],
+      "9xl": ["128px", "1"],
+    },
     extend: {
       borderRadius: {
         lg: "var(--radius)",
@@ -9,7 +27,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       screens: {
-        lgmd: '820px',
+        lgmd: "820px",
       },
       colors: {
         black: "#0E191C",
