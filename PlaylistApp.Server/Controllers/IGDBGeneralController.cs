@@ -35,17 +35,21 @@ public class IGDBGeneralController
 
     //Don't uncomment unless you need to reseed the database with games!
 
-    [HttpGet("Upload Games")]
-    public async Task UploadGames()
+    [HttpGet("Reset Games")]
+    public async Task ResetGames()
     {
         var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
         var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+        var filteredGames = Strainer.StrainGames(igdbGames);
         var coverLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Covers);
         var igdbCovers = Parser.ParseCoverCsv(coverLocalPath);
         var ageRatingLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.AgeRating);
         var igdbRatings = Parser.ParseRatingCsv(ageRatingLocalPath);
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
-        await uploader.UploadGamesToDatabase(localGames);
+        var allGames = await uploader.GetAllGames();
+        var gameDict = allGames.ToDictionary(p => p?.IdgbId ?? 0, p => p);
+        var realGamesToRemove = localGames.Where(p => gameDict.ContainsKey(p?.IdgbId ?? 0)).Select(p => gameDict[p?.IdgbId ?? 0]).ToList();
+        await uploader.RemoveGames(realGamesToRemove);
     }
 
     [HttpGet("Upload Companies")]
@@ -71,6 +75,12 @@ public class IGDBGeneralController
         var igdbPlatformLogos = Parser.ParsePlatformLogoCsv(platformLogoUrl);
         var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
         await uploader.UploadPlatformsToDatabase(localPlatforms);
+    }
+
+    [HttpDelete("PLEASE00")]
+    public async Task Delete()
+    {
+        await uploader.PleaseDeleteThem();
     }
 
     [HttpGet("uploadPlatformsGames")]

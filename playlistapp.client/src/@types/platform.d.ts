@@ -3,9 +3,3 @@ export interface Platform {
     name: string;
     logoURL: string;
 }
-
-export interface PlatformContextInterface {
-    platforms: Platform[];
-    error: string | undefined;
-    isLoading: boolean;
-}

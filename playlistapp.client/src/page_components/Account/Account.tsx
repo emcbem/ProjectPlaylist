@@ -2,36 +2,41 @@ import React from "react";
 import "./Account.modules.scss";
 import { useAuth0 } from "@auth0/auth0-react";
 import PlatformGamerTags from "./PlatformGamerTags";
-import { UserGameContext } from "../../contexts/UserGameContext";
-import { UserGameContextInterface } from "../../@types/usergame";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import PlaylistLists from "./PlaylistLists";
 import LibraryLoading from "./LibraryViewsComponents/LibraryLoading";
 import LibraryList from "./LibraryViewsComponents/LibraryList";
 import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
+import { UserGameQueries } from "@/hooks/UserGameQueries";
 
 const Account = () => {
-  const { userGamesFromUser, isLoading } = React.useContext(
-    UserGameContext
-  ) as UserGameContextInterface;
-  const { user, isAuthenticated } = useAuth0();
-  const { usr } = React.useContext(
+  const { isAuthenticated } = useAuth0();
+
+  const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
+  const {
+    data: userGamesFromUser,
+    isLoading,
+    isSuccess,
+  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+
+  console.log("isAuthenticated: ", isAuthenticated);
+  console.log("usr.profileURL: ", usr?.profileURL);
+  console.log("isSuccess: ", isSuccess);
+
   return (
     isAuthenticated &&
-    user && (
+    usr?.profileURL &&
+    isSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
           <div className="flex flex-wrap">
-            <img
-              className="rounded-full h-[96px] w-[96px] border-2 border-clay-700 bg-clay-600"
-              src={usr?.profileURL!!}
-            />
+            <img className="rounded-full w-10" src={usr?.profileURL} />
             <div>
-              <p className="text-4xl ms-8">{user.nickname}</p>
+              <p className="text-4xl ms-8">{usr.username}</p>
               <p className="text-2xl ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
             </div>
           </div>

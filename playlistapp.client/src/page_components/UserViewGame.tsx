@@ -3,34 +3,10 @@ import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/hooks/GameQueries";
 
-const ViewGame = () => {
+const UserViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
   const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
-
-  // const [colors, setColors] = useState<string[]>([]);
-
-  // const getColors = async (imageUrl: string) => {
-  //   try {
-  //     const palette = await Vibrant.from(imageUrl).getPalette();
-  //     const dominantColor = palette.Vibrant?.hex || "#ffffff";
-  //     const colorsArray = [
-  //       dominantColor,
-  //       palette.LightVibrant?.hex || "#ffffff",
-  //       palette.DarkVibrant?.hex || "#000000",
-  //       palette.Muted?.hex || "#ffffff",
-  //       palette.LightMuted?.hex || "#ffffff",
-  //       palette.DarkMuted?.hex || "#000000",
-  //     ];
-  //     setColors(colorsArray);
-  //   } catch (error) {
-  //     console.error("Error extracting colors:", error, colors);
-  //   }
-  // };
-
-  // if (game) {
-  //   getColors(`https:${game.coverUrl.replace(/t_cover_big/g, "t_1080p")}`);
-  // }
 
   return (
     <>
@@ -71,18 +47,4 @@ const ViewGame = () => {
   );
 };
 
-export default ViewGame;
-
-{
-  /* <div className="flex space-x-2 mt-4">
-  {colors.map((color, index) => (
-    <div
-      key={index}
-      className="w-10 h-10 rounded"
-      style={{ backgroundColor: color }}
-    >
-      {color}
-    </div>
-  ))}
-</div> */
-}
+export default UserViewGame;
