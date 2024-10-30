@@ -2,6 +2,7 @@
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 
@@ -35,9 +36,15 @@ public class UserAchievementLikeController : Controller
         return await userAchievementLikeService.RemoveUserAchievementLike(request);
     }
 
-    [HttpPatch("updateuserachivementlike")]
+    [HttpPatch("updateuserachievementlike")]
     public async Task<bool> UpdateUserAchievementLike(UpdateUserAchievementLikeRequest request)
     {
         return await userAchievementLikeService.UpdateUserAchievementLike(request);
+    }
+
+    [HttpPost("getuserachievementlike")]
+    public async Task<UserAchievementLikeDTO> GetUserAchievementLike(GetUserAchievementLikeRequest request)
+    {
+        return await userAchievementLikeService.GetUserAchievementLike(request);
     }
 }
