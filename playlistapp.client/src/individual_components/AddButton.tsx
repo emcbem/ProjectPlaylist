@@ -142,7 +142,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                       onPointerEnterCapture={undefined}
                       onPointerLeaveCapture={undefined}
                       className="font-bold"
-                      key={x.platformId}
+                      key={x.platform.id}
                       onClick={() => {
                         setSelectedPlatform(
                           platformGames.find((pGame) => x.id == pGame.id)
