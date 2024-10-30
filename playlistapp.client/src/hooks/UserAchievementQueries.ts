@@ -45,6 +45,7 @@ export const UserAchievementQueries = {
       queryKey: keys.GetUserAchievementByAchievementId,
       queryFn: () =>
         UserAchievementService.GetUserAchievementByAchievementId(achievementId),
+      enabled: !!achievementId,
     });
     /*
       const UserAchievementByAchievementId =
@@ -58,6 +59,7 @@ export const UserAchievementQueries = {
       queryKey: keys.GetUserAchievementById,
       queryFn: () =>
         UserAchievementService.GetUserAchievementById(userAchievementId),
+      enabled: !!userAchievementId,
     });
     /*
       const UserAchievementById =
@@ -68,6 +70,7 @@ export const UserAchievementQueries = {
     return useQuery({
       queryKey: keys.GetUserAchievementByUserId,
       queryFn: () => UserAchievementService.GetUserAchievementByUserId(userId),
+      enabled: !!userId,
     });
     /*
       const UserAchievementByUserId =
