@@ -19,6 +19,7 @@ export interface UserAccount {
 
 export interface UserAccountContextInterface {
     usr: UserAccount | undefined;
+    userGuid: string | undefined;
     error: string | undefined;
     isLoading: boolean;
 }
