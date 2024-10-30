@@ -9,7 +9,7 @@ import { UserAccountContextInterface } from "@/@types/userAccount";
 const MyLibrary = () => {
   const [isListView, setIsListView] = useState<boolean>(true);
 
-  const { usr } = React.useContext(
+  const { userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
@@ -17,7 +17,7 @@ const MyLibrary = () => {
     data: userGamesFromUser,
     isLoading,
     isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(usr?.guid ?? "");
+  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
   if (isLoading) {
     return <>Loading ...</>;

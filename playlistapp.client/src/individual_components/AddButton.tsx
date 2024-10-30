@@ -37,14 +37,14 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     PlatformGameContext
   ) as PlatformGameContextInterface;
 
-  const { usr } = React.useContext(
+  const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
   const { mutateAsync: AddUserGame } = UserGameQueries.useAddUserGame(addUserGameRequest);
 
   const { data: lists, isLoading: listIsLoading } =
-    ListQueries.useGetListsByUserId(usr?.guid ?? "");
+    ListQueries.useGetListsByUserId(userGuid ?? "");
 
   const handleMenuItemClick = async (platformGameId: number) => {
     if (platformGameId && usr && usr.guid) {
@@ -191,7 +191,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
           <AddButtonListMenuItem
             lists={lists}
             gameId={gameId}
-            userGuid={usr?.guid}
+            userGuid={userGuid}
           />
         </MenuList>
       </Menu>

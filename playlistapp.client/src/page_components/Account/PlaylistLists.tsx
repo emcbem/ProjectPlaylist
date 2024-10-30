@@ -7,8 +7,8 @@ import AddListBtn from './AddListBtn';
 import { Game } from '@/@types/game';
 
 const PlaylistLists = () => {
-    const { usr } = React.useContext(UserAccountContext) as UserAccountContextInterface;
-    const { data: lists } = ListQueries.useGetListsByUserId(usr?.guid ?? "");
+    const { usr, userGuid } = React.useContext(UserAccountContext) as UserAccountContextInterface;
+    const { data: lists } = ListQueries.useGetListsByUserId(userGuid ?? "");
     const fillGame: Game = {
         id: 0,
         idgb_id: 0,

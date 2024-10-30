@@ -10,24 +10,24 @@ import { FC, useContext, useEffect, useState } from "react";
 const ReviewLike: FC<{
   gameReviewId: number;
 }> = ({ gameReviewId }) => {
-  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
+  const { usr, userGuid } = useContext(UserAccountContext) as UserAccountContextInterface;
   const [val, setVal] = useState<boolean>(false);
 
   const addReviewLikeRequest: AddReviewLikeRequest = {
     gameReviewId: Number(gameReviewId),
     isLike: val,
-    userId: usr?.guid ?? "",
+    userId: userGuid ?? "",
   };
 
   const updateReviewLikeRequest: UpdateReviewLikeRequest = {
     gameReviewId: Number(gameReviewId),
     isLike: val,
-    userId: usr?.guid ?? "",
+    userId: userGuid ?? "",
   };
 
   const getReviewLikeRequest: GetReviewLikeRequest = {
     gameReviewId: Number(gameReviewId),
-    userId: usr?.guid ?? "",
+    userId: userGuid ?? "",
   };
 
   const { mutate: AddReviewLike } =

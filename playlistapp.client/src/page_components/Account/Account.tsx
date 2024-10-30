@@ -13,7 +13,7 @@ import { UserGameQueries } from "@/hooks/UserGameQueries";
 const Account = () => {
   const { isAuthenticated } = useAuth0();
 
-  const { usr } = React.useContext(
+  const { usr, userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
@@ -21,7 +21,7 @@ const Account = () => {
     data: userGamesFromUser,
     isLoading,
     isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(usr?.guid ?? "");
+  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
   console.log("isAuthenticated: ", isAuthenticated);
   console.log("usr.profileURL: ", usr?.profileURL);
