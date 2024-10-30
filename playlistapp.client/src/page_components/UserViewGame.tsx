@@ -34,11 +34,11 @@ const ViewGame = () => {
 
   return (
     <>
-      <div className="flex flex-grow w-full dark:text-white text-black justify-center mt-28">
-        <div className="flex flex-row w-1/2">
+      <div className="flex w-full dark:text-white text-black justify-center mt-28">
+        <div className="flex lgmd:flex-row xl:w-1/2 lg:w-5/6 lgmd:w-full">
           <img
             src={game?.coverUrl.replace(/t_cover_big/g, "t_1080p")}
-            className="w-60 h-96 object-cover rounded-lg shadow-xl sticky top-10"
+            className="lgmd:w-60 lgmd:h-96 h-60 w-36 object-cover rounded-lg shadow-xl sticky top-10"
             alt={`${game?.title} cover`}
           />
           <div className="flex flex-col ml-5">
@@ -54,13 +54,18 @@ const ViewGame = () => {
             <div>
               <AddButton gameId={gameId} />
             </div>
-            <div className="">
-              <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <div className="lgmd:flex hidden">
+              <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
                 <Tabs />
               </ul>
             </div>
           </div>
         </div>
+      </div>
+      <div className="lgmd:hidden ">
+        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+          <Tabs />
+        </ul>
       </div>
     </>
   );

@@ -43,22 +43,17 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 const Tabs = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
-  const {data: AllGameReviewsForGame} = GameReviewQueries.useGetAllGameReviewsByGame(
-    parseInt(gameId??"1")
-  );
+  const { data: AllGameReviewsForGame } =
+    GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
 
-  const tabs = [
-    "Reviews",
-    "Your Stats",
-    "Your Achievements",
-    "Global Leaderboard",
-  ];
+  const tabs = ["Reviews", "Your Stats", "Achievements", "Global Leaderboard"];
 
   return (
     <div className="w-full">
-      <ul className="flex space-x-2">
+      {/*This line below*/}
+      <ul className="flex lgmd:justify-normal justify-center space-x-2">
         {tabs.map((tab) => (
           <Tab
             key={tab}
@@ -70,14 +65,13 @@ const Tabs = () => {
       </ul>
 
       <div className="mt-4 w-full">
-
         {/* REVIEWS HERE!!! */}
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
               {AllGameReviewsForGame && AllGameReviewsForGame?.length > 0 ? (
-                AllGameReviewsForGame?.map((review) => (
-                  <Review review={review} />
+                AllGameReviewsForGame?.map((review, index) => (
+                  <Review review={review} key={index} />
                 ))
               ) : (
                 <p>No reviews yet</p>
@@ -87,15 +81,14 @@ const Tabs = () => {
           </>
         )}
 
-
         {activeTab === "Your Stats" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
             <span>Hours Played: 200</span>
             <span>Date Added: 10/1/2024</span>
           </div>
         )}
-        {activeTab === "Your Achievements" && (
-          <div className="text-left text-2xl dark:text-white flex flex-col w-full">
+        {activeTab === "Achievements" && (
+          <div className="text-left text-2xl dark:text-white flex flex-col">
             <AchievementsPage />
           </div>
         )}

@@ -104,10 +104,13 @@ export const ReviewLikeQueries = {
     }
     */
   },
-  useGetReviewLike: (getReviewLikeRequest: GetReviewLikeRequest) => {
+  useGetReviewLike: (
+    getReviewLikeRequest: GetReviewLikeRequest,
+    gameReviewId: number
+  ) => {
     return useQuery({
       queryFn: () => ReviewLikeService.getReviewLike(getReviewLikeRequest),
-      queryKey: keys.GetReviewLike,
+      queryKey: keys.GetReviewLike(gameReviewId),
     });
     /*
       const getReviewLikeRequest: GetReviewLikeRequest = {

@@ -8,6 +8,9 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      screens: {
+        lgmd: '820px',
+      },
       colors: {
         black: "#0E191C",
         background: "hsl(var(--background))",
