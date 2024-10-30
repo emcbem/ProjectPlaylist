@@ -122,9 +122,8 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                   : selectedPlatform.platform.name}
                 <ChevronUpIcon
                   strokeWidth={2.5}
-                  className={`h-3.5 w-3.5 transition-transform ${
-                    openMenu ? "rotate-90" : ""
-                  }`}
+                  className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-90" : ""
+                    }`}
                 />
               </MenuItem>
             </MenuHandler>
@@ -143,7 +142,9 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                       onPointerLeaveCapture={undefined}
                       className="font-bold"
                       key={x.platform.id}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
                         setSelectedPlatform(
                           platformGames.find((pGame) => x.id == pGame.id)
                         );
@@ -165,9 +166,8 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            className={`font-bold ${
-              !selectedPlatform ? "text-gray-500 cursor-default" : ``
-            }`}
+            className={`font-bold ${!selectedPlatform ? "text-gray-500 cursor-default" : ``
+              }`}
             onClick={() => {
               selectedPlatform ? handleMenuItemClick(selectedPlatform.id) : "";
             }}
@@ -182,7 +182,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               className={`font-bold text-gray-900`}
-              onClick={() => {}}
+              onClick={() => { }}
             >
               <img src={loadingDotsGif} width={20} />
             </MenuItem>
