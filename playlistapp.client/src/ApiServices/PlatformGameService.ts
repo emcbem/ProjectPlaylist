@@ -20,31 +20,21 @@ export const PlatformGameService = {
       throw error;
     }
   },
-  GetAllPlatfromGamesByGameId: async (gameId: number) => {
+  GetAllPlatfromGamesByGame: async (gameId: number) => {
     try {
       const response = await axios.get<PlatformGame[]>(
         `${
           import.meta.env.VITE_URL
-        }/PlatformGame/getallplatformgamesbygame/${gameId}`
+        }/PlatformGame/getallplatformgamesbygame/`,
+        {
+          params: {
+            gameId: gameId
+          }
+        }
       );
-
       return response.data;
     } catch (error) {
       console.error("Failed to get platform games", error);
-      throw error;
-    }
-  },
-  GetPlatformGamesById: async (platformGameId: number) => {
-    try {
-      const response = await axios.get<PlatformGame[]>(
-        `${
-          import.meta.env.VITE_URL
-        }/PlatformGame/getplatformgamebyid/${platformGameId}`
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error("Failed to get platform game by platform game Id", error);
       throw error;
     }
   },

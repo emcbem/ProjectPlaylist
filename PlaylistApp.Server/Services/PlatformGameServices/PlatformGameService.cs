@@ -20,7 +20,7 @@ public class PlatformGameService : IPlatformGameService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var platformGames =  await context.PlatformGames
+        var platformGames = await context.PlatformGames
             .Where(x => x.Game.Title.ToLower().Contains(request.Filter.ToLower()))
             .Where(x => x.PlatformId == request.PlatformID)
             .Include(x => x.Game)
@@ -42,5 +42,4 @@ public class PlatformGameService : IPlatformGameService
 
         return platformGames.Select(x => x.ToDTO()).ToList();
     }
-
 }

@@ -15,13 +15,14 @@ export const UserGameQueries = {
     const { data: userGameFromGame, isLoading, error } = useGetAllUserGamesByGameQuery(Number(gameId));
     */
   },
-  useDeleteUserGame: () => {
+  useDeleteUserGame: (userGuid: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
       mutationFn: UserGameService.DeleteUserGame,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.DeleteUserGame });
+        queryClient.invalidateQueries({ queryKey: keys.GetAllUserGamesByUser(userGuid) });
         console.log("User game deleted successfully.");
       },
       onError: (error) => {
@@ -71,7 +72,7 @@ export const UserGameQueries = {
   useGetAllUserGamesByUser: (userId: string) => {
     return useQuery({
       queryFn: () => UserGameService.GetAllUserGamesByUser(userId),
-      queryKey: keys.GetAllUserGamesByUser,
+      queryKey: keys.GetAllUserGamesByUser(userId),
     });
   },
   useAddUserGame: (addUserGameRequest: AddUserGameRequest | undefined) => {

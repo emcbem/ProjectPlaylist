@@ -17,7 +17,7 @@ import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
 import { ThemeProvider } from "@material-tailwind/react";
 import { materialTheme } from "./lib/theme";
-const queryClient = new QueryClient();
+const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
   const { isAuthenticated } = useAuth0();
