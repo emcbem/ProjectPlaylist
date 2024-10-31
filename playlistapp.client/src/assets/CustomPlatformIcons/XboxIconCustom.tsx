@@ -1,11 +1,12 @@
 interface IconProps {
     width: string,
+    fill: string
 }
 
-const XboxIconCustom: React.FC<IconProps> = ({ width }) => {
+const XboxIconCustom: React.FC<IconProps> = ({ width, fill }) => {
     return (
         <svg
-            className="transition-colors duration-300 fill-current group-hover:fill-[#FFFFFF]"
+            className={`transition-colors duration-300 fill-[${fill}]`}
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             width={width}
