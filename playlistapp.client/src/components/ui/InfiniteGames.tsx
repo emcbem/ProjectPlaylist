@@ -4,9 +4,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
 import CardGamesList from "@/individual_components/CardGamesList";
-import { InfiniteGameController } from "@/@types/ComponentControllers/InfiniteGameController";
+import { SearchRequestController } from "@/@types/ComponentControllers/InfiniteGameController";
 
-export const InfiniteGames: FC<InfiniteGameController> = (controller) => {
+export const InfiniteGames: FC<SearchRequestController> = (controller) => {
   const searchBarContext = useSearchBarContext();
   const observer = useRef<IntersectionObserver | null>();
 

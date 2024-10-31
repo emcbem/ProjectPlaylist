@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameKeys";
 import { GameService } from "@/ApiServices/GameService";
-import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
 
 export const GameQueries = {
   useGetAllGamesByNameQuery: (query: string) => {
@@ -21,13 +20,4 @@ export const GameQueries = {
       queryFn: () => GameService.GetGameById(query),
     });
   },
-
-  useFilterGameQuery: (request: GetGamesRequest) => {
-    return useQuery(
-      {
-        queryKey: keys.QueriedGames(request),
-        queryFn: () => GameService.GetFilteredGamesByRequest(request),
-      }
-    )
-  }
 };

@@ -2,7 +2,7 @@ import { OrderingMethods } from '@/@types/Enums/OrderingMethod';
 import { GetGamesRequest } from '@/@types/Requests/GetRequests/getGamesRequest';
 import { useState } from 'react'
 
-export const useInfiniteController = () => {
+export const useSearchRequest = () => {
     const [searchRequest, setSearchRequest] = useState<GetGamesRequest>({
     title: "",
     page: 0,

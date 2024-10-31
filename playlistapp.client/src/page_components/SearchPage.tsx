@@ -1,12 +1,12 @@
 import { InfiniteGames } from "@/components/ui/InfiniteGames";
-import { useInfiniteController } from "@/hooks/InfiniteGames/useInfiniteController";
+import { useSearchRequest } from "@/hooks/InfiniteGames/useInfiniteController";
 import React, { useState } from "react";
 
 const SearchPage: React.FC = () => {
   
   const [isVisible, setIsVisible] = useState(false);
 
-  const infiniteGamesController = useInfiniteController();
+  const searchRequest = useSearchRequest();
 
   const toggleDiv = () => {
     setIsVisible(!isVisible);
@@ -90,7 +90,7 @@ const SearchPage: React.FC = () => {
           </div>
 
           <div className="ml-1/4 w-3/4 sm:w-full h-fit p-5 overflow-y-auto">
-            <InfiniteGames {...infiniteGamesController}/>
+            <InfiniteGames {...searchRequest}/>
           </div>
           
         </div>
