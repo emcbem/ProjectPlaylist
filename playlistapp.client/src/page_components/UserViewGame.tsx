@@ -9,7 +9,7 @@ const UserViewGame = () => {
   const [avgReview, setAvgReview] = useState<number | null>();
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+  const { data: game } = GameQueries.useGetGameById(Number(gameId));
 
   const { data: AllGameReviewsForGame } =
     GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));

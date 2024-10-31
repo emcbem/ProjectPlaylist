@@ -20,7 +20,7 @@ const ReviewModal = () => {
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+  const { data: game } = GameQueries.useGetGameById(Number(gameId));
 
   const openModal = () => {
     setIsOpen(true);
