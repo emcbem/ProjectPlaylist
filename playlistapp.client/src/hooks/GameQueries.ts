@@ -21,10 +21,4 @@ export const GameQueries = {
       queryFn: () => GameService.GetGamesByQuery(query),
     });
   },
-  useGetFilteredGamesByRequest: (request: GetGamesRequest) => {
-    return useQuery({
-      queryKey: keys.QueriedGames(request),
-      queryFn: () => GameService.GetFilteredGamesByRequest(request),
-    });
-  },
 };

@@ -48,10 +48,8 @@ public class UserController : Controller
     }
 
     [HttpPost("addnewuser")]
-    public async Task<IResult> AddNewUser([FromBody] AddUserRequest addUserRequest)
+    public async Task<bool> AddNewUser([FromBody] AddUserRequest addUserRequest)
     {
-        await userService.AddUser(addUserRequest);
-
-        return Results.Ok("User was created");
+        return await userService.AddUser(addUserRequest);
     }
 }

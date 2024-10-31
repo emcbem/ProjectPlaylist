@@ -150,7 +150,7 @@ public class UserService : IUserService
 		}
 
 		userUnderChange.Xp = updateUserRequest.XP;
-		userUnderChange.Username = updateUserRequest.UserName ?? userUnderChange.Username;
+		userUnderChange.Username = updateUserRequest.Username ?? userUnderChange.Username;
 		userUnderChange.Bio = updateUserRequest.Bio;
 		userUnderChange.Strike = updateUserRequest.Strikes;
 		userUnderChange.UserImageId = updateUserRequest.UserImageID;
@@ -161,13 +161,12 @@ public class UserService : IUserService
 		return userUnderChange.ToDTO();
 	}
 
-	public async Task AddUser(AddUserRequest addUserRequest)
+	public async Task<bool> AddUser(AddUserRequest addUserRequest)
 	{
 		if (addUserRequest.Username == null || addUserRequest.AuthId == null)
 		{
-			throw new Exception("Cannot make a user without a username or an authID");
+			return false;
 		}
-
 
 		var user = new UserAccount();
 		user.Username = addUserRequest.Username;
@@ -180,8 +179,11 @@ public class UserService : IUserService
 		user.UserImageId = 1;
 
 		using var context = await dbContextFactory.CreateDbContextAsync();
+
 		context.UserAccounts.Add(user);
 		await context.SaveChangesAsync();
+
+		return true;
 	}
 
 }

@@ -54,7 +54,7 @@ export const GameService = {
     }
   },
 
-  GetFilteredGamesByRequest: async (page: any, searchRequest: GetGamesRequest): Promise<Page> => {
+  GetFilteredGamesByRequest: async (page: number, searchRequest: GetGamesRequest): Promise<Page> => {
     const clone = { ...searchRequest };
     clone.page = page;
     try {
