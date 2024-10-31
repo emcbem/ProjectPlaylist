@@ -60,8 +60,6 @@ const ReviewLike: FC<{
     UpdateReviewLike();
   };
 
-  console.log("RRRR", getReviewLikeRequest, reviewLike);
-
   return (
     <div className="flex justify-end items-center mt-5">
       <div

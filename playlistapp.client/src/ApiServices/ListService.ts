@@ -66,8 +66,6 @@ export const ListService = {
                     },
                 }
             );
-            console.log('response from updating list')
-            console.log(response.data)
             return response.data;
         } catch (error) {
             console.error("Failed to fetch list:", error);

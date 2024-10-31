@@ -1,7 +1,7 @@
 import { UserGame } from '@/@types/usergame';
-import TrashIconGray from '@/assets/Icons/Trash';
 import { FC } from 'react'
 import { Link } from 'react-router-dom';
+import RemoveFromLibButton from './RemoveButton';
 
 interface MyLibraryGridViewProps {
     games: UserGame[];
@@ -14,12 +14,9 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
                 <Link key={key} to={`/user-view-game/${ug.platformGame.game.id}`} className="m-2 w-36">
                     <div className="relative group">
                         <div className="absolute bottom-2 left-2">
-                            {ug.platformGame.platform && (
-                                <div className='group-hover:block hidden'>
-                                    <button className="bg-white py-1 px-2 rounded"><TrashIconGray /></button>
-                                </div>
-                            )
-                            }
+                            <div className="hidden group-hover:block">
+                                <RemoveFromLibButton ugid={ug.userGameId} />
+                            </div>
                         </div>
                         <div className="overflow-hidden">
                             <img

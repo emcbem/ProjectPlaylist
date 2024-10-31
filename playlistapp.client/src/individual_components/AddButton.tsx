@@ -1,7 +1,6 @@
 import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
-import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import {
@@ -34,7 +33,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     Filter: "",
     PlatformId: 1,
   });
-  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
+  // const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
   const { usr, userGuid } = React.useContext(
     UserAccountContext
@@ -60,19 +59,11 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     }
   };
 
-  useEffect(() => {
-    PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
-      (x) => {
-        setPlatformGames(x ?? []);
-      }
-    );
-  }, []);
+  const { data: platformGames } = PlatformGameQueries.useGetAllPlatformGamesByGame(Number(gameId));
 
   useEffect(() => {
     mutatePlatformGames();
   }, []);
-
-  
 
   return (
     <>
@@ -136,7 +127,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             </MenuHandler>
             <MenuList>
               {platformGames
-                .filter((x) => x.game.id == Number(gameId))
+                ?.filter((x) => x.game.id == Number(gameId))
                 .map((x, index) => (
                   <div key={index}>
                     <MenuItem
