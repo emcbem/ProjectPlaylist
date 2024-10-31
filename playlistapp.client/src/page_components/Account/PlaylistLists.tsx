@@ -35,7 +35,7 @@ const PlaylistLists = () => {
                                     <div key={key} className="relative">
                                         <img
                                             src={ug.game ? ug.game.coverUrl : fillGame.coverUrl}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover rounded-xl"
                                             style={{ aspectRatio: '1 / 1' }}
                                         />
                                     </div>
