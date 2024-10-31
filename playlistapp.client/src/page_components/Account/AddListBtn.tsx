@@ -33,12 +33,12 @@ const AddListBtn: FC<Props> = ({ usr }) => {
     }
 
     return (
-        <div className="flex flex-wrap bg-gray-300 p-1 rounded-xl w-fit h-fit ">
+        <div className="flex flex-wrap bg-gray-300 rounded-xl w-fit h-fit">
             <div id="dropdownDefaultButton" role="button" className="p-3 hover:scale-110" onClick={(event) => {
                 event.stopPropagation();
                 setDropDownIsVisible(!dropDownIsVisible);
             }}>
-                <PlusIcon width={"20"} height={"20"} />
+                <PlusIcon width={"15"} height={"15"} />
             </div>
             <div id="dropdown" className={`${dropDownIsVisible ? `absolute mt-8` : `hidden`} z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
