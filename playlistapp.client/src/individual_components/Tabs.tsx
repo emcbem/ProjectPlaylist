@@ -13,11 +13,11 @@ interface TabProps {
 
 const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   return (
-    <li className="me-2">
+    <li className="">
       <a
         href="#"
         onClick={onClick}
-        className={`inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg hover:text-black dark:hover:text-gray-300 group ${
+        className={`inline-flex items-center justify-center border-b-2 rounded-t-lg p-4 hover:text-black dark:hover:text-gray-300 group sm:text-sm text-xs ${
           isActive
             ? "text-black border-black dark:border-white dark:text-white"
             : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
@@ -26,7 +26,7 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
         <svg
           className={`w-4 h-4 me-2 ${
             isActive ? "text-black dark:text-white" : "text-gray-500"
-          } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white`}
+          } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white sm:block hidden`}
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -81,18 +81,13 @@ const Tabs = () => {
           </>
         )}
 
-        {activeTab === "Your Stats" && (
-          <div className="text-left text-2xl dark:text-white flex flex-col">
-            <span>Hours Played: 200</span>
-            <span>Date Added: 10/1/2024</span>
-          </div>
-        )}
+        {activeTab === "Your Stats" && <div>Coming soon...</div>}
         {activeTab === "Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
             <AchievementsPage />
           </div>
         )}
-        {activeTab === "Global Leaderboard" && <div>Global Leaderboards</div>}
+        {activeTab === "Global Leaderboard" && <div>Coming soon...</div>}
       </div>
     </div>
   );

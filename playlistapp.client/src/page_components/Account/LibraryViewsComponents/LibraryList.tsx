@@ -13,7 +13,7 @@ const LibraryList: FC<props> = ({ userGamesFromUser }) => {
                 {userGamesFromUser && (
                     userGamesFromUser.slice(0, 15).map((ug, key) => (
                         <div key={key} className="m-2 flex-shrink-0">
-                            <img src={ug.platformGame.game.coverUrl} width={150} style={{ aspectRatio: '3 / 4' }} className="object-cover" />
+                            <img src={ug.platformGame.game.coverUrl} width={150} style={{ aspectRatio: '3 / 4' }} className="object-cover rounded-xl" />
                         </div>
                     )))
                 }

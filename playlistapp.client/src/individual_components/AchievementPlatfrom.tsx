@@ -10,13 +10,11 @@ import { PlatformGame } from "@/@types/platformGame";
 import { AchievementQueries } from "@/hooks/AchievementQueries";
 
 interface props {
-  gameId: number;
   platformGame: PlatformGame;
   showAddButton: boolean;
 }
 
 const AchievementPlatfrom: React.FC<props> = ({
-  gameId,
   platformGame,
   showAddButton,
 }) => {
@@ -27,15 +25,6 @@ const AchievementPlatfrom: React.FC<props> = ({
 
   const { data: achievements } =
     AchievementQueries.useGetAchievementByPlatformGameId(platformGame.id);
-
-  console.log(
-    "achievements",
-    achievements,
-    "Game ID:",
-    gameId,
-    "PFG",
-    platformGame.id
-  );
 
   return (
     <>
@@ -51,6 +40,7 @@ const AchievementPlatfrom: React.FC<props> = ({
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
+          className="text-tiny"
         >
           {platformGame.platform.name}
         </AccordionHeader>

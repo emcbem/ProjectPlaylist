@@ -7,12 +7,18 @@ import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/update
 import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLikeRequest";
 
 export const ReviewLikeQueries = {
-  useAddReviewLike: (addReviewLikeRequest: AddReviewLikeRequest) => {
+  useAddReviewLike: (
+    addReviewLikeRequest: AddReviewLikeRequest,
+    gameReviewId: number
+  ) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => ReviewLikeService.addReviewLike(addReviewLikeRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.AddReviewLike });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetReviewLike(gameReviewId),
+        });
       },
     });
     /*
@@ -49,13 +55,20 @@ export const ReviewLikeQueries = {
     } = ReviewLikeQueries.useGetAllReviewLikesByUser(usr?.guid ?? "");
     */
   },
-  useRemoveReviewLike: (removeReviewLikeRequest: RemoveReviewLikeRequest) => {
+  useRemoveReviewLike: (
+    removeReviewLikeRequest: RemoveReviewLikeRequest,
+    gameReviewId: number
+  ) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         ReviewLikeService.removeReviewLike(removeReviewLikeRequest),
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: keys.RemoveReviewLike }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.RemoveReviewLike });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetReviewLike(gameReviewId),
+        });
+      },
     });
     /*
       const removeReviewLikeRequest: RemoveReviewLikeRequest = {
@@ -76,13 +89,20 @@ export const ReviewLikeQueries = {
     };
     */
   },
-  useUpdateReviewLike: (updateReviewLikeRequest: UpdateReviewLikeRequest) => {
+  useUpdateReviewLike: (
+    updateReviewLikeRequest: UpdateReviewLikeRequest,
+    gameReviewId: number
+  ) => {
     const queryclient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         ReviewLikeService.updateReviewLike(updateReviewLikeRequest),
-      onSuccess: () =>
-        queryclient.invalidateQueries({ queryKey: keys.UpdateReviewLike }),
+      onSuccess: () => {
+        queryclient.invalidateQueries({ queryKey: keys.UpdateReviewLike });
+        queryclient.invalidateQueries({
+          queryKey: keys.GetReviewLike(gameReviewId),
+        });
+      },
     });
     /*
       const updateReviewLikeRequest: UpdateReviewLikeRequest = {

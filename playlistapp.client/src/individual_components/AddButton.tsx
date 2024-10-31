@@ -2,7 +2,6 @@ import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { PlatformGameService } from "@/ApiServices/PlatformGameService";
-import { Plus } from "@/assets/ViewGameSVGs/plus";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import {
@@ -73,21 +72,37 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     mutatePlatformGames();
   }, []);
 
+  
+
   return (
     <>
-      <Menu placement="bottom-end">
-        <MenuHandler>
+      <Menu placement="bottom-end" >
+        <MenuHandler >
           <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start w-44 h-12 justify-center"
+              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 w-28 h-8  justify-center space-x-1"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <div>
-                <div className="text-2xl font-extrabold h-fit">Add</div>
+              <div className="flex items-end">
+                <div className="sm:text-2xl text-base font-extrabold leading-none">
+                  Add
+                </div>
               </div>
               <div className="relative inline-block">
-                <Plus height={20} width={20} />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className={`w-[15px] h-[15px] fill-current mb-1`}
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    className="text-white"
+                    d="M13 9C13 8.44772 12.5523 8 12 8C11.4477 8 11 8.44772 11 9V11H9C8.44772 11 8 11.4477 8 12C8 12.5523 8.44772 13 9 13H11V15C11 15.5523 11.4477 16 12 16C12.5523 16 13 15.5523 13 15V13H15C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11H13V9ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z"
+                  />
+                </svg>
               </div>
               {isHovered && (
                 <BorderBeam
@@ -99,11 +114,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             </div>
           </button>
         </MenuHandler>
-        <MenuList
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        >
+        <MenuList>
           <Menu
             placement="right-start"
             open={openMenu}
@@ -112,11 +123,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             offset={15}
           >
             <MenuHandler className="flex items-center justify-between font-bold">
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
+              <MenuItem>
                 {!selectedPlatform
                   ? "Select Platform"
                   : selectedPlatform.platform.name}
@@ -127,19 +134,12 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                 />
               </MenuItem>
             </MenuHandler>
-            <MenuList
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-            >
+            <MenuList>
               {platformGames
                 .filter((x) => x.game.id == Number(gameId))
                 .map((x, index) => (
                   <div key={index}>
                     <MenuItem
-                      placeholder={undefined}
-                      onPointerEnterCapture={undefined}
-                      onPointerLeaveCapture={undefined}
                       className="font-bold"
                       key={x.platform.id}
                       onClick={(event) => {
@@ -178,9 +178,6 @@ const AddButton: React.FC<props> = ({ gameId }) => {
           {listIsLoading && (
             <MenuItem
               disabled={true}
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
               className={`font-bold text-gray-900`}
               onClick={() => { }}
             >

@@ -7,5 +7,4 @@ public interface IPlatformGameService
 {
     public Task<List<PlatformGameDTO>> GetAllPlatformGames(PlatformGameRequest request);
     public Task<List<PlatformGameDTO>> GetAllPlatformGamesByGame(int  gameId);
-    public Task<PlatformGameDTO> GetPlatformGamesById(int platformGameId);
 }

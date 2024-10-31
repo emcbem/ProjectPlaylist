@@ -38,7 +38,7 @@ const AddButtonListMenuItem: React.FC<props> = ({ lists, gameId, userGuid }) => 
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
-                    className={`font-bold text-gray-900`}
+                    className={`font-bold`}
                     onClick={() => { handleListMenuItemClick(list.id) }}
                 >
                     {list.name}
