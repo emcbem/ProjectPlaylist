@@ -1,105 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import CardGamesList from "@/individual_components/CardGamesList";
-import { useSearchBarContext } from "@/hooks/useSearchBarContext";
-import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
-import { OrderingMethods } from "@/@types/Enums/OrderingMethod";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { Game } from "@/@types/game";
+import { InfiniteGames } from "@/components/ui/InfiniteGames";
+import { useInfiniteController } from "@/hooks/InfiniteGames/useInfiniteController";
+import React, { useState } from "react";
 
 const SearchPage: React.FC = () => {
-  const searchBarContext = useSearchBarContext();
+  
   const [isVisible, setIsVisible] = useState(false);
-  const observer = useRef<IntersectionObserver | null>();
 
-  const [searchRequest, setSearchRequest] = useState<GetGamesRequest>({
-    title: searchBarContext.searchQuery,
-    page: 0,
-    companyIds: [],
-    genreIds: [],
-    platformIds: [],
-    pageSize: 10,
-    orderingMethod: OrderingMethods.AZ,
-  });
-
-  const GetFilteredGamesByRequest = async (page: any): Promise<Page> => {
-    const clone = { ...searchRequest };
-    clone.page = page;
-    try {
-      const response = await axios.post<Game[]>(
-        `${import.meta.env.VITE_URL}/game/filtergamesbyrequest`,
-        clone
-      );
-      console.log(response.data);
-
-      return {
-        pageGames: response.data,
-        previousCursor: page - 1,
-        nextCursor: page + 1,
-      };
-    } catch (error) {
-      console.error("Failed to fetch games with query:", error);
-      throw error;
-    }
-  };
-
-  interface Page {
-    pageGames: Game[];
-    previousCursor?: number;
-    nextCursor?: number;
-  }
-
-  const {
-    data: games,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    refetch,
-  } = useInfiniteQuery<Page, Error>({
-    queryKey: ["infiniteGames", searchRequest],
-    initialPageParam: 0,
-    queryFn: ({ pageParam = 0 }) => GetFilteredGamesByRequest(pageParam),
-    getNextPageParam: (lastPage: Page) => {
-      return lastPage.nextCursor;
-    },
-  });
-
-  useEffect(() => {
-    console.log(searchBarContext.searchQuery);
-    setSearchRequest((prevRequest) => ({
-      ...prevRequest,
-      title: searchBarContext.searchQuery,
-    }));
-  }, [searchBarContext.searchQuery]);
-
-  useEffect(() => {
-    refetch();
-  }, [searchRequest]);
-
-  const lastItemRef = useCallback(
-    (node: HTMLElement | null) => {
-      if (isFetchingNextPage) return;
-
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-
-      observer.current = new IntersectionObserver(
-        (entries: IntersectionObserverEntry[]) => {
-          if (entries[0]?.isIntersecting && hasNextPage) {
-            console.log("Hi");
-            fetchNextPage();
-          }
-        }
-      );
-
-      if (node) {
-        observer.current.observe(node);
-      }
-    },
-    [isFetchingNextPage, fetchNextPage, hasNextPage]
-  );
+  const infiniteGamesController = useInfiniteController();
 
   const toggleDiv = () => {
     setIsVisible(!isVisible);
@@ -183,15 +90,7 @@ const SearchPage: React.FC = () => {
           </div>
 
           <div className="ml-1/4 w-3/4 sm:w-full h-fit p-5 overflow-y-auto">
-            {games && (
-              <>
-                <CardGamesList
-                  games={games.pages.flatMap((x) => x.pageGames)}
-                  ref={lastItemRef}
-                  isLoading={isLoading}
-                />
-              </>
-            )}
+            <InfiniteGames {...infiniteGamesController}/>
           </div>
           
         </div>
