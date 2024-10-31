@@ -6,7 +6,7 @@ import { GameQueries } from "@/hooks/GameQueries";
 const UserViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+  const { data: game } = GameQueries.useGetGameById(Number(gameId));
 
   return (
     <>
