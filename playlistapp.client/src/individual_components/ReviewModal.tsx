@@ -88,6 +88,7 @@ const ReviewModal = () => {
         <div
           ref={modalRef}
           className={`relative mx-auto w-full max-w-[48rem] h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
+            // className={`relative mx-auto w-full sm:max-w-[48rem] sm:h-96 max-w-[16rem] h-64 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
             isOpen ? "scale-100" : "scale-95"
           }`}
         >

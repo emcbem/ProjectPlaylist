@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="z-20">
-      <nav className=" w-full flex items-center sm:px-8 px-4 pt-8 h-20 mb-2 z-20">
+      <nav className=" w-full flex items-center sm:px-8 sm:px-4 sm:pt-8 h-20 mb-2 z-20">
         <div className="flex-shrink-0 z-20">
           <a href="/">
             <img
@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
               alt="PP Logo"
             />
             <img
-              className="h-14 lg:hidden block"
+              className="sm:h-14 h-8 lg:hidden block"
               src={PPDiamond}
               alt="PP Diamond"
             />

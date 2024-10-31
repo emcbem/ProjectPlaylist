@@ -80,7 +80,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
         <MenuHandler>
           <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 w-28 h-8  justify-center space-x-1"
+              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 py-2 px-4  justify-center space-x-1"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >

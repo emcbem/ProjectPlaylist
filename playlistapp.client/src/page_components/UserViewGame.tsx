@@ -71,7 +71,7 @@ const UserViewGame = () => {
             <h1 className="dark:text-white text-black sm:text-base text-tiny line-clamp-3">
               {game?.description}
             </h1>
-            <div className="flex sm:justify-start justify-center w-full">
+            <div className="flex justify-start w-full">
               <AddButton gameId={gameId} />
             </div>
             <div className="lgmd:flex hidden">
