@@ -23,7 +23,7 @@ const PlaylistGridView: FC<props> = ({ listGames }) => {
                     <Link key={key} to={`/user-view-game/${g.gameId}`} className="">
                         <div className="overflow-hidden">
                             <img
-                                className="img img-fluid w-full h-auto object-cover"
+                                className="img img-fluid w-full h-auto object-cover rounded-xl"
                                 src={g.game.coverUrl}
                                 style={{ aspectRatio: '3 / 4' }}
                             />

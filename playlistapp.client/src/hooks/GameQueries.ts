@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameKeys";
 import { GameService } from "@/ApiServices/GameService";
-import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
 
 export const GameQueries = {
   useGetAllGames: () => {
