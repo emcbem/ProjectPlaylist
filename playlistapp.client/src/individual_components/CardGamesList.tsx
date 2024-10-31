@@ -45,6 +45,7 @@ const CardGamesList = forwardRef<
             return <div key={g.id}>{ListGame(g, key)}</div>;
           }
         })}
+      </div>
         {isLoading && (
         <div role="status">
           <svg
@@ -66,7 +67,6 @@ const CardGamesList = forwardRef<
           <span className="sr-only">Loading...</span>
         </div>
       )}
-      </div>
       
     </>
   );

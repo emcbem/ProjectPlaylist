@@ -10,7 +10,9 @@ import { FC, useContext, useEffect, useState } from "react";
 const ReviewLike: FC<{
   gameReviewId: number;
 }> = ({ gameReviewId }) => {
-  const { usr, userGuid } = useContext(UserAccountContext) as UserAccountContextInterface;
+  const { usr, userGuid } = useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
   const [val, setVal] = useState<boolean>(false);
 
   const addReviewLikeRequest: AddReviewLikeRequest = {
@@ -30,10 +32,17 @@ const ReviewLike: FC<{
     userId: userGuid ?? "",
   };
 
-  const { mutate: AddReviewLike } =
-    ReviewLikeQueries.useAddReviewLike(addReviewLikeRequest);
+  const { mutate: AddReviewLike } = ReviewLikeQueries.useAddReviewLike(
+    addReviewLikeRequest,
+    gameReviewId
+  );
   const { mutate: UpdateReviewLike } = ReviewLikeQueries.useUpdateReviewLike(
-    updateReviewLikeRequest
+    updateReviewLikeRequest,
+    gameReviewId
+  );
+  const { mutate: RemoveReviewLike } = ReviewLikeQueries.useRemoveReviewLike(
+    updateReviewLikeRequest,
+    gameReviewId
   );
   const { data: reviewLike, refetch } = ReviewLikeQueries.useGetReviewLike(
     getReviewLikeRequest,
@@ -51,29 +60,32 @@ const ReviewLike: FC<{
     AddReviewLike();
   };
 
-  const handleUpdateReviewLike = () => {
-    setVal(!val);
+  const handleUpdateReviewLike = (passedVal: boolean) => {
+    console.log("UMMMMM KAY!", updateReviewLikeRequest);
+    setVal(passedVal);
     UpdateReviewLike();
   };
 
   const handleRemoveReviewLike = () => {
-    UpdateReviewLike();
+    RemoveReviewLike();
   };
 
   return (
     <div className="flex justify-end items-center mt-5">
       <div
         onClick={() => {
-          reviewLike?.isLike
+          usr && reviewLike?.isLike == true
             ? handleRemoveReviewLike()
+            : reviewLike?.isLike == false
+            ? handleUpdateReviewLike(true)
             : handleAddReviewLike(true);
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 hover:translate-y-[-8px] hover:fill-green-600 cursor-pointer ${
+          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 cursor-pointer ${
             usr && reviewLike?.isLike == true
-              ? "translate-y-[-8px] fill-green-600"
+              ? " fill-green-600"
               : "fill-black dark:fill-white"
           }`}
           viewBox="0 0 16 14"
@@ -84,16 +96,18 @@ const ReviewLike: FC<{
       </div>
       <div
         onClick={() => {
-          reviewLike && !reviewLike.isLike
-            ? handleUpdateReviewLike()
+          usr && reviewLike?.isLike == false
+            ? handleRemoveReviewLike()
+            : reviewLike?.isLike == true
+            ? handleUpdateReviewLike(false)
             : handleAddReviewLike(false);
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 hover:translate-y-[8px] hover:fill-red-600 cursor-pointer transform -scale-x-100 ${
+          className={`sm:w-5 sm:h-5 w-4 h-4 mx-2 transition-transform duration-300 cursor-pointer transform -scale-x-100 ${
             usr && reviewLike?.isLike == false
-              ? "translate-y-[8px] fill-red-600"
+              ? " fill-red-600"
               : "fill-black dark:fill-white"
           }`}
           viewBox="0 2 16 14"

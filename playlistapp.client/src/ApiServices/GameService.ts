@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Game } from "../@types/game";
 import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
+import { Page } from "@/@types/Page";
 
 export const GameService = {
   GetAllGames: async (): Promise<Game[]> => {
@@ -10,17 +11,15 @@ export const GameService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to fetch games:", error);
+      console.error("Failed to fetch all games:", error);
       throw error;
     }
   },
-
   GetGameById: async (gameId: number | undefined): Promise<Game> => {
     if (!gameId) {
       console.error("Game id is undefined or not found");
       throw new Error("Game id must be provided");
     }
-
     try {
       const response = await axios.get<Game>(
         `${import.meta.env.VITE_URL}/Game/getgamebyid`,
@@ -36,7 +35,6 @@ export const GameService = {
       throw error;
     }
   },
-
   GetGamesByQuery: async (query: string | undefined): Promise<Game[]> => {
     console.log("Getting games by query: ", query);
     try {
@@ -56,19 +54,20 @@ export const GameService = {
     }
   },
 
-  GetFilteredGamesByRequest: async (
-    request: GetGamesRequest
-  ): Promise<Game[]> => {
-    console.log("Getting games from a request with title: " + request.title);
-    console.log(request);
+  GetFilteredGamesByRequest: async (page: any, searchRequest: GetGamesRequest): Promise<Page> => {
+    const clone = { ...searchRequest };
+    clone.page = page;
     try {
       const response = await axios.post<Game[]>(
         `${import.meta.env.VITE_URL}/game/filtergamesbyrequest`,
-
-        request
+        clone
       );
-      console.log(response.data);
-      return response.data;
+
+      return {
+        pageGames: response.data,
+        previousCursor: page - 1,
+        nextCursor: page + 1,
+      };
     } catch (error) {
       console.error("Failed to fetch games with query:", error);
       throw error;

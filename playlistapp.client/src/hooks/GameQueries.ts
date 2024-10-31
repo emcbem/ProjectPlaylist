@@ -1,33 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GameKeys";
 import { GameService } from "@/ApiServices/GameService";
-import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
 
 export const GameQueries = {
-  useGetAllGamesByNameQuery: (query: string) => {
+  useGetAllGames: () => {
+    return useQuery({
+      queryKey: keys.GetAllGames,
+      queryFn: () => GameService.GetAllGames(),
+    });
+  },
+  useGetGameById: (gameId: number) => {
+    return useQuery({
+      queryKey: keys.GameById,
+      queryFn: () => GameService.GetGameById(gameId),
+    });
+  },
+  useGetAllGamesByQuery: (query: string) => {
     return useQuery({
       queryKey: keys.GameByName,
       queryFn: () => GameService.GetGamesByQuery(query),
     });
-    /*
-            example on how to use in a page
-            const { data: userGameFromGame, isLoading, error } = useGetAllUserGamesByGameQuery(Number(gameId));
-        */
   },
-
-  useGetGameByIdQuery: (query: number) => {
+  useGetFilteredGamesByRequest: (request: GetGamesRequest) => {
     return useQuery({
-      queryKey: keys.GameById,
-      queryFn: () => GameService.GetGameById(query),
+      queryKey: keys.QueriedGames(request),
+      queryFn: () => GameService.GetFilteredGamesByRequest(request),
     });
   },
-
-  useFilterGameQuery: (request: GetGamesRequest) => {
-    return useQuery(
-      {
-        queryKey: keys.QueriedGames(request),
-        queryFn: () => GameService.GetFilteredGamesByRequest(request),
-      }
-    )
-  }
 };

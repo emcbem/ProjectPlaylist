@@ -63,12 +63,13 @@ const AddButton: React.FC<props> = ({ gameId }) => {
 
   useEffect(() => {
     mutatePlatformGames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <Menu placement="bottom-end" >
-        <MenuHandler >
+      <Menu placement="bottom-end">
+        <MenuHandler>
           <button className="my-4">
             <div
               className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 w-28 h-8  justify-center space-x-1"
@@ -120,8 +121,9 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                   : selectedPlatform.platform.name}
                 <ChevronUpIcon
                   strokeWidth={2.5}
-                  className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-90" : ""
-                    }`}
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    openMenu ? "rotate-90" : ""
+                  }`}
                 />
               </MenuItem>
             </MenuHandler>
@@ -157,9 +159,11 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            className={`font-bold ${!selectedPlatform ? "text-gray-500 cursor-default" : ``
-              }`}
+            className={`font-bold ${
+              !selectedPlatform ? "text-gray-500 cursor-default" : ``
+            }`}
             onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               selectedPlatform ? handleMenuItemClick(selectedPlatform.id) : "";
             }}
           >
@@ -170,7 +174,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             <MenuItem
               disabled={true}
               className={`font-bold text-gray-900`}
-              onClick={() => { }}
+              onClick={() => {}}
             >
               <img src={loadingDotsGif} width={20} />
             </MenuItem>
