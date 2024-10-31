@@ -15,99 +15,60 @@ import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
-const queryClient = new QueryClient();
+import { ThemeProvider } from "@material-tailwind/react";
+import { materialTheme } from "./lib/theme";
+const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
   const { isAuthenticated } = useAuth0();
-
-  // const theme = {
-  //   menu: {
-  //     styles: {
-  //       base: {
-  //         menu: {
-  //           bg: "bg-clay-600 ",
-  //           minWidth: "min-w-[75px]",
-  //           width: "sm:w-full w-1/3",
-  //           p: "p-3",
-  //           border: "border border-none",
-  //           borderRadius: "rounded-md",
-  //           boxShadow: "shadow-lg shadow-blue-gray-500/10",
-  //           fontFamily: "font-sans",
-  //           fontSize: "smm:text-sm text-[11.2px]",
-  //           fontWeight: "font-normal",
-  //           color: "text-white",
-  //           overflow: "overflow-auto",
-  //           outline: "focus:outline-none",
-  //           zIndex: "z-[999]",
-  //         },
-  //         item: {
-  //           initial: {
-  //             display: "block",
-  //             width: "w-full",
-  //             pt: "pt-[9px]",
-  //             pb: "pb-2",
-  //             px: "sm:px-3",
-  //             borderRadius: "rounded-md",
-  //             textAlign: "text-start",
-  //             lightHeight: "leading-tight",
-  //             cursor: "cursor-pointer",
-  //             userSelect: "select-none",
-  //             transition: "transition-all",
-  //             bg: "hover:bg-blue-gray-50 hover:bg-opacity-80 focus:bg-blue-gray-50 focus:bg-opacity-80 active:bg-blue-gray-50 active:bg-opacity-80",
-  //             color:
-  //               "text-white",
-  //             outline: "outline-none",
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // };
 
   return (
     <QueryClientProvider client={queryClient}>
       <UserAccountContextProvider>
         <SearchBarProvider>
-          {/* <ThemeProvider value={theme}> */}
-          <Toaster />
-          <ShineBorder
-            className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
-            color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
-            borderWidth={6}
-            duration={30}
-          >
-            <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
-              <div className="dark:bg-black bg-white w-full">
-                <Navbar />
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
-                    }
-                  />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/view-game/:gameId" element={<UserViewGame />} />
-                  <Route
-                    path="/user-view-game/:gameId"
-                    element={<UserViewGame />}
-                  />
-                  <Route path="/account" element={<Account />} />
-                  <Route path="/library" element={<MyLibrary />} />
-                  <Route path="/list/:listId" element={<Playlist />} />
-                  <Route
-                    path="/achievements/:gameId"
-                    element={<AchievementsPage />}
-                  />
-                  <Route
-                    path="/test/:userAchievementId"
-                    element={<TestPage />}
-                  />
-                </Routes>
+          <ThemeProvider value={materialTheme}>
+            <Toaster />
+            <ShineBorder
+              className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
+              color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
+              borderWidth={6}
+              duration={30}
+            >
+              <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
+                <div className="dark:bg-black bg-white w-full">
+                  <Navbar />
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={
+                        isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
+                      }
+                    />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route
+                      path="/view-game/:gameId"
+                      element={<UserViewGame />}
+                    />
+                    <Route
+                      path="/user-view-game/:gameId"
+                      element={<UserViewGame />}
+                    />
+                    <Route path="/account" element={<Account />} />
+                    <Route path="/library" element={<MyLibrary />} />
+                    <Route path="/list/:listId" element={<Playlist />} />
+                    <Route
+                      path="/achievements/:gameId"
+                      element={<AchievementsPage />}
+                    />
+                    <Route
+                      path="/test/:userAchievementId"
+                      element={<TestPage />}
+                    />
+                  </Routes>
+                </div>
               </div>
-            </div>
-          </ShineBorder>
-          {/* </ThemeProvider> */}
+            </ShineBorder>
+          </ThemeProvider>
         </SearchBarProvider>
       </UserAccountContextProvider>
     </QueryClientProvider>
