@@ -19,8 +19,6 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
     user?.sub ?? ""
   );
 
-  console.log(user)
-
   useEffect(() => {
     if (data && data.guid) {
       setStoredUserGuid(data.guid);

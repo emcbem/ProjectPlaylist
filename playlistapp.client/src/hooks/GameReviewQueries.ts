@@ -69,13 +69,20 @@ export const GameReviewQueries = {
     ).data;
     */
   },
-  useUpdateGameReview: (updateGameReviewRequest: UpdateGameReviewRequest) => {
+  useUpdateGameReview: (
+    updateGameReviewRequest: UpdateGameReviewRequest,
+    gameId: number
+  ) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         GameReviewService.UpdateGameReview(updateGameReviewRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateGameReview });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetAllGameReviewsByGame(gameId),
+          refetchType: "all",
+        });
       },
     });
     /*
