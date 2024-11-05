@@ -19,10 +19,6 @@ const PlaylistLists = () => {
         coverUrl: "https://lipsum.app/400x400/717272/717272"
     }
 
-    console.log("Lists")
-    // console.log(lists ? lists[0] : "no games")
-    console.log(lists)
-
     return (
         <>
             <div className="flex flex-row">
@@ -51,7 +47,6 @@ const PlaylistLists = () => {
                             <Link to={`/list/${list.id}`}>
                                 <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end opacity-100 dark:opacity-100 customGradient p-2">
                                     <div>
-                                        <p>List id: {list.id}</p>
                                         <p className="text-white text-2xl me-2">{list.name}<br />
                                             <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="currentColor" className="bi bi-arrow-right" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />

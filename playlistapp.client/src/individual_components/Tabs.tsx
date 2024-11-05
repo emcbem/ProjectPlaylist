@@ -46,12 +46,26 @@ const Tabs = () => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: AllGameReviewsForGame } =
+  const { data: AllGameReviewsForGame, isLoading: loading } =
     GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
 
   const tabs = ["Reviews", "Your Stats", "Achievements", "Global Leaderboard"];
+
+  const sortedReview = (() => {
+    const reviewsCopy = AllGameReviewsForGame!;
+
+    const userReviewIndex = reviewsCopy?.findIndex(
+      (item) => item.user.guid == usr?.guid
+    );
+    if (userReviewIndex > 0) {
+      const [item3] = reviewsCopy.splice(userReviewIndex, 1);
+      reviewsCopy.unshift(item3);
+    }
+
+    return reviewsCopy;
+  })();
 
   return (
     <div className="w-full">
@@ -71,18 +85,18 @@ const Tabs = () => {
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
-              {usr &&
-              AllGameReviewsForGame &&
-              AllGameReviewsForGame?.length > 0 ? (
-                AllGameReviewsForGame?.map((review, key) => (
+              {usr && AllGameReviewsForGame && sortedReview?.length > 0 ? (
+                sortedReview?.map((review, key) => (
                   <Review
                     review={review}
                     currentUserGuid={usr?.guid}
                     key={key}
                   />
                 ))
+              ) : loading == true ? (
+                <p>loading</p>
               ) : (
-                <p>No reviews yet</p>
+                <p>No reviews yet, leave one!</p>
               )}
             </div>
             <ReviewModal />

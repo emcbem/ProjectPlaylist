@@ -74,6 +74,9 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
         text: reviewText,
       });
 
+      setVal(0);
+      setReviewText("");
+
       handleAddGameReview();
     }
     if (game && usr && gameReviewId && editReview && editVal) {
@@ -103,7 +106,7 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
           width="16"
           height="16"
           fill="currentColor"
-          className="bi bi-pencil-square mr-2 cursor-pointer text-white"
+          className="bi bi-pencil-square mx-2 cursor-pointer text-clay-900"
           viewBox="0 0 16 16"
           onClick={openModal}
         >
@@ -158,8 +161,8 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
                 onChange={handleChange}
                 value={val}
                 valueLabelDisplay="auto"
-                step={1}
                 marks
+                step={1}
                 min={1}
                 max={10}
                 sx={{
@@ -172,7 +175,7 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
               <label className="block mb-2 text-sm text-white ">Review</label>
               <textarea
                 className="resize-y w-full rounded-md bg-transparent placeholder:white text-white text-sm border border-white px-3 py-5  focus:border-white focus:ring-0"
-                placeholder={reviewText ? reviewText : "Your Rview"}
+                placeholder={reviewText ? reviewText : "Enter your thoughts..."}
                 value={reviewText ? reviewText : ""}
                 onChange={(e) => setReviewText(e.target.value)}
               />
