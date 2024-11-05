@@ -1,7 +1,9 @@
 import { List } from "@/@types/list";
 import TrashIconGray from "@/assets/Icons/Trash";
 import { ListQueries } from "@/hooks/ListQueries";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import React, { useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 
 interface RemoveListProps {
