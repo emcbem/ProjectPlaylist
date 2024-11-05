@@ -1,6 +1,6 @@
 import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
 import { GoalService } from "@/ApiServices/GoalService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GoalKeys";
 
 export const GoalQueries = {
@@ -13,4 +13,10 @@ export const GoalQueries = {
       },
     });
   },
+  useGetGoalById: (goalId: number) => {
+    return useQuery({
+        queryFn: () => GoalService.getGoalById(goalId),
+        queryKey: keys.GetGoalById
+    })
+  }
 };
