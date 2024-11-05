@@ -1,6 +1,7 @@
 import { GameReview } from "@/@types/gameReview.js";
 import ReviewLike from "./ReviewLike.tsx";
 import ReviewModal from "./ReviewModal.tsx";
+import DeleteModal from "./DeleteModal.tsx";
 
 interface props {
   review: GameReview;
@@ -38,11 +39,14 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
               }`}
             >
               {currentUserGuid == review.user.guid ? (
-                <ReviewModal
-                  gameReviewId={review.id}
-                  editReview={review.text}
-                  editVal={review.rating}
-                />
+                <>
+                  <DeleteModal gameReviewId={review.id} />
+                  <ReviewModal
+                    gameReviewId={review.id}
+                    editReview={review.text}
+                    editVal={review.rating}
+                  />
+                </>
               ) : (
                 <> </>
               )}

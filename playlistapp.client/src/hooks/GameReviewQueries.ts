@@ -105,12 +105,17 @@ export const GameReviewQueries = {
     };
     */
   },
-  useDeleteGameReview: (gameReviewId: number) => {
+  useDeleteGameReview: (gameReviewId: number, gameId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => GameReviewService.DeleteGameReview(gameReviewId),
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: keys.DeleteGameReview }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.DeleteGameReview });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetAllGameReviewsByGame(gameId),
+          refetchType: "all",
+        });
+      },
     });
     /*
     const {
