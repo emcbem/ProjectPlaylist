@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserGameKeys";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { updateUserGameRequest } from "@/@types/Requests/UpdateRequests/updateUserGameRequest";
+import toast from "react-hot-toast";
 
 export const UserGameQueries = {
   useGetAllUserGamesByUserGameIdQuery: (userGameId: number) => {
@@ -23,7 +24,7 @@ export const UserGameQueries = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.DeleteUserGame });
         queryClient.invalidateQueries({ queryKey: keys.GetAllUserGamesByUser(userGuid) });
-        console.log("User game deleted successfully.");
+        toast.success("User game deleted successfully");
       },
       onError: (error) => {
         console.error("Error deleting user game: ", error);

@@ -61,7 +61,6 @@ const ReviewLike: FC<{
   };
 
   const handleUpdateReviewLike = (passedVal: boolean) => {
-    console.log("UMMMMM KAY!", updateReviewLikeRequest);
     setVal(passedVal);
     UpdateReviewLike();
   };

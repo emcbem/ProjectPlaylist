@@ -3,7 +3,7 @@ import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/hooks/GameQueries";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 
 const UserViewGame = () => {
   const [avgReview, setAvgReview] = useState<number | null>();
@@ -26,8 +26,6 @@ const UserViewGame = () => {
       setAvgReview(null);
     }
   }, [AllGameReviewsForGame]);
-
-  console.log(5.5);
 
   return (
     <>

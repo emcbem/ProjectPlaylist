@@ -1,11 +1,13 @@
 import { GameReview } from "@/@types/gameReview.js";
 import ReviewLike from "./ReviewLike.tsx";
+import ReviewModal from "./ReviewModal.tsx";
 
 interface props {
   review: GameReview;
+  currentUserGuid: string;
 }
 
-const Review: React.FC<props> = ({ review }) => {
+const Review: React.FC<props> = ({ review, currentUserGuid }) => {
   return (
     <li className="py-3 w-full sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
       <div className="flex space-x-4 rtl:space-x-reverse">
@@ -21,8 +23,9 @@ const Review: React.FC<props> = ({ review }) => {
             <p className="sm:text-sm text-tiny font-medium text-clay-950  dark:text-clay-900">
               {review.user.username}
             </p>
+
             <div
-              className={`flex justify-end items-center md:text-lg sm:text-base text-tiny font-semibold mx-2 ${
+              className={`flex justify-end items-baseline md:text-lg sm:text-base text-tiny font-semibold mx-2 ${
                 review.rating <= 10 && review.rating >= 8
                   ? `text-yellow-500`
                   : review.rating <= 7 && review.rating >= 6
@@ -34,6 +37,15 @@ const Review: React.FC<props> = ({ review }) => {
                   : ``
               }`}
             >
+              {currentUserGuid == review.user.guid ? (
+                <ReviewModal
+                  gameReviewId={review.id}
+                  editReview={review.text}
+                  editVal={review.rating}
+                />
+              ) : (
+                <> </>
+              )}
               {review.rating}/10
             </div>
           </div>

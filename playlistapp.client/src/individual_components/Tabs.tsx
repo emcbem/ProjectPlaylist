@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
 import { useParams } from "react-router-dom";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
 
 interface TabProps {
   TabName: string;
@@ -41,6 +43,7 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 };
 
 const Tabs = () => {
+  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
 
   const { data: AllGameReviewsForGame } =
@@ -68,9 +71,15 @@ const Tabs = () => {
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
-              {AllGameReviewsForGame && AllGameReviewsForGame?.length > 0 ? (
+              {usr &&
+              AllGameReviewsForGame &&
+              AllGameReviewsForGame?.length > 0 ? (
                 AllGameReviewsForGame?.map((review, key) => (
-                  <Review review={review} key={key} />
+                  <Review
+                    review={review}
+                    currentUserGuid={usr?.guid}
+                    key={key}
+                  />
                 ))
               ) : (
                 <p>No reviews yet</p>

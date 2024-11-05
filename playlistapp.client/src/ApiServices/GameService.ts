@@ -36,7 +36,6 @@ export const GameService = {
     }
   },
   GetGamesByQuery: async (query: string | undefined): Promise<Game[]> => {
-    console.log("Getting games by query: ", query);
     try {
       const response = await axios.get<Game[]>(
         `${import.meta.env.VITE_URL}/Game/getgamebyname`,
@@ -46,7 +45,6 @@ export const GameService = {
           },
         }
       );
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch games with query:", error);

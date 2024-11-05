@@ -1,7 +1,7 @@
 
 interface IconProps {
     width: string,
-    fill: string,
+    fill?: string,
 }
 
 const EpicIconCustom: React.FC<IconProps> = ({ width, fill }) => {
