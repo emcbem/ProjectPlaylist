@@ -61,7 +61,7 @@ function App() {
                       element={<AchievementsPage />}
                     />
                     <Route
-                      path="/test/:userAchievementId"
+                      path="/test"
                       element={<TestPage />}
                     />
                   </Routes>
