@@ -1,111 +1,143 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using PlaylistApp.Server.Data;
 
 namespace PlaylistApp.Server.Services.IGDBServices
 {
-    public class UploadData
-    {
-        IDbContextFactory<PlaylistDbContext> dbContextFactory;
+	public class UploadData
+	{
+		IDbContextFactory<PlaylistDbContext> dbContextFactory;
 
-        public UploadData(IDbContextFactory<PlaylistDbContext> dbContextFactory)
-        {
-            this.dbContextFactory = dbContextFactory;
-        }
+		public UploadData(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+		{
+			this.dbContextFactory = dbContextFactory;
+		}
 
-        public async Task<List<Data.Game>> GetAllGames()
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+		public async Task<List<Data.Game>> GetAllGames()
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            return await context.Games.ToListAsync();
-        }
+			return await context.Games.ToListAsync();
+		}
 
-        public async Task UploadGamesToDatabase(List<Data.Game> localGames)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+		public async Task UploadGamesToDatabase(List<Data.Game> localGames)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            context.Games.AddRange(localGames);
+			context.Games.AddRange(localGames);
 
-            await context.SaveChangesAsync();
-        }
+			await context.SaveChangesAsync();
+		}
 
-        public async Task RemoveGames(List<Data.Game> localGames)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
-        }
+		public async Task RemoveGames(List<Data.Game> localGames)
+		{
+			int batchSize = 10;
+			var batches = localGames
+				.Select((game, index) => new { game, index })
+				.GroupBy(x => x.index / batchSize)
+				.Select(group => group.Select(x => x.game).ToList())
+				.ToList();
 
-        public async Task UploadCompaniesToDatabase(List<Data.Company> localCompanies)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			using var semaphore = new SemaphoreSlim(5);
+			var tasks = new List<Task>();
 
-            context.Companies.AddRange(localCompanies);
+			foreach (var batch in batches)
+			{
+				await semaphore.WaitAsync(); // Wait for a slot to become available
 
-            await context.SaveChangesAsync();
-        }
+				tasks.Add(Task.Run(async () =>
+				{
+					try
+					{
+						// Create a new DbContext for this task
+						using var context = dbContextFactory.CreateDbContext();
+						context.Games.RemoveRange(batch);
+						await context.SaveChangesAsync();
+					}
+					finally
+					{
+						semaphore.Release(); // Release the semaphore slot
+					}
+				}));
+			}
 
-        public async Task UploadPlatformsToDatabase(List<Platform> localPlatforms)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			// Wait for all tasks to complete
+			await Task.WhenAll(tasks);
+		}
 
-            context.Platforms.AddRange(localPlatforms);
+		public async Task UploadCompaniesToDatabase(List<Data.Company> localCompanies)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            await context.SaveChangesAsync();
-        }
+			context.Companies.AddRange(localCompanies);
 
-        public async Task UploadPlatformGamesToDatabase(List<PlatformGame> localPlatformGames)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			await context.SaveChangesAsync();
+		}
 
-            context.PlatformGames.AddRange(localPlatformGames);
+		public async Task UploadPlatformsToDatabase(List<Platform> localPlatforms)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            await context.SaveChangesAsync();
-        }
+			context.Platforms.AddRange(localPlatforms);
 
-        internal async Task UploadAcievementsToDatabase(List<Data.Achievement> achievementLists)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			await context.SaveChangesAsync();
+		}
 
-            context.Achievements.AddRange(achievementLists);
+		public async Task UploadPlatformGamesToDatabase(List<PlatformGame> localPlatformGames)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            await context.SaveChangesAsync();
-        }
+			context.PlatformGames.AddRange(localPlatformGames);
 
-        public async Task UploadGenresToDatabase(List<Data.Genre> localGenres)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			await context.SaveChangesAsync();
+		}
 
-            context.Genres.AddRange(localGenres);
+		internal async Task UploadAcievementsToDatabase(List<Data.Achievement> achievementLists)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            await context.SaveChangesAsync();
+			context.Achievements.AddRange(achievementLists);
 
-        }
+			await context.SaveChangesAsync();
+		}
 
-        public async Task UploadInvolvedCompaniesToDatabase(List<InvolvedCompany> localInvolvedCompanies)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+		public async Task UploadGenresToDatabase(List<Data.Genre> localGenres)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            context.InvolvedCompanies.AddRange(localInvolvedCompanies);
+			context.Genres.AddRange(localGenres);
 
-            await context.SaveChangesAsync();
-        }
+			await context.SaveChangesAsync();
 
-        public async Task UploadGameGenres(List<GameGenre> localGameGenres)
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+		}
 
-            context.GameGenres.AddRange(localGameGenres);
+		public async Task UploadInvolvedCompaniesToDatabase(List<InvolvedCompany> localInvolvedCompanies)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-            await context.SaveChangesAsync();
-        }
+			context.InvolvedCompanies.AddRange(localInvolvedCompanies);
 
-        public async Task<List<Data.PlatformGame>> GetAllPlatformGames()
-        {
-            var context = await dbContextFactory.CreateDbContextAsync();
+			await context.SaveChangesAsync();
+		}
 
-            return await context.PlatformGames.ToListAsync();
-        }
+		public async Task UploadGameGenres(List<GameGenre> localGameGenres)
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
 
-        public async Task PleaseDeleteThem()
-        {
+			context.GameGenres.AddRange(localGameGenres);
+
+			await context.SaveChangesAsync();
+		}
+
+		public async Task<List<Data.PlatformGame>> GetAllPlatformGames()
+		{
+			var context = await dbContextFactory.CreateDbContextAsync();
+
+			return await context.PlatformGames.ToListAsync();
+		}
+
+		public async Task PleaseDeleteThem()
+		{
 			var context = await dbContextFactory.CreateDbContextAsync();
 			var gamesToDelete = context.PlatformGames.Where(p => Strainer.FlaggedPlatforms.Contains(p.PlatformId)).ToList(); // Execute query
 

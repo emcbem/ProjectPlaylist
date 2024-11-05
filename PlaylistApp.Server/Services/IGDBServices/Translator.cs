@@ -9,18 +9,44 @@ namespace PlaylistApp.Server.Services.IGDBServices
     {
         public static List<Data.Game> TranslateIGDBGamesIntoPersonalData(List<IGDB.Models.Game> igdbGames, List<Cover> covers, List<AgeRating> ratings)
         {
-            return igdbGames.Select(igdbGame => new Data.Game()
+            var coversDict = covers.Where(p => p.Id != null).ToDictionary(p => (long)p!.Id!, p => p);
+            var ratingsDict = ratings.Where(p => p.Category == AgeRatingCategory.ESRB).ToDictionary(p => p?.Id ?? 0, p => p);
+
+            Cover? cover = null;
+			AgeRating? rating = null;
+
+
+
+			return igdbGames.Select(igdbGame => 
             {
-                IdgbId = (int?)igdbGame.Id,
-                Description = igdbGame.Summary,
-                CoverUrl = igdbGame.Cover.Id is not null && igdbGame.Cover.Id != -1 ? covers.FirstOrDefault(cover => cover.Id == igdbGame.Cover.Id)?.Url ?? "" : "",
-                AgeRating = igdbGame.AgeRatings.Ids is not null && igdbGame.AgeRatings.Ids.Count() > 0 ? ratings.FirstOrDefault(rating =>
-                    igdbGame.AgeRatings.Ids.Any(igdbRatingId => rating.Id == igdbRatingId &&
-                    rating.Category == AgeRatingCategory.ESRB
-                ))?.Rating.ToString() ?? "No Age Rating Found" : "No Age Rating Found",
-                PublishDate = igdbGame.FirstReleaseDate?.DateTime.ToUniversalTime() ?? (new DateTime()).ToUniversalTime(),
-                Title = igdbGame.Name,
-            }).ToList();
+                var game = new Data.Game();
+
+                game.IdgbId = (int?)igdbGame.Id;
+                game.Description = igdbGame.Summary;
+
+                if(coversDict.TryGetValue(igdbGame.Cover.Id ?? 0, out cover))
+                {
+                    game.CoverUrl = cover.Url;
+                }
+                else
+                {
+					game.CoverUrl = null;
+				}
+
+                if(igdbGame.AgeRatings.Ids is not null && igdbGame.AgeRatings.Ids.Count() > 0 && igdbGame.AgeRatings.Ids.Any(i => ratingsDict.TryGetValue(i, out rating)))
+                {
+                    game.AgeRating = rating!.ToString();
+                }
+                else
+                {
+					game.AgeRating = null;
+				}
+
+				game.PublishDate = igdbGame.FirstReleaseDate?.DateTime.ToUniversalTime() ?? (new DateTime()).ToUniversalTime();
+                game.Title = igdbGame.Name;
+
+                return game;
+            }).Where(p => p is not null).ToList()!;
         }
 
         public static List<Data.Company> TranslateIGDBCompaniesIntoPersonalData(List<IGDB.Models.Company> igdbCompanies, List<IGDB.Models.CompanyLogo> igdbLogos)

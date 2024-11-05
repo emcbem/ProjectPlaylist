@@ -22,16 +22,29 @@ public static class Strainer
 			505
 		};
 
-	public static HashSet<int> FlaggedKeywords = new HashSet<int>()
+	public static HashSet<int?> FlaggedKeywords = new HashSet<int?>()
 		{
 			2509
 		};
 
+	public static HashSet<int> FlaggedThemes = new HashSet<int>()
+		{
+			42
+		};
+
 	public static List<IGDB.Models.Game> StrainGames(List<IGDB.Models.Game> games)
 	{
-		var uselessGames = games.Where(p => p.Platforms.Ids.All(id => FlaggedPlatforms.Contains((int)id))).ToList();
-		var alsoUseless = games.Where(p => p.Keywords.Ids.Any(id => FlaggedKeywords.Contains((int)id))).ToList();
+		var uselessGames = games.Where(p =>
+		{
+			bool keywordFlagged = p.Keywords?.Ids.Any(id => FlaggedKeywords.Contains((int?)id)) ?? false;
+			bool platformFlagged = p.Platforms.Ids.Count() == 0 || p.Platforms.Ids.All(id => FlaggedPlatforms.Contains((int)id));
+			bool coverFlagged = p.Cover.Id == -1;
+			bool themeFlagged = p.Themes?.Ids.Any(id => FlaggedThemes.Contains((int)id)) ?? false;
+			bool flaggedAsDlc = p.Category != IGDB.Models.Category.MainGame;
 
-		return alsoUseless;
+			return keywordFlagged || platformFlagged || coverFlagged || themeFlagged || flaggedAsDlc;
+		}).ToList();
+
+		return uselessGames;
 	}
 }

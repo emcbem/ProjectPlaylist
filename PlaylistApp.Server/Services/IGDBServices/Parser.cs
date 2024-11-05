@@ -298,6 +298,8 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")!));
                     game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")!));
                     game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
+					var parentGameId = csv.GetField<long?>("parent_game");
+                    game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1); 
                     // Example null check
                     if (string.IsNullOrWhiteSpace(game.Name))
                     {
