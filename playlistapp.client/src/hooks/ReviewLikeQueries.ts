@@ -2,6 +2,7 @@ import { AddReviewLikeRequest } from "@/@types/Requests/AddRequests/addReviewLik
 import { ReviewLikeService } from "@/ApiServices/ReviewLikeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/ReviewLikeKeys";
+import reviewKeys from "@/QueryKeys/GameReviewKeys";
 import { RemoveReviewLikeRequest } from "@/@types/Requests/DeleteRequests/removeReviewLikeRequest";
 import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
 import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLikeRequest";
@@ -9,7 +10,8 @@ import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLik
 export const ReviewLikeQueries = {
   useAddReviewLike: (
     addReviewLikeRequest: AddReviewLikeRequest,
-    gameReviewId: number
+    gameReviewId: number,
+    gameId: number
   ) => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -18,6 +20,9 @@ export const ReviewLikeQueries = {
         queryClient.invalidateQueries({ queryKey: keys.AddReviewLike });
         queryClient.invalidateQueries({
           queryKey: keys.GetReviewLike(gameReviewId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: reviewKeys.GetAllGameReviewsByGame(gameId),
         });
       },
     });
@@ -57,7 +62,8 @@ export const ReviewLikeQueries = {
   },
   useRemoveReviewLike: (
     removeReviewLikeRequest: RemoveReviewLikeRequest,
-    gameReviewId: number
+    gameReviewId: number,
+    gameId: number
   ) => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -67,6 +73,9 @@ export const ReviewLikeQueries = {
         queryClient.invalidateQueries({ queryKey: keys.RemoveReviewLike });
         queryClient.invalidateQueries({
           queryKey: keys.GetReviewLike(gameReviewId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: reviewKeys.GetAllGameReviewsByGame(gameId),
         });
       },
     });
@@ -91,7 +100,8 @@ export const ReviewLikeQueries = {
   },
   useUpdateReviewLike: (
     updateReviewLikeRequest: UpdateReviewLikeRequest,
-    gameReviewId: number
+    gameReviewId: number,
+    gameId: number
   ) => {
     const queryclient = useQueryClient();
     return useMutation({
@@ -101,6 +111,9 @@ export const ReviewLikeQueries = {
         queryclient.invalidateQueries({ queryKey: keys.UpdateReviewLike });
         queryclient.invalidateQueries({
           queryKey: keys.GetReviewLike(gameReviewId),
+        });
+        queryclient.invalidateQueries({
+          queryKey: reviewKeys.GetAllGameReviewsByGame(gameId),
         });
       },
     });

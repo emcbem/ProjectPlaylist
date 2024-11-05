@@ -50,6 +50,7 @@ public class GameReviewService : IGameReviewService
             .Include(x => x.Game)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
+            .Include(x => x.ReviewLikes)
             .Where(x => x.Id == gameReviewId)
             .FirstOrDefaultAsync();
 
@@ -71,6 +72,7 @@ public class GameReviewService : IGameReviewService
             .Include(x => x.Game)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
+            .Include(x => x.ReviewLikes)
             .Where(x => x.GameId == gameId)
             .ToListAsync();
 
@@ -90,6 +92,7 @@ public class GameReviewService : IGameReviewService
             .Include(x => x.Game)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
+            .Include(x => x.ReviewLikes)
             .Where(x => x.Id == gameReviewId)
             .FirstOrDefaultAsync();
 
@@ -109,6 +112,7 @@ public class GameReviewService : IGameReviewService
             .Include(x => x.Game)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
+            .Include(x => x.ReviewLikes)
             .Where(x => x.Id == request.GameReviewId)
             .FirstOrDefaultAsync();
 
