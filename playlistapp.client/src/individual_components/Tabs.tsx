@@ -36,7 +36,7 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
         <svg
           className={`w-4 h-4 me-2 ${
             isActive ? "text-black dark:text-white" : "text-gray-500"
-          }`}
+          } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white sm:block hidden`}
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
