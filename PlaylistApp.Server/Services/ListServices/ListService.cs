@@ -128,12 +128,11 @@ public class ListService : IListService
                 .ThenInclude(x => x.UserImage)
             .Include(x => x.ListGames)
                 .ThenInclude(x => x.Game)
-            .Where(x => x.Id == request.ListId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ListId);
 
         if (list == null)
         {
-            return new ListDTO();
+            return new ListDTO(); 
         }
 
         list.ListName = request.ListName;
@@ -141,36 +140,34 @@ public class ListService : IListService
 
         if (request.GamesToRemove is not null && request.GamesToRemove.Count > 0)
         {
-            var listGamesToRemove = request.GamesToRemove.Select(x => new ListGame()
-            {
-                DateAdded = x.DateAdded,
-                Game = new Data.Game{
-                    Id = x.Game!.Id
-                },
-                ListId = x.ListId,
-            });
-            context.ListGames.RemoveRange(listGamesToRemove);
-            await context.SaveChangesAsync();
-        }
+            var gameIdsToRemove = request.GamesToRemove.Select(x => x.GameId).ToList();
 
+            var listGamesToRemove = await context.ListGames
+                .Where(x => x.ListId == request.ListId && gameIdsToRemove.Contains(x.GameId))
+                .ToListAsync();
+
+            context.ListGames.RemoveRange(listGamesToRemove);
+        }
 
         if (request.NewGames is not null && request.NewGames.Count > 0)
         {
-            var listGamesToAdd = request.NewGames.Select(x => new ListGame()
-            {
-                DateAdded = DateTime.UtcNow,
-                GameId = x.Id,
-                ListId = request.ListId,
-            });
+            var existingGameIds = list.ListGames.Select(lg => lg.GameId).ToHashSet();
 
-            var filteredListGamesToAdd = listGamesToAdd.Where(x => list.ListGames.All(y => y.GameId != x.GameId));
+            var listGamesToAdd = request.NewGames
+                .Where(ng => !existingGameIds.Contains(ng.Id)) 
+                .Select(x => new ListGame
+                {
+                    DateAdded = DateTime.UtcNow,
+                    GameId = x.Id,
+                    ListId = request.ListId,
+                })
+                .ToList();
 
-            context.ListGames.AddRange(filteredListGamesToAdd);
-            await context.SaveChangesAsync();
+            context.ListGames.AddRange(listGamesToAdd);
         }
 
-        context.Update(list);
         await context.SaveChangesAsync();
-        return list.ToDTO();
+        return list.ToDTO(); 
     }
+
 }
