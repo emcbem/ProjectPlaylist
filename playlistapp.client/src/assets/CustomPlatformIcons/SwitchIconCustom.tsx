@@ -1,7 +1,7 @@
 
 interface IconProps {
     width: string,
-    fill: string,
+    fill?: string,
 }
 
 const SwitchIconCustom: React.FC<IconProps> = ({ width, fill }) => {

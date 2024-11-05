@@ -21,7 +21,7 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     queryKey: ["infiniteGames", controller.searchRequest],
     initialPageParam: 0,
     queryFn: ({ pageParam = 0 }) =>
-      GameService.GetFilteredGamesByRequest(pageParam, controller.searchRequest),
+      GameService.GetFilteredGamesByRequest(Number(pageParam), controller.searchRequest),
     getNextPageParam: (lastPage: Page) => {
       return lastPage.nextCursor;
     },
