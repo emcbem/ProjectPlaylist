@@ -7,7 +7,7 @@ const AchievementsPage: React.FC = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
   const { data: platformGames } =
-    PlatformGameQueries.useGetAllPlatformGamesByGameId(Number(gameId));
+    PlatformGameQueries.useGetAllPlatformGamesByGame(Number(gameId));
 
   console.log("pfg", platformGames);
 
