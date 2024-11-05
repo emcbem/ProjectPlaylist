@@ -49,7 +49,6 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
       observer.current = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
           if (entries[0]?.isIntersecting && hasNextPage) {
-            console.log("Hi");
             fetchNextPage();
           }
         }

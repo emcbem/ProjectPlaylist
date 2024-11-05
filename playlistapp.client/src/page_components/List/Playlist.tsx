@@ -25,8 +25,6 @@ const Playlist = () => {
     return <p>Loading...</p>
   }
 
-  console.log(list)
-
   return (
     <div className="min-h-screen bg-white dark:bg-black dark:text-white">
       <div className="grid justify-items-center ">
@@ -44,7 +42,7 @@ const Playlist = () => {
           </div>
 
           {!isListView ? (
-            <PlaylistTableView games={listGames} />
+            <PlaylistTableView games={listGames} list={list} />
           ) : (
             <PlaylistGridView listGames={listGames} list={list} />
           )
