@@ -2,12 +2,12 @@ import { ListGame } from '@/@types/listgame';
 import { ListQueries } from '@/hooks/ListQueries';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import EditListComponent from './EditListComponent';
+import EditListComponent from './EditNameComponent';
 import './Playlist.modules.scss';
 import GridAndListIcons from '../../individual_components/GridAndListIcons';
 import PlaylistTableView from './PlaylistListView';
 import PlaylistGridView from './PlaylistGridView';
-import RemoveListModal from './RemoveListModal';
+import ListOptionsComponent from './ListOptionsComponent';
 
 const Playlist = () => {
   const { listId } = useParams<{ listId: string }>();
@@ -31,7 +31,7 @@ const Playlist = () => {
         <div style={{ maxWidth: '1200px' }} className='w-full mt-8'>
           <div className="flex flex-row justify-between align-bottom">
             <EditListComponent list={list} />
-            <RemoveListModal list={list} />
+            <ListOptionsComponent list={list} />
           </div>
           <div className="flex flex-row justify-left align-middle mt-4 mb-3">
             <p className="me-8 text-xl text-clay-900">{list?.ownerName}</p>
