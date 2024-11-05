@@ -1,13 +1,13 @@
 import { ListGame } from '@/@types/listgame';
 import { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { List } from '@/@types/list';
 
 interface props {
     listGames: ListGame[] | undefined;
+    list: List | undefined;
 }
 
-const PlaylistGridView: FC<props> = ({ listGames }) => {
-
+const PlaylistGridView: FC<props> = ({ listGames, list }) => {
     if (!listGames || listGames.length <= 0) {
         return (
             <div>
@@ -16,20 +16,28 @@ const PlaylistGridView: FC<props> = ({ listGames }) => {
         )
     }
 
+    console.log(list)
+
     return (
-        <div className="grid xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-3 grid-cols-3 gap-1">
-            {listGames && listGames?.map((g, key) => (
-                <div key={key} className="w-50 m-2 dark:border-[#ffffff]">
-                    <Link key={key} to={`/user-view-game/${g.gameId}`} className="">
-                        <div className="overflow-hidden">
-                            <img
-                                className="img img-fluid w-full h-auto object-cover rounded-xl"
-                                src={g.game.coverUrl}
-                                style={{ aspectRatio: '3 / 4' }}
-                            />
-                        </div>
-                    </Link>
-                </div>
+        <div className="flex flex-wrap">
+            {listGames && listGames?.map((listGame, key) => (
+                <div key={key}>{listGame.id}, </div>
+                // <Link key={key} to={`/user-view-game/${listGame}`} className="m-2 w-36">
+                //     <div className="relative group">
+                //         <div className="absolute bottom-2 left-2">
+                //             <div className="hidden group-hover:block">
+                //                 <RemoveFromListButton listGame={listGame} list={list} />
+                //             </div>
+                //         </div>
+                //         <div className="overflow-hidden">
+                //             <img
+                //                 className="img img-fluid w-full h-auto object-cover rounded-xl"
+                //                 src={listGame.game.coverUrl}
+                //                 style={{ aspectRatio: '3 / 4' }}
+                //             />
+                //         </div>
+                //     </div>
+                // </Link>
             ))}
         </div>
     )

@@ -9,8 +9,6 @@ const AchievementsPage: React.FC = () => {
   const { data: platformGames } =
     PlatformGameQueries.useGetAllPlatformGamesByGame(Number(gameId));
 
-  console.log("pfg", platformGames);
-
   return (
     <div className=" dark:text-white text-black">
       <div className="">

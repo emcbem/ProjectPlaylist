@@ -4,6 +4,6 @@ export interface ListGame {
     listId: number,
     gameId: number,
     dateAdded: Date,
-    game: Game,
-    list: List,
+    // game: Game,
+    // list: List,
 }

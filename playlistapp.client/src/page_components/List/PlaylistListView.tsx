@@ -30,7 +30,7 @@ const PlaylistTableView: FC<listViewProps> = ({ games }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {games.map((g, key) => (
+                        {/* {games.map((g, key) => (
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={key}>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white xl:block lg:block md:block sm:hidden xs:hidden hidden">
                                     <img src={g.game.coverUrl} width={70} className="hover:scale-105" />
@@ -45,7 +45,7 @@ const PlaylistTableView: FC<listViewProps> = ({ games }) => {
                                     {String(g.dateAdded.getDay)}
                                 </td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </table>
             </div>
