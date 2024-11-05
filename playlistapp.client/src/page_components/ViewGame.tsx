@@ -9,7 +9,6 @@ import { GameQueries } from "../hooks/GameQueries";
 const ViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const { data: game, isSuccess } = GameQueries.useGetGameById(Number(gameId));
-  console.log("Game: ", game)
 
   return (
     isSuccess && (

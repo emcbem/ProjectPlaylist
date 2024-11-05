@@ -140,7 +140,7 @@ public class ListService : IListService
 
         if (request.GamesToRemove is not null && request.GamesToRemove.Count > 0)
         {
-            var gameIdsToRemove = request.GamesToRemove.Select(x => x.GameId).ToList();
+            var gameIdsToRemove = request.GamesToRemove.Select(x => x.Game!.Id).ToList();
 
             var listGamesToRemove = await context.ListGames
                 .Where(x => x.ListId == request.ListId && gameIdsToRemove.Contains(x.GameId))

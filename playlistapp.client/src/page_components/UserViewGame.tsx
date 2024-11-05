@@ -27,8 +27,6 @@ const UserViewGame = () => {
     }
   }, [AllGameReviewsForGame]);
 
-  console.log(5.5);
-
   return (
     <>
       <div className="flex w-full dark:text-white text-black justify-center sm:mt-28 mt-14">

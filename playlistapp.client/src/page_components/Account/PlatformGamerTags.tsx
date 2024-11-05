@@ -19,20 +19,20 @@ const PlatformGamerTags = () => {
                 </div>
             </div>
             <div className="flex flex-row items-center mb-3">
-                <EpicIconCustom width={'40'} />
+                <EpicIconCustom width={'40'} fill={'black'} />
                 <div className="ml-4 text-xl">
                     AlmondMilkxxx
                 </div>
             </div>
             <div className="flex flex-row items-center mb-3">
-                <SwitchIconCustom width={'40'} />
+                <SwitchIconCustom width={'40'} fill={'black'} />
                 <div className="ml-4 text-xl">
                     Nintento_Account2345
                 </div>
             </div>
 
             <div className="flex flex-row items-center mb-3">
-                <XboxIconCustom width={'40'} />
+                <XboxIconCustom width={'40'} fill={'black'} />
                 <div className="ml-4 text-xl">
                     Xbox_Account2345
                 </div>
