@@ -24,14 +24,11 @@ export const UserGenreService = {
         }
     },
     DeleteUserGenre: async (request: RemoveUserGenreRequest) => {
-        console.log(request)
         try {
             const response = await axios.delete<boolean>(
                 `${import.meta.env.VITE_URL}/UserGenre/deleteusergenre`,
                 {
-                    params: {
-                        request: request,
-                    },
+                    data: request, // Use the `data` field to send the request body
                 }
             );
             return response.data;

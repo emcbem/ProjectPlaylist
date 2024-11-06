@@ -19,12 +19,13 @@ const EditUserGenresList = ({ userGuid }: { userGuid: string | undefined }) => {
   }
 
   const handleRemoveGenre = async (userGenre: Genre) => {
-    const newGenreRequest: RemoveUserGenreRequest = {
+    const removeUserGenreRequest: RemoveUserGenreRequest = {
       userId: userGuid ?? "",
       genreId: userGenre.id
     }
-    await removeGenre(newGenreRequest)
+    await removeGenre(removeUserGenreRequest)
   }
+
 
   return (
     <>
