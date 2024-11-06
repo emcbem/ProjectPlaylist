@@ -17,6 +17,7 @@ import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
 import { ThemeProvider } from "@material-tailwind/react";
 import { materialTheme } from "./lib/theme";
+import Settings from "./page_components/Settings";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -63,6 +64,10 @@ function App() {
                     <Route
                       path="/test/:goalId"
                       element={<TestPage />}
+                    />
+                    <Route
+                      path="/settings"
+                      element={<Settings />}
                     />
                   </Routes>
                 </div>

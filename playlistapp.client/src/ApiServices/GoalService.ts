@@ -86,4 +86,24 @@ export const GoalService = {
       throw error;
     }
   },
+  deleteGoal: async (goalId: number) => {
+    if (!goalId) {
+      console.error("Goal id is undefined or empty");
+      throw new Error("Goal id must be provided");
+    }
+    try {
+      const response = await axios.delete<boolean>(
+        `${import.meta.env.VITE_URL}/Goal/deletegoal`,
+        {
+          params: {
+            goalId: goalId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to delete goal");
+      throw error;
+    }
+  },
 };

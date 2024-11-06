@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "/playlistapp.client",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -45,7 +46,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.7.4",
-    "@types/react": "^18.2.42",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-measure": "^2.0.12",
     "@types/react-responsive-masonry": "^2.1.3",
