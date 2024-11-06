@@ -64,14 +64,16 @@ const Profile: React.FC = () => {
               </Link>
 
               <hr className="my-3" />
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                className="font-bold"
-              >
-                Settings
-              </MenuItem>
+              <Link to={"/settings"} >
+                <MenuItem
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  className="font-bold"
+                >
+                  Settings
+                </MenuItem>
+              </Link>
 
               <hr className="my-3" />
               <LogoutButton />
