@@ -45,7 +45,6 @@ public class GoalService : IGoalService
             return 0;
         }
 
-        // Getting the users current goal and setting it to false if the one they just added is their new active one
         if (newGoal.IsCurrent == true)
         {
             var currentGoal = await context.Goals

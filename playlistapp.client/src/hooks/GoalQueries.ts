@@ -2,6 +2,7 @@ import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
 import { GoalService } from "@/ApiServices/GoalService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GoalKeys";
+import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
 
 export const GoalQueries = {
   useAddGoal: (addGoalRequest: AddGoalRequest) => {
@@ -15,8 +16,23 @@ export const GoalQueries = {
   },
   useGetGoalById: (goalId: number) => {
     return useQuery({
-        queryFn: () => GoalService.getGoalById(goalId),
-        queryKey: keys.GetGoalById
-    })
-  }
+      queryFn: () => GoalService.getGoalById(goalId),
+      queryKey: keys.GetGoalById(goalId),
+    });
+  },
+  useGetGoalsByUser: (userId: string) => {
+    return useQuery({
+      queryFn: () => GoalService.getGoalsFromUser(userId),
+      queryKey: keys.GetGoalsByUser(userId),
+    });
+  },
+  useUpdateGoal: (updateGoalRequest: UpdateGoalRequest) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: () => GoalService.updateGoal(updateGoalRequest),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.UpdateGoal });
+      },
+    });
+  },
 };
