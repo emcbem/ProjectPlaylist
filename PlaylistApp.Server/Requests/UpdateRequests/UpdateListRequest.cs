@@ -6,7 +6,7 @@ public class UpdateListRequest
 {
     public int ListId { get; set; }
     public string ListName { get; set; } = "Default name";
-    public List<GameDTO>? NewGames { get; set; } = new List<GameDTO>();
-    public List<ListGameDTO>? GamesToRemove { get; set; } = new List<ListGameDTO>();
+    public List<GameDTO>? NewGames { get; set; }
+    public List<ListGameDTO>? GamesToRemove { get; set; }
     public bool IsPublic { get; set; }  
 }

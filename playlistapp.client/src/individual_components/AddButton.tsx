@@ -1,7 +1,6 @@
 import { PlatformGame } from "@/@types/platformGame";
 import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
-import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import {
@@ -34,7 +33,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     Filter: "",
     PlatformId: 1,
   });
-  const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
+  // const [platformGames, setPlatformGames] = useState<PlatformGame[]>([]);
 
   const { usr, userGuid } = React.useContext(
     UserAccountContext
@@ -60,27 +59,20 @@ const AddButton: React.FC<props> = ({ gameId }) => {
     }
   };
 
-  useEffect(() => {
-    PlatformGameService.GetAllPlatfromGamesByGameId(Number(gameId)).then(
-      (x) => {
-        setPlatformGames(x ?? []);
-      }
-    );
-  }, []);
+  const { data: platformGames } = PlatformGameQueries.useGetAllPlatformGamesByGame(Number(gameId));
 
   useEffect(() => {
     mutatePlatformGames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  
 
   return (
     <>
-      <Menu placement="bottom-end" >
-        <MenuHandler >
+      <Menu placement="bottom-end">
+        <MenuHandler>
           <button className="my-4">
             <div
-              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 w-28 h-8  justify-center space-x-1"
+              className="cursor-pointer relative flex flex-row items-center bg-clay-200 dark:bg-clay-600 dark:text-white text-white rounded-lg text-start sm:w-44 sm:h-12 py-2 px-4  justify-center space-x-1"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -129,14 +121,15 @@ const AddButton: React.FC<props> = ({ gameId }) => {
                   : selectedPlatform.platform.name}
                 <ChevronUpIcon
                   strokeWidth={2.5}
-                  className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-90" : ""
-                    }`}
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    openMenu ? "rotate-90" : ""
+                  }`}
                 />
               </MenuItem>
             </MenuHandler>
             <MenuList>
               {platformGames
-                .filter((x) => x.game.id == Number(gameId))
+                ?.filter((x) => x.game.id == Number(gameId))
                 .map((x, index) => (
                   <div key={index}>
                     <MenuItem
@@ -166,9 +159,11 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            className={`font-bold ${!selectedPlatform ? "text-gray-500 cursor-default" : ``
-              }`}
+            className={`font-bold ${
+              !selectedPlatform ? "text-gray-500 cursor-default" : ``
+            }`}
             onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               selectedPlatform ? handleMenuItemClick(selectedPlatform.id) : "";
             }}
           >
@@ -179,7 +174,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
             <MenuItem
               disabled={true}
               className={`font-bold text-gray-900`}
-              onClick={() => { }}
+              onClick={() => {}}
             >
               <img src={loadingDotsGif} width={20} />
             </MenuItem>

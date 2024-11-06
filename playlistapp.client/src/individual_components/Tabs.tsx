@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
 import { useParams } from "react-router-dom";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+} from "@material-tailwind/react";
+import { GameReview } from "@/@types/gameReview";
 
 interface TabProps {
   TabName: string;
@@ -13,16 +22,17 @@ interface TabProps {
 
 const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   return (
-    <li className="">
+    <li>
       <a
         href="#"
         onClick={onClick}
-        className={`inline-flex items-center justify-center border-b-2 rounded-t-lg p-4 hover:text-black dark:hover:text-gray-300 group sm:text-sm text-xs ${
+        className={`inline-flex items-center justify-center border-b-2 rounded-t-lg sm:p-4 hover:text-black dark:hover:text-gray-300 group sm:text-sm text-xs ${
           isActive
             ? "text-black border-black dark:border-white dark:text-white"
             : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
         }`}
       >
+        {/* SVG Icon */}
         <svg
           className={`w-4 h-4 me-2 ${
             isActive ? "text-black dark:text-white" : "text-gray-500"
@@ -41,19 +51,50 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
 };
 
 const Tabs = () => {
+  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: AllGameReviewsForGame } =
+  const { data: AllGameReviewsForGame, isLoading: loading } =
     GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
+  const [filter, setFilter] = useState<string>("Recommended");
+  const [sortedReviews, setSortedReviews] = useState<GameReview[]>([]);
 
   const tabs = ["Reviews", "Your Stats", "Achievements", "Global Leaderboard"];
 
+  useEffect(() => {
+    if (AllGameReviewsForGame) {
+      const reviewsCopy = AllGameReviewsForGame.slice();
+
+      const userReviewIndex = reviewsCopy.findIndex(
+        (item) => item.user.guid === usr?.guid
+      );
+
+      if (filter === "Recommended" && userReviewIndex > -1) {
+        const [userReview] = reviewsCopy.splice(userReviewIndex, 1);
+        reviewsCopy.unshift(userReview);
+        setSortedReviews(reviewsCopy);
+      } else if (filter === "Most Liked") {
+        setSortedReviews(
+          reviewsCopy.sort(
+            (a, b) => b.likes - b.dislikes - (a.likes - a.dislikes)
+          )
+        );
+      } else if (filter === "Recent") {
+        setSortedReviews(
+          reviewsCopy.sort(
+            (a, b) =>
+              new Date(a.publishDate).getTime() -
+              new Date(b.publishDate).getTime()
+          )
+        );
+      }
+    }
+  }, [AllGameReviewsForGame, filter, usr]);
   return (
     <div className="w-full">
-      {/*This line below*/}
-      <ul className="flex lgmd:justify-normal justify-center space-x-2">
+      <ul className="flex justify-between">
         {tabs.map((tab, key) => (
           <Tab
             key={key}
@@ -63,24 +104,62 @@ const Tabs = () => {
           />
         ))}
       </ul>
-
       <div className="mt-4 w-full">
-        {/* REVIEWS HERE!!! */}
         {activeTab === "Reviews" && (
           <>
             <div className="text-left text-2xl dark:text-white flex flex-col">
-              {AllGameReviewsForGame && AllGameReviewsForGame?.length > 0 ? (
-                AllGameReviewsForGame?.map((review, key) => (
-                  <Review review={review} key={key} />
+              <div className="flex flex-row">
+                <p className="sm:text-sm text-tiny font-medium text-clay-950 dark:text-clay-600 p-2">
+                  Sort by:
+                </p>
+                <Menu placement="bottom-start">
+                  <MenuHandler>
+                    <button className="sm:text-sm text-tiny font-medium text-clay-950 dark:text-clay-900 p-2 hover:bg-clay-900 hover:text-white rounded-md underline transition-colors duration-300 ease-in-out border-none">
+                      {filter}
+                    </button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem
+                      className="text-clay-950"
+                      onClick={() => setFilter("Recommended")}
+                    >
+                      Recommended
+                    </MenuItem>
+                    <hr className="my-3" />
+                    <MenuItem
+                      className="text-clay-950"
+                      onClick={() => setFilter("Recent")}
+                    >
+                      Recent
+                    </MenuItem>
+                    <hr className="my-3" />
+                    <MenuItem
+                      className="text-clay-950"
+                      onClick={() => setFilter("Most Liked")}
+                    >
+                      Top Rated
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </div>
+
+              {usr && AllGameReviewsForGame && sortedReviews.length > 0 ? (
+                sortedReviews.map((review, key) => (
+                  <Review
+                    review={review}
+                    currentUserGuid={usr?.guid}
+                    key={key}
+                  />
                 ))
+              ) : loading ? (
+                <p>Loading...</p>
               ) : (
-                <p>No reviews yet</p>
+                <p>No reviews yet, leave one!</p>
               )}
             </div>
             <ReviewModal />
           </>
         )}
-
         {activeTab === "Your Stats" && <div>Coming soon...</div>}
         {activeTab === "Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">

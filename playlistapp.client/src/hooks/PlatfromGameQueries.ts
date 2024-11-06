@@ -4,10 +4,10 @@ import { PlatformGameService } from "@/ApiServices/PlatformGameService";
 import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGameRequest";
 
 export const PlatformGameQueries = {
-  useGetAllPlatformGamesByGameId: (gameId: number) => {
+  useGetAllPlatformGamesByGame: (gameId: number) => {
     return useQuery({
       queryKey: keys.PlatformGameByGameId,
-      queryFn: () => PlatformGameService.GetAllPlatfromGamesByGameId(gameId),
+      queryFn: () => PlatformGameService.GetAllPlatfromGamesByGame(gameId),
     });
   },
   useGetAllPlatformGames: (platfromGameRequest: PlatformGameRequest | undefined) => {

@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
     isAuthenticated &&
     usr && (
       <div className="lg:w-[213.69px] flex justify-end relative z-20">
-        <div className="flex flex-row flex-shrink-0 h-14 w-14">
+        <div className="flex flex-row flex-shrink-0 sm:h-14 sm:w-14 h-8 w-8">
           <Menu placement="bottom-start">
             <MenuHandler>
               <img
@@ -40,15 +40,6 @@ const Profile: React.FC = () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              <MenuItem
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
-                Welcome back, {usr.username}!
-              </MenuItem>
-
-              <hr className="my-3" />
               <Link to="/account" reloadDocument>
                 <MenuItem
                   placeholder={undefined}

@@ -22,11 +22,7 @@ const Account = () => {
     isLoading,
     isSuccess,
   } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
-
-  console.log("isAuthenticated: ", isAuthenticated);
-  console.log("usr.profileURL: ", usr?.profileURL);
-  console.log("isSuccess: ", isSuccess);
-
+  
   return (
     isAuthenticated &&
     usr?.profileURL &&

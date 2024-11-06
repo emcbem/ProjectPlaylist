@@ -5,7 +5,6 @@ import SearchPage from "./page_components/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 import { useAuth0 } from "@auth0/auth0-react";
 import Account from "./page_components/Account/Account";
-import { GameContextProvidor } from "./contexts/GameContext";
 import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
@@ -16,61 +15,18 @@ import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
-const queryClient = new QueryClient();
+import { ThemeProvider } from "@material-tailwind/react";
+import { materialTheme } from "./lib/theme";
+const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
   const { isAuthenticated } = useAuth0();
 
-  // const theme = {
-  //   menu: {
-  //     styles: {
-  //       base: {
-  //         menu: {
-  //           bg: "bg-clay-600 ",
-  //           minWidth: "min-w-[75px]",
-  //           width: "sm:w-full w-1/3",
-  //           p: "p-3",
-  //           border: "border border-none",
-  //           borderRadius: "rounded-md",
-  //           boxShadow: "shadow-lg shadow-blue-gray-500/10",
-  //           fontFamily: "font-sans",
-  //           fontSize: "smm:text-sm text-[11.2px]",
-  //           fontWeight: "font-normal",
-  //           color: "text-white",
-  //           overflow: "overflow-auto",
-  //           outline: "focus:outline-none",
-  //           zIndex: "z-[999]",
-  //         },
-  //         item: {
-  //           initial: {
-  //             display: "block",
-  //             width: "w-full",
-  //             pt: "pt-[9px]",
-  //             pb: "pb-2",
-  //             px: "sm:px-3",
-  //             borderRadius: "rounded-md",
-  //             textAlign: "text-start",
-  //             lightHeight: "leading-tight",
-  //             cursor: "cursor-pointer",
-  //             userSelect: "select-none",
-  //             transition: "transition-all",
-  //             bg: "hover:bg-blue-gray-50 hover:bg-opacity-80 focus:bg-blue-gray-50 focus:bg-opacity-80 active:bg-blue-gray-50 active:bg-opacity-80",
-  //             color:
-  //               "text-white",
-  //             outline: "outline-none",
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // };
-
   return (
     <QueryClientProvider client={queryClient}>
       <UserAccountContextProvider>
-        <GameContextProvidor>
-          <SearchBarProvider>
-                  {/* <ThemeProvider value={theme}> */}
+        <SearchBarProvider>
+          <ThemeProvider value={materialTheme}>
             <Toaster />
             <ShineBorder
               className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
@@ -105,16 +61,15 @@ function App() {
                       element={<AchievementsPage />}
                     />
                     <Route
-                      path="/test/:userAchievementId"
+                      path="/test/:goalId"
                       element={<TestPage />}
                     />
                   </Routes>
                 </div>
               </div>
             </ShineBorder>
-                  {/* </ThemeProvider> */}
-          </SearchBarProvider>
-        </GameContextProvidor>
+          </ThemeProvider>
+        </SearchBarProvider>
       </UserAccountContextProvider>
     </QueryClientProvider>
   );

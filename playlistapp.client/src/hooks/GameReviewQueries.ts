@@ -69,13 +69,20 @@ export const GameReviewQueries = {
     ).data;
     */
   },
-  useUpdateGameReview: (updateGameReviewRequest: UpdateGameReviewRequest) => {
+  useUpdateGameReview: (
+    updateGameReviewRequest: UpdateGameReviewRequest,
+    gameId: number
+  ) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         GameReviewService.UpdateGameReview(updateGameReviewRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateGameReview });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetAllGameReviewsByGame(gameId),
+          refetchType: "all",
+        });
       },
     });
     /*
@@ -98,12 +105,17 @@ export const GameReviewQueries = {
     };
     */
   },
-  useDeleteGameReview: (gameReviewId: number) => {
+  useDeleteGameReview: (gameReviewId: number, gameId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => GameReviewService.DeleteGameReview(gameReviewId),
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: keys.DeleteGameReview }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.DeleteGameReview });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetAllGameReviewsByGame(gameId),
+          refetchType: "all",
+        });
+      },
     });
     /*
     const {

@@ -7,9 +7,7 @@ const AchievementsPage: React.FC = () => {
   const { gameId } = useParams<{ gameId: string }>();
 
   const { data: platformGames } =
-    PlatformGameQueries.useGetAllPlatformGamesByGameId(Number(gameId));
-
-  console.log("pfg", platformGames);
+    PlatformGameQueries.useGetAllPlatformGamesByGame(Number(gameId));
 
   return (
     <div className=" dark:text-white text-black">

@@ -13,7 +13,7 @@ interface props {
 
 const AddButtonListMenuItem: React.FC<props> = ({ lists, gameId, userGuid }) => {
     const { mutateAsync: updateListMutation } = ListQueries.useUpdateListQuery();
-    const { data: game } = GameQueries.useGetGameByIdQuery(Number(gameId));
+    const { data: game } = GameQueries.useGetGameById(Number(gameId));
     
     const handleListMenuItemClick = async (listId: number) => {
         const listToUpdate = lists?.filter(x => x.id === listId) || [];
