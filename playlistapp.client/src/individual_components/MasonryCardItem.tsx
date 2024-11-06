@@ -12,32 +12,22 @@ const MasonryCardItem: FC<{ game: Game }> = ({ game }) => {
   const [randomHeight] = useState(
     Math.floor(Math.random() * (300 - 200 + 1) + 200)
   );
-  
+
   return (
     <Link to={`/view-game/${game.id}`} key={game.id}>
       <div className="rounded-lg overflow-hidden text-white dark:text-white">
         <img
           src={game.coverUrl}
-          className={`w-full sm:h-[${randomHeight}px] h-[${
-            randomHeight / 2
-          }px] object-cover`}
+          style={{
+            height:
+              window.innerWidth >= 640
+                ? `${randomHeight}px`
+                : `${randomHeight / 2}px`,
+          }}
+          className="w-full object-cover"
+          alt="Game Cover"
         />
         <div className="bg-clay-200 dark:bg-clay-400 pt-3">
-          {/* <div className="flex flex-row p-2">
-              <PS5Icon height={20} width={20} darkColor="black" color="white" />
-              <XboxIcon
-                height={20}
-                width={20}
-                darkColor="black"
-                color="white"
-              />
-              <SteamIcon
-                height={20}
-                width={20}
-                darkColor="black"
-                color="white"
-              />
-            </div> */}
           <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
             {game.title}
           </div>
