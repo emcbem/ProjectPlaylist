@@ -3,7 +3,7 @@ import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/hooks/GameQueries";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const UserViewGame = () => {
   const [avgReview, setAvgReview] = useState<number | null>();
@@ -54,7 +54,7 @@ const UserViewGame = () => {
                     : ``
                 }`}
               >
-                <h1>{avgReview}/10&nbsp;-&nbsp;</h1>
+                <h1>{Math.round(avgReview * 10) / 10}/10&nbsp;-&nbsp;</h1>
                 <h1 className="underline cursor-pointer">Leave a rating</h1>
               </div>
             ) : (

@@ -10,7 +10,7 @@ interface props {
 }
 
 const Review: React.FC<props> = ({ review, currentUserGuid }) => {
-  console.log(review.id, new Date(review.publishDate).getUTCDate());
+  console.log("REVIEW:", review.id, review.lastEditDate);
   return (
     <li className="py-3 w-full sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
       <div className="flex space-x-4 rtl:space-x-reverse">
@@ -28,7 +28,9 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
                 {review.user.username}&nbsp;-&nbsp;
               </p>
               <p className="sm:text-sm text-tiny font-medium text-clay-950  dark:text-clay-900">
-                {formatDate(review.publishDate)}
+                {review.lastEditDate
+                  ? formatDate(review.lastEditDate, true)
+                  : formatDate(review.publishDate)}
               </p>
             </div>
 
@@ -65,7 +67,6 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
           </p>
         </div>
       </div>
-      <div className="flex justify-end items-center mt-5"></div>
 
       <ReviewLike
         review={review}

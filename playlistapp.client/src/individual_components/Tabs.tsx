@@ -118,25 +118,34 @@ const Tabs = () => {
                       {filter}
                     </button>
                   </MenuHandler>
-                  <MenuList>
+                  <MenuList  
+                  placeholder={undefined} 
+                  onPointerEnterCapture={undefined} 
+                  onPointerLeaveCapture={undefined}>
                     <MenuItem
                       className="text-clay-950"
                       onClick={() => setFilter("Recommended")}
-                    >
+                      placeholder={undefined} 
+                      onPointerEnterCapture={undefined} 
+                      onPointerLeaveCapture={undefined}                    >
                       Recommended
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Recent")}
-                    >
+                      onClick={() => setFilter("Recent")} 
+                      placeholder={undefined} 
+                      onPointerEnterCapture={undefined} 
+                      onPointerLeaveCapture={undefined}                    >
                       Recent
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Most Liked")}
-                    >
+                      onClick={() => setFilter("Most Liked")} 
+                      placeholder={undefined} 
+                      onPointerEnterCapture={undefined} 
+                      onPointerLeaveCapture={undefined}                    >
                       Top Rated
                     </MenuItem>
                   </MenuList>
