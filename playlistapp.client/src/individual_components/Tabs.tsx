@@ -54,7 +54,7 @@ const Tabs = () => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: AllGameReviewsForGame, isLoading: loading } =
+  const { data: AllGameReviewsForGame } =
     GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
@@ -152,7 +152,9 @@ const Tabs = () => {
                 </Menu>
               </div>
 
-              {usr && AllGameReviewsForGame && sortedReviews.length > 0 ? (
+              {usr &&
+              AllGameReviewsForGame &&
+              AllGameReviewsForGame.length > 0 ? (
                 sortedReviews.map((review, key) => (
                   <Review
                     review={review}
@@ -160,8 +162,6 @@ const Tabs = () => {
                     key={key}
                   />
                 ))
-              ) : loading ? (
-                <p>Loading...</p>
               ) : (
                 <p>No reviews yet, leave one!</p>
               )}

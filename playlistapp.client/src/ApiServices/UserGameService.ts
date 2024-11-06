@@ -31,7 +31,7 @@ export const UserGameService = {
       throw new Error("Add user game request must be provided");
     }
     try {
-      const response = await axios.post<UserGame>(
+      const response = await axios.post<number>(
         `${import.meta.env.VITE_URL}/UserGame/addusergame`,
         addUserGameRequest,
         {

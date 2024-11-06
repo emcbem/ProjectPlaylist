@@ -11,9 +11,6 @@ const AchievementCard: React.FC<props> = ({
   showAddButton,
   imageUrl,
 }) => {
-  // console.log("Title", Title);
-  // console.log("Description", Description);
-  // console.log("imageUrl", imageUrl);
   return (
     <>
       <li className="py-3 sm:pb-4 ">
