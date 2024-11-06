@@ -111,96 +111,85 @@ const AddButton: React.FC<props> = ({ gameId }) => {
               </button>
             </MenuHandler>
             <MenuList
-              children={
-                <>
-                  <Menu
-                    placement="right-start"
-                    open={openMenu}
-                    handler={setOpenMenu}
-                    allowHover
-                    offset={15}
-                  >
-                    <MenuHandler className="flex items-center justify-between font-bold">
-                      <MenuItem>
-                        {!selectedPlatform
-                          ? "Select Platform"
-                          : selectedPlatform.platform.name}
-                        <ChevronUpIcon
-                          strokeWidth={2.5}
-                          className={`h-3.5 w-3.5 transition-transform ${
-                            openMenu ? "rotate-90" : ""
-                          }`}
-                        />
-                      </MenuItem>
-                    </MenuHandler>
-                    <MenuList
-                      children={
-                        <>
-                          {platformGames
-                            ?.filter((x) => x.game.id == Number(gameId))
-                            .map((x, index) => (
-                              <div key={index}>
-                                <MenuItem
-                                  className="font-bold"
-                                  key={x.platform.id}
-                                  onClick={(event) => {
-                                    event.preventDefault();
-                                    event.stopPropagation();
-                                    setSelectedPlatform(
-                                      platformGames.find(
-                                        (pGame) => x.id == pGame.id
-                                      )
-                                    );
-                                  }}
-                                >
-                                  {x.platform.name}
-                                </MenuItem>
-                                {index != platformGames.length - 1 ? (
-                                  <hr className="my-3" />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            ))}
-                        </>
-                      }
-                    />
-                  </Menu>
-                  <hr className="my-3" />
-                  <MenuItem
-                    placeholder={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                    className={`font-bold ${
-                      !selectedPlatform ? "text-gray-500 cursor-default" : ``
-                    }`}
-                    onClick={() => {
-                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                      selectedPlatform
-                        ? handleMenuItemClick(selectedPlatform.id)
-                        : "";
-                    }}
-                  >
-                    Add to My Library
-                  </MenuItem>
-                  <hr className="my-3" />
-                  {listIsLoading && (
-                    <MenuItem
-                      disabled={true}
-                      className={`font-bold text-gray-900`}
-                      onClick={() => {}}
-                    >
-                      <img src={loadingDotsGif} width={20} />
+              children={<>
+                <Menu
+                  placement="right-start"
+                  open={openMenu}
+                  handler={setOpenMenu}
+                  allowHover
+                  offset={15}
+                >
+                  <MenuHandler className="flex items-center justify-between font-bold">
+                    <MenuItem placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                      {!selectedPlatform
+                        ? "Select Platform"
+                        : selectedPlatform.platform.name}
+                      <ChevronUpIcon
+                        strokeWidth={2.5}
+                        className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-90" : ""}`} />
                     </MenuItem>
-                  )}
-                  <AddButtonListMenuItem
-                    lists={lists}
-                    gameId={gameId}
-                    userGuid={userGuid}
-                  />
-                </>
-              }
-            />
+                  </MenuHandler>
+                  <MenuList
+                    children={<>
+                      {platformGames
+                        ?.filter((x) => x.game.id == Number(gameId))
+                        .map((x, index) => (
+                          <div key={index}>
+                            <MenuItem
+                              className="font-bold"
+                              key={x.platform.id}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                setSelectedPlatform(
+                                  platformGames.find(
+                                    (pGame) => x.id == pGame.id
+                                  )
+                                );
+                              } } placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                            >
+                              {x.platform.name}
+                            </MenuItem>
+                            {index != platformGames.length - 1 ? (
+                              <hr className="my-3" />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ))}
+                    </>} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                </Menu>
+                <hr className="my-3" />
+                <MenuItem
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  className={`font-bold ${!selectedPlatform ? "text-gray-500 cursor-default" : ``}`}
+                  onClick={() => {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                    selectedPlatform
+                      ? handleMenuItemClick(selectedPlatform.id)
+                      : "";
+                  } }
+                >
+                  Add to My Library
+                </MenuItem>
+                <hr className="my-3" />
+                {listIsLoading && (
+                  <MenuItem
+                    disabled={true}
+                    className={`font-bold text-gray-900`}
+                    onClick={() => { } }
+                    placeholder={undefined} 
+                    onPointerEnterCapture={undefined} 
+                    onPointerLeaveCapture={undefined}                  >
+                    <img src={loadingDotsGif} width={20} />
+                  </MenuItem>
+                )}
+                <AddButtonListMenuItem
+                  lists={lists}
+                  gameId={gameId}
+                  userGuid={userGuid} />
+              </>} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            />
           </div>
         }
       />
