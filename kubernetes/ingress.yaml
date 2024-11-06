@@ -4,6 +4,7 @@ metadata:
   name: playlist-ingress
   namespace: codebras
   annotations:
+    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-project-playlist-production
 spec:
   tls:
