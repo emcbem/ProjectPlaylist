@@ -1,4 +1,5 @@
 import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
+import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GoalQueries } from "@/hooks/GoalQueries";
@@ -16,10 +17,17 @@ const TestPage = () => {
   const { goalId } = useParams<{ goalId: string }>();
 
   const addGoalRequest: AddGoalRequest = {
-    achievementId: 38456,
+    achievementId: 486,
     dateToAchieve: new Date(2025, 11, 29),
     isCurrent: true,
     userId: usr?.guid ?? "",
+  };
+
+  const updateGoalRequest: UpdateGoalRequest = {
+    dateToAchieve: new Date(2026, 11, 29),
+    id: Number(goalId),
+    isComplete: true,
+    isCurrent: false,
   };
 
   const {
@@ -44,9 +52,21 @@ const TestPage = () => {
     isSuccess: isGettingGoalsByUserSuccess,
   } = GoalQueries.useGetGoalsByUser("f776d4d8-a6f5-44db-9960-6165a1b1535d");
 
+  const {
+    data: updatedGoal,
+    mutate: UpdateGoal,
+    isPending: isUpdating,
+    isError: isUpdatingError,
+    isSuccess: isUpdatingSuccess,
+  } = GoalQueries.useUpdateGoal(updateGoalRequest);
+
   const handleAddGoal = () => {
     AddNewGoal();
   };
+
+  const handleUpdateGoal = () => {
+    UpdateGoal();
+  }
 
   return (
     isAuthenticated &&
@@ -84,6 +104,12 @@ const TestPage = () => {
             </div>
           )}
           {isGettingGoalsByUserError && <p>Failed to get goals for user</p>}
+        </div>
+        <div>
+          {isUpdating && <p>Updating goal...</p>}
+          {isUpdatingSuccess && <p>Updated Goal's still acitve: {String(updatedGoal?.isCurrent)}</p>}
+          {isUpdatingError && <p>Failed to update goal...</p>}
+          <button onClick={handleUpdateGoal}>Update Goal {goalById?.id}</button>
         </div>
       </div>
     )
