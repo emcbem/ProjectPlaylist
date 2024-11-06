@@ -3,6 +3,8 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.GoalLikeServices;
 
@@ -41,18 +43,32 @@ public class GoalLikeService : IGoalLikeService
         return true;
     }
 
-    public async Task<List<GoalDTO>> GetGoalLikesFromUser(Guid userId)
+    public async Task<GoalLikeDTO> GetGoalLike(GetGoalLikeRequest request)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var user = await context.UserAccounts
-            .Where(x => x.Guid == userId)
+        var goalLike = await context.GoalLikes
+            .Include(x => x.User)
+                .ThenInclude(x => x.UserImage)
+            .Include(x => x.Goal)
+                .ThenInclude(x => x.Achievement)
+                    .ThenInclude(x => x.PlatformGame)
+                        .ThenInclude(x => x.Game)
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.Id == request.GoalId)
             .FirstOrDefaultAsync();
 
-        if (user == null)
+        if (goalLike == null)
         {
-            return new List<GoalDTO>();
+            return new GoalLikeDTO();
         }
+
+        return goalLike.ToDTO();
+    }
+
+    public async Task<List<GoalDTO>> GetGoalLikesFromUser(Guid userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var goalLikes = await context.GoalLikes
             .Include(x => x.User)
@@ -61,7 +77,7 @@ public class GoalLikeService : IGoalLikeService
                 .ThenInclude(x => x.Achievement)
                     .ThenInclude(x => x.PlatformGame)
                         .ThenInclude(x => x.Game)
-            .Where(x => x.UserId == user.Id)
+            .Where(x => x.User.Guid == userId)
             .ToListAsync();
 
         return goalLikes.Select(x => x.Goal.ToDTO()).ToList();   
@@ -71,17 +87,8 @@ public class GoalLikeService : IGoalLikeService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var user = await context.UserAccounts
-            .Where(x => x.Guid == request.UserId)
-            .FirstOrDefaultAsync();
-
-        if (user == null)
-        {
-            return false;
-        }
-
         var goalLike = await context.GoalLikes
-            .Where(x => x.UserId == user.Id)
+            .Where(x => x.User.Guid == request.UserId)
             .Where(x => x.GoalId == request.GoalId)
             .FirstOrDefaultAsync();
 
@@ -91,6 +98,24 @@ public class GoalLikeService : IGoalLikeService
         }
 
         context.Remove(goalLike);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UpdateGoalLike(UpdateGoalLikeRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var goalLikeUnderChange = await context.GoalLikes
+            .Where(x => x.Id == request.Id)
+            .FirstOrDefaultAsync();
+
+        if (goalLikeUnderChange == null)
+        {
+            return false;
+        }
+
+        context.Update(goalLikeUnderChange);
         await context.SaveChangesAsync();
         return true;
     }
