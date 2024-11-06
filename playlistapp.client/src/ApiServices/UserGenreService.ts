@@ -24,19 +24,19 @@ export const UserGenreService = {
         }
     },
     DeleteUserGenre: async (request: RemoveUserGenreRequest) => {
+        console.log(request)
         try {
-            const response = await axios.post<boolean>(
+            const response = await axios.delete<boolean>(
                 `${import.meta.env.VITE_URL}/UserGenre/deleteusergenre`,
-                request,
                 {
-                    headers: {
-                        "Content-Type": "application/json",
+                    params: {
+                        request: request,
                     },
                 }
             );
             return response.data;
         } catch (error) {
-            toast.error("Failed to remove user genre.")
+            toast.error("Failed to remove user genre. Try again.")
             console.error("Failed to remove user genre", error);
             throw error;
         }
@@ -44,17 +44,18 @@ export const UserGenreService = {
     GetAllByUser: async (userId: string) => {
         try {
             const response = await axios.get<Genre[]>(
-              `${import.meta.env.VITE_URL}/UserGenre/getallbyuser`,
-              {
-                params: {
-                  userId: userId,
-                },
-              }
+                `${import.meta.env.VITE_URL}/UserGenre/getallbyuser`,
+                {
+                    params: {
+                        userId: userId,
+                    },
+                }
             );
             return response.data;
-          } catch (error) {
+        } catch (error) {
+            toast.error("Failed to fetch user genres. Try again.")
             console.error("Failed to fetch user genres:", error);
             throw error;
-          }
+        }
     },
 }

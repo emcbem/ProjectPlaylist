@@ -12,7 +12,7 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React from "react";
 
 const Profile: React.FC = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
 
   const { usr } = React.useContext(
     UserAccountContext
@@ -21,8 +21,6 @@ const Profile: React.FC = () => {
   if (isLoading) {
     return <div>Loading ...</div>;
   }
-
-  console.log("USER", user);
 
   return (
     isAuthenticated &&
