@@ -1602,7 +1602,7 @@ COPY playlistdb.game (id, title, description, cover_url, publish_date, age_ratin
 1086	Yoshi's Island: Super Mario Advance 3	Super Mario Advance 3 is a GBA remake for the SNES with the dinosaur Yoshi and his friends as main characters carrying Baby Mario and Luigi on their back.\n\nSuper Mario Advance is a four-part series for the GBA with Super Mario games of the NES and SNES era. The remakes came with adjusted graphics, sound and additional content. Each game of the series includes additionally the arcade-classic "Mario Bros" which can be played in multiplayer via link cable.	//images.igdb.com/igdb/image/upload/t_cover_big/co4ac4.jpg	2002-09-24 00:00:00+00	E	16747
 1087	Mass Effect 3: Extended Cut	The Extended Cut downloadable content adds to and modifies the ending of Mass Effect 3, in response to fan feedback.	//images.igdb.com/igdb/image/upload/t_cover_big/co5rwr.jpg	2012-07-04 00:00:00+00	NaN	78460
 1088	Bomberman '94	BOMBERMAN has arrived to restore peace on the planet, which has been split into five parts by an evil hand! In addition to the nine members of the Bomber Family, the character ROOI shows up to lend a hand. Jump on the EGGS that appear from destroyed SOFT BLOCKS, and you can ride one of five types of ROOI. Each ROOI has different special abilitiesuse these well and youll ride to victory! Bombs that turn according to arrows and other new gimmicks have been added to BATTLE GAME, increased to ten stages. Tag-team matches are now possible, ensuring that this game will be a blast!\n\nBomberman '94 is a video game from the Bomberman series which was developed and published by Hudson Soft for the PC Engine and released on December 10, 1993 in Japan. It was later re-developed by Westone and re-published by Sega as Mega Bomberman on the Sega Mega Drive/Genesis in 1994 in other areas. The PC Engine Bomberman '94 was later released outside Japan through the Wii's Virtual Console and the PlayStation 3's PlayStation Network.\n\nThe game supports single-player and multi-player modes. In single player, the player navigates several levels of mazes, destroying creatures with bombs. In multi-player mode, players defeat each other with bombs.\n\nBomberman '94 is the final HuCard title to be made and released by Hudson Soft, the original designers of the PC Engine console.	//images.igdb.com/igdb/image/upload/t_cover_big/co233p.jpg	1993-12-10 00:00:00+00	E	3448
-1089	Space Marshals	Space Marshals is a Sci-fi Wild West adventure taking place in outer space! This tactical top-down shooter puts you in the shoes of specialist Burton in his hunt for dangerous fugitives after a disastrous prison break.	//images.igdb.com/igdb/image/upload/t_cover_big/co6lg3.jpg	2015-01-08 00:00:00+00	T	46747
+1089	A Mario Adventure	Space Marshals is a Sci-fi Wild West adventure taking place in outer space! This tactical top-down shooter puts you in the shoes of specialist Burton in his hunt for dangerous fugitives after a disastrous prison break.	//images.igdb.com/igdb/image/upload/t_cover_big/co6lg3.jpg	2015-01-08 00:00:00+00	T	46747
 1090	Traffic Tour	Traffic Tour is a new endless arcade racing game that takes you to another level of smooth driving simulations and high graphic quality. Drive your car in the endless highway roads, overtake traffic in challenging career missions, collect blueprints, unlock new cars, upgrade them, and challenge your friends in real-time racing with different camera modes to give you a unique driving experience.	//images.igdb.com/igdb/image/upload/t_cover_big/bkr3xrw4hnaigdbjvyj1.jpg	2016-11-07 00:00:00+00	NaN	87282
 1091	TagPro	TagPro is a free-to-play online multiplayer capture the flag video game originally designed and programmed by Nick Riggs. The first version was released in February 2013, after Riggs began experimenting with software platform Node.js. The game is named after one of its three obtainable power-ups. It follows the basic rules of capture the flag, along with some modifications, including power-ups, spikes, and other map elements.	//images.igdb.com/igdb/image/upload/t_cover_big/co3wf7.jpg	2013-02-01 00:00:00+00	NaN	9604
 1092	Kara no Shoujo	Set in 1956, Reiji is investigating a series of strange crimes that revolve arround an all-female academy, which may be involved with the murder that killed his wife.\n\nAlso, he meets Toko Kuchiki, a strange girl who hires Reiji for the job to "find her real self".	//images.igdb.com/igdb/image/upload/t_cover_big/co2nrj.jpg	2008-07-04 00:00:00+00	NaN	46980
@@ -1648,6 +1648,7 @@ COPY playlistdb.game (id, title, description, cover_url, publish_date, age_ratin
 --
 
 COPY playlistdb.game_genre (id, genre_id, game_id) FROM stdin;
+1	2	688
 \.
 
 
@@ -1656,6 +1657,7 @@ COPY playlistdb.game_genre (id, genre_id, game_id) FROM stdin;
 --
 
 COPY playlistdb.game_review (id, game_id, user_id, review, publish_date, last_edit_date, rating) FROM stdin;
+1	797	1	Banger	2024-09-18 06:00:00+00	2024-09-18 06:00:00+00	10
 \.
 
 
@@ -1780,6 +1782,7 @@ COPY playlistdb.user_achievement (id, achievement_id, user_id, date_achieved, is
 --
 
 COPY playlistdb.user_game (id, user_id, platform_game_id, date_added, time_played) FROM stdin;
+1	1	1	2024-09-18 06:00:00+00	500
 \.
 
 

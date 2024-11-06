@@ -46,14 +46,14 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
               }`}
             >
               {currentUserGuid == review.user.guid ? (
-                <>
+                <div className="sm:flex hidden">
                   <DeleteModal gameReviewId={review.id} />
                   <ReviewModal
                     gameReviewId={review.id}
                     editReview={review.text}
                     editVal={review.rating}
                   />
-                </>
+                </div>
               ) : (
                 <> </>
               )}
@@ -65,12 +65,11 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
           </p>
         </div>
       </div>
+      <div className="flex justify-end items-center mt-5"></div>
 
       <ReviewLike
-        reviewLikeCount={review.likes}
-        reviewDislikeCount={review.dislikes}
-        gameReviewId={review.id}
-        gameId={review.game.id}
+        review={review}
+        showCrud={currentUserGuid == review.user.guid}
       />
     </li>
   );
