@@ -44,4 +44,24 @@ export const GoalService = {
       throw error;
     }
   },
+  getGoalsFromUser: async (userId: string) => {
+    if (!userId) {
+      console.error("User id is undefined or empty");
+      throw new Error("User id must be provided");
+    }
+    try {
+      const response = await axios.get<Goal[]>(
+        `${import.meta.env.VITE_URL}/Goal/getgoalsfromuser`,
+        {
+          params: {
+            userId: userId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get all goals for user");
+      throw error;
+    }
+  },
 };

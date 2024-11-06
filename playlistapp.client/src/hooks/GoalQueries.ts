@@ -18,5 +18,11 @@ export const GoalQueries = {
         queryFn: () => GoalService.getGoalById(goalId),
         queryKey: keys.GetGoalById
     })
+  },
+  useGetGoalsByUser: (userId: string) => {
+    return useQuery({
+        queryFn: () => GoalService.getGoalsFromUser(userId),
+        queryKey: keys.GetGoalsByUser
+    })
   }
 };
