@@ -15,7 +15,7 @@ const MasonryCardItem: FC<{ game: Game }> = ({ game }) => {
 
   return (
     <Link to={`/view-game/${game.id}`} key={game.id}>
-      <div className="rounded-lg overflow-hidden text-white dark:text-white">
+      <div className="rounded-lg overflow-hidden text-black dark:text-white">
         <img
           src={game.coverUrl}
           style={{
@@ -27,7 +27,7 @@ const MasonryCardItem: FC<{ game: Game }> = ({ game }) => {
           className="w-full object-cover"
           alt="Game Cover"
         />
-        <div className="bg-clay-200 dark:bg-clay-400 pt-3">
+        <div className="bg-clay-950 dark:bg-clay-400 pt-3">
           <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
             {game.title}
           </div>
