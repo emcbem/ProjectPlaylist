@@ -203,11 +203,11 @@ public static class DTOConverter
         return new GameReviewDTO()
         {
             Dislikes = gameReview.ReviewLikes.Where(x => x.IsLike == false).Count(),
-            PublishDate = DateOnly.FromDateTime(DateTime.Today),
+            PublishDate = DateOnly.FromDateTime(gameReview.PublishDate),
             Likes = gameReview.ReviewLikes.Where(x => x.IsLike == true).Count(),
             Rating = gameReview.Rating,
             Text = gameReview.Review,
-            LastEditDate = DateOnly.FromDateTime(gameReview.LastEditDate ?? DateTime.Today),
+            LastEditDate = gameReview.LastEditDate.HasValue ? DateOnly.FromDateTime(gameReview.LastEditDate.Value) : null,
             Game = gameReview.Game.ToDTO(),
             User = gameReview.User.ToDTO(),
             Id = gameReview.Id

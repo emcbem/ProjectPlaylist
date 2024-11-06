@@ -2,6 +2,7 @@ import { GameReview } from "@/@types/gameReview.js";
 import ReviewLike from "./ReviewLike.tsx";
 import ReviewModal from "./ReviewModal.tsx";
 import DeleteModal from "./DeleteModal.tsx";
+import formatDate from "@/lib/date.ts";
 
 interface props {
   review: GameReview;
@@ -9,6 +10,7 @@ interface props {
 }
 
 const Review: React.FC<props> = ({ review, currentUserGuid }) => {
+  console.log("REVIEW:", review.id, review.lastEditDate);
   return (
     <li className="py-3 w-full sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
       <div className="flex space-x-4 rtl:space-x-reverse">
@@ -21,16 +23,23 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-row justify-between items-center">
-            <p className="sm:text-sm text-tiny font-medium text-clay-950  dark:text-clay-900">
-              {review.user.username}
-            </p>
+            <div className="flex flex-row">
+              <p className="sm:text-sm text-tiny font-medium text-clay-950  dark:text-clay-900">
+                {review.user.username}&nbsp;-&nbsp;
+              </p>
+              <p className="sm:text-sm text-tiny font-medium text-clay-950  dark:text-clay-900">
+                {review.lastEditDate
+                  ? formatDate(review.lastEditDate, true)
+                  : formatDate(review.publishDate)}
+              </p>
+            </div>
 
             <div
               className={`flex justify-end items-baseline md:text-lg sm:text-base text-tiny font-semibold mx-2 ${
                 review.rating <= 10 && review.rating >= 8
                   ? `text-yellow-500`
                   : review.rating <= 7 && review.rating >= 6
-                  ? `text-green-700`
+                  ? `text-green-500`
                   : review.rating <= 5 && review.rating >= 3
                   ? `text-orange-400`
                   : review.rating <= 2 && review.rating >= 0
@@ -39,14 +48,14 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
               }`}
             >
               {currentUserGuid == review.user.guid ? (
-                <>
+                <div className="sm:flex hidden">
                   <DeleteModal gameReviewId={review.id} />
                   <ReviewModal
                     gameReviewId={review.id}
                     editReview={review.text}
                     editVal={review.rating}
                   />
-                </>
+                </div>
               ) : (
                 <> </>
               )}
@@ -59,7 +68,10 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
         </div>
       </div>
 
-      <ReviewLike gameReviewId={review.id} />
+      <ReviewLike
+        review={review}
+        showCrud={currentUserGuid == review.user.guid}
+      />
     </li>
   );
 };

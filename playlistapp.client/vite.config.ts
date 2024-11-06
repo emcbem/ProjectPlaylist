@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import plugin from "@vitejs/plugin-react";
@@ -37,11 +38,11 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
   }
 }
 
-const target = env.ASPNETCORE_HTTPS_PORT
-  ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
-  : env.ASPNETCORE_URLS
-  ? env.ASPNETCORE_URLS.split(";")[0]
-  : "https://localhost:7041";
+// const target = env.ASPNETCORE_HTTPS_PORT
+//   ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
+//   : env.ASPNETCORE_URLS
+//   ? env.ASPNETCORE_URLS.split(";")[0]
+//   : "https://localhost:7041";
 
 // Load environment variables
 dotenv.config();
@@ -56,12 +57,6 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      "^/weatherforecast": {
-        target,
-        secure: false,
-      },
-    },
     port: 5174,
     https: isNoCert
       ? {
@@ -70,4 +65,5 @@ export default defineConfig({
         }
       : undefined,
   },
+  
 });

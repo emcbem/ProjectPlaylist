@@ -38,17 +38,21 @@ public class IGDBGeneralController
     [HttpGet("Reset Games")]
     public async Task ResetGames()
     {
-        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        await downloader.DownloadCSV(IGDBClient.Endpoints.Keywords);
+
+		var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
         var igdbGames = Parser.ParseGameCsv(gameLocalPath);
         var filteredGames = Strainer.StrainGames(igdbGames);
         var coverLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Covers);
         var igdbCovers = Parser.ParseCoverCsv(coverLocalPath);
         var ageRatingLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.AgeRating);
-        var igdbRatings = Parser.ParseRatingCsv(ageRatingLocalPath);
-        var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
+
+		var igdbRatings = Parser.ParseRatingCsv(ageRatingLocalPath);
+        var localGames = Translator.TranslateIGDBGamesIntoPersonalData(filteredGames, igdbCovers, igdbRatings);
         var allGames = await uploader.GetAllGames();
         var gameDict = allGames.ToDictionary(p => p?.IdgbId ?? 0, p => p);
         var realGamesToRemove = localGames.Where(p => gameDict.ContainsKey(p?.IdgbId ?? 0)).Select(p => gameDict[p?.IdgbId ?? 0]).ToList();
+        Console.WriteLine("Hi");
         await uploader.RemoveGames(realGamesToRemove);
     }
 

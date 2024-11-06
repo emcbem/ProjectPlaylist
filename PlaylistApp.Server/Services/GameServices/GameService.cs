@@ -118,10 +118,10 @@ public class GameService : IGameService
 		switch (request.OrderingMethod)
 		{
 			case Data.Enums.OrderingMethod.HighestRating:
-				query = query.OrderBy(game => game.GameReviews.Sum(gr => gr.Rating));
+				query = query.OrderByDescending(game => game.GameReviews.Sum(gr => gr.Rating));
 				break;
 			case Data.Enums.OrderingMethod.MostPlayed:
-				query = query.OrderBy(game => (int?)game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)) ?? 0);
+				query = query.OrderByDescending(game => (int?)game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)) ?? 0);
 				break;
 			case Data.Enums.OrderingMethod.ReleaseDate:
 				query = query.OrderBy(game => game.PublishDate);

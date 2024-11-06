@@ -62,7 +62,7 @@ function App() {
                       element={<AchievementsPage />}
                     />
                     <Route
-                      path="/test"
+                      path="/test/:goalId"
                       element={<TestPage />}
                     />
                     <Route
