@@ -9,6 +9,7 @@ import LibraryLoading from "./LibraryViewsComponents/LibraryLoading";
 import LibraryList from "./LibraryViewsComponents/LibraryList";
 import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
+import UserGenresList from "./UserGenresList";
 
 const Account = () => {
   const { isAuthenticated } = useAuth0();
@@ -22,7 +23,10 @@ const Account = () => {
     isLoading,
     isSuccess,
   } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
-  
+
+
+
+
   return (
     isAuthenticated &&
     usr?.profileURL &&
@@ -30,14 +34,21 @@ const Account = () => {
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
           <div className="flex flex-wrap">
-            <img className="rounded-full w-10" src={usr?.profileURL} />
+            <img className="rounded-full w-24 shadow-inner" src={usr?.profileURL} />
             <div>
               <p className="text-4xl ms-8">{usr.username}</p>
               <p className="text-2xl ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
             </div>
           </div>
 
-          <PlatformGamerTags />
+          <div className="flex flex-row my-6">
+            <PlatformGamerTags />
+            <div className="ms-8 w-1/2">
+              <p className="text-xl">Bio <span className='text-sm text-teal-400'>(Edit)</span></p>
+              <p className="text-clay-700">{usr.bio}</p>
+              <UserGenresList userGuid={userGuid} />
+            </div>
+          </div>
 
           <p className="mt-8 text-6xl">Your Library</p>
           {isLoading && <LibraryLoading />}

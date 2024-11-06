@@ -4,8 +4,8 @@ import XboxIconCustom from '@/assets/CustomPlatformIcons/XboxIconCustom'
 
 const PlatformGamerTags = () => {
     return (
-        <div className="lg:mx-28 mx-12 md:my-8 my-4">
-            <div className="flex flex-row items-center mb-3">
+        <div className="">
+            {/* <div className="flex flex-row items-center mb-3">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0.78 4 22 17"
@@ -17,23 +17,23 @@ const PlatformGamerTags = () => {
                 <div className="ml-2 text-xl">
                     AlmondMilk_320
                 </div>
-            </div>
+            </div> */}
             <div className="flex flex-row items-center mb-3">
-                <EpicIconCustom width={'40'} fill={'black'} />
-                <div className="ml-4 text-xl">
-                    AlmondMilkxxx
+                <EpicIconCustom width={'30'} fill={'black'} />
+                <div className="ml-4 text-xl font-sans">
+                    AlmondMilk2420
                 </div>
             </div>
             <div className="flex flex-row items-center mb-3">
-                <SwitchIconCustom width={'40'} fill={'black'} />
-                <div className="ml-4 text-xl">
+                <SwitchIconCustom width={'30'} fill={'black'} />
+                <div className="ml-4 text-xl font-sans">
                     Nintento_Account2345
                 </div>
             </div>
 
             <div className="flex flex-row items-center mb-3">
-                <XboxIconCustom width={'40'} fill={'black'} />
-                <div className="ml-4 text-xl">
+                <XboxIconCustom width={'30'} fill={'black'} />
+                <div className="ml-4 text-xl font-sans">
                     Xbox_Account2345
                 </div>
             </div>
