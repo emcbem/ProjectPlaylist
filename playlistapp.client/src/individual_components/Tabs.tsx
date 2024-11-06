@@ -54,7 +54,7 @@ const Tabs = () => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: AllGameReviewsForGame } =
+  const { data: AllGameReviewsForGame, isLoading: loading } =
     GameReviewQueries.useGetAllGameReviewsByGame(parseInt(gameId ?? "1"));
 
   const [activeTab, setActiveTab] = useState<string>("Reviews");
@@ -70,11 +70,11 @@ const Tabs = () => {
       const userReviewIndex = reviewsCopy.findIndex(
         (item) => item.user.guid === usr?.guid
       );
+      const [userReview] = reviewsCopy.splice(userReviewIndex, 1);
+      reviewsCopy.unshift(userReview);
+      setSortedReviews(reviewsCopy);
 
       if (filter === "Recommended" && userReviewIndex > -1) {
-        const [userReview] = reviewsCopy.splice(userReviewIndex, 1);
-        reviewsCopy.unshift(userReview);
-        setSortedReviews(reviewsCopy);
       } else if (filter === "Most Liked") {
         setSortedReviews(
           reviewsCopy.sort(
@@ -118,52 +118,45 @@ const Tabs = () => {
                       {filter}
                     </button>
                   </MenuHandler>
-                  <MenuList  
-                  placeholder={undefined} 
-                  onPointerEnterCapture={undefined} 
-                  onPointerLeaveCapture={undefined}>
+                  <MenuList>
                     <MenuItem
                       className="text-clay-950"
                       onClick={() => setFilter("Recommended")}
-                      placeholder={undefined} 
-                      onPointerEnterCapture={undefined} 
-                      onPointerLeaveCapture={undefined}                    >
+                    >
                       Recommended
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Recent")} 
-                      placeholder={undefined} 
-                      onPointerEnterCapture={undefined} 
-                      onPointerLeaveCapture={undefined}                    >
+                      onClick={() => setFilter("Recent")}
+                    >
                       Recent
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Most Liked")} 
-                      placeholder={undefined} 
-                      onPointerEnterCapture={undefined} 
-                      onPointerLeaveCapture={undefined}                    >
+                      onClick={() => setFilter("Most Liked")}
+                    >
                       Top Rated
                     </MenuItem>
                   </MenuList>
                 </Menu>
               </div>
 
-              {usr &&
-              AllGameReviewsForGame &&
-              AllGameReviewsForGame.length > 0 ? (
-                sortedReviews.map((review, key) => (
-                  <Review
-                    review={review}
-                    currentUserGuid={usr?.guid}
-                    key={key}
-                  />
-                ))
+              {usr && !loading ? (
+                AllGameReviewsForGame && AllGameReviewsForGame.length > 0 ? (
+                  sortedReviews.map((review, key) => (
+                    <Review
+                      review={review}
+                      currentUserGuid={usr?.guid}
+                      key={key}
+                    />
+                  ))
+                ) : (
+                  <p>No reviews yet, leave one!</p>
+                )
               ) : (
-                <p>No reviews yet, leave one!</p>
+                <p>Loading...</p>
               )}
             </div>
             <ReviewModal />
