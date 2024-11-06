@@ -60,13 +60,25 @@ const TestPage = () => {
     isSuccess: isUpdatingSuccess,
   } = GoalQueries.useUpdateGoal(updateGoalRequest);
 
+  const {
+    data: deletedGoal,
+    mutate: DeleteGoal,
+    isPending: isDeleting,
+    isError: isDeletingError,
+    isSuccess: isDeletingSuccess,
+  } = GoalQueries.useDeleteGoal(Number(goalId));
+
   const handleAddGoal = () => {
     AddNewGoal();
   };
 
   const handleUpdateGoal = () => {
     UpdateGoal();
-  }
+  };
+
+  const handleDeleteGoal = () => {
+    DeleteGoal();
+  };
 
   return (
     isAuthenticated &&
@@ -107,9 +119,17 @@ const TestPage = () => {
         </div>
         <div>
           {isUpdating && <p>Updating goal...</p>}
-          {isUpdatingSuccess && <p>Updated Goal's still acitve: {String(updatedGoal?.isCurrent)}</p>}
+          {isUpdatingSuccess && (
+            <p>Updated Goal's still acitve: {String(updatedGoal?.isCurrent)}</p>
+          )}
           {isUpdatingError && <p>Failed to update goal...</p>}
           <button onClick={handleUpdateGoal}>Update Goal {goalById?.id}</button>
+        </div>
+        <div>
+          {isDeleting && <p>Deleting goal...</p>}
+          {isDeletingSuccess && <p>Goal is deleted: {String(deletedGoal)}</p>}
+          {isDeletingError && <p>Failed to delete goal...</p>}
+          <button onClick={handleDeleteGoal}>Delete Goal {goalById?.id}</button>
         </div>
       </div>
     )
