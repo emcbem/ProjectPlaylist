@@ -2,7 +2,7 @@
 
 public class GameReviewDTO
 {
-    public DateOnly LastEditDate { get; set; }
+    public DateOnly? LastEditDate { get; set; }
     public DateOnly PublishDate { get; set; }
     public GameDTO Game { get; set; } = new GameDTO();
     public UserDTO User { get; set; } = new UserDTO();
