@@ -87,15 +87,16 @@ export const UserAccountService = {
       throw error;
     }
   },
-  UpdateUser: async (updateUserRequest: UpdateUserRequest) => {
-    if (!updateUserRequest) {
+  UpdateUser: async (request: UpdateUserRequest) => {
+    console.log("Request in UpdateUser: ", request)
+    if (!request) {
       console.error("Update user request was undefined or empty");
       throw new Error("Update user request must be provided");
     }
     try {
       const response = await axios.patch<UserAccount>(
         `${import.meta.env.VITE_URL}/User/updateuser`,
-        updateUserRequest,
+        request,
         {
           headers: {
             "Content-Type": "application/json",

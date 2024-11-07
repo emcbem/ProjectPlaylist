@@ -34,13 +34,14 @@ export const UserAccountQueries = {
       },
     });
   },
-  useUpdateUser: (updateUserRequest: UpdateUserRequest) => {
+  useUpdateUser: () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: () => UserAccountService.UpdateUser(updateUserRequest),
+      mutationFn: (updateUserRequest: UpdateUserRequest) => UserAccountService.UpdateUser(updateUserRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
+        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId})
       },
     });
   },

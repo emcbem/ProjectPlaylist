@@ -1,8 +1,9 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React, { useRef } from "react";
-import PlatformGamerTags from "./Account/PlatformGamerTags";
-import EditUserGenresList from "./Account/EditUserGenresList";
+import PlatformGamerTags from "../Account/PlatformGamerTags";
+import EditUserGenresList from "./EditUserGenresList";
+import EditBio from "./EditBio";
 
 
 const Settings = () => {
@@ -28,7 +29,7 @@ const Settings = () => {
         return (
             <div className="min-h-screen bg-white dark:bg-black dark:text-white ">
                 <div className="m-8 w-99 flex justify-center">
-                    <h1 className="text-8xl">Loading</h1>
+                    <h1 className="text-2xl">Loading ...</h1>
                 </div>
             </div>
         )
@@ -53,8 +54,7 @@ const Settings = () => {
                             </section>
                             <section className="mb-5" id="bio" ref={bioRef}>
                                 <h2 className="text-2xl">Bio</h2>
-                                <p className="font-sans">{usr.bio}</p>
-                                <p className="text-teal-500 underline underline-offset-1">edit bio</p>
+                                <EditBio />
                             </section>
                             <hr className="mb-8" />
                             <section className="mb-5" id="platforms" ref={platformsRef}>
@@ -70,8 +70,6 @@ const Settings = () => {
                             <section className="mb-5" id="favorite-genres" ref={genresRef}>
                                 <h2 className="text-2xl">Favorite Genres</h2>
                                 <EditUserGenresList userGuid={usr.guid} />
-
-                                
                             </section>
                             <hr className="mb-8" />
                             <section className="mb-5" id="favorite-games" ref={gamesRef}>
