@@ -7,7 +7,6 @@ import CardGamesList from "@/individual_components/CardGamesList";
 import { SearchRequestController } from "@/@types/ComponentControllers/InfiniteGameController";
 
 export const InfiniteGames: FC<SearchRequestController> = (controller) => {
-  const searchBarContext = useSearchBarContext();
   const observer = useRef<IntersectionObserver | null>();
 
   const {
@@ -26,13 +25,6 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
       return lastPage.nextCursor;
     },
   });
-
-  useEffect(() => {
-    controller.setSearchRequest(prevRequest => ({
-      ...prevRequest,
-      title: searchBarContext.searchQuery,
-    }));
-  }, [searchBarContext.searchQuery]);
 
   useEffect(() => {
     refetch();
