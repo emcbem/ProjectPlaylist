@@ -1,5 +1,4 @@
 import { FC, useCallback, useEffect, useRef } from "react";
-import { useSearchBarContext } from "../../hooks/useSearchBarContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
