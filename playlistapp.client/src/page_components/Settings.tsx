@@ -2,7 +2,7 @@ import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React, { useRef } from "react";
 import PlatformGamerTags from "./Account/PlatformGamerTags";
-import UserGenresList from "./Account/UserGenresList";
+import EditUserGenresList from "./Account/EditUserGenresList";
 
 
 const Settings = () => {
@@ -69,7 +69,9 @@ const Settings = () => {
                             <hr className="mb-8" />
                             <section className="mb-5" id="favorite-genres" ref={genresRef}>
                                 <h2 className="text-2xl">Favorite Genres</h2>
-                                <UserGenresList userGuid={usr.guid} />
+                                <EditUserGenresList userGuid={usr.guid} />
+
+                                
                             </section>
                             <hr className="mb-8" />
                             <section className="mb-5" id="favorite-games" ref={gamesRef}>

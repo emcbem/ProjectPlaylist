@@ -10,7 +10,6 @@ interface props {
 }
 
 const Review: React.FC<props> = ({ review, currentUserGuid }) => {
-  console.log("REVIEW:", review.id, review.lastEditDate);
   return (
     <li className="py-3 w-full sm:pb-4 border-y-2 border-clay-600 rounded-md my-2">
       <div className="flex space-x-4 rtl:space-x-reverse">

@@ -25,7 +25,20 @@ public class UserGenreService : IUserGenreService
             .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
 
-        if (usr == null) { return false; }
+        if (usr == null) 
+        { 
+            return false; 
+        }
+
+        var possibleUserGenre = await context.UserGenres
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.GenreId == request.GenreId)
+            .FirstOrDefaultAsync();
+
+        if (possibleUserGenre is not null)
+        {
+            return false;
+        }
 
         var newUserGenre = new UserGenre() 
         { 

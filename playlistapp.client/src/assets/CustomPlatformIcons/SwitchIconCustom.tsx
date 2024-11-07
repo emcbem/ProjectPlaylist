@@ -1,14 +1,13 @@
 
 interface IconProps {
     width: string,
-    fill?: string,
 }
 
-const SwitchIconCustom: React.FC<IconProps> = ({ width, fill }) => {
+const SwitchIconCustom: React.FC<IconProps> = ({ width }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`transition-colors duration-300 fill-[${fill}]`}
+            className={`transition-colors duration-300 fill-black dark:fill-white`}
             viewBox="0 0 32 32"
             width={width}
         >
