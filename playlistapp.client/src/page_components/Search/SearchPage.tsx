@@ -34,6 +34,10 @@ const SearchPage: React.FC = () => {
       ...x,
       genreIds: genreSelectorController.selectedItems.map(x => x.id)
     }));
+    console.log({
+      ...searchRequest.searchRequest,
+      genreIds: genreSelectorController.selectedItems.map(x => x.id)
+    })
   }, [genreSelectorController.selectedItems])
 
 
