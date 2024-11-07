@@ -5,6 +5,7 @@ const UserAccountKeys = {
   AddNewUser: ["UserAccount", "AddNewUser"] as const,
   UpdateUser: ["UserAccount", "UpdateUser"] as const,
   DeleteUser: ["UserAccount", "DeleteUser"] as const,
+  GetUser: (userGuid: string) => ["UserAccount", "GetUserByAuthId", userGuid] as const,
 };
 
 export default UserAccountKeys;
