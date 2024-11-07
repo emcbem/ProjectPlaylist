@@ -1,12 +1,22 @@
 import { InfiniteGames } from "@/page_components/Search/InfiniteGames";
-import { useSearchRequest } from "@/hooks/InfiniteGames/useInfiniteController";
 import React, { useState } from "react";
+import { useSelector } from "./hooks/useSelector";
+import { Genre } from "@/@types/genre";
+import { Selector } from "./Selector";
+import { useSearchRequest } from "./hooks/useInfiniteController";
+import { GenreQueries } from "@/hooks/GenreQueries";
 
 const SearchPage: React.FC = () => {
   
   const [isVisible, setIsVisible] = useState(false);
 
   const searchRequest = useSearchRequest();
+
+  const {data: genres, isLoading} = GenreQueries.useGetAllGenres();
+
+  let genreSelectorController = useSelector<Genre>("Filter By Genres", genres ?? [] as Genre[], (value: Genre) => {return value.name})
+
+
 
   const toggleDiv = () => {
     setIsVisible(!isVisible);
@@ -61,32 +71,11 @@ const SearchPage: React.FC = () => {
                   </div>
                 )
               )}
+
+              {!isLoading && Selector<Genre>(genreSelectorController)}
             </div>
 
-            <p className="text-xl mt-5 mb-1">Filter by Genre</p>
-            <div className="flex flex-wrap">
-              {[
-                "Arcade",
-                "Fighting",
-                "Action",
-                "Shooter",
-                "Puzzle",
-                "Sport",
-                "MOBA",
-                "Quiz / Trivia",
-                "Pinball",
-                "Indie",
-                "Point-and-click",
-                "Simulator",
-              ].map((genre) => (
-                <div
-                  key={genre}
-                  className="rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 hover:bg-gray-300"
-                >
-                  {genre}
-                </div>
-              ))}
-            </div>
+            
           </div>
 
           <div className="ml-1/4 w-3/4 sm:w-full h-fit p-5 overflow-y-auto">
