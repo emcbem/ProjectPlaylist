@@ -30,7 +30,7 @@ export const Selector = <T,>(controller: SelectorController<T>) => {
             {controller.items.map((value, index) => (
             <div
                 key={index}
-                className={`rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 ${controller.selectedItems.find(x => value == x) ? "bg-gray-300 hover:bg-transparent" : "bg-transparent hover:bg-gray-300"}`} 
+                className={`rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 ${controller.selectedItems.find(x => value == x) ? "bg-gray-300 hover:bg-gray-200" : "bg-transparent hover:bg-gray-200"}`} 
                 onClick={() => handleClick(value)}
             >
                 {controller.stringify_value_fn(value)}

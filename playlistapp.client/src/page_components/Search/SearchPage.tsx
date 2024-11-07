@@ -1,21 +1,40 @@
 import { InfiniteGames } from "@/page_components/Search/InfiniteGames";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "./hooks/useSelector";
 import { Genre } from "@/@types/genre";
 import { Selector } from "./Selector";
 import { useSearchRequest } from "./hooks/useInfiniteController";
 import { GenreQueries } from "@/hooks/GenreQueries";
+import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 
 const SearchPage: React.FC = () => {
   
   const [isVisible, setIsVisible] = useState(false);
 
   const searchRequest = useSearchRequest();
+  const searchBarContext = useSearchBarContext();
+
 
   const {data: genres, isLoading} = GenreQueries.useGetAllGenres();
 
-  let genreSelectorController = useSelector<Genre>("Filter By Genres", genres ?? [] as Genre[], (value: Genre) => {return value.name})
+  const genreSelectorController = useSelector<Genre>("Filter By Genres", genres ?? [] as Genre[], (value: Genre) => {return value.name})
 
+  
+  useEffect(() => {
+    searchRequest.setSearchRequest(prevRequest => ({
+      ...prevRequest,
+      title: searchBarContext.searchQuery,
+    }));
+  }, [searchBarContext.searchQuery]);
+
+ 
+
+  useEffect(() => {
+    searchRequest.setSearchRequest(x => ({
+      ...x,
+      genreIds: genreSelectorController.selectedItems.map(x => x.id)
+    }));
+  }, [genreSelectorController.selectedItems])
 
 
   const toggleDiv = () => {
