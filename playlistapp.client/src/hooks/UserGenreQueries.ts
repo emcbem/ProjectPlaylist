@@ -5,25 +5,25 @@ import UserGenreKeys from "@/QueryKeys/UserGenreKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const UserGenreQueries = {
-    useAddUserGenreQuery: (addUserGenreRequest: AddUserGenreRequest) => {
+    useAddUserGenreQuery: (userGuid: string) => {
         const queryClient = useQueryClient();
 
         return useMutation({
-            mutationFn: () => UserGenreService.AddUserGenre(addUserGenreRequest),
+            mutationFn: (addUserGenreRequest: AddUserGenreRequest) => UserGenreService.AddUserGenre(addUserGenreRequest),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: UserGenreKeys.AddUserGenre })
-                queryClient.invalidateQueries({ queryKey: UserGenreKeys.GetAllUserGenresByUser(addUserGenreRequest.userId)})
+                queryClient.invalidateQueries({ queryKey: UserGenreKeys.GetAllUserGenresByUser(userGuid)})
             }
         })
     },
-    useDeleteUserGenreQuery: (removeUserGenreRequest: RemoveUserGenreRequest) => {
+    useDeleteUserGenreQuery: (userGuid: string) => {
         const queryClient = useQueryClient();
-
+        
         return useMutation({
-            mutationFn: () => UserGenreService.DeleteUserGenre(removeUserGenreRequest),
+            mutationFn: (removeUserGenreRequest: RemoveUserGenreRequest) => UserGenreService.DeleteUserGenre(removeUserGenreRequest),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: UserGenreKeys.DeleteUserGenre })
-                queryClient.invalidateQueries({ queryKey: UserGenreKeys.GetAllUserGenresByUser(removeUserGenreRequest.userId)})
+                queryClient.invalidateQueries({ queryKey: UserGenreKeys.GetAllUserGenresByUser(userGuid)})
             }
         })
     },

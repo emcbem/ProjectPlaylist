@@ -44,8 +44,9 @@ const Account = () => {
           <div className="flex flex-row my-6">
             <PlatformGamerTags />
             <div className="ms-8 w-1/2">
-              <p className="text-xl">Bio <span className='text-sm text-teal-400'>(Edit)</span></p>
-              <p className="text-clay-700">{usr.bio}</p>
+              <p className="text-xl">Bio</p>
+              <p className="text-clay-700 dark:text-clay-950">{usr.bio}</p>
+              <p className="mt-6 text-xl">Favorite Genres <span className='text-sm text-gray-400'>(Edit)</span></p>
               <UserGenresList userGuid={userGuid} />
             </div>
           </div>

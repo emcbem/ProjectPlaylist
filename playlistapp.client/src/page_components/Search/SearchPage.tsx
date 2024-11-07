@@ -1,4 +1,4 @@
-import { InfiniteGames } from "@/components/ui/InfiniteGames";
+import { InfiniteGames } from "@/page_components/Search/InfiniteGames";
 import { useSearchRequest } from "@/hooks/InfiniteGames/useInfiniteController";
 import React, { useState } from "react";
 
