@@ -115,6 +115,9 @@ public class GoalLikeService : IGoalLikeService
             return false;
         }
 
+        goalLikeUnderChange.IsLike = request.IsLike;
+        goalLikeUnderChange.DateLiked = DateTime.UtcNow;
+
         context.Update(goalLikeUnderChange);
         await context.SaveChangesAsync();
         return true;

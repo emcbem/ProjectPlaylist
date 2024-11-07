@@ -2,6 +2,8 @@
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
+using PlaylistApp.Server.Requests.GetRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.GoalLikeServices;
 
 namespace PlaylistApp.Server.Controllers;
@@ -32,5 +34,17 @@ public class GoalLikeController : Controller
     public async Task<bool> RemoveGoalLike(RemoveGoalLikeRequest request)
     {
         return await goalLikeService.RemoveGoalLike(request);
+    }
+
+    [HttpPatch("updategoallike")]
+    public async Task<bool> UpdateGoalLike(UpdateGoalLikeRequest request)
+    {
+        return await goalLikeService.UpdateGoalLike(request);
+    }
+
+    [HttpPost("getgoallike")]
+    public async Task<GoalLikeDTO> GetGoalLike(GetGoalLikeRequest request)
+    {
+        return await goalLikeService.GetGoalLike(request);
     }
 }
