@@ -10,5 +10,7 @@ export interface GameReview {
     id: number,
     likes: number,
     dislikes: number,
-    rating: number
+    rating: number,
+    playtimeAtReview: number,
+    playtimeAtModification: number
 }

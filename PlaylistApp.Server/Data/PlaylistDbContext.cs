@@ -190,6 +190,9 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Rating).HasColumnName("rating");
 			entity.Property(e => e.Review).HasColumnName("review");
 			entity.Property(e => e.UserId).HasColumnName("user_id");
+			entity.Property(e => e.PlaytimeAtReview).HasColumnName("playtime_at_review");
+			entity.Property(e => e.PlaytimeAtModification).HasColumnName("playtime_at_modification");
+
 
 			entity.HasOne(d => d.Game).WithMany(p => p.GameReviews)
 				.HasForeignKey(d => d.GameId)

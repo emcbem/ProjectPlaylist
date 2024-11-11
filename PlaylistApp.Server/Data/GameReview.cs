@@ -19,7 +19,11 @@ public partial class GameReview
 
     public int Rating { get; set; }
 
-    public virtual Game Game { get; set; } = null!;
+    public int? PlaytimeAtReview { get; set; }
+
+	public int? PlaytimeAtModification { get; set; }
+
+	public virtual Game Game { get; set; } = null!;
 
     public virtual ICollection<ReviewLike> ReviewLikes { get; set; } = new List<ReviewLike>();
 

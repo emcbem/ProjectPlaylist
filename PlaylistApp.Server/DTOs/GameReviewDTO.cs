@@ -11,4 +11,7 @@ public class GameReviewDTO
     public int Likes { get; set; }
     public int Dislikes { get; set; }
     public int Rating { get; set; }
+    public int? PlaytimeAtReview { get; set; }
+	public int? PlaytimeAtModification { get; set; }
+
 }

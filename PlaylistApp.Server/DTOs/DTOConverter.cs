@@ -230,7 +230,9 @@ public static class DTOConverter
             LastEditDate = gameReview.LastEditDate.HasValue ? DateOnly.FromDateTime(gameReview.LastEditDate.Value) : null,
             Game = gameReview.Game.ToDTO(),
             User = gameReview.User.ToDTO(),
-            Id = gameReview.Id
+            Id = gameReview.Id,
+            PlaytimeAtModification = gameReview.PlaytimeAtModification,
+            PlaytimeAtReview = gameReview.PlaytimeAtReview
         };
     }
 
