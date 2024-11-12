@@ -477,6 +477,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.Url).HasColumnName("url");
+			entity.Property(e => e.Alt).HasColumnName("alt");
 		});
 
 		modelBuilder.Entity<UserPlatform>(entity =>

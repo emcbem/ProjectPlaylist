@@ -9,6 +9,8 @@ const HomePageLoggedIn: React.FC = () => {
   const slicedArray = games?.filter((item) => !!item.coverUrl).slice(0, 48);
   const slicedArray2 = games?.filter((item) => !!item.coverUrl).slice(49, 97);
 
+  console.log("All Games: ", games);
+
   return (
     games && (
       <>
