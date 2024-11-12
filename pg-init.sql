@@ -224,6 +224,8 @@ CREATE TABLE playlistdb.game_review (
     publish_date timestamp with time zone NOT NULL,
     last_edit_date timestamp with time zone,
     rating integer NOT NULL,
+    playtime_at_review integer,
+    playtime_at_modification integer
     CONSTRAINT game_review_rating_check CHECK (((rating > 0) AND (rating < 11)))
 );
 
