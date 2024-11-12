@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import PlatformGamerTags from "../Account/PlatformGamerTags";
 import EditUserGenresList from "./EditUserGenresList";
 import EditBio from "./EditBio";
+import { Link } from "react-router-dom";
 
 
 const Settings = () => {
@@ -42,7 +43,7 @@ const Settings = () => {
                 <div className="flex flex-wrap align-top">
                     <div className="">
                         <img className="rounded-full w-24 h-24 shadow-inner flex-shrink bg-gray-50" src={usr?.profileURL ?? ""} alt="User Profile Image" />
-                        <span className="text-teal-500 underline underline-offset-1">edit image</span>
+                        <Link to={"/settings/setprofileimage"}><span className="text-teal-500 underline underline-offset-1">edit image</span></Link>
                     </div>
                     {usr &&
                         <div className="flex flex-col px-8" style={{ maxWidth: "900px" }}>

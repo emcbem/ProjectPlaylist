@@ -3,6 +3,7 @@ import keys from "@/QueryKeys/UserAccountKeys";
 import { UserAccountService } from "@/ApiServices/UserAccountService";
 import { AddUserRequest } from "@/@types/Requests/AddRequests/addUserRequest";
 import { UpdateUserRequest } from "@/@types/Requests/UpdateRequests/updateUserRequest";
+import toast from "react-hot-toast";
 
 export const UserAccountQueries = {
   useGetUserByUsername: (name: string) => {
@@ -41,7 +42,8 @@ export const UserAccountQueries = {
       mutationFn: (updateUserRequest: UpdateUserRequest) => UserAccountService.UpdateUser(updateUserRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
-        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId})
+        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId});
+        toast.success("User Image Updated!");
       },
     });
   },
