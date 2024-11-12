@@ -1,6 +1,6 @@
 import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
 import { GoalLikeService } from "@/ApiServices/GoalLikeService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "../QueryKeys/GoalLikeKeys";
 
 export const GoalLikeQueries = {
@@ -11,6 +11,12 @@ export const GoalLikeQueries = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.AddGoalLike });
       },
+    });
+  },
+  useGetGoalLikesFromUser: (userId: string) => {
+    return useQuery({
+      queryFn: () => GoalLikeService.getGoalLikesFromUser(userId),
+      queryKey: keys.GetGoalLikesFromUser(userId),
     });
   },
 };

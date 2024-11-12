@@ -2,6 +2,7 @@ import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeReq
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GoalLikeQueries } from "@/hooks/GoalLikeQueries";
+import formatDate from "@/lib/date";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -28,6 +29,13 @@ const TestPage = () => {
     isSuccess: isAddingSuccess,
   } = GoalLikeQueries.useAddGoalLike(AddGoalLikeRequest);
 
+  const {
+    data: goalLikesFromUser,
+    isPending: isGettingFromUser,
+    isError: isGettingFromUserError,
+    isSuccess: isGettingFromUserSuccess,
+  } = GoalLikeQueries.useGetGoalLikesFromUser(usr?.guid ?? "");
+
   const handleAddGoalLike = () => {
     AddGoalLike();
   };
@@ -42,6 +50,24 @@ const TestPage = () => {
           {isAddingSuccess && <p>Goal is liked: {String(newGoalLike)}</p>}
           {isAddingError && <p>Failed to add goal to like...</p>}
           <button onClick={handleAddGoalLike}>Add Goal</button>
+        </div>
+        <div>
+          {isGettingFromUser && (
+            <p>Getting all like goals for user {usr?.username}...</p>
+          )}
+          {isGettingFromUserSuccess && (
+            <div>
+              {goalLikesFromUser.map((x) => (
+                <div key={x.id}>
+                  {x.id}: Goal: {x.achievement.name}, Goal Date:{" "}
+                  {formatDate(x.dateToAchieve)}
+                </div>
+              ))}
+              {isGettingFromUserError && (
+                <p>Failed to get goals user has liked</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     )
