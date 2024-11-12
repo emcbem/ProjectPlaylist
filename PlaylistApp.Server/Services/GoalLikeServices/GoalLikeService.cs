@@ -30,6 +30,16 @@ public class GoalLikeService : IGoalLikeService
             return false;
         }
 
+        var possibleGoalLike = await context.GoalLikes
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.GoalId == request.GoalId)
+            .FirstOrDefaultAsync();
+
+        if (possibleGoalLike != null)
+        {
+            return false;
+        }
+
         GoalLike newGoalLike = new GoalLike()
         {
             DateLiked = DateTime.UtcNow,
