@@ -18,6 +18,7 @@ import { SearchBarProvider } from "./contexts/SearchBarContext";
 import { ThemeProvider } from "@material-tailwind/react";
 import { materialTheme } from "./lib/theme";
 import Settings from "./page_components/Settings/Settings";
+import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -68,6 +69,10 @@ function App() {
                     <Route
                       path="/settings"
                       element={<Settings />}
+                    />
+                    <Route
+                      path="/settings/setprofileimage"
+                      element={<ChooseProfileImg />}
                     />
                   </Routes>
                 </div>
