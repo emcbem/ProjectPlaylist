@@ -1,45 +1,53 @@
 import { InfiniteGames } from "@/page_components/Search/InfiniteGames";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "./hooks/useSelector";
 import { Genre } from "@/@types/genre";
 import { Selector } from "./Selector";
 import { useSearchRequest } from "./hooks/useInfiniteController";
 import { GenreQueries } from "@/hooks/GenreQueries";
 import { useSearchBarContext } from "@/hooks/useSearchBarContext";
+import { PlatformQueries } from "@/hooks/PlatformQueries";
+import { Platform } from "@/@types/platform";
+import Dropdown from "./SelectOrder";
 
-const SearchPage: React.FC = () => {
-  
+const SearchPage = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const searchRequest = useSearchRequest();
   const searchBarContext = useSearchBarContext();
 
+  const { data: genres, isLoading: genresLoading } =
+    GenreQueries.useGetAllGenres();
+  const genreSelectorController = useSelector<Genre>(
+    "Filter By Genres",
+    genres ?? ([] as Genre[]),
+    (value: Genre) => {
+      return value.name;
+    }
+  );
 
-  const {data: genres, isLoading} = GenreQueries.useGetAllGenres();
+  const { data: platforms, isLoading: platformsLoading } =
+    PlatformQueries.useGetAllPlatforms();
+  const platformSelectorController = useSelector<Platform>(
+    "Filter By Platforms",
+    platforms ?? ([] as Platform[]),
+    (value: Genre) => {
+      return value.name;
+    }
+  );
 
-  const genreSelectorController = useSelector<Genre>("Filter By Genres", genres ?? [] as Genre[], (value: Genre) => {return value.name})
-
-  
   useEffect(() => {
-    searchRequest.setSearchRequest(prevRequest => ({
-      ...prevRequest,
-      title: searchBarContext.searchQuery,
-    }));
-  }, [searchBarContext.searchQuery]);
-
- 
-
-  useEffect(() => {
-    searchRequest.setSearchRequest(x => ({
+    searchRequest.setSearchRequest((x) => ({
       ...x,
-      genreIds: genreSelectorController.selectedItems.map(x => x.id)
+      genreIds: genreSelectorController.selectedItems.map((x) => x.id),
+      title: searchBarContext.searchQuery,
+      platformIds: platformSelectorController.selectedItems.map((x) => x.id),
     }));
-    console.log({
-      ...searchRequest.searchRequest,
-      genreIds: genreSelectorController.selectedItems.map(x => x.id)
-    })
-  }, [genreSelectorController.selectedItems])
-
+  }, [
+    genreSelectorController.selectedItems,
+    searchBarContext.searchQuery,
+    platformSelectorController.selectedItems,
+  ]);
 
   const toggleDiv = () => {
     setIsVisible(!isVisible);
@@ -51,7 +59,7 @@ const SearchPage: React.FC = () => {
         <div className="2xl:hidden xl:hidden lg:hidden md:hidden sm:block">
           {!isVisible ? (
             <button
-              className="border border-black dark:border-white dark:text-white p-2 px-8 w-30 h-14 text-2xl rounded-lg"
+              className="border border-black dark:border-white dark:text-white w-30 h-14 text-2xl rounded-lg"
               onClick={toggleDiv}
             >
               Filter
@@ -82,29 +90,19 @@ const SearchPage: React.FC = () => {
 
         <div className="min-h-screen bg-white dark:bg-black flex">
           <div className="w-1/4 h-screen bg-gradient-to-b from-[#ff704e00] to-[#602B53] p-5 sticky top-0 left-0 overflow-y-auto xl:block lg:block md:block sm:hidden xs:hidden hidden">
-            <p className="text-xl mt-5 mb-1">Filter by Platform</p>
-            <div className="flex flex-wrap">
-              {["Steam", "Nintendo", "Xbox", "Playstation", "Epic Games"].map(
-                (platform) => (
-                  <div
-                    key={platform}
-                    className="rounded-full p-1 px-5 border-[#111111] dark:border-[#ffffff] m-1 border-2 hover:bg-gray-300 dark:hover:bg-red-500"
-                  >
-                    {platform}
-                  </div>
-                )
-              )}
+            {!platformsLoading &&
+              Selector<Platform>(platformSelectorController)}
 
-              {!isLoading && Selector<Genre>(genreSelectorController)}
-            </div>
-
-            
+            {!genresLoading && Selector<Genre>(genreSelectorController)}
           </div>
-
           <div className="ml-1/4 w-3/4 sm:w-full h-fit p-5 overflow-y-auto">
-            <InfiniteGames {...searchRequest}/>
+            <div className="flex">
+              <div className="ml-auto">
+                <Dropdown searchRequest={searchRequest.searchRequest} setSearchRequest={searchRequest.setSearchRequest}/>
+              </div>
+            </div>
+            <InfiniteGames {...searchRequest} />
           </div>
-          
         </div>
 
         <div
@@ -127,30 +125,7 @@ const SearchPage: React.FC = () => {
               )}
             </div>
 
-            <p className="text-xl mt-5 mb-1">Filter by Genre</p>
-            <div className="flex flex-wrap">
-              {[
-                "Arcade",
-                "Fighting",
-                "Action",
-                "Shooter",
-                "Puzzle",
-                "Sport",
-                "MOBA",
-                "Quiz / Trivia",
-                "Pinball",
-                "Indie",
-                "Point-and-click",
-                "Simulator",
-              ].map((genre) => (
-                <div
-                  key={genre}
-                  className="rounded-full p-3 px-7 border-2 border-[#111111] dark:border-[#ffffff] m-2 hover:bg-gray-300"
-                >
-                  {genre}
-                </div>
-              ))}
-            </div>
+            {!genresLoading && Selector<Genre>(genreSelectorController)}
             <button
               className="border border-black dark:border-white dark:text-black p-2 px-8 w-30 h-14 text-2xl rounded-lg sticky bottom-0 dark:bg-white w-screen"
               onClick={toggleDiv}
