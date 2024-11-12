@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
@@ -14,7 +14,8 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     fetchNextPage,
     hasNextPage,
     isLoading,
-    refetch,
+    // refetch,
+    
   } = useInfiniteQuery<Page, Error>({
     queryKey: ["infiniteGames", controller.searchRequest],
     initialPageParam: 0,
@@ -25,9 +26,10 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     },
   });
 
-  useEffect(() => {
-    refetch();
-  }, [controller.searchRequest]);
+  // useEffect(() => {
+  //   refetch();
+
+  // }, [controller.searchRequest]);
 
   const lastItemRef = useCallback(
     (node: HTMLElement | null) => {
