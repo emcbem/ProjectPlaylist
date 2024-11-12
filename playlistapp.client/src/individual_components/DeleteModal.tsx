@@ -68,7 +68,7 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
       >
         <div
           ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 ${
+          className={`relative mx-auto w-full max-w-[48rem] h-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 animation-fill-mode: forwards;${
             isOpen ? "scale-100" : "scale-95"
           }`}
         >

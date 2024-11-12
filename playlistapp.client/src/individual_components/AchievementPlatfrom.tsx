@@ -51,10 +51,8 @@ const AchievementPlatfrom: React.FC<props> = ({
                 return (
                   <AchievementCard
                     key={index}
-                    Title={achievement.name}
-                    Description={achievement.description}
+                    achievement={achievement}
                     showAddButton={showAddButton}
-                    imageUrl={achievement.imageURL}
                   />
                 );
               })
