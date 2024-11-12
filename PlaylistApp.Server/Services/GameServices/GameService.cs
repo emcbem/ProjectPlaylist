@@ -50,6 +50,8 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var game = await context.Games
+			.Include(x => x.InvolvedCompanies)
+				.ThenInclude(x => x.Company)
 			.Where(x => x.Id == id)
 			.FirstOrDefaultAsync();
 
