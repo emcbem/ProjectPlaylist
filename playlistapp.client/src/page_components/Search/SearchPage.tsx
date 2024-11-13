@@ -71,7 +71,7 @@ const SearchPage = () => {
   return (
     <>
       <div className="relative">
-        <div className="md:hidden block">
+        <div className="md:hidden block dark:bg-black">
           {!isVisible ? (
             <button
               className="border border-black dark:border-white dark:text-white w-full h-14 text-2xl rounded-lg pt-3"
