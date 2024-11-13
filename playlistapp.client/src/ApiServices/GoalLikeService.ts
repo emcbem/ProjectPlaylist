@@ -1,5 +1,7 @@
 import { Goal } from "@/@types/goal";
+import { GoalLike } from "@/@types/goalLike";
 import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
+import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
 import axios from "axios";
 
 export const GoalLikeService = {
@@ -41,6 +43,27 @@ export const GoalLikeService = {
       return response.data;
     } catch (error) {
       console.error("Failed to get goal likes from user");
+      throw error;
+    }
+  },
+  getGoalLike: async (getGoalLikeRequest: GetGoalLikeRequest) => {
+    if (!getGoalLikeRequest) {
+      console.error("Get goal like request is undefined or empty");
+      throw new Error("Get goal like request must be provided");
+    }
+    try {
+      const response = await axios.post<GoalLike>(
+        `${import.meta.env.VITE_URL}/GoalLike/getgoallike`,
+        getGoalLikeRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get goal like from request");
       throw error;
     }
   },
