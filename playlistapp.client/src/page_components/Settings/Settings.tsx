@@ -1,10 +1,10 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React, { useRef } from "react";
-import PlatformGamerTags from "../Account/PlatformGamerTags";
 import EditUserGenresList from "./EditUserGenresList";
 import EditBio from "./EditBio";
 import { Link } from "react-router-dom";
+import EditGamerTags from "./EditGamerTags";
 
 
 const Settings = () => {
@@ -60,12 +60,7 @@ const Settings = () => {
                             <hr className="mb-8" />
                             <section className="mb-5" id="platforms" ref={platformsRef}>
                                 <h2 className="text-2xl">Platforms</h2>
-                                <PlatformGamerTags />
-                            </section>
-                            <hr className="mb-8" />
-                            <section className="mb-5" id="preferred-theme" ref={themeRef}>
-                                <h2 className="text-2xl">Preferred Theme</h2>
-                                <p>Light Mode</p>
+                                <EditGamerTags />
                             </section>
                             <hr className="mb-8" />
                             <section className="mb-5" id="favorite-genres" ref={genresRef}>
@@ -75,7 +70,7 @@ const Settings = () => {
                             <hr className="mb-8" />
                             <section className="mb-5" id="favorite-games" ref={gamesRef}>
                                 <h2 className="text-2xl">Favorite Games</h2>
-                                <p>Light Mode</p>
+                                <p>Not Implemented Yet...</p>
                             </section>
                             <hr className="mb-8" />
                             <section className="mb-5">

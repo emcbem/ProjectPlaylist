@@ -32,7 +32,7 @@ const EditUserGenresList = ({ userGuid }: { userGuid: string | undefined }) => {
       <div className="flex flex-wrap mb-3">
         {userGenres && userGenres.map((userGenre, key) => (
           <div key={key} role="button"
-            className="group rounded-full p-1 px-3 border-2 dark:bg-white dark:text-black border-clay-900 dark:border-[#ffffff] m-1 flex flex-row items-center"  onClick={() => handleRemoveGenre(userGenre)}>
+            className="group rounded-full p-1 px-3 dark:border-2 bg-clay-500 text-white dark:bg-white dark:text-black border-clay-900 dark:border-[#ffffff] m-1 flex flex-row items-center"  onClick={() => handleRemoveGenre(userGenre)}>
             {userGenre.name}
             <span className='text-lg ml-2'>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
@@ -44,7 +44,7 @@ const EditUserGenresList = ({ userGuid }: { userGuid: string | undefined }) => {
       </div>
       <div className="flex flex-wrap">
         {allGenres && allGenres.filter(x => !userGenres?.some(y => y.name === x.name)).map((genre, key) => (
-          <div key={key} role="button" className="rounded-full p-1 px-3 border-2 border-clay-900 dark:border-[#ffffff] m-1" onClick={() => handleAddGenre(genre)}>
+          <div key={key} role="button" className="rounded-full p-1 px-3 border border-clay-900 dark:border-[#ffffff] m-1" onClick={() => handleAddGenre(genre)}>
             {genre.name}
           </div>
         ))}
