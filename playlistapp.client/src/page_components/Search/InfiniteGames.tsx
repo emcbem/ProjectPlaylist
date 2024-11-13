@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
@@ -29,7 +29,19 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     },
   });
 
-  const [fetchedOnGames, setFetchedOnGames] = useState<React.MutableRefObject<IntersectionObserver | null | undefined>[]>([])
+  const [fetchedOnGames, setFetchedOnGames] = useState<
+    Element[]
+  >([]);
+
+  useEffect(() => {
+    setFetchedOnGames([]);
+  }, [
+    controller.searchRequest.title,
+    controller.searchRequest.companyIds,
+    controller.searchRequest.genreIds,
+    controller.searchRequest.orderingMethod,
+    controller.searchRequest.platformIds,
+  ]);
 
   const lastItemRef = useCallback(
     (node: HTMLElement | null) => {
@@ -41,8 +53,12 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
 
       observer.current = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
-          if (entries[0]?.isIntersecting && hasNextPage && !fetchedOnGames.find(x => x === observer)) {
-            setFetchedOnGames(x => [...x, observer]);
+          if (
+            entries[0]?.isIntersecting &&
+            hasNextPage &&
+            !fetchedOnGames.find((x) => x === entries[0].target)
+          ) {
+            setFetchedOnGames((x) => [...x, entries[0].target]);
             fetchNextPage();
           }
         }
@@ -70,12 +86,14 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
           <LoaderIcon className="w-[50px] h-[50px]"></LoaderIcon>
         </div>
       )}
-      {!isFetching && games?.pages.length == 1 && games.pages[0].pageGames.length == 0 &&
-        <div className="flex justify-center flex-col w-full pt-10">
-          <QuestionMarkCircleIcon className="w-full h-[100px]"/>
-          <p className="w-full text-center pt-3">No Games found</p>
-        </div>
-      }
+      {!isFetching &&
+        games?.pages.length == 1 &&
+        games.pages[0].pageGames.length == 0 && (
+          <div className="flex justify-center flex-col w-full pt-10">
+            <QuestionMarkCircleIcon className="w-full h-[100px]" />
+            <p className="w-full text-center pt-3">No Games found</p>
+          </div>
+        )}
     </>
   );
 };
