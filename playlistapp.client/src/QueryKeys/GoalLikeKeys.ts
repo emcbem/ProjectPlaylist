@@ -4,6 +4,7 @@ const GoalLikeKeys = {
     ["GoalLike", "GetGoalLikesFromUser", userId] as const,
   GetGoalLike: ["GoalLike", "GetGoalLike"] as const,
   UpdateGoalLike: ["GoalLike", "UpdateGoalLike"] as const,
+  RemoveGoalLike: ["GoalLike", "RemoveGoalLike"] as const,
 };
 
 export default GoalLikeKeys;

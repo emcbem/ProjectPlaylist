@@ -1,6 +1,7 @@
 import { Goal } from "@/@types/goal";
 import { GoalLike } from "@/@types/goalLike";
 import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
+import { RemoveGoalLikerequest } from "@/@types/Requests/DeleteRequests/removeGoalLikeRequest";
 import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
 import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import axios from "axios";
@@ -86,6 +87,27 @@ export const GoalLikeService = {
       return response.data;
     } catch (error) {
       console.error("Failed to update goal like");
+      throw error;
+    }
+  },
+  removeGoalLike: async (removeGoalLikeRequest: RemoveGoalLikerequest) => {
+    if (!removeGoalLikeRequest) {
+      console.error("Remove goal like request is unefined or empty");
+      throw new Error("Remove goal like request must be provided");
+    }
+    try {
+      const response = await axios.post<boolean>(
+        `${import.meta.env.VITE_URL}/GoalLike/removegoallike`,
+        removeGoalLikeRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to remove goal like");
       throw error;
     }
   },

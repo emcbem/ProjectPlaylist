@@ -1,4 +1,5 @@
 import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
+import { RemoveGoalLikerequest } from "@/@types/Requests/DeleteRequests/removeGoalLikeRequest";
 import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
 import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
@@ -33,6 +34,13 @@ const TestPage = () => {
     isLike: false,
   };
 
+  const removeGoalLikeRequest: RemoveGoalLikerequest = {
+    goalId: Number(goalId),
+    userId: usr?.guid ?? "",
+  };
+
+  console.log("RemoveGoalLikeRequest: ", removeGoalLikeRequest);
+
   const {
     data: newGoalLike,
     mutate: AddGoalLike,
@@ -64,6 +72,14 @@ const TestPage = () => {
     isSuccess: isUpdatingSuccess,
   } = GoalLikeQueries.useUpdateGoalLike(updateGoalLikeRequest);
 
+  const {
+    data: removedGoalLike,
+    mutate: RemoveGoalLike,
+    isPending: isRemoving,
+    isError: isRemovingError,
+    isSuccess: isRemovingSuccess,
+  } = GoalLikeQueries.useRemoveGoalLike(removeGoalLikeRequest);
+
   const handleAddGoalLike = () => {
     AddGoalLike();
   };
@@ -74,6 +90,10 @@ const TestPage = () => {
 
   const handleUpdateGoalLike = () => {
     UpdateGoalLike();
+  };
+
+  const handleRemoveGoalLike = () => {
+    RemoveGoalLike();
   };
 
   return (
@@ -120,6 +140,14 @@ const TestPage = () => {
           )}
           {isUpdatingError && <p>Failed to update goal like...</p>}
           <button onClick={handleUpdateGoalLike}>Update Goal Like</button>
+        </div>
+        <div>
+          {isRemoving && <p>Removing goal like...</p>}
+          {isRemovingSuccess && (
+            <p>Is goal like removed: {String(removedGoalLike)}</p>
+          )}
+          {isRemovingError && <p>Failed to remove goal like...</p>}
+          <button onClick={handleRemoveGoalLike}>Remove Goal Like</button>
         </div>
       </div>
     )
