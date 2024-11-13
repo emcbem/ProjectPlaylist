@@ -41,7 +41,7 @@ const EditBio = () => {
         <>
             <div className=''>
                 <textarea
-                    aria-label='Edit List Name'
+                    aria-label='Edit Profile Bio'
                     value={value}
                     className={`${showTextBox ? "" : "hidden"} bg-inherit rounded w-full`}
                     onChange={handleChange}
@@ -54,7 +54,7 @@ const EditBio = () => {
                 </button>
             </div>
             <p className={`${!showTextBox ? "" : "hidden"} font-sans`}>{usr?.bio && usr?.bio.length >= 0 ? usr?.bio : <span className="text-clay-900">No bio yet...</span>}</p>
-            <p className={`${!showTextBox ? "" : "hidden"} text-teal-500 underline underline-offset-1`} onClick={() => setShowTextBox(!showTextBox)}>edit bio</p>
+            <p className={`${!showTextBox ? "" : "hidden"} text-teal-500 underline underline-offset-1 hover:underline-offset-2 transition-all`} role="button" onClick={() => setShowTextBox(!showTextBox)}>edit bio</p>
         </>
     )
 }

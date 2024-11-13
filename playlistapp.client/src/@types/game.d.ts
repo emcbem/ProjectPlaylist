@@ -6,7 +6,7 @@ export interface Game {
   title: string;
   description: string;
   ageRating: string;
-  publishDate: string;
+  publishDate: Date;
   coverUrl: string;
   companies: Company[];
 }
