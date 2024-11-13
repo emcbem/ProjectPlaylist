@@ -1,5 +1,6 @@
 import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
 import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
+import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GoalLikeQueries } from "@/hooks/GoalLikeQueries";
@@ -27,6 +28,11 @@ const TestPage = () => {
     userId: usr?.guid ?? "",
   };
 
+  const updateGoalLikeRequest: UpdateGoalLikeRequest = {
+    id: 1,
+    isLike: false,
+  };
+
   const {
     data: newGoalLike,
     mutate: AddGoalLike,
@@ -50,12 +56,24 @@ const TestPage = () => {
     isSuccess: isGettinggoalLikeSuccess,
   } = GoalLikeQueries.useGetGoalLike(GetGoalLikeRequest);
 
+  const {
+    data: updatedGoalLike,
+    mutate: UpdateGoalLike,
+    isPending: isUpdating,
+    isError: isUpdatingError,
+    isSuccess: isUpdatingSuccess,
+  } = GoalLikeQueries.useUpdateGoalLike(updateGoalLikeRequest);
+
   const handleAddGoalLike = () => {
     AddGoalLike();
   };
 
   const handleGetGoalLike = () => {
     GetGoalLike();
+  };
+
+  const handleUpdateGoalLike = () => {
+    UpdateGoalLike();
   };
 
   return (
@@ -94,6 +112,14 @@ const TestPage = () => {
           )}
           {isGettingGoalLikeError && <p>Failed to get goal like...</p>}
           <button onClick={handleGetGoalLike}>Get Goal Like</button>
+        </div>
+        <div>
+          {isUpdating && <p>Updating goal like...</p>}
+          {isUpdatingSuccess && (
+            <p>Is goal like updated: {String(updatedGoalLike)}</p>
+          )}
+          {isUpdatingError && <p>Failed to update goal like...</p>}
+          <button onClick={handleUpdateGoalLike}>Update Goal Like</button>
         </div>
       </div>
     )
