@@ -9,3 +9,4 @@ export interface Game {
   publishDate: Date;
   coverUrl: string;
   companies: Company[];
+}

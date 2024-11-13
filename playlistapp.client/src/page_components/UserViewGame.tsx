@@ -42,6 +42,7 @@ const UserViewGame = () => {
               {game?.title}
             </h1>
             <p className="text-clay-950 dark:text-clay-900">
+              {game?.companies[0].name} -&nbsp;Released&nbsp;
               {game?.publishDate
                 ? formatDate(new Date(game.publishDate))
                 : "No publish date"}

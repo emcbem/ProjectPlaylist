@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
@@ -29,6 +29,8 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     },
   });
 
+  const [fetchedOnGames, setFetchedOnGames] = useState<React.MutableRefObject<IntersectionObserver | null | undefined>[]>([])
+
   const lastItemRef = useCallback(
     (node: HTMLElement | null) => {
       if (isFetchingNextPage) return;
@@ -39,7 +41,8 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
 
       observer.current = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
-          if (entries[0]?.isIntersecting && hasNextPage) {
+          if (entries[0]?.isIntersecting && hasNextPage && !fetchedOnGames.find(x => x === observer)) {
+            setFetchedOnGames(x => [...x, observer]);
             fetchNextPage();
           }
         }
