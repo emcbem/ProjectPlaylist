@@ -1,7 +1,6 @@
 import { Game } from "@/@types/game";
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
-import Contour from "@/assets/contour1.svg";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
