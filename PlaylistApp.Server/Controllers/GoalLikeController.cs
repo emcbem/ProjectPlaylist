@@ -30,7 +30,7 @@ public class GoalLikeController : Controller
         return await goalLikeService.GetGoalLikesFromUser(userId);
     }
 
-    [HttpDelete("removegoallike")]
+    [HttpPost("removegoallike")]
     public async Task<bool> RemoveGoalLike(RemoveGoalLikeRequest request)
     {
         return await goalLikeService.RemoveGoalLike(request);

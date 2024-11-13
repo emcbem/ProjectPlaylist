@@ -19,6 +19,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { materialTheme } from "./lib/theme";
 import Settings from "./page_components/Settings/Settings";
 import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
+import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -62,18 +63,13 @@ function App() {
                       path="/achievements/:gameId"
                       element={<AchievementsPage />}
                     />
-                    <Route
-                      path="/test/:goalId"
-                      element={<TestPage />}
-                    />
-                    <Route
-                      path="/settings"
-                      element={<Settings />}
-                    />
+                    <Route path="/test/:goalId" element={<TestPage />} />
+                    <Route path="/settings" element={<Settings />} />
                     <Route
                       path="/settings/setprofileimage"
                       element={<ChooseProfileImg />}
                     />
+                    <Route path="viewallgoals" element={<ViewAllGoals />} />
                   </Routes>
                 </div>
               </div>

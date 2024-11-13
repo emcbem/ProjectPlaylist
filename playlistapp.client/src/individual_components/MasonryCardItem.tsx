@@ -1,6 +1,7 @@
 import { Game } from "@/@types/game";
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import Contour from "@/assets/contour1.svg";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -27,7 +28,9 @@ const MasonryCardItem: FC<{ game: Game }> = ({ game }) => {
           className="w-full object-cover"
           alt="Game Cover"
         />
-        <div className="bg-clay-950 dark:bg-clay-400 pt-3">
+        <div
+          className="bg-[#f1f3f4] dark:bg-clay-400 pt-3"
+        >
           <div className="sm:text-2xl text-base px-2 pt-2 font-extrabold">
             {game.title}
           </div>

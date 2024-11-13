@@ -1,8 +1,10 @@
-import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
-import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
+import { AddGoalLikeRequest } from "@/@types/Requests/AddRequests/addGoalLikeRequest";
+import { RemoveGoalLikerequest } from "@/@types/Requests/DeleteRequests/removeGoalLikeRequest";
+import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
+import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalLikeQueries } from "@/hooks/GoalLikeQueries";
 import formatDate from "@/lib/date";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
@@ -16,68 +18,82 @@ const TestPage = () => {
 
   const { goalId } = useParams<{ goalId: string }>();
 
-  const addGoalRequest: AddGoalRequest = {
-    achievementId: 486,
-    dateToAchieve: new Date(2025, 11, 29),
-    isCurrent: true,
+  const AddGoalLikeRequest: AddGoalLikeRequest = {
+    goalId: Number(goalId),
+    isLike: true,
     userId: usr?.guid ?? "",
   };
 
-  const updateGoalRequest: UpdateGoalRequest = {
-    dateToAchieve: new Date(2026, 11, 29),
-    id: Number(goalId),
-    isComplete: true,
-    isCurrent: false,
+  const GetGoalLikeRequest: GetGoalLikeRequest = {
+    goalId: Number(goalId),
+    userId: usr?.guid ?? "",
   };
 
+  const updateGoalLikeRequest: UpdateGoalLikeRequest = {
+    id: 1,
+    isLike: false,
+  };
+
+  const removeGoalLikeRequest: RemoveGoalLikerequest = {
+    goalId: Number(goalId),
+    userId: usr?.guid ?? "",
+  };
+
+  console.log("RemoveGoalLikeRequest: ", removeGoalLikeRequest);
+
   const {
-    data: newGoal,
-    mutate: AddNewGoal,
+    data: newGoalLike,
+    mutate: AddGoalLike,
     isPending: isAdding,
     isError: isAddingError,
     isSuccess: isAddingSuccess,
-  } = GoalQueries.useAddGoal(addGoalRequest);
+  } = GoalLikeQueries.useAddGoalLike(AddGoalLikeRequest);
 
   const {
-    data: goalById,
-    isPending: isGettingGoalById,
-    isError: isGettingGoalByIdError,
-    isSuccess: isGettingGoalByIdSuccess,
-  } = GoalQueries.useGetGoalById(Number(goalId));
+    data: goalLikesFromUser,
+    isPending: isGettingFromUser,
+    isError: isGettingFromUserError,
+    isSuccess: isGettingFromUserSuccess,
+  } = GoalLikeQueries.useGetGoalLikesFromUser(usr?.guid ?? "");
 
   const {
-    data: goalsByUser,
-    isPending: isGettingGoalsByUser,
-    isError: isGettingGoalsByUserError,
-    isSuccess: isGettingGoalsByUserSuccess,
-  } = GoalQueries.useGetGoalsByUser("f776d4d8-a6f5-44db-9960-6165a1b1535d");
+    data: goalLike,
+    mutate: GetGoalLike,
+    isPending: isGettingGoalLike,
+    isError: isGettingGoalLikeError,
+    isSuccess: isGettinggoalLikeSuccess,
+  } = GoalLikeQueries.useGetGoalLike(GetGoalLikeRequest);
 
   const {
-    data: updatedGoal,
-    mutate: UpdateGoal,
+    data: updatedGoalLike,
+    mutate: UpdateGoalLike,
     isPending: isUpdating,
     isError: isUpdatingError,
     isSuccess: isUpdatingSuccess,
-  } = GoalQueries.useUpdateGoal(updateGoalRequest);
+  } = GoalLikeQueries.useUpdateGoalLike(updateGoalLikeRequest);
 
   const {
-    data: deletedGoal,
-    mutate: DeleteGoal,
-    isPending: isDeleting,
-    isError: isDeletingError,
-    isSuccess: isDeletingSuccess,
-  } = GoalQueries.useDeleteGoal(Number(goalId));
+    data: removedGoalLike,
+    mutate: RemoveGoalLike,
+    isPending: isRemoving,
+    isError: isRemovingError,
+    isSuccess: isRemovingSuccess,
+  } = GoalLikeQueries.useRemoveGoalLike(removeGoalLikeRequest);
 
-  const handleAddGoal = () => {
-    AddNewGoal();
+  const handleAddGoalLike = () => {
+    AddGoalLike();
   };
 
-  const handleUpdateGoal = () => {
-    UpdateGoal();
+  const handleGetGoalLike = () => {
+    GetGoalLike();
   };
 
-  const handleDeleteGoal = () => {
-    DeleteGoal();
+  const handleUpdateGoalLike = () => {
+    UpdateGoalLike();
+  };
+
+  const handleRemoveGoalLike = () => {
+    RemoveGoalLike();
   };
 
   return (
@@ -86,50 +102,52 @@ const TestPage = () => {
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
         <div>
-          {isAdding && <p>Adding goal...</p>}
-          {isAddingSuccess && <p>New Goal's Id: {newGoal}</p>}
-          {isAddingError && <p>Failed to add new goal...</p>}
-          <button onClick={handleAddGoal}>Add New Goal</button>
+          {isAdding && <p>Adding goal like...</p>}
+          {isAddingSuccess && <p>Goal is liked: {String(newGoalLike)}</p>}
+          {isAddingError && <p>Failed to add goal to like...</p>}
+          <button onClick={handleAddGoalLike}>Add Goal</button>
         </div>
         <div>
-          {isGettingGoalById && <p>Getting goal by id...</p>}
-          {isGettingGoalByIdSuccess && (
-            <p>
-              Viewing goal: {goalById.id}, for achievement:{" "}
-              {goalById.achievement.name}
-            </p>
+          {isGettingFromUser && (
+            <p>Getting all like goals for user {usr?.username}...</p>
           )}
-          {isGettingGoalByIdError && <p>Failed to get goal by id</p>}
-        </div>
-        <div>
-          {isGettingGoalsByUser && (
-            <p>Getting all goals for user {usr?.username}...</p>
-          )}
-          {isGettingGoalsByUserSuccess && (
+          {isGettingFromUserSuccess && (
             <div>
-              {goalsByUser.map((x) => (
+              {goalLikesFromUser.map((x) => (
                 <div key={x.id}>
-                  {x.id}: Achievement: {x.achievement.name}, Goal Date:{" "}
+                  {x.id}: Goal: {x.achievement.name}, Goal Date:{" "}
                   {formatDate(x.dateToAchieve)}
                 </div>
               ))}
+              {isGettingFromUserError && (
+                <p>Failed to get goals user has liked</p>
+              )}
             </div>
           )}
-          {isGettingGoalsByUserError && <p>Failed to get goals for user</p>}
         </div>
         <div>
-          {isUpdating && <p>Updating goal...</p>}
-          {isUpdatingSuccess && (
-            <p>Updated Goal's still acitve: {String(updatedGoal?.isCurrent)}</p>
+          {isGettingGoalLike && <p>Getting goal like...</p>}
+          {isGettinggoalLikeSuccess && (
+            <p>Goal Like: {formatDate(goalLike.dateLiked)}</p>
           )}
-          {isUpdatingError && <p>Failed to update goal...</p>}
-          <button onClick={handleUpdateGoal}>Update Goal {goalById?.id}</button>
+          {isGettingGoalLikeError && <p>Failed to get goal like...</p>}
+          <button onClick={handleGetGoalLike}>Get Goal Like</button>
         </div>
         <div>
-          {isDeleting && <p>Deleting goal...</p>}
-          {isDeletingSuccess && <p>Goal is deleted: {String(deletedGoal)}</p>}
-          {isDeletingError && <p>Failed to delete goal...</p>}
-          <button onClick={handleDeleteGoal}>Delete Goal {goalById?.id}</button>
+          {isUpdating && <p>Updating goal like...</p>}
+          {isUpdatingSuccess && (
+            <p>Is goal like updated: {String(updatedGoalLike)}</p>
+          )}
+          {isUpdatingError && <p>Failed to update goal like...</p>}
+          <button onClick={handleUpdateGoalLike}>Update Goal Like</button>
+        </div>
+        <div>
+          {isRemoving && <p>Removing goal like...</p>}
+          {isRemovingSuccess && (
+            <p>Is goal like removed: {String(removedGoalLike)}</p>
+          )}
+          {isRemovingError && <p>Failed to remove goal like...</p>}
+          <button onClick={handleRemoveGoalLike}>Remove Goal Like</button>
         </div>
       </div>
     )
