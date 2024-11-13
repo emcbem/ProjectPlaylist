@@ -67,7 +67,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
       </button>
       <div
         onClick={handleBackdropClick}
-        className={`fixed inset-0 z-[999] grid h-screen w-screen place-items-center dark:bg-black bg-white dark:bg-opacity-60 bg-opacity-60  backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[999] grid h-screen w-screen place-items-center dark:bg-black bg-[#f1f3f4] dark:bg-opacity-60 bg-opacity-60  backdrop-blur-sm transition-opacity duration-300 ${
           isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -75,7 +75,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
       >
         <div
           ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 animation-fill-mode: forwards;${
+          className={`relative mx-auto w-full max-w-[48rem] h-auto rounded-lg overflow-hidden shadow-sm bg-[#f1f3f4] dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 animation-fill-mode: forwards;${
             isOpen ? "scale-100" : "scale-95"
           }`}
         >
@@ -83,7 +83,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5"
           >
-            <h2 className="text-3xl mb-4 text-white">
+            <h2 className="text-3xl mb-4 dark:text-white text-black">
               Are you sure you want to remove this achievement?
             </h2>
             <p className=" mb-6 text-red-600">
