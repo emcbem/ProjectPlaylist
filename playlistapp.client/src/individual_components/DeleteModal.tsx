@@ -76,7 +76,7 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5"
           >
-            <h2 className="text-3xl mb-4 text-white">
+            <h2 className="text-3xl mb-4 dark:text-white text-clay-50">
               Are you sure you want to delete this review?
             </h2>
             <p className=" mb-6 text-red-600">
