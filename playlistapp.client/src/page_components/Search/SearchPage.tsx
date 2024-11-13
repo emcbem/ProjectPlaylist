@@ -9,6 +9,9 @@ import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 import { PlatformQueries } from "@/hooks/PlatformQueries";
 import { Platform } from "@/@types/platform";
 import Dropdown from "./SelectOrder";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { Company } from "@/@types/company";
+import { CompanyQueries } from "@/hooks/CompanyQueries";
 
 const SearchPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -36,17 +39,26 @@ const SearchPage = () => {
     }
   );
 
+  const {data: companies, isLoading: companiesLoading} = CompanyQueries.useGetAllCompanies()
+  const companySelectorController = useSelector<Company>("Filter By Companies", companies ?? [],
+    (value: Company) => {
+      return value.name
+    }
+  )
+
   useEffect(() => {
     searchRequest.setSearchRequest((x) => ({
       ...x,
       genreIds: genreSelectorController.selectedItems.map((x) => x.id),
       title: searchBarContext.searchQuery,
       platformIds: platformSelectorController.selectedItems.map((x) => x.id),
+      companyIds: companySelectorController.selectedItems.map(x => x.id)
     }));
   }, [
     genreSelectorController.selectedItems,
     searchBarContext.searchQuery,
     platformSelectorController.selectedItems,
+    companySelectorController.selectedItems
   ]);
 
   const toggleDiv = () => {
@@ -56,30 +68,21 @@ const SearchPage = () => {
   return (
     <>
       <div className="relative">
-        <div className="2xl:hidden xl:hidden lg:hidden md:hidden sm:block">
+        <div className="md:hidden block">
           {!isVisible ? (
             <button
-              className="border border-black dark:border-white dark:text-white w-30 h-14 text-2xl rounded-lg"
+              className="border border-black dark:border-white dark:text-white w-full h-14 text-2xl rounded-lg pt-3"
               onClick={toggleDiv}
             >
               Filter
             </button>
           ) : (
-            <div className="flex w-screen">
+            <div className="flex w-screen bg-white">
               <button
                 className="dark:text-white p-2 text-2xl rounded-lg"
                 onClick={toggleDiv}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="40"
-                  height="40"
-                  fill="currentColor"
-                  className="bi bi-x"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                </svg>
+                <XMarkIcon width={40} height={40}/>
               </button>
               <button className="border border-black dark:border-white dark:text-white p-2 px-8 w-30 h-14 text-2xl rounded-lg justify-self-end">
                 Clear All
@@ -89,16 +92,22 @@ const SearchPage = () => {
         </div>
 
         <div className="min-h-screen bg-white dark:bg-black flex">
-          <div className="w-1/4 h-screen bg-gradient-to-b from-[#ff704e00] to-[#602B53] p-5 sticky top-0 left-0 overflow-y-auto xl:block lg:block md:block sm:hidden xs:hidden hidden">
+          <div className="w-[300px] h-screen bg-gradient-to-b from-[#ff704e00] to-[#602B53] p-4 pt-[75px] sticky top-0 left-0 overflow-y-auto md:block hidden">
             {!platformsLoading &&
               Selector<Platform>(platformSelectorController)}
+            <hr className="my-3 border border-clay-100" />
 
             {!genresLoading && Selector<Genre>(genreSelectorController)}
+            <hr className="my-3 border border-clay-100" />
+
+            {!companiesLoading && Selector<Company>(companySelectorController)}
           </div>
-          <div className="ml-1/4 w-3/4 sm:w-full h-fit p-5 overflow-y-auto">
+          <div className="ml-auto w-full h-fit p-4 overflow-y-auto">
             <div className="flex">
               <div className="ml-auto">
-                <Dropdown searchRequest={searchRequest.searchRequest} setSearchRequest={searchRequest.setSearchRequest}/>
+                <Dropdown
+                  setSearchRequest={searchRequest.setSearchRequest}
+                />
               </div>
             </div>
             <InfiniteGames {...searchRequest} />
@@ -108,7 +117,7 @@ const SearchPage = () => {
         <div
           className={`${
             isVisible ? "block" : "hidden"
-          } absolute top-20 left-0 overflow-y-auto h-screen w-screen bg-black`}
+          } block md:hidden absolute top-14 left-0 overflow-y-auto h-screen bg-white dark:bg-black`}
         >
           <div className="">
             <p className="text-xl mt-5 mb-3">Filter by Platform</p>

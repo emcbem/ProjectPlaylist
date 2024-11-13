@@ -22,40 +22,45 @@ export const Selector = <T,>(controller: SelectorController<T>) => {
   console.log(controller);
   return (
     <>
-      <div className="flex flex-row items-center">
-        <p className="text-xl">{controller.title}</p>
-        <button
-          className="ml-auto"
-          onClick={() => controller.setShowItems((x) => !x)}
-        >
-          <div
-            className={`${
-              controller.showItems ? "rotate-90" : ""
-            } transition-transform duration-300 ease-in-out w-[45px]`}
-          >
-            <ChevronRightIcon />
-          </div>
-        </button>
-      </div>
+  <div className="flex flex-row items-center">
+    <p className="text-xl">{controller.title}</p>
+    <button
+      className="ml-auto"
+      onClick={() => controller.setShowItems((x) => !x)}
+    >
       <div
-        className={`flex flex-wrap ${
-          controller.showItems ? "block" : "hidden"
-        }`}
+        className={`${
+          controller.showItems ? "rotate-90" : ""
+        } transition-transform duration-300 ease-in-out w-[45px]`}
       >
-        {controller.items.map((value, index) => (
-          <div
-            key={index}
-            className={`rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 ${
-              controller.selectedItems.find((x) => value == x)
-                ? "bg-gray-300 hover:bg-gray-200"
-                : "bg-transparent hover:bg-gray-200"
-            }`}
-            onClick={() => handleClick(value)}
-          >
-            {controller.stringify_value_fn(value)}
-          </div>
-        ))}
+        <ChevronRightIcon />
       </div>
-    </>
+    </button>
+  </div>
+  <div className="overflow-hidden" 
+       style={{
+         maxHeight: controller.showItems ? `${controller.items.length * 50}px` : "0",
+         transition: "max-height 0.3s ease-in-out, opacity 0.3s ease-in-out",
+         opacity: controller.showItems ? 1 : 0,
+       }}
+    >
+    <div className="flex flex-wrap">
+      {controller.items.map((value, index) => (
+        <div
+          key={index}
+          className={`rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 ${
+            controller.selectedItems.find((x) => value == x)
+              ? "bg-gray-300 hover:bg-gray-200"
+              : "bg-transparent hover:bg-gray-200"
+          }`}
+          onClick={() => handleClick(value)}
+        >
+          {controller.stringify_value_fn(value)}
+        </div>
+      ))}
+    </div>
+  </div>
+</>
+
   );
 };

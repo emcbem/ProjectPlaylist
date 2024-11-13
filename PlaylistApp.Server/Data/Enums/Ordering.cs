@@ -3,7 +3,6 @@
 public enum OrderingMethod
 {
 	HighestRating,
-	MostPlayed,
 	ReleaseDate,
 	AZ,
 	ZA
