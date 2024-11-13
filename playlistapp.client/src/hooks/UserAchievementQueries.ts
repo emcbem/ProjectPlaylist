@@ -113,13 +113,16 @@ export const UserAchievementQueries = {
   );
     */
   },
-  useDeleteUserAchievement: (userAchievementId: number) => {
+  useDeleteUserAchievement: (userAchievementId: number, userId: string) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         UserAchievementService.DeleteUserAchievement(userAchievementId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.DeleteUserAchievement });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetUserAchievementByUserId(userId),
+        });
       },
     });
     /*

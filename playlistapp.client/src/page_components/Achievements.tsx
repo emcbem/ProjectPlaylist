@@ -11,18 +11,18 @@ const AchievementsPage: React.FC = () => {
 
   const validPlatformIds = [6, 48, 49, 167, 169];
 
-  const hasAchievements = platformGames?.find((x) =>
+  const matchingPlatformGames = platformGames?.filter((x) =>
     validPlatformIds.includes(x.platform.id)
   );
 
-  console.log("huuuuh", hasAchievements?.id);
+  console.log("huuuuh", matchingPlatformGames);
 
   return (
     <div className=" dark:text-white text-black">
       <div>
         {platformGames ? (
-          hasAchievements && (
-            <AchievementList platformGameId={hasAchievements?.id} />
+          matchingPlatformGames && (
+            <AchievementList platforms={matchingPlatformGames} />
           )
         ) : (
           <p>Loading...</p>
