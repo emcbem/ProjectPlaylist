@@ -19,6 +19,7 @@ const PlaylistLists = () => {
     ageRating: "",
     publishDate: new Date(),
     coverUrl: "https://lipsum.app/400x400/717272/717272",
+    companies: [],
   };
 
   return (
