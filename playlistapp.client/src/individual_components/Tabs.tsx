@@ -75,6 +75,7 @@ const Tabs = () => {
       setSortedReviews(reviewsCopy);
 
       if (filter === "Recommended" && userReviewIndex > -1) {
+        <></>;
       } else if (filter === "Most Liked") {
         setSortedReviews(
           reviewsCopy.sort(
@@ -118,22 +119,38 @@ const Tabs = () => {
                       {filter}
                     </button>
                   </MenuHandler>
-                  <MenuList placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                  <MenuList
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  >
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Recommended")} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    >
+                      onClick={() => setFilter("Recommended")}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
                       Recommended
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Recent")}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    >
+                      onClick={() => setFilter("Recent")}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
                       Recent
                     </MenuItem>
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Most Liked")}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    >
+                      onClick={() => setFilter("Most Liked")}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
                       Top Rated
                     </MenuItem>
                   </MenuList>

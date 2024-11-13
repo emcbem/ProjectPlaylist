@@ -1,25 +1,29 @@
 import { Achievement } from "@/@types/achievement";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
-import { useContext, useEffect } from "react";
+import { FC, useContext, useEffect } from "react";
+import AchievementModal from "./AchievementModal";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { AchievementModal } from "./AchievementModal";
+import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
 
 interface props {
   achievement: Achievement;
-  showAddButton: boolean;
 }
 
-const AchievementCard: React.FC<props> = ({ achievement, showAddButton }) => {
+const AchievementCard: FC<props> = ({ achievement }) => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
+
   const { data: userEarnedAchievement, refetch } =
     UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
 
   useEffect(() => {
-    if (usr) {
+    if (usr?.guid) {
       refetch();
     }
   }, [usr, refetch]);
+
+  const earnedAchievement =
+    userEarnedAchievement &&
+    userEarnedAchievement.some((e) => e.achievement.id === achievement.id);
 
   return (
     <>
@@ -29,7 +33,7 @@ const AchievementCard: React.FC<props> = ({ achievement, showAddButton }) => {
             <img
               className="sm:w-12 sm:h-12 w-8 h-8 rounded-full"
               src={achievement.imageURL}
-              alt="Neil image"
+              alt="Achievement Logo"
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -42,11 +46,18 @@ const AchievementCard: React.FC<props> = ({ achievement, showAddButton }) => {
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
-              {showAddButton && userEarnedAchievement && <AchievementModal />}
+              {usr?.guid && (
+                <AchievementModal
+                  achievementId={achievement.id}
+                  earned={earnedAchievement || false}
+                  userGuid={usr.guid}
+                />
+              )}
             </div>
           </div>
         </div>
       </li>
+      <hr />
     </>
   );
 };
