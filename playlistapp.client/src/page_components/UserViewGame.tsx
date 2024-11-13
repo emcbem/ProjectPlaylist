@@ -4,6 +4,7 @@ import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/hooks/GameQueries";
 import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 import { useEffect, useState } from "react";
+import formatDate from "@/lib/date";
 
 const UserViewGame = () => {
   const [avgReview, setAvgReview] = useState<number | null>();
@@ -40,6 +41,12 @@ const UserViewGame = () => {
             <h1 className="dark:text-white text-black font-extrabold 2xl:text-5xl xl:text-3xl lg:text-1xl sm:text-2xl text-base">
               {game?.title}
             </h1>
+            <p className="text-clay-950 dark:text-clay-900">
+              {game?.publishDate
+                ? formatDate(new Date(game.publishDate))
+                : "No publish date"}
+            </p>
+
             {avgReview ? (
               <div
                 className={`sm:text-base text-tiny font-extrabold my-3 flex flex-row ${

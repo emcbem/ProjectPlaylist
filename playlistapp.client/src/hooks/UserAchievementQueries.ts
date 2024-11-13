@@ -6,7 +6,8 @@ import { UpdateUserAchievementRequest } from "@/@types/Requests/UpdateRequests/u
 
 export const UserAchievementQueries = {
   useAddUserAchievement: (
-    addUserAchievementRequest: AddUserAchievementRequest
+    addUserAchievementRequest: AddUserAchievementRequest,
+    userId: string
   ) => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -14,6 +15,9 @@ export const UserAchievementQueries = {
         UserAchievementService.AddUserAchievement(addUserAchievementRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.AddUserAchievement });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetUserAchievementByUserId(userId),
+        });
       },
       onError: (error) => {
         console.error("Error adding user achievement:", error);
@@ -68,7 +72,7 @@ export const UserAchievementQueries = {
   },
   useGetUserAchievementByUserId: (userId: string) => {
     return useQuery({
-      queryKey: keys.GetUserAchievementByUserId,
+      queryKey: keys.GetUserAchievementByUserId(userId),
       queryFn: () => UserAchievementService.GetUserAchievementByUserId(userId),
       enabled: !!userId,
     });
@@ -109,13 +113,16 @@ export const UserAchievementQueries = {
   );
     */
   },
-  useDeleteUserAchievement: (userAchievementId: number) => {
+  useDeleteUserAchievement: (userAchievementId: number, userId: string) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>
         UserAchievementService.DeleteUserAchievement(userAchievementId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.DeleteUserAchievement });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetUserAchievementByUserId(userId),
+        });
       },
     });
     /*

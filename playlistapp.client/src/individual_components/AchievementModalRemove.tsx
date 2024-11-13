@@ -1,17 +1,15 @@
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
 import React, { FC } from "react";
 import { useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 
 interface props {
-  gameReviewId?: number;
+  userAchievementId: number;
+  userGuid: string;
 }
 
-const DeleteModal: FC<props> = ({ gameReviewId }) => {
+const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-
-  const { gameId } = useParams<{ gameId: string }>();
 
   const openModal = () => {
     setIsOpen(true);
@@ -21,19 +19,25 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
     setIsOpen(false);
   };
 
-  const { mutate: updateGameReivew } = GameReviewQueries.useDeleteGameReview(
-    Number(gameReviewId),
-    Number(gameId)
-  );
+  const { mutate: deleteUserAchievement } =
+    UserAchievementQueries.useDeleteUserAchievement(
+      userAchievementId,
+      userGuid
+    );
 
-  const handleDeleteGameReview = () => {
-    updateGameReivew();
+  const handleDeleteUserAchievement = async () => {
+    try {
+      const result = await deleteUserAchievement();
+      console.log("Deletion result: ", result);
+    } catch (error) {
+      console.error("Error deleting user achievement: ", error);
+    }
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    handleDeleteGameReview();
+    handleDeleteUserAchievement();
 
     closeModal();
   };
@@ -49,13 +53,16 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
       <button onClick={openModal} className="" type="button">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          className="bi bi-trash3 text-clay-900"
-          viewBox="0 0 16 16"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`w-[35px] h-[35px] md:m-1 ml-1 mb-1 fill-green-600`}
         >
-          <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            className="text-black dark:text-white"
+            d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM10 14.5L8.5 13L7.5 14L10 16.5L16.5 10L15.5 9L10 14.5Z"
+          />
         </svg>
       </button>
       <div
@@ -77,10 +84,10 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
             className="flex flex-col gap-4 p-6 mx-5"
           >
             <h2 className="text-3xl mb-4 text-white">
-              Are you sure you want to delete this review?
+              Are you sure you want to remove this achievement?
             </h2>
             <p className=" mb-6 text-red-600">
-              Warning: Your list review will be deleted forever
+              Warning: Your achievement will be deleted forever
             </p>
             <div className="flex justify-end">
               <button
@@ -104,4 +111,4 @@ const DeleteModal: FC<props> = ({ gameReviewId }) => {
   );
 };
 
-export default DeleteModal;
+export default AchievementModalRemove;
