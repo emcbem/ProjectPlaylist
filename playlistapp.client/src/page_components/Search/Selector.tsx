@@ -25,7 +25,7 @@ export const Selector = <T,>(controller: SelectorController<T>) => {
   <div className="flex flex-row items-center">
     <p className="text-xl">{controller.title}</p>
     <button
-      className="ml-auto"
+      className="md:ml-auto ml-3"
       onClick={() => controller.setShowItems((x) => !x)}
     >
       <div
@@ -48,14 +48,17 @@ export const Selector = <T,>(controller: SelectorController<T>) => {
       {controller.items.map((value, index) => (
         <div
           key={index}
-          className={`rounded-full p-1 px-3 border-2 border-[#111111] dark:border-[#ffffff] m-1 ${
+          className={`rounded-full truncate p-1 px-3 border-2 w-full border-[#111111] dark:border-[#ffffff] m-1 ${
             controller.selectedItems.find((x) => value == x)
               ? "bg-gray-300 hover:bg-gray-200"
               : "bg-transparent hover:bg-gray-200"
           }`}
           onClick={() => handleClick(value)}
         >
+          <p className=" text-center">
+            
           {controller.stringify_value_fn(value)}
+          </p>
         </div>
       ))}
     </div>
