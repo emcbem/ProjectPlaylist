@@ -39,12 +39,15 @@ const SearchPage = () => {
     }
   );
 
-  const {data: companies, isLoading: companiesLoading} = CompanyQueries.useGetAllCompanies()
-  const companySelectorController = useSelector<Company>("Filter By Companies", companies ?? [],
+  const { data: companies, isLoading: companiesLoading } =
+    CompanyQueries.useGetAllCompanies();
+  const companySelectorController = useSelector<Company>(
+    "Filter By Companies",
+    companies ?? [],
     (value: Company) => {
-      return value.name
+      return value.name;
     }
-  )
+  );
 
   useEffect(() => {
     searchRequest.setSearchRequest((x) => ({
@@ -52,13 +55,13 @@ const SearchPage = () => {
       genreIds: genreSelectorController.selectedItems.map((x) => x.id),
       title: searchBarContext.searchQuery,
       platformIds: platformSelectorController.selectedItems.map((x) => x.id),
-      companyIds: companySelectorController.selectedItems.map(x => x.id)
+      companyIds: companySelectorController.selectedItems.map((x) => x.id),
     }));
   }, [
     genreSelectorController.selectedItems,
     searchBarContext.searchQuery,
     platformSelectorController.selectedItems,
-    companySelectorController.selectedItems
+    companySelectorController.selectedItems,
   ]);
 
   const toggleDiv = () => {
@@ -82,7 +85,7 @@ const SearchPage = () => {
                 className="dark:text-white p-2 text-2xl rounded-lg"
                 onClick={toggleDiv}
               >
-                <XMarkIcon width={40} height={40}/>
+                <XMarkIcon width={40} height={40} />
               </button>
               <button className="border border-black dark:border-white dark:text-white p-2 px-8 w-30 h-14 text-2xl rounded-lg justify-self-end">
                 Clear All
@@ -105,9 +108,7 @@ const SearchPage = () => {
           <div className="ml-auto w-full h-fit p-4 overflow-y-auto">
             <div className="flex">
               <div className="ml-auto">
-                <Dropdown
-                  setSearchRequest={searchRequest.setSearchRequest}
-                />
+                <Dropdown setSearchRequest={searchRequest.setSearchRequest} />
               </div>
             </div>
             <InfiniteGames {...searchRequest} />
@@ -120,21 +121,14 @@ const SearchPage = () => {
           } block md:hidden absolute top-14 left-0 overflow-y-auto h-screen bg-white dark:bg-black`}
         >
           <div className="">
-            <p className="text-xl mt-5 mb-3">Filter by Platform</p>
-            <div className="flex flex-wrap">
-              {["Steam", "Nintendo", "Xbox", "Playstation", "Epic Games"].map(
-                (platform) => (
-                  <div
-                    key={platform}
-                    className="rounded-full p-3 px-7 border-[#111111] dark:border-[#ffffff] m-2 border-2 hover:bg-gray-300 dark:hover:bg-red-500"
-                  >
-                    {platform}
-                  </div>
-                )
-              )}
-            </div>
+            {!platformsLoading &&
+              Selector<Platform>(platformSelectorController)}
+            <hr className="my-3 border border-clay-100" />
 
             {!genresLoading && Selector<Genre>(genreSelectorController)}
+            <hr className="my-3 border border-clay-100" />
+
+            {!companiesLoading && Selector<Company>(companySelectorController)}
             <button
               className="border border-black dark:border-white dark:text-black p-2 px-8 w-30 h-14 text-2xl rounded-lg sticky bottom-0 dark:bg-white w-screen"
               onClick={toggleDiv}

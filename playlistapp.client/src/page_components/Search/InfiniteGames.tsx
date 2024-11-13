@@ -5,6 +5,7 @@ import { GameService } from "@/ApiServices/GameService";
 import CardGamesList from "@/individual_components/CardGamesList";
 import { SearchRequestController } from "@/@types/ComponentControllers/InfiniteGameController";
 import { LoaderIcon } from "react-hot-toast";
+import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon";
 
 export const InfiniteGames: FC<SearchRequestController> = (controller) => {
   const observer = useRef<IntersectionObserver | null>();
@@ -67,9 +68,9 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
         </div>
       )}
       {!isFetching && games?.pages.length == 1 && games.pages[0].pageGames.length == 0 &&
-        <div className="flex justify-center">
-
-          <p>No Games found</p>
+        <div className="flex justify-center flex-col w-full pt-10">
+          <QuestionMarkCircleIcon className="w-full h-[100px]"/>
+          <p className="w-full text-center pt-3">No Games found</p>
         </div>
       }
     </>
