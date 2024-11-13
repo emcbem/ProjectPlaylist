@@ -1,3 +1,5 @@
+import { Company } from "./company";
+
 export interface Game {
   id: number;
   idgb_id: number;
@@ -6,4 +8,4 @@ export interface Game {
   ageRating: string;
   publishDate: Date;
   coverUrl: string;
-}
+  companies: Company[];

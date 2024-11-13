@@ -50,6 +50,8 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var game = await context.Games
+			.Include(x => x.InvolvedCompanies)
+				.ThenInclude(x => x.Company)
 			.Where(x => x.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -100,31 +102,28 @@ public class GameService : IGameService
 			.Include(x => x.GameGenres)
 			.Where(x => x.Title.ToLower().Contains(request.Title.ToLower()));
 
-		if (request.PlatformIds is not null && request.PlatformIds.Count() > 0)
+		if (request.PlatformIds is not null && request.PlatformIds.Any())
 		{
-			query = query.Where(x => x.PlatformGames.Any(y => request.PlatformIds.Contains(y.PlatformId)));
+			query = query.Where(x => request.PlatformIds.All(platformId => x.PlatformGames.Any(y => y.PlatformId == platformId)));
 		}
 
-		if (request.CompanyIds is not null && request.CompanyIds.Count() > 0)
+		if (request.CompanyIds is not null && request.CompanyIds.Any())
 		{
-			query = query.Where(x => x.InvolvedCompanies.Any(y => request.CompanyIds.Contains(y.CompanyId)));
+			query = query.Where(x => request.CompanyIds.All(companyId => x.InvolvedCompanies.Any(y => y.CompanyId == companyId)));
 		}
 
-		if(request.GenreIds is not null && request.GenreIds.Count() > 0)
+		if (request.GenreIds != null && request.GenreIds.Any())
 		{
-			query = query.Where(x => x.GameGenres.Any(y => request.GenreIds.Contains(y.GenreId)));
+			query = query.Where(x => request.GenreIds.All(genreId => x.GameGenres.Any(y => y.GenreId == genreId)));
 		}
 
 		switch (request.OrderingMethod)
 		{
 			case Data.Enums.OrderingMethod.HighestRating:
-				query = query.OrderByDescending(game => game.GameReviews.Sum(gr => gr.Rating));
-				break;
-			case Data.Enums.OrderingMethod.MostPlayed:
-				query = query.OrderByDescending(game => (int?)game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)) ?? 0);
+				query = query.OrderByDescending(game => game.GameReviews.Sum(gr => gr.Rating)).ThenBy(x => x.Id);
 				break;
 			case Data.Enums.OrderingMethod.ReleaseDate:
-				query = query.OrderBy(game => game.PublishDate);
+				query = query.OrderBy(game => game.PublishDate).ThenBy(x => x.Id);
 				break;
 			case Data.Enums.OrderingMethod.ZA:
 				query = query.OrderByDescending(game => game.Title);

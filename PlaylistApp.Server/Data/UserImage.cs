@@ -9,5 +9,7 @@ public partial class UserImage
 
     public string Url { get; set; } = null!;
 
+    public string? Alt { get; set; }
+
     public virtual ICollection<UserAccount> UserAccounts { get; set; } = new List<UserAccount>();
 }
