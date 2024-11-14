@@ -50,17 +50,16 @@ const ViewSearchedGame = () => {
 
             {avgReview ? (
               <div
-                className={`sm:text-base text-tiny font-extrabold my-3 flex flex-row ${
-                  avgReview <= 10.0 && avgReview >= 8.0
+                className={`sm:text-base text-tiny font-extrabold my-3 flex flex-row ${avgReview <= 10.0 && avgReview >= 8.0
                     ? `text-yellow-500`
                     : avgReview < 8.0 && avgReview >= 6.0
-                    ? `text-green-700`
-                    : avgReview < 6.0 && avgReview >= 3.0
-                    ? `text-orange-400`
-                    : avgReview < 3.0 && avgReview >= 0.0
-                    ? `text-red-700`
-                    : ``
-                }`}
+                      ? `text-green-700`
+                      : avgReview < 6.0 && avgReview >= 3.0
+                        ? `text-orange-400`
+                        : avgReview < 3.0 && avgReview >= 0.0
+                          ? `text-red-700`
+                          : ``
+                  }`}
               >
                 <h1>{Math.round(avgReview * 10) / 10}/10&nbsp;-&nbsp;</h1>
                 <h1 className="underline cursor-pointer">Leave a rating</h1>
