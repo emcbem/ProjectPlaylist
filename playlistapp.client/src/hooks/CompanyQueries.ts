@@ -7,6 +7,9 @@ export const CompanyQueries = {
     return useQuery({
       queryFn: () => CompanyService.GetAllCompanies(),
       queryKey: keys.GetAllCompanies,
+      refetchOnMount: false,
+      refetchIntervalInBackground: false,
+      refetchOnReconnect: false,
     });
   },
 };
