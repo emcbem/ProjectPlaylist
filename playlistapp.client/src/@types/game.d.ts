@@ -1,4 +1,7 @@
 import { Company } from "./company";
+import { GameReview } from "./gameReview";
+import { Platform } from "./platform";
+import { PlatformGame } from "./platformGame";
 
 export interface Game {
   id: number;
@@ -9,4 +12,9 @@ export interface Game {
   publishDate: Date;
   coverUrl: string;
   companies: Company[];
+  platforms: PlatformGame[];
+  genres: Genre[];
+  reviews: GameReview[];
+  hoursPlayed: number,
+  totalOwned: number
 }
