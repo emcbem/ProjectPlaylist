@@ -114,8 +114,12 @@ const SearchPage = () => {
             <hr className="my-3 border border-clay-100" />
 
               <SearchDropdown
-                options={companies?.map((x) => x.name) ?? []}
-                onSelect={(option: string) => console.log(option)}
+                options={companies ?? []}
+                stringify_option_fn={(option: Company) => option.name}
+                onSelect={(option: Company) => searchRequest.setSearchRequest(x => ({
+                  ...x,
+                  companyIds: [option.id]
+                }))}
               />
             {/* {!companiesLoading && Selector<Company>(companySelectorController)} */}
           </div>
