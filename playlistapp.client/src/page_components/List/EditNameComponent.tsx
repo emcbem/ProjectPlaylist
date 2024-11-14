@@ -80,7 +80,7 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
 
     const handleEditButtonClick = () => {
         console.log("clicked edit button");
-        setIsEditing(!isEditing);
+        setIsEditing(true);
         setShowEditNameBox(!showEditNameBox);
     };
 

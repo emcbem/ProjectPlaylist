@@ -47,7 +47,7 @@ export const UserGameQueries = {
       mutationFn: () => UserGameService.UpdateUserGame(updateUserGameRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUserGame });
-        toast.success("User game updated successfully");
+        toast.success(`User game updated successfully`);
       },
       onError: (error) => {
         console.error("Error updating user game: ", error);
@@ -83,6 +83,7 @@ export const UserGameQueries = {
       mutationFn: () => UserGameService.AddUserGame(addUserGameRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.AddUserGame });
+        toast.success(`Game Added`);
       },
     });
   },
