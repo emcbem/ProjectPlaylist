@@ -5,12 +5,17 @@ import EditUserGenresList from "./EditUserGenresList";
 import EditBio from "./EditBio";
 import { Link } from "react-router-dom";
 import EditGamerTags from "./EditGamerTags";
+import { UserAccountQueries } from "@/hooks/UserAccountQueries";
 
 
 const Settings = () => {
     const { usr, isLoading } = React.useContext(
         UserAccountContext
     ) as UserAccountContextInterface;
+
+    console.log(usr)
+
+    const { mutateAsync: deleteAccount } = UserAccountQueries.useDeleteUser(usr?.guid ?? "");
 
     const profileInfoRef = useRef<HTMLDivElement>(null);
     const bioRef = useRef<HTMLDivElement>(null);
@@ -36,8 +41,11 @@ const Settings = () => {
         )
     }
 
-    return (
+    const handleUserDelete = async () => {
+        await deleteAccount();
+    }
 
+    return (
         <div className="min-h-screen bg-white dark:bg-black dark:text-white ">
             <div className="m-8 w-99 flex justify-center">
                 <div className="flex flex-wrap align-top">
@@ -80,7 +88,14 @@ const Settings = () => {
                             <hr className="mb-8" />
                             <section className="mb-5" id="delete-account" ref={deleteAccountRef}>
                                 <h2 className="text-2xl">Delete Account</h2>
-                                <p>Danger Danger! ...</p>
+                                <p>Not implemented yet ...</p>
+                                <button
+                                    className="mr-2 px-4 py-2 bg-inherit border border-solid text-red-600 border-red-600 rounded-md hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    type="submit"
+                                    onClick={handleUserDelete}
+                                >
+                                    Delete Account
+                                </button>
                             </section>
                         </div>
                     }

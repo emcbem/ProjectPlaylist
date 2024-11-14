@@ -38,18 +38,18 @@ const PlaylistTableView: FC<listViewProps> = ({ games, list }) => {
                     <tbody>
                         {games.map((listGame, key) => (
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={key}>
-                                <Link key={key} to={`/user-view-game/${listGame.game.id}`}>
+                                <Link key={key} to={`/user-library-game/${listGame.game.id}`}>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white xl:block lg:block md:block sm:hidden xs:hidden hidden">
                                         <img src={listGame.game.coverUrl} width={70} className="hover:scale-105" />
                                     </th>
                                 </Link>
                                 <td className="px-6 py-4">
-                                    <Link key={key} to={`/user-view-game/${listGame.game.id}`}>
+                                    <Link key={key} to={`/user-library-game/${listGame.game.id}`}>
                                         {listGame.game.title}
                                     </Link>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <Link key={key} to={`/user-view-game/${listGame.game.id}`}>
+                                    <Link key={key} to={`/user-library-game/${listGame.game.id}`}>
                                         {listGame.game.publishDate.match(/^(\d{4})/)[1]}
                                     </Link>
                                 </td>

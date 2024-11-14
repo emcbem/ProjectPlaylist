@@ -47,7 +47,7 @@ export const UserAccountQueries = {
       },
     });
   },
-  useDeleteUser: (userId: number) => {
+  useDeleteUser: (userId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({

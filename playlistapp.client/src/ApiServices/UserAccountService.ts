@@ -109,7 +109,7 @@ export const UserAccountService = {
       throw error;
     }
   },
-  DeleteUser: async (userId: number) => {
+  DeleteUser: async (userId: string) => {
     if (!userId) {
       console.error("User id was undefined or empty");
       throw new Error("User id must be provided");
