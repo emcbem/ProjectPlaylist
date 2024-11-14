@@ -6,7 +6,7 @@ import { GameReviewQueries } from "@/hooks/GameReviewQueries";
 import { useEffect, useState } from "react";
 import formatDate from "@/lib/date";
 
-const UserViewGame = () => {
+const ViewSearchedGame = () => {
   const [avgReview, setAvgReview] = useState<number | null>();
   const { gameId } = useParams<{ gameId: string }>();
 
@@ -97,4 +97,4 @@ const UserViewGame = () => {
   );
 };
 
-export default UserViewGame;
+export default ViewSearchedGame;
