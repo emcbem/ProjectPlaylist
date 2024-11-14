@@ -12,7 +12,7 @@ interface props {
   platforms: PlatformGame[];
 }
 
-const AchievementModal: FC<props> = ({
+const AchievementModalParent: FC<props> = ({
   achievement,
   earned,
   userGuid,
@@ -21,7 +21,10 @@ const AchievementModal: FC<props> = ({
   return (
     <>
       {earned ? (
-        <AchievementModalRemove userAchievementId={earned.id} userGuid={userGuid} />
+        <AchievementModalRemove
+          userAchievementId={earned.id}
+          userGuid={userGuid}
+        />
       ) : (
         <AchievementModalAdd
           achievement={achievement}
@@ -33,4 +36,4 @@ const AchievementModal: FC<props> = ({
   );
 };
 
-export default AchievementModal;
+export default AchievementModalParent;

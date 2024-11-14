@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 interface DateSelectorProps {
   month: string;
@@ -17,6 +17,10 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   setDay,
   setYear,
 }) => {
+  const monthRef = useRef<HTMLInputElement>(null);
+  const dayRef = useRef<HTMLInputElement>(null);
+  const yearRef = useRef<HTMLInputElement>(null);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/[0-9]/.test(event.key) &&
@@ -27,9 +31,26 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     }
   };
 
+  const handleDayKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    ref: React.RefObject<HTMLInputElement>
+  ) => {
+    if (event.key === "Tab" && ref == monthRef) {
+      event.preventDefault();
+      dayRef.current?.focus();
+    } else if (event.key === "Tab" && ref == dayRef) {
+      event.preventDefault();
+      yearRef.current?.focus();
+    } else if (event.key === "Tab" && ref == yearRef) {
+      event.preventDefault();
+      monthRef.current?.focus();
+    }
+  };
+
   return (
     <div className="flex flex-row w-full items-center">
       <input
+        ref={monthRef}
         value={month}
         onChange={(e) => setMonth(e.target.value)}
         maxLength={2}
@@ -37,10 +58,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         max="12"
         className="bg-clay-600 mr-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="MM"
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          handleKeyDown(e);
+          handleDayKeyDown(e, monthRef);
+        }}
       />
       <h1>/</h1>
       <input
+        ref={dayRef}
         value={day}
         onChange={(e) => setDay(e.target.value)}
         maxLength={2}
@@ -48,10 +73,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         max="31"
         className="bg-clay-600 mx-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="DD"
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          handleKeyDown(e);
+          handleDayKeyDown(e, dayRef);
+        }}
       />
       <h1>/</h1>
       <input
+        ref={yearRef}
         value={year}
         onChange={(e) => setYear(e.target.value)}
         maxLength={4}
@@ -59,7 +88,10 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         max="2100"
         className="bg-clay-600 mx-2 rounded-md flex items-center justify-center leading-none w-16 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="YYYY"
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          handleKeyDown(e);
+          handleDayKeyDown(e, yearRef);
+        }}
       />
     </div>
   );

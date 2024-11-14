@@ -15,8 +15,6 @@ const AchievementsPage: React.FC = () => {
     validPlatformIds.includes(x.platform.id)
   );
 
-  console.log("huuuuh", matchingPlatformGames);
-
   return (
     <div className=" dark:text-white text-black">
       <div>
