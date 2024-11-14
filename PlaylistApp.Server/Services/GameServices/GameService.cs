@@ -1,10 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.GetRequests;
+using System.Runtime.CompilerServices;
 
 namespace PlaylistApp.Server.Services.Game;
 
+internal static class GameIncluder
+{
+	public static IQueryable<Data.Game> IncludeGames(this DbSet<Data.Game> games)
+	{
+		return games
+			.Include(x => x.InvolvedCompanies)
+				.ThenInclude(x => x.Company)
+			.Include(x => x.GameGenres)
+				.ThenInclude(x => x.Genre)
+			.Include(x => x.PlatformGames)
+				.ThenInclude(x => x.Achievements)
+			.Include(x => x.PlatformGames)
+				.ThenInclude(x => x.Platform)
+			.Include(x => x.GameReviews)
+				.ThenInclude(x => x.ReviewLikes)
+			.Include(x => x.GameReviews)
+				.ThenInclude(x => x.User);
+	}
+}
 public class GameService : IGameService
 {
 	private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
@@ -18,11 +39,9 @@ public class GameService : IGameService
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
-		var games = context.Games
-			.Include(x => x.InvolvedCompanies)
-				.ThenInclude(x => x.Company)
+		var games = await context.Games
 			.Take(500)
-			.ToList();
+			.ToListAsync(); // Use ToListAsync for async execution
 
 		return games.Select(x => x.ToDTO()).ToList();
 	}
@@ -32,9 +51,7 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var games = await context.Games
-			.Where(x => x.InvolvedCompanies
-				.Where(x => x.CompanyId == companyId)
-				.Count() > 0)
+			.IncludeGames()
 			.ToListAsync();
 
 		if (!games.Any())
@@ -50,8 +67,7 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var game = await context.Games
-			.Include(x => x.InvolvedCompanies)
-				.ThenInclude(x => x.Company)
+			.IncludeGames()
 			.Where(x => x.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -68,6 +84,7 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var game = await context.Games
+			.IncludeGames()
 			.Where(x => x.IdgbId == id)
 			.FirstOrDefaultAsync();
 
@@ -84,6 +101,7 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var games = await context.Games
+			.IncludeGames()
 			.Where(x => x.Title.ToLower().Contains(name.ToLower()))
 			.ToListAsync();
 

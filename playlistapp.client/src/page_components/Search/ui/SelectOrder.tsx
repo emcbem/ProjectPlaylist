@@ -1,7 +1,7 @@
 import { OrderingMethods } from '@/@types/Enums/OrderingMethod';
 import { GetGamesRequest } from '@/@types/Requests/GetRequests/getGamesRequest';
 import { useEffect, useState } from 'react';
-import { HumanizeOrder } from './logic/humanize-order';
+import { HumanizeOrder } from '../logic/humanize-order';
 
 
 function Dropdown({setSearchRequest}: {setSearchRequest: React.Dispatch<React.SetStateAction<GetGamesRequest>>}) {

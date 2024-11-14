@@ -24,6 +24,14 @@ const AchievementModalAdd: FC<props> = ({
 
   const modalRef = useRef<HTMLDivElement>(null);
 
+
+  // console.log(
+  //   "WAAARB",
+  //   achievement.platformGame.game?.publishDate
+  //     ? formatDate(new Date(achievement.platformGame.game?.publishDate))
+  //     : "No publish date"
+  // );
+
   const addUserAchievementRequest: AddUserAchievementRequest = {
     dateAchieved: new Date(`${month}/${day}/${year}`),
     userGuid: userGuid ?? "",

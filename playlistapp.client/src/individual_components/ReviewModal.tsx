@@ -10,12 +10,18 @@ import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 interface props {
+  hideReview?: boolean;
   gameReviewId?: number;
   editVal?: number;
   editReview?: string;
 }
 
-const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
+const ReviewModal: FC<props> = ({
+  hideReview,
+  gameReviewId,
+  editVal,
+  editReview,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [val, setVal] = useState<number>(editVal ? editVal : 0);
   const [reviewText, setReviewText] = useState<string>(
@@ -44,7 +50,6 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
     setVal(newValue as number);
   };
 
-  // MUTATION HERE!!
   const { mutate: addGameReview } = GameReviewQueries.useAddGameReview(
     review!,
     Number(gameId)
@@ -119,7 +124,9 @@ const ReviewModal: FC<props> = ({ gameReviewId, editVal, editReview }) => {
       ) : (
         <button
           onClick={openModal}
-          className="rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
+          className={`rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2 ${
+            hideReview == true ? `hidden` : ``
+          }`}
           // className="rounded-md bg-clay-200 dark:bg-clay-600 sm:py-2 px-1 sm:px-4 sm:text-base w-28 h-8 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
           type="button"
         >

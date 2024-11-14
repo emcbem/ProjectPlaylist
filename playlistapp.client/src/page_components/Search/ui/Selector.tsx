@@ -19,7 +19,6 @@ export const Selector = <T,>(controller: SelectorController<T>) => {
     }
   };
 
-  console.log(controller);
   return (
     <>
   <div className="flex flex-row items-center">

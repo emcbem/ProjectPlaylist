@@ -15,14 +15,16 @@ const AchievementsPage: React.FC = () => {
     validPlatformIds.includes(x.platform.id)
   );
 
-  console.log("huuuuh", matchingPlatformGames);
-
   return (
     <div className=" dark:text-white text-black">
       <div>
-        {platformGames ? (
-          matchingPlatformGames && (
+        {platformGames && matchingPlatformGames ? (
+          matchingPlatformGames?.length > 0 ? (
             <AchievementList platforms={matchingPlatformGames} />
+          ) : (
+            <p className="sm:text-sm text-tiny font-medium text-clay-950 dark:text-clay-900 text-center">
+              No Achievements for this game
+            </p>
           )
         ) : (
           <p>Loading...</p>

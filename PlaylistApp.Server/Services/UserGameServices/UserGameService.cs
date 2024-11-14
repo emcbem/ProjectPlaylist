@@ -65,6 +65,8 @@ public class UserGameService : IUserGameService
                     .ThenInclude(x => x.InvolvedCompanies)
                         .ThenInclude(x => x.Company)
             .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Achievements)
+            .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Platform)
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)

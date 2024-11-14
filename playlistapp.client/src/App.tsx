@@ -1,7 +1,7 @@
 import Navbar from "./individual_components/Navbar";
 import HomePageNLI from "./page_components/HomePageNLI";
 import { Route, Routes } from "react-router-dom";
-import SearchPage from "./page_components/Search/SearchPage";
+import SearchPage from "./page_components/Search/ui/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
 import { useAuth0 } from "@auth0/auth0-react";
 import Account from "./page_components/Account/Account";
@@ -10,7 +10,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
-import UserViewGame from "./page_components/UserViewGame";
+import ViewSearchedGame from "./page_components/ViewSearchedGame";
 import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
@@ -20,6 +20,7 @@ import { materialTheme } from "./lib/theme";
 import Settings from "./page_components/Settings/Settings";
 import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
+import ViewLibraryGame from "./page_components/ViewLibraryGame";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -50,11 +51,11 @@ function App() {
                     <Route path="/search" element={<SearchPage />} />
                     <Route
                       path="/view-game/:gameId"
-                      element={<UserViewGame />}
+                      element={<ViewSearchedGame />}
                     />
                     <Route
-                      path="/user-view-game/:gameId"
-                      element={<UserViewGame />}
+                      path="/user-library-game/:gameId"
+                      element={<ViewLibraryGame />}
                     />
                     <Route path="/account" element={<Account />} />
                     <Route path="/library" element={<MyLibrary />} />

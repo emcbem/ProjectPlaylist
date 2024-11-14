@@ -7,6 +7,8 @@ using PlaylistApp.Server.Services.GameReviewService;
 using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.SyncServices;
 using PlaylistApp.Server.Services.UserGenreService;
+using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,12 @@ builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgs
 {
 	builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
 }));
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+		x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+		x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 builder.MapProjectPlaylistCoreServices();
 

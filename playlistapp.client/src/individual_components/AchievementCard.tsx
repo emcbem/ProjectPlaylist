@@ -1,6 +1,6 @@
 import { Achievement } from "@/@types/achievement";
 import { FC, useContext, useEffect } from "react";
-import AchievementModal from "./AchievementModal";
+import AchievementModalParent from "./AchievementModalParent";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
@@ -16,7 +16,6 @@ const AchievementCard: FC<props> = ({ achievement, platforms }) => {
 
   const { data: userEarnedAchievement, refetch } =
     UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
-  console.log(achievement.platformGame.platform.name);
 
   useEffect(() => {
     if (usr?.guid) {
@@ -50,7 +49,7 @@ const AchievementCard: FC<props> = ({ achievement, platforms }) => {
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
               {usr?.guid && (
-                <AchievementModal
+                <AchievementModalParent
                   achievement={achievement}
                   earned={earnedAchievement!}
                   userGuid={usr.guid}
