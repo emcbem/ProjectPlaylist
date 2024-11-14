@@ -13,7 +13,7 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
       {games.map((ug, key) => (
         <Link
           key={key}
-          to={`/user-library-game/${ug.platformGame.game.id}`}
+          to={`/user-library-game/${ug.userGameId}`}
           className="m-2 w-36"
         >
           <div className="relative group">

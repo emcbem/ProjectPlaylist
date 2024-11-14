@@ -16,7 +16,6 @@ const AchievementCard: FC<props> = ({ achievement, platforms }) => {
 
   const { data: userEarnedAchievement, refetch } =
     UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
-  console.log(achievement.platformGame.platform.name);
 
   useEffect(() => {
     if (usr?.guid) {
