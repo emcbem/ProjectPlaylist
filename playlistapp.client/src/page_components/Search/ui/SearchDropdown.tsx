@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 
-interface SearchDropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
+interface SearchDropdownProps<T> {
+  options: T[];
+  onSelect: (option: T) => void;
+  stringify_option_fn: (option: T) => string
 }
 
-const SearchDropdown: React.FC<SearchDropdownProps> = ({
+const SearchDropdown = <T,>({
   options,
   onSelect,
-}) => {
+  stringify_option_fn
+}: SearchDropdownProps<T>) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [filteredOptions, setFilteredOptions] = useState<T[]>(options);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -20,7 +22,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
     if (value.length > 3) {
       setFilteredOptions(
         options.filter((option) =>
-          option.toLowerCase().includes(value.toLowerCase())
+          stringify_option_fn(option).toLowerCase().includes(value.toLowerCase())
         )
       );
     }
@@ -31,9 +33,9 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
     setIsOpen(true);
   };
 
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: T) => {
     onSelect(option);
-    setSearchTerm(option);
+    setSearchTerm(stringify_option_fn(option));
     setIsOpen(false);
   };
 
@@ -70,7 +72,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                 onClick={() => handleSelect(option)}
                 className="px-4 py-2 cursor-pointer hover:bg-blue-100"
               >
-                {option}
+                {stringify_option_fn(option)}
               </li>
             ))
           ) : (
