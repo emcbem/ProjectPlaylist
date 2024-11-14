@@ -2,6 +2,7 @@ import { List } from '@/@types/list';
 import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
 import { ListQueries } from '@/hooks/ListQueries';
 import React, { useEffect, useRef, useState } from 'react';
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 interface EditListProps {
     list: List | undefined;
@@ -13,6 +14,8 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLInputElement>(null);
     const { mutateAsync } = ListQueries.useUpdateListQuery();
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [error, setError] = useState<string>()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
@@ -21,6 +24,7 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     };
 
     const updateList = async () => {
+        console.log("Updating list, ", value)
         if (value && !isEmpty) {
             const updatedList: UpdateListRequest = {
                 listId: list?.id ?? -1,
@@ -31,43 +35,57 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
             };
             await mutateAsync(updatedList);
             setShowEditNameBox(false);
+            setIsEditing(false);
+            setError("")
+        } else {
+            setError("List name is required")
         }
+
     };
 
     useEffect(() => {
+        // console.log("Entering useEffect")
+
         const handleClick = (event: MouseEvent) => {
             // Check if the click is outside the input box
-            if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+            if (inputRef.current && !inputRef.current.contains(event.target as Node) && isEditing) {
+                console.log("click outside of list")
                 updateList();
             }
         };
-
+        
+        // console.log("adding event listener")
         document.addEventListener("click", handleClick, true);
 
         return () => {
+            // console.log("removing event listener")
             document.removeEventListener("click", handleClick, true);
         };
     }, [value, isEmpty, list, mutateAsync]);
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && isEditing) {
             await updateList();
         }
     };
 
     useEffect(() => {
+        console.log("showing edit name box")
+
         if (showEditNameBox) {
             inputRef.current?.focus();
             inputRef.current?.select();
         }
     }, [showEditNameBox]);
 
-    const handleClick = () => {
+    const handleEditButtonClick = () => {
+        console.log("clicked edit button");
+        setIsEditing(!isEditing);
         setShowEditNameBox(!showEditNameBox);
     };
 
     return (
-        <div className="flex flex-row align-bottom">
+        <div className="flex flex-row align-bottom relative">
             <div>
                 <p className={`${showEditNameBox ? "hidden" : ""} text-5xl`}>{list?.name}</p>
                 <input
@@ -75,17 +93,18 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
                     aria-label='Edit List Name'
                     ref={inputRef}
                     value={value}
-                    className={`${showEditNameBox ? "" : "hidden"} bg-inherit text-5xl`}
+                    className={`${showEditNameBox ? "" : "hidden"} bg-inherit text-5xl rounded`}
                     onChange={handleChange}
                     onKeyDown={handleKeyPress}
                 />
+                <p className='text-red-600'>{error}</p>
             </div>
-            <div className='mt-auto mb-3 ms-3'>
-                <span onClick={handleClick} role="button" className="underline text-clay-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                    </svg>
+
+            <div className='mt-auto mb-3 ms-12'>
+                <span onClick={handleEditButtonClick} role="button">
+                    <PencilSquareIcon 
+                    className="h-8 absolute bottom-0 right-0 text-clay-900"
+                        role="button" />
                 </span>
             </div>
         </div>
