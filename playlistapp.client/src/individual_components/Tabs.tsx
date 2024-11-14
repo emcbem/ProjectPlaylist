@@ -62,6 +62,7 @@ const Tabs = () => {
   const [sortedReviews, setSortedReviews] = useState<GameReview[]>([]);
 
   const tabs = ["Reviews", "Your Stats", "Achievements", "Global Leaderboard"];
+  let hideReviewButton = false;
 
   useEffect(() => {
     if (AllGameReviewsForGame) {
@@ -76,7 +77,7 @@ const Tabs = () => {
 
       if (filter === "Recommended" && userReviewIndex > -1) {
         <></>;
-      } else if (filter === "Most Liked") {
+      } else if (filter === "Top Rated") {
         setSortedReviews(
           reviewsCopy.sort(
             (a, b) => b.likes - b.dislikes - (a.likes - a.dislikes)
@@ -86,8 +87,8 @@ const Tabs = () => {
         setSortedReviews(
           reviewsCopy.sort(
             (a, b) =>
-              new Date(a.publishDate).getTime() -
-              new Date(b.publishDate).getTime()
+              new Date(b.publishDate).getTime() -
+              new Date(a.publishDate).getTime()
           )
         );
       }
@@ -146,7 +147,7 @@ const Tabs = () => {
                     <hr className="my-3" />
                     <MenuItem
                       className="text-clay-950"
-                      onClick={() => setFilter("Most Liked")}
+                      onClick={() => setFilter("Top Rated")}
                       placeholder={undefined}
                       onPointerEnterCapture={undefined}
                       onPointerLeaveCapture={undefined}
@@ -159,13 +160,18 @@ const Tabs = () => {
 
               {usr && !loading ? (
                 AllGameReviewsForGame && AllGameReviewsForGame.length > 0 ? (
-                  sortedReviews.map((review, key) => (
-                    <Review
-                      review={review}
-                      currentUserGuid={usr?.guid}
-                      key={key}
-                    />
-                  ))
+                  sortedReviews.map((review) => {
+                    if (usr.guid === review.user.guid) {
+                      hideReviewButton = true;
+                    }
+                    return (
+                      <Review
+                        review={review}
+                        currentUserGuid={usr?.guid}
+                        key={review.id}
+                      />
+                    );
+                  })
                 ) : (
                   <p>No reviews yet, leave one!</p>
                 )
@@ -173,7 +179,7 @@ const Tabs = () => {
                 <p>Loading...</p>
               )}
             </div>
-            <ReviewModal />
+            <ReviewModal hideReview={hideReviewButton} />
           </>
         )}
         {activeTab === "Your Stats" && <div>Coming soon...</div>}

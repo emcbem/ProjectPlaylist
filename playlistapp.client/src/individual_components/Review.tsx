@@ -50,6 +50,7 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
                 <div className="sm:flex hidden">
                   <DeleteModal gameReviewId={review.id} />
                   <ReviewModal
+                    hideReview={true}
                     gameReviewId={review.id}
                     editReview={review.text}
                     editVal={review.rating}
