@@ -12,7 +12,12 @@ public class GameDTO
     public string? AgeRating { get; set; }
     public int? IdgbId { get; set; }
     public List<CompanyDTO>? Companies { get; set; }
+    public List<PlatformGameDTO>? Platforms { get; set; }
+    public List<GenreDTO>? Genres { get; set; }
+    public List<GameReviewDTO>? Reviews { get; set; }
     public long? HoursPlayed { get; set; }
     public int? TotalOwned { get; set; }
+
+
 
 }

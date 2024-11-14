@@ -25,7 +25,10 @@ public static class DTOConverter
             Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
             HoursPlayed = game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)),
             TotalOwned = game.PlatformGames.Sum(x => x.UserGames.Count),
-        };
+            Platforms = game.PlatformGames.Select(x => x.ToMinDTO()).ToList(),
+            Genres = game.GameGenres.Select(x => x.Genre.ToDTO()).ToList(),
+			Reviews = game.GameReviews.Select(x => x.ToMinDTO()).ToList(),
+		};
     }
 
     public static UserDTO ToDTO(this UserAccount user)
@@ -67,7 +70,23 @@ public static class DTOConverter
         };
     }
 
-    public static PlatformGameDTO ToDTO(this PlatformGame platformGame)
+    public static PlatformGameDTO ToMinDTO(this PlatformGame platformGame)
+	{
+		if (platformGame is null)
+		{
+			return new PlatformGameDTO();
+		}
+
+		return new PlatformGameDTO()
+		{
+			id = platformGame.Id,
+			PlatformKey = platformGame.PlatformKey ?? "",
+			Platform = platformGame.Platform.ToDTO(),
+			PlatformURL = platformGame.PlatformUrl ?? "",
+            Achievements = platformGame.Achievements.Select(x => x.ToMinDTO()).ToList()
+		};
+	}
+	public static PlatformGameDTO ToDTO(this PlatformGame platformGame)
     {
         if (platformGame is null)
         {
@@ -81,7 +100,8 @@ public static class DTOConverter
             PlatformKey = platformGame.PlatformKey ?? "",
             Platform = platformGame.Platform.ToDTO(),
             PlatformURL = platformGame.PlatformUrl ?? "",
-        };
+			Achievements = platformGame.Achievements.Select(x => x.ToMinDTO()).ToList()
+		};
     }
 
     public static AchievementDTO ToDTO(this Achievement achievement)
@@ -102,7 +122,24 @@ public static class DTOConverter
         };
     }
 
-    public static FriendDTO ToDTO(this Friend friend)
+	public static AchievementDTO ToMinDTO(this Achievement achievement)
+	{
+		if (achievement is null)
+		{
+			return new AchievementDTO();
+		}
+
+		return new AchievementDTO()
+		{
+			ID = achievement.Id,
+			ImageURL = achievement.ImageUrl ?? "",
+			Name = achievement.AchievementName,
+			Description = achievement.AchievementDesc ?? "",
+			TotalTimeClaimed = achievement.UserAchievements.Count
+		};
+	}
+
+	public static FriendDTO ToDTO(this Friend friend)
     {
         if (friend is null)
         {
@@ -212,8 +249,29 @@ public static class DTOConverter
         };
 
     }
+    public static GameReviewDTO ToMinDTO(this GameReview gameReview)
+	{
+		if (gameReview is null)
+		{
+			return new GameReviewDTO();
+		}
 
-    public static GameReviewDTO ToDTO(this GameReview gameReview)
+		return new GameReviewDTO()
+		{
+			Dislikes = gameReview.ReviewLikes.Where(x => x.IsLike == false).Count(),
+			PublishDate = DateOnly.FromDateTime(gameReview.PublishDate),
+			Likes = gameReview.ReviewLikes.Where(x => x.IsLike == true).Count(),
+			Rating = gameReview.Rating,
+			Text = gameReview.Review,
+			LastEditDate = gameReview.LastEditDate.HasValue ? DateOnly.FromDateTime(gameReview.LastEditDate.Value) : null,
+			User = gameReview.User.ToDTO(),
+			Id = gameReview.Id,
+			PlaytimeAtModification = gameReview.PlaytimeAtModification,
+			PlaytimeAtReview = gameReview.PlaytimeAtReview
+		};
+	}
+
+	public static GameReviewDTO ToDTO(this GameReview gameReview)
     {
         if (gameReview is null)
         {
