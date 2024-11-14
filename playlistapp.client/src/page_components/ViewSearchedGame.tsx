@@ -76,9 +76,6 @@ const ViewSearchedGame = () => {
             <h1 className="dark:text-white text-black sm:text-base text-tiny line-clamp-3">
               {game?.description}
             </h1>
-            <div>
-              {game?.id}
-            </div>
             <div className="flex justify-start w-full">
               <AddButton gameId={gameId} />
             </div>
