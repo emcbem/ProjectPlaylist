@@ -21,7 +21,7 @@ const PlaylistGridView: FC<props> = ({ listGames, list }) => {
     return (
         <div className="flex flex-wrap">
             {listGames && listGames?.map((listGame, key) => (
-                <Link key={key} to={`/user-view-game/${listGame.game.id}`} className="m-2 w-36">
+                <Link key={key} to={`/view-game/${listGame.game.id}`} className="m-2 w-36">
                     <div className="relative group">
                         <div className="absolute bottom-2 left-2">
                             <div className="hidden group-hover:block">

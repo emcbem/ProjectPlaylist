@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Account.modules.scss";
 import { useAuth0 } from "@auth0/auth0-react";
-import PlatformGamerTags from "./PlatformGamerTags";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import PlaylistLists from "./PlaylistLists";
@@ -14,6 +13,7 @@ import DisplayCurrentGoal from "../Goals/DisplayCurrentGoal";
 import { GoalQueries } from "@/hooks/GoalQueries";
 import { Goal } from "@/@types/goal";
 import ViewAllGoalsButton from "../Goals/ViewAllGoalsButton";
+import GamerTags from "./GamerTags";
 
 const Account = () => {
   const { isAuthenticated } = useAuth0();
@@ -58,7 +58,8 @@ const Account = () => {
 
           <div className="flex flex-row my-6">
             <div className="w-1/4">
-              <PlatformGamerTags />
+              {/* <PlatformGamerTags /> */}
+              <GamerTags />
             </div>
             <div className="ms-8 w-1/2">
               <p className="text-xl">Bio</p>
