@@ -1,17 +1,18 @@
-import { InfiniteGames } from "@/page_components/Search/InfiniteGames";
 import { useEffect, useState } from "react";
-import { useSelector } from "./hooks/useSelector";
+import { useSelector } from "../hooks/useSelector";
 import { Genre } from "@/@types/genre";
 import { Selector } from "./Selector";
-import { useSearchRequest } from "./hooks/useInfiniteController";
+import { useSearchRequest } from "../hooks/useInfiniteController";
 import { GenreQueries } from "@/hooks/GenreQueries";
 import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 import { PlatformQueries } from "@/hooks/PlatformQueries";
 import { Platform } from "@/@types/platform";
-import Dropdown from "./SelectOrder";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Company } from "@/@types/company";
 import { CompanyQueries } from "@/hooks/CompanyQueries";
+import Dropdown from "./SelectOrder";
+import { InfiniteGames } from "./InfiniteGames";
+import SearchDropdown from "./SearchDropdown";
 
 const SearchPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -39,7 +40,7 @@ const SearchPage = () => {
     }
   );
 
-  const { data: companies, isLoading: companiesLoading } =
+  const { data: companies,  } =
     CompanyQueries.useGetAllCompanies();
   const companySelectorController = useSelector<Company>(
     "Filter By Companies",
@@ -50,16 +51,25 @@ const SearchPage = () => {
   );
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      searchRequest.setSearchRequest((x) => ({
+        ...x,
+        title: searchBarContext.searchQuery,
+      }));
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchBarContext.searchQuery]);
+
+  useEffect(() => {
     searchRequest.setSearchRequest((x) => ({
       ...x,
       genreIds: genreSelectorController.selectedItems.map((x) => x.id),
-      title: searchBarContext.searchQuery,
       platformIds: platformSelectorController.selectedItems.map((x) => x.id),
       companyIds: companySelectorController.selectedItems.map((x) => x.id),
     }));
   }, [
     genreSelectorController.selectedItems,
-    searchBarContext.searchQuery,
     platformSelectorController.selectedItems,
     companySelectorController.selectedItems,
   ]);
@@ -103,7 +113,11 @@ const SearchPage = () => {
             {!genresLoading && Selector<Genre>(genreSelectorController)}
             <hr className="my-3 border border-clay-100" />
 
-            {!companiesLoading && Selector<Company>(companySelectorController)}
+              <SearchDropdown
+                options={companies?.map((x) => x.name) ?? []}
+                onSelect={(option: string) => console.log(option)}
+              />
+            {/* {!companiesLoading && Selector<Company>(companySelectorController)} */}
           </div>
           <div className="ml-auto w-full h-fit p-4 overflow-y-auto">
             <div className="flex">
@@ -128,7 +142,7 @@ const SearchPage = () => {
             {!genresLoading && Selector<Genre>(genreSelectorController)}
             <hr className="my-3 border border-clay-100" />
 
-            {!companiesLoading && Selector<Company>(companySelectorController)}
+            {/* {!companiesLoading && Selector<Company>(companySelectorController)} */}
             <button
               className="border border-black dark:border-white dark:text-black p-2 px-8 w-30 h-14 text-2xl rounded-lg sticky bottom-0 dark:bg-white w-screen"
               onClick={toggleDiv}
