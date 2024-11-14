@@ -6,10 +6,16 @@ import { updateUserGameRequest } from "@/@types/Requests/UpdateRequests/updateUs
 import toast from "react-hot-toast";
 
 export const UserGameQueries = {
-  useGetAllUserGamesByUserGameIdQuery: (userGameId: number) => {
+  useGetAllUserGamesByUser: (userId: string) => {
+    return useQuery({
+      queryFn: () => UserGameService.GetAllUserGamesByUser(userId),
+      queryKey: keys.GetAllUserGamesByUser(userId),
+    });
+  },
+  useGetUserGameByUserGameId: (userGameId: number) => {
     return useQuery({
       queryKey: keys.UserGameByGame,
-      queryFn: () => UserGameService.GetAllUserGamesByUserGameId(userGameId),
+      queryFn: () => UserGameService.GetUserGameByUserGameId(userGameId),
     });
     /*
     example on how to use in a page
@@ -23,7 +29,9 @@ export const UserGameQueries = {
       mutationFn: UserGameService.DeleteUserGame,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.DeleteUserGame });
-        queryClient.invalidateQueries({ queryKey: keys.GetAllUserGamesByUser(userGuid) });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetAllUserGamesByUser(userGuid),
+        });
         toast.success("User game deleted successfully");
       },
       onError: (error) => {
@@ -69,12 +77,6 @@ export const UserGameQueries = {
     }
   };
     */
-  },
-  useGetAllUserGamesByUser: (userId: string) => {
-    return useQuery({
-      queryFn: () => UserGameService.GetAllUserGamesByUser(userId),
-      queryKey: keys.GetAllUserGamesByUser(userId),
-    });
   },
   useAddUserGame: (addUserGameRequest: AddUserGameRequest | undefined) => {
     const queryClient = useQueryClient();
