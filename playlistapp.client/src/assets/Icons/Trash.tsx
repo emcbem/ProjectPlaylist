@@ -6,4 +6,5 @@ const TrashIconGray = () => {
     )
 }
 
+
 export default TrashIconGray
