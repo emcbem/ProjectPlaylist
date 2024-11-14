@@ -20,7 +20,12 @@ const PlaylistLists = () => {
     publishDate: new Date(),
     coverUrl: "https://lipsum.app/400x400/717272/717272",
     companies: [],
-  };
+    genres: [],
+    hoursPlayed: 0,
+    platforms: [],
+    reviews: [],
+    totalOwned: 0
+  } as Game;
 
   return (
     <>
