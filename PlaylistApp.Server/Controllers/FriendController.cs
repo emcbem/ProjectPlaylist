@@ -41,6 +41,12 @@ public class FriendController : Controller
         return await friendService.GetFriendById(friendId);
     }
 
+    [HttpGet("getbasependingrequests")]
+    public async Task<List<FriendDTO>> GetBasePendingRequests(int baseId)
+    {
+        return await friendService.GetBasePendingRequests(baseId);
+    }
+
     [HttpDelete("removefriend")]
     public async Task<bool> RemoveFriend(int friendId)
     {
