@@ -12,7 +12,7 @@ import UserGenresList from "./UserGenresList";
 import DisplayCurrentGoal from "../Goals/DisplayCurrentGoal";
 import { GoalQueries } from "@/hooks/GoalQueries";
 import { Goal } from "@/@types/goal";
-import ViewAllGoalsButton from "../Goals/ViewAllGoalsButton";
+import ViewAllGoalsButton from "../Goals/Components/Buttons/ViewAllGoalsButton";
 import GamerTags from "./GamerTags";
 
 const Account = () => {

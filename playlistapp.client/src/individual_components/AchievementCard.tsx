@@ -15,7 +15,7 @@ const AchievementCard: FC<props> = ({ achievement, platforms }) => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
   const { data: userEarnedAchievement, refetch } =
-    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
+    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid ?? "");
 
   useEffect(() => {
     if (usr?.guid) {

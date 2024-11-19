@@ -56,7 +56,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         maxLength={2}
         min="1"
         max="12"
-        className="bg-clay-600 mr-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
+        className="dark:bg-clay-600 bg-clay-950 mr-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="MM"
         onKeyDown={(e) => {
           handleKeyDown(e);
@@ -71,7 +71,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         maxLength={2}
         min="1"
         max="31"
-        className="bg-clay-600 mx-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
+        className="dark:bg-clay-600 bg-clay-950 mx-2 rounded-md flex items-center justify-center leading-none w-12 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="DD"
         onKeyDown={(e) => {
           handleKeyDown(e);
@@ -86,7 +86,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         maxLength={4}
         min="1900"
         max="2100"
-        className="bg-clay-600 mx-2 rounded-md flex items-center justify-center leading-none w-16 pl-1 border-transparent focus:border-transparent focus:ring-0 "
+        className="dark:bg-clay-600 bg-clay-950 mx-2 rounded-md flex items-center justify-center leading-none w-16 pl-1 border-transparent focus:border-transparent focus:ring-0 "
         placeholder="YYYY"
         onKeyDown={(e) => {
           handleKeyDown(e);
