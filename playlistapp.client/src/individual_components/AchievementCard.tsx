@@ -4,24 +4,17 @@ import AchievementModalParent from "./AchievementModalParent";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
-import { PlatformGame } from "@/@types/platformGame";
 
 interface props {
   achievement: Achievement;
-  platforms: PlatformGame[];
+  showAddButton: boolean;
 }
 
-const AchievementCard: FC<props> = ({ achievement, platforms }) => {
+const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
-  const { data: userEarnedAchievement, refetch } =
+  const { data: userEarnedAchievement } =
     UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
-
-  useEffect(() => {
-    if (usr?.guid) {
-      refetch();
-    }
-  }, [usr, refetch]);
 
   const earnedAchievement =
     userEarnedAchievement &&
@@ -48,12 +41,11 @@ const AchievementCard: FC<props> = ({ achievement, platforms }) => {
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
-              {usr?.guid && (
+              {usr?.guid && showAddButton && (
                 <AchievementModalParent
                   achievement={achievement}
                   earned={earnedAchievement!}
                   userGuid={usr.guid}
-                  platforms={platforms}
                 />
               )}
             </div>

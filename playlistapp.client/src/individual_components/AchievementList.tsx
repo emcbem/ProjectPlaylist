@@ -1,18 +1,19 @@
-import { AchievementQueries } from "@/hooks/AchievementQueries";
 import AchievementCard from "./AchievementCard";
-import { PlatformGame } from "@/@types/platformGame";
+import { Achievement } from "@/@types/achievement";
 
 interface props {
-  platforms: PlatformGame[];
+  achievements: Achievement[];
+  showAddButton: boolean;
 }
 
-const AchievementsList: React.FC<props> = ({ platforms }) => {
-  const { data: achievements } =
-    AchievementQueries.useGetAchievementByPlatformGameId(platforms[0].id);
-
+const AchievementsList: React.FC<props> = ({ achievements, showAddButton }) => {
   if (achievements) {
     return achievements.map((achievement, index) => (
-      <AchievementCard key={index} achievement={achievement} platforms={platforms}/>
+      <AchievementCard
+        key={index}
+        achievement={achievement}
+        showAddButton={showAddButton}
+      />
     ));
   } else {
     <h1>Error loading achievements</h1>;

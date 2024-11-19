@@ -12,9 +12,9 @@ const Gauge = () => {
           r="16"
           fill="none"
           className="stroke-current text-clay-950"
-          stroke-width="1"
-          stroke-dasharray="75 100"
-          stroke-linecap="round"
+          strokeWidth="1"
+          strokeDasharray="75 100"
+          strokeLinecap="round"
         ></circle>
 
         <circle
@@ -23,9 +23,9 @@ const Gauge = () => {
           r="16"
           fill="none"
           className="stroke-current text-green-500 dark:text-green-500"
-          stroke-width="2"
-          stroke-dasharray="56.25 100"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeDasharray="56.25 100"
+          strokeLinecap="round"
         ></circle>
       </svg>
 
