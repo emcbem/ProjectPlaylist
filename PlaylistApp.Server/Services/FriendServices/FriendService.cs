@@ -80,8 +80,9 @@ public class FriendService : IFriendService
         var friends = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => x.Base.Guid == userId)
+            .Where(x => x.Base.Guid == userId || x.Recieved.Guid == userId)
             .ToListAsync();
+
 
         if (!friends.Any())
         {
@@ -123,6 +124,24 @@ public class FriendService : IFriendService
         return friend.ToDTO();  
     }
 
+    public async Task<FriendDTO> GetFriendByBaseId(int id)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var friend = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (friend == null)
+        {
+            return new FriendDTO();
+        }
+
+        return friend.ToDTO();
+    }
+
     public async Task<bool> RemoveFriend(int id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
@@ -141,5 +160,19 @@ public class FriendService : IFriendService
         context.Remove(friend);
         await context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<List<FriendDTO>> GetBasePendingRequests(int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var pendingFriends = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
+            .Where(x => x.BaseId == userId)
+            .Where(x => x.IsAccepted == false)
+            .ToListAsync();
+
+        return pendingFriends.Select(x => x.ToDTO()).ToList();
     }
 }

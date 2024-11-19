@@ -1,36 +1,21 @@
 import React, { FC, useState, useRef } from "react";
 import DateSelector from "./DateSelector";
 import { Achievement } from "@/@types/achievement";
-import { PlatformGame } from "@/@types/platformGame";
 import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
 import { AddUserAchievementRequest } from "@/@types/Requests/AddRequests/addUserAchievementRequest";
 
 interface props {
   achievement: Achievement;
   userGuid: string;
-  platforms: PlatformGame[];
 }
 
-const AchievementModalAdd: FC<props> = ({
-  achievement,
-  userGuid,
-  platforms,
-}) => {
+const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [month, setMonth] = useState<string>("");
   const [day, setDay] = useState<string>("");
   const [year, setYear] = useState<string>("");
-  const [platform, setPlatform] = useState<PlatformGame | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
-
-
-  // console.log(
-  //   "WAAARB",
-  //   achievement.platformGame.game?.publishDate
-  //     ? formatDate(new Date(achievement.platformGame.game?.publishDate))
-  //     : "No publish date"
-  // );
 
   const addUserAchievementRequest: AddUserAchievementRequest = {
     dateAchieved: new Date(`${month}/${day}/${year}`),
@@ -63,14 +48,6 @@ const AchievementModalAdd: FC<props> = ({
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       closeModal();
     }
-  };
-
-  const handlePlatformClick = (
-    event: React.MouseEvent,
-    platform: PlatformGame
-  ) => {
-    event.preventDefault();
-    setPlatform(platform);
   };
 
   return (
@@ -130,29 +107,6 @@ const AchievementModalAdd: FC<props> = ({
                 setDay={setDay}
                 setYear={setYear}
               />
-            </div>
-
-            <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-white">
-                Select Platform
-              </label>
-              <div className="flex flex-wrap">
-                {platforms.map((x) => (
-                  <button
-                    key={x.id}
-                    className={` hover:bg-clay-900 transition-all rounded-md p-2 w-fit m-1 ${
-                      platform?.id == x.id ? `bg-clay-900` : `bg-clay-600`
-                    }`}
-                    onClick={(event) => {
-                      handlePlatformClick(event, x);
-                    }}
-                  >
-                    {x.platform.name === "PC (Microsoft Windows)"
-                      ? "PC"
-                      : x.platform.name}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="p-6 pb-0">
