@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import formatDate from "@/lib/date";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
-import Gauge from "@/individual_components/Gauge";
+import LibraryTabs from "@/individual_components/LibraryTabs";
 
 const ViewLibraryGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
@@ -21,23 +21,29 @@ const ViewLibraryGame = () => {
             className="lgmd:w-60 lgmd:h-96 sm:h-60 sm:w-36 w-28 h-44 object-cover rounded-lg shadow-xl sticky top-10"
             alt={`${userGame?.platformGame.game?.title} cover`}
           />
-          <div className="flex flex-col ml-5">
+          <div className="flex flex-col ml-5 w-full">
             <h1 className="dark:text-white text-black font-extrabold 2xl:text-5xl xl:text-3xl lg:text-1xl sm:text-2xl text-base">
-              {userGame?.platformGame.game?.title}{" "}
+              {userGame?.platformGame.game?.title}
             </h1>
+            <p className="text-clay-950 dark:text-clay-900"></p>
             <p className="text-clay-950 dark:text-clay-900">
+              {userGame?.platformGame.platform.name} -&nbsp;
               {userGame?.platformGame.game?.companies[0].name}{" "}
               -&nbsp;Released&nbsp;
               {userGame?.platformGame.game?.publishDate
                 ? formatDate(new Date(userGame?.platformGame.game.publishDate))
                 : "No publish date"}
             </p>
-
-            <h1 className="bg-[#f1f3f4] dark:bg-clay-400 w-fit p-20 rounded-xl flex flex-col items-center justify-center">
-                <p>Current Progress</p>
-              <Gauge />
+            <h1 className="dark:text-white text-black sm:text-base text-tiny line-clamp-3 my-3 ">
+              {userGame?.platformGame.game?.description}
             </h1>
-
+            <div className="lgmd:flex hidden">
+              <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-full">
+                <LibraryTabs
+                  userGame={userGame}
+                />
+              </ul>
+            </div>
           </div>
         </div>
       </div>

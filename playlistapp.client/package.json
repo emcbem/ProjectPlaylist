@@ -25,6 +25,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.17",
     "gsap": "^3.12.5",
     "lucide-react": "^0.447.0",
     "node-vibrant": "^3.1.6",
@@ -32,7 +33,7 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-measure": "^2.5.2",
-    "react-responsive-masonry": "^2.3.0",
+    "react-responsive-masonry": "2.3.0",
     "react-router-dom": "^6.26.2",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"

@@ -2,8 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {
   Menu,
   MenuHandler,
-  MenuList,
-  MenuItem,
+  MenuList as MTMenuList,
+  MenuItem as MTMenuItem,
 } from "@material-tailwind/react";
 import LogoutButton from "./logout";
 import { Link } from "react-router-dom";
@@ -22,6 +22,9 @@ const Profile: React.FC = () => {
     return <div>Loading ...</div>;
   }
 
+  const MenuList = (props: any) => <MTMenuList {...props} />;
+  const MenuItem = (props: any) => <MTMenuItem {...props} />;
+  
   return (
     isAuthenticated &&
     usr && (
@@ -35,44 +38,19 @@ const Profile: React.FC = () => {
                 className="rounded-full border-2 border-clay-700 bg-clay-600"
               />
             </MenuHandler>
-            <MenuList
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-            >
+            <MenuList>
               <Link to="/account" reloadDocument>
-                <MenuItem
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  className="font-bold"
-                >
-                  Account
-                </MenuItem>
+                <MenuItem className="font-bold">Account</MenuItem>
               </Link>
 
               <hr className="my-3" />
               <Link to="/library" reloadDocument>
-                <MenuItem
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  className="font-bold"
-                >
-                  My Library
-                </MenuItem>
+                <MenuItem className="font-bold">My Library</MenuItem>
               </Link>
 
               <hr className="my-3" />
-              <Link to={"/settings"} >
-                <MenuItem
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  className="font-bold"
-                >
-                  Settings
-                </MenuItem>
+              <Link to={"/settings"}>
+                <MenuItem className="font-bold">Settings</MenuItem>
               </Link>
 
               <hr className="my-3" />

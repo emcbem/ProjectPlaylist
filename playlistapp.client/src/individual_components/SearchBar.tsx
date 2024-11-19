@@ -31,13 +31,19 @@ const SearchBar: React.FC = () => {
           />
         </svg>
 
+
         <input
-          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-black dark:border-white rounded-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white dark:text-white"
+          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-r-0 border-black dark:border-white rounded-l-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white dark:text-white"
           placeholder=""
           onKeyDown={handleKeyPress}
           onChange={(e) => searchBarContext.setSearchQuery(e.target.value)}
           value={searchBarContext.searchQuery}
         />
+        <select className="bg-transparent border  border-black dark:border-white rounded-r-lg text-sm sm:text-lg ring-0 focus:ring-transparent focus:border-black dark:focus:border-white border-l-0 dark:text-clay-950 sm:h-fit h-8">
+          <option className="hover:bg-gray-50 text-clay-400" value="users">Games</option>
+          <option className="hover:bg-gray-50 text-clay-400" value="games">Users</option>
+        </select>
+
       </div>
     </div>
   );

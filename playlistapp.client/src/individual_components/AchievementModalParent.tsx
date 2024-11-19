@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Achievement } from "@/@types/achievement";
-import { PlatformGame } from "@/@types/platformGame";
 import AchievementModalRemove from "./AchievementModalRemove";
 import AchievementModalAdd from "./AchievementModalAdd";
 import { UserAchievement } from "@/@types/userAchievement";
@@ -9,14 +8,12 @@ interface props {
   achievement: Achievement;
   earned: UserAchievement;
   userGuid: string;
-  platforms: PlatformGame[];
 }
 
 const AchievementModalParent: FC<props> = ({
   achievement,
   earned,
   userGuid,
-  platforms,
 }) => {
   return (
     <>
@@ -29,7 +26,6 @@ const AchievementModalParent: FC<props> = ({
         <AchievementModalAdd
           achievement={achievement}
           userGuid={userGuid}
-          platforms={platforms}
         />
       )}
     </>
