@@ -25,6 +25,26 @@ export const UserGameService = {
       throw error;
     }
   },
+  GetUserGameByUserGameId: async (userGameId: number | undefined) => {
+    if (!userGameId) {
+      console.error("Game id was not found");
+      throw new Error("Game id must be provided to get all user games.");
+    }
+    try {
+      const response = await axios.get<UserGame>(
+        `${import.meta.env.VITE_URL}/UserGame/getusergamebyid`,
+        {
+          params: {
+            userGameId: userGameId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch user games:", error);
+      throw error;
+    }
+  },
   AddUserGame: async (addUserGameRequest: AddUserGameRequest | undefined) => {
     if (!addUserGameRequest) {
       console.error("Add user game request is undefined or empty");
@@ -43,26 +63,6 @@ export const UserGameService = {
       return response.data;
     } catch (error) {
       console.error("Failed to add user game", error);
-      throw error;
-    }
-  },
-  GetAllUserGamesByUserGameId: async (userGameId: number | undefined) => {
-    if (!userGameId) {
-      console.error("Game id was not found");
-      throw new Error("Game id must be provided to get all user games.");
-    }
-    try {
-      const response = await axios.get<UserGame>(
-        `${import.meta.env.VITE_URL}/UserGame/getusergamebyid`,
-        {
-          params: {
-            userGameId: userGameId,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Failed to fetch user games:", error);
       throw error;
     }
   },
@@ -104,11 +104,14 @@ export const UserGameService = {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Failed to update user game", error.response?.data || error.message);
+        console.error(
+          "Failed to update user game",
+          error.response?.data || error.message
+        );
       } else {
         console.error("An unexpected error occurred", error);
       }
-      throw error; 
+      throw error;
     }
   },
 };
