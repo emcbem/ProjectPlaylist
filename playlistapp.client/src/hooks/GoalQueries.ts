@@ -13,83 +13,29 @@ export const GoalQueries = {
         queryClient.invalidateQueries({ queryKey: keys.AddGoal });
       },
     });
-    /*
-    const addGoalRequest: AddGoalRequest = {
-      achievementId: achievementId,
-      dateToAchieve: date,
-      isCurrent: bool,
-      userId: usr?.guid ?? "",
-    };
-
-    const {
-      data: newGoal,
-      mutate: AddNewGoal,
-      isPending: isAdding,
-      isError: isAddingError,
-      isSuccess: isAddingSuccess,
-    } = GoalQueries.useAddGoal(addGoalRequest);
-
-    const handleAddGoal = () => {
-      AddNewGoal();
-    };
-    */
   },
   useGetGoalById: (goalId: number) => {
     return useQuery({
       queryFn: () => GoalService.getGoalById(goalId),
       queryKey: keys.GetGoalById(goalId),
     });
-    /*
-    const {
-      data: goalById,
-      isPending: isGettingGoalById,
-      isError: isGettingGoalByIdError,
-      isSuccess: isGettingGoalByIdSuccess,
-    } = GoalQueries.useGetGoalById(Number(goalId));
-    */
   },
   useGetGoalsByUser: (userId: string) => {
     return useQuery({
       queryFn: () => GoalService.getGoalsFromUser(userId),
       queryKey: keys.GetGoalsByUser(userId),
     });
-    /*
-    const {
-      data: goalsByUser,
-      isPending: isGettingGoalsByUser,
-      isError: isGettingGoalsByUserError,
-      isSuccess: isGettingGoalsByUserSuccess,
-    } = GoalQueries.useGetGoalsByUser(userId);
-    */
   },
-  useUpdateGoal: (updateGoalRequest: UpdateGoalRequest) => {
+  useUpdateGoal: (updateGoalRequest: UpdateGoalRequest, userId: string) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => GoalService.updateGoal(updateGoalRequest),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.UpdateGoal });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetGoalsByUser(userId),
+        });
       },
     });
-    /*
-    const updateGoalRequest: UpdateGoalRequest = {
-      dateToAchieve: date,
-      id: Number(goalId),
-      isComplete: bool,
-      isCurrent: bool,
-    };
-
-    const {
-      data: updatedGoal,
-      mutate: UpdateGoal,
-      isPending: isUpdating,
-      isError: isUpdatingError,
-      isSuccess: isUpdatingSuccess,
-    } = GoalQueries.useUpdateGoal(updateGoalRequest);
-
-    const handleUpdateGoal = () => {
-      UpdateGoal();
-    };
-    */
   },
   useDeleteGoal: (goalId: number) => {
     const queryClient = useQueryClient();
@@ -99,18 +45,5 @@ export const GoalQueries = {
         queryClient.invalidateQueries({ queryKey: keys.DeleteGoal(goalId) });
       },
     });
-    /*
-    const {
-      data: deletedGoal,
-      mutate: DeleteGoal,
-      isPending: isDeleting,
-      isError: isDeletingError,
-      isSuccess: isDeletingSuccess,
-    } = GoalQueries.useDeleteGoal(Number(goalId));
-
-    const handleDeleteGoal = () => {
-      DeleteGoal();
-    };
-    */
   },
 };
