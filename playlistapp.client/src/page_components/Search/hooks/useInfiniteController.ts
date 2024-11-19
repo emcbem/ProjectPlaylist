@@ -1,9 +1,12 @@
-import { OrderingMethods } from '@/@types/Enums/OrderingMethod';
-import { GetGamesRequest } from '@/@types/Requests/GetRequests/getGamesRequest';
-import { useState } from 'react'
+import { OrderingMethods } from "@/@types/Enums/OrderingMethod";
+import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
+import { useSearchBarContext } from "@/hooks/useSearchBarContext";
+import { useEffect, useState } from "react";
 
 export const useSearchRequest = () => {
-    const [searchRequest, setSearchRequest] = useState<GetGamesRequest>({
+  const searchBarContext = useSearchBarContext();
+
+  const [searchRequest, setSearchRequest] = useState<GetGamesRequest>({
     title: "",
     page: 0,
     companyIds: [],
@@ -12,9 +15,19 @@ export const useSearchRequest = () => {
     pageSize: 10,
     orderingMethod: OrderingMethods.AZ,
   });
-  return ({
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSearchRequest((x) => ({
+        ...x,
+        title: searchBarContext.searchQuery,
+      }));
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchBarContext.searchQuery]);
+  return {
     searchRequest,
-    setSearchRequest
-  }
-  )
-}
+    setSearchRequest,
+  };
+};

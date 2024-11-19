@@ -30,6 +30,8 @@ export default {
         lgmd: "820px",
       },
       colors: {
+        gradientBlue: "rgba(47, 44, 102, 1)",
+        gradientOrange: "rgba(242, 112, 78, 0.41780462184873945)",
         black: "#0E191C",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
