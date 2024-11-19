@@ -1,5 +1,5 @@
 import { Achievement } from "@/@types/achievement";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext } from "react";
 import AchievementModalParent from "./AchievementModalParent";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
