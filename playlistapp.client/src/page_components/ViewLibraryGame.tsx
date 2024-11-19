@@ -40,7 +40,7 @@ const ViewLibraryGame = () => {
             <div className="lgmd:flex hidden">
               <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-full">
                 <LibraryTabs
-                  passedGameAchievements={userGame?.platformGame.achievements}
+                  userGame={userGame}
                 />
               </ul>
             </div>
