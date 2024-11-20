@@ -12,9 +12,18 @@ const SearchDropdown = <T,>({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    filterOptions("")
+  }, [controller.options])
+
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    if (value.length > 3) {
+    filterOptions(value);
+    setIsOpen(true);
+  };
+
+  const filterOptions = (value:string) => {
+    if (value.length >= controller.minLength) {
       setFilteredOptions(
         controller.options.filter((option) =>
           controller
@@ -27,13 +36,12 @@ const SearchDropdown = <T,>({
     } else {
       setFilteredOptions([]);
     }
-    setIsOpen(true);
-  };
+  }
 
   const handleSelect = (option: T) => {
     controller.setSelectedOptions((x) => [...x, option]);
     setSearchTerm("");
-    setFilteredOptions([]);
+    filterOptions("")
     setIsOpen(false);
   };
 
