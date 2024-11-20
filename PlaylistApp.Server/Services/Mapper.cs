@@ -40,5 +40,5 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
-	}
+    }
 }

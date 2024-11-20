@@ -12,6 +12,12 @@ export const UserAccountQueries = {
       queryKey: keys.GetUserByUsername,
     });
   },
+  useGetUserBySearch: (query: string) => {
+    return useQuery({
+      queryFn: () => UserAccountService.GetUsersByQueryString(query),
+      queryKey: keys.GetUsersBySearchQuery(query),
+    });
+  },
   useGetUserByAuthId: (authId: string) => {
     return useQuery({
       queryFn: () => UserAccountService.GetUserByAuthId(authId),

@@ -35,6 +35,12 @@ public class UserController : Controller
         return await userService.GetUsersByName(username);
     }
 
+    [HttpGet("search")]
+    public async Task<List<UserDTO>> GetUsersBySearchQuery(string query)
+    {
+        return await userService.GetUsersBySearchQuery(query);
+    }
+
     [HttpPatch("updateuser")]
     public async Task<UserDTO> UpdateUser(UpdateUserRequest request)
     {

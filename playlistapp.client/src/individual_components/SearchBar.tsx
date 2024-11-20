@@ -1,4 +1,5 @@
 import { useSearchBarContext } from "@/hooks/useSearchBarContext";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
@@ -7,11 +8,28 @@ const SearchBar: React.FC = () => {
   const navigate = useNavigate();
   const searchBarContext = useSearchBarContext();
 
+  const [selectedOption, setSelectedOption] = useState<string>('games');
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (location.pathname != '/search') {
+      if (location.pathname != '/search' && selectedOption == 'games') {
         navigate("/search");
       }
+      if (location.pathname != '/searchusers' && selectedOption == 'users') {
+        navigate("/searchusers");
+      }
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+    if (location.pathname != '/search' && selectedOption == 'users') {
+      navigate("/search");
+    }
+    if (location.pathname != '/searchusers' && selectedOption == 'games') {
+      navigate("/searchusers");
     }
   };
 
@@ -39,9 +57,10 @@ const SearchBar: React.FC = () => {
           onChange={(e) => searchBarContext.setSearchQuery(e.target.value)}
           value={searchBarContext.searchQuery}
         />
-        <select className="bg-transparent border  border-black dark:border-white rounded-r-lg text-sm sm:text-lg ring-0 focus:ring-transparent focus:border-black dark:focus:border-white border-l-0 dark:text-clay-950 sm:h-fit h-8">
-          <option className="hover:bg-gray-50 text-clay-400" value="users">Games</option>
-          <option className="hover:bg-gray-50 text-clay-400" value="games">Users</option>
+
+        <select className="bg-transparent border  border-black dark:border-white rounded-r-lg text-sm sm:text-lg ring-0 focus:ring-transparent focus:border-black dark:focus:border-white border-l-0 dark:text-clay-950 sm:h-fit h-8" value={selectedOption} onChange={handleSelectChange}>
+          <option className="hover:bg-gray-50 text-clay-400" value="games">Games</option>
+          <option className="hover:bg-gray-50 text-clay-400" value="users">Users</option>
         </select>
 
       </div>

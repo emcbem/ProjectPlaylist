@@ -21,6 +21,7 @@ import Settings from "./page_components/Settings/Settings";
 import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
 import ViewLibraryGame from "./page_components/ViewLibraryGame";
+import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
                       }
                     />
                     <Route path="/search" element={<SearchPage />} />
+                    <Route path="/searchusers" element={<SearchUsers />} />
                     <Route
                       path="/view-game/:gameId"
                       element={<ViewSearchedGame />}
