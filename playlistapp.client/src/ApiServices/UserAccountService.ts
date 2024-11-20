@@ -26,6 +26,24 @@ export const UserAccountService = {
       throw error;
     }
   },
+  GetUsersByQueryString: async (query: string) => {
+    try {
+      const response = await axios.get<UserAccount[]>(
+        `${import.meta.env.VITE_URL}/User/search`,
+        {
+          params: {
+            query: query,
+          },
+        }
+      );
+      console.log("RESPONSE.DATA")
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get users");
+      throw error;
+    }
+  },
   GetUserByAuthId: async (authId: string) => {
     if (!authId) {
       console.error("Auth id was undefined or empty");
@@ -88,7 +106,6 @@ export const UserAccountService = {
     }
   },
   UpdateUser: async (request: UpdateUserRequest) => {
-    console.log("Request in UpdateUser: ", request)
     if (!request) {
       console.error("Update user request was undefined or empty");
       throw new Error("Update user request must be provided");
