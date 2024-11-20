@@ -22,13 +22,15 @@ export const useFilterController = ({
     genres ?? ([] as Genre[]),
     (value: Genre) => {
       return value.name;
-    }
+    },
+    0
   );
 
   const companySelectorController = useSearchDropdown(
     "Companies",
     companies ?? [],
-    (option: Company) => option.name
+    (option: Company) => option.name,
+    2
   );
 
   const platformSelectorController = useSearchDropdown(
@@ -36,7 +38,8 @@ export const useFilterController = ({
     platforms ?? ([] as Platform[]),
     (value: Platform) => {
       return value.name;
-    }
+    },
+    0
   );
 
   useEffect(() => {
