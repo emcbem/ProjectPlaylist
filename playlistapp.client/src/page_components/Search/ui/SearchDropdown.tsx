@@ -1,85 +1,101 @@
-import React, { useEffect, useRef, useState } from "react";
-
-interface SearchDropdownProps<T> {
-  options: T[];
-  onSelect: (option: T) => void;
-  stringify_option_fn: (option: T) => string
-}
+import { useState, useRef, useEffect } from "react";
+import { SearchDropdownController } from "../types/SearchDropdownController";
+import { DropdownItem } from "./DropdownItem";
 
 const SearchDropdown = <T,>({
-  options,
-  onSelect,
-  stringify_option_fn
-}: SearchDropdownProps<T>) => {
+  controller,
+}: {
+  controller: SearchDropdownController<T>;
+}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredOptions, setFilteredOptions] = useState<T[]>(options);
+  const [filteredOptions, setFilteredOptions] = useState<T[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleSearch = (value: string) => {
     setSearchTerm(value);
     if (value.length > 3) {
       setFilteredOptions(
-        options.filter((option) =>
-          stringify_option_fn(option).toLowerCase().includes(value.toLowerCase())
+        controller.options.filter((option) =>
+          controller
+            .stringify_option_fn(option)
+            .toLowerCase()
+            .includes(value.toLowerCase()) &&
+          !controller.selectedOptions.find((x) => x === option)
         )
       );
-    }
-    else
-    {
-        setFilteredOptions([])
+    } else {
+      setFilteredOptions([]);
     }
     setIsOpen(true);
   };
 
   const handleSelect = (option: T) => {
-    onSelect(option);
-    setSearchTerm(stringify_option_fn(option));
+    controller.setSelectedOptions((x) => [...x, option]);
+    setSearchTerm("");
+    setFilteredOptions([]);
     setIsOpen(false);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
-    <div ref={dropdownRef} className="">
+    <div ref={containerRef} className="relative">
+      <p className="text-xl mb-2">{controller.title}</p>
       <input
         type="text"
         value={searchTerm}
-        onChange={handleSearch}
+        onChange={(e) => handleSearch(e.target.value)}
         onFocus={() => setIsOpen(true)}
-        className=" border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-slate-500 focus:border-slate-500"
+        className="border border-black dark:placeholder-gray-400 dark:text-white dark:border-white rounded-lg w-full dark:bg-black text-black focus:outline-none focus:ring-pppurple-200 focus:border-pppurple-200 dark:focus:ring-pporange-600 dark:focus:border-pporange-600"
         placeholder="Search..."
       />
       {isOpen && (
-        <ul className="z-10 w-full bg-white border border-gray-300 rounded-lg overflow-y-auto overflow-x-hidden max-h-48 mt-1 shadow-lg">
+        <ul className="z-10 w-full bg-white dark:bg-black border border-gray-300 rounded-lg overflow-y-auto overflow-x-hidden max-h-48 mt-2 shadow-lg">
           {filteredOptions.length > 0 ? (
             filteredOptions.map((option, index) => (
               <li
                 key={index}
                 onClick={() => handleSelect(option)}
-                className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                className="px-4 py-2 cursor-pointer dark:text-white text-black hover:bg-pppurple-50 dark:hover:bg-pporange-900"
               >
-                {stringify_option_fn(option)}
+                {controller.stringify_option_fn(option)}
               </li>
             ))
           ) : (
-            <li className="px-4 py-2 text-gray-500">No options found</li>
+            <li className="px-4 py-2 text-gray-500 dark:text-gray-400">
+              No options found
+            </li>
           )}
         </ul>
       )}
+      <div className="flex flex-col pt-3 w-full max-h-96 overflow-scroll">
+        {controller.selectedOptions.map((value) => (
+          <DropdownItem
+            key={controller.stringify_option_fn(value)}
+            value={controller.stringify_option_fn(value)}
+            onClick={() =>
+              controller.setSelectedOptions((x) =>
+                x.filter((x) => x != value)
+              )
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 };

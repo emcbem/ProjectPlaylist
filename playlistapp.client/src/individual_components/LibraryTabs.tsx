@@ -1,7 +1,11 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import AchievementsPage from "@/page_components/Achievements";
 import Gauge from "./Gauge";
-import { Achievement } from "@/@types/achievement";
+import NumberTicker from "@/components/ui/number-ticker";
+import { UserGame } from "@/@types/usergame";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
 
 interface TabProps {
   TabName: string;
@@ -21,7 +25,6 @@ const LibraryTab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
             : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
         }`}
       >
-        {/* SVG Icon */}
         <svg
           className={`w-4 h-4 me-2 ${
             isActive ? "text-black dark:text-white" : "text-gray-500"
@@ -39,12 +42,14 @@ const LibraryTab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
   );
 };
 
-const LibraryTabs: FC<{ passedGameAchievements?: Achievement[] }> = ({
-  passedGameAchievements,
-}) => {
+const LibraryTabs: FC<{ userGame?: UserGame }> = ({ userGame }) => {
   const [activeTab, setActiveTab] = useState<string>("Your Stats");
 
   const tabs = ["Your Stats", "Achievements", "Global Leaderboard"];
+  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
+
+  const { data: userEarnedAchievement } =
+    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
 
   return (
     <div className="w-full">
@@ -59,20 +64,39 @@ const LibraryTabs: FC<{ passedGameAchievements?: Achievement[] }> = ({
         ))}
       </ul>
       <div className="mt-4 w-full">
-        {activeTab === "Your Stats" && (
+        {activeTab === "Your Stats" &&
+        userEarnedAchievement != undefined &&
+        userGame != undefined ? (
           <div className="flex flex-row w-full">
-            {" "}
-            <div className="bg-[#f1f3f4] dark:bg-clay-100 shadow-xl w-fit p-10 rounded-xl flex flex-col items-center justify-center m-2">
-              <Gauge />
-            </div>
-            <div className="bg-[#f1f3f4] dark:bg-clay-100 shadow-xl w-full p-10 rounded-xl flex flex-col items-center justify-center m-2">
-              <h1>Hours Played: 250</h1>
+            <div className="bg-[#f1f3f4] dark:bg-clay-100 shadow-xl w-fit rounded-xl flex flex-row items-start m-2 p-8">
+              <div className="flex flex-col">
+                <h1>Progress</h1>
+                <Gauge
+                  totalAchievments={Number(
+                    userGame?.platformGame.achievements.length
+                  )}
+                  earnedAchievements={Number(userEarnedAchievement?.length)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <h1>Hours Played</h1>
+                <div className="p-4">
+                  <NumberTicker
+                    value={Number(userGame.timePlayed)}
+                    className="text-5xl"
+                  />
+                </div>
+              </div>
             </div>
           </div>
+        ) : (
+          <p>Loading...</p>
         )}
         {activeTab === "Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
-            <AchievementsPage passedGameAchievements={passedGameAchievements} />
+            <AchievementsPage
+              passedGameAchievements={userGame?.platformGame.achievements}
+            />
           </div>
         )}
         {activeTab === "Global Leaderboard" && <div>Coming soon...</div>}
