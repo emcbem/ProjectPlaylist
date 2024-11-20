@@ -7,13 +7,15 @@ import GoalAchievementCard from "./Components/AchievementCard";
 import GoalAccomplishDate from "./Components/ShowDates/DisplayGoalDate";
 import GoalSetDate from "./Components/ShowDates/GoalSetDate";
 import { FC } from "react";
+import DeleteGoalButton from "./Components/Buttons/DeleteGoalButton";
 
 interface props {
   goal: Goal;
   onEditClick: (goal: Goal) => void;
+  onDeleteClick: (goal: Goal) => void;
 }
 
-const GoalCard: FC<props> = ({ goal, onEditClick }) => {
+const GoalCard: FC<props> = ({ goal, onEditClick, onDeleteClick }) => {
   const { isAuthenticated } = useAuth0();
 
   const daysRemaining = goal?.dateToAchieve
@@ -34,15 +36,19 @@ const GoalCard: FC<props> = ({ goal, onEditClick }) => {
 
           <GoalAchievementCard goal={goal}></GoalAchievementCard>
 
-          <GoalSetDate goal={goal}></GoalSetDate>
+          <div className="w-full flex flex-wrap items-center mt-2">
+            <div className="w-full md:w-1/2 mb-2 md:mb-0">
+              <GoalSetDate goal={goal}></GoalSetDate>
+            </div>
 
-          <div className="w-full relative max-w-full flex justify-end items-end space-x-2">
-            <EditGoalButton onEditClick={() => onEditClick(goal)} />
-
-            <ProgressDisplay
-              goal={goal}
-              daysRemaining={daysRemaining || 0}
-            ></ProgressDisplay>
+            <div className="w-full md:w-1/2 flex justify-end items-center space-x-2">
+              <DeleteGoalButton
+                onDeleteClick={() => onDeleteClick(goal)}
+                modal={false}
+              />
+              <EditGoalButton onEditClick={() => onEditClick(goal)} />
+              <ProgressDisplay goal={goal} daysRemaining={daysRemaining || 0} />
+            </div>
           </div>
         </div>
       </div>
