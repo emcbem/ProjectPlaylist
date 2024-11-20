@@ -24,7 +24,7 @@ export const FriendService = {
   },
   AddFriend: async(request: AddFriendRequest) => {
     try {
-      const response = await axios.patch<boolean>(
+      const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/friend/addfriend`,
         request,
         {
