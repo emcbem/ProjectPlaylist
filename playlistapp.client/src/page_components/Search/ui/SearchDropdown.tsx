@@ -83,7 +83,7 @@ const SearchDropdown = <T,>({
           )}
         </ul>
       )}
-      <div className="flex flex-col pt-3 w-full max-h-96 overflow-scroll">
+      <div className="flex flex-col pt-3 w-full">
         {controller.selectedOptions.map((value) => (
           <DropdownItem
             key={controller.stringify_option_fn(value)}
