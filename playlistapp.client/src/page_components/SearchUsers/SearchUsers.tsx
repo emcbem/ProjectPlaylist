@@ -9,6 +9,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import React from "react";
 import AddFriendBtn from "./AddFriendBtn";
+import PendingFriends from "../Account/PendingFriends";
+import { FilterMyPendingFriends } from "../Account/logic/FilterMyPendingFriends";
 
 const SearchUsers = () => {
     const { isAuthenticated } = useAuth0();
@@ -21,8 +23,6 @@ const SearchUsers = () => {
     const { data: users, isLoading, isError } = UserAccountQueries.useGetUserBySearch(searchBarContext.searchQuery);
     const { data: friends } = FriendQueries.GetAllFriendsByBaseIdQuery(usr?.guid ?? "")
     const { data: pendingFriends } = FriendQueries.GetPendingFriendRequestsQuery(usr?.id ?? 0);
-    console.log(pendingFriends)
-    console.log("pfriends: ", pendingFriends)
 
     if (isLoading && !isError && searchBarContext.searchQuery.length > 0) {
         return (
@@ -48,8 +48,8 @@ const SearchUsers = () => {
     }
 
     return (
-        <div className="grid justify-items-center">
-            <div style={{ maxWidth: "600px" }} className="w-full mt-8">
+        <div className="flex flex-col md:flex-row justify-center">
+            <div style={{ maxWidth: "600px" }} className="w-full mt-8 ">
                 {users && users.map((user, key) => {
                     const isFriend = friends?.some(friend => friend.id === user.id)
                     const isPending = pendingFriends?.some(pendingFriend => pendingFriend.receivingUser.id === user.id)
@@ -88,6 +88,11 @@ const SearchUsers = () => {
                         </>
                     )
                 })}
+            </div>
+            <div className={`mt-8 ms-10 ${pendingFriends && FilterMyPendingFriends(pendingFriends, usr?.id ?? 0)?.length <= 0 ? "w-0" : "xl:w-1/5 md:1/3 w-1/2"}`}>
+                {usr && pendingFriends &&
+                    <PendingFriends pendingFriends={pendingFriends} usr={usr} />
+                }
             </div>
         </div>
     )

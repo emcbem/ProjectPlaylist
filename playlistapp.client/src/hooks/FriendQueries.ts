@@ -11,7 +11,7 @@ export const FriendQueries = {
         return useMutation({
             mutationFn: (request: AcceptFriendRequest) => FriendService.AcceptFriend(request),
             onSuccess: () => {
-                toast.success("Accepted Friend Request");
+                toast.success("Accepted");
                 queryClient.invalidateQueries({
                     queryKey: keys.acceptFriend,
                     refetchType: "all",
@@ -50,7 +50,6 @@ export const FriendQueries = {
         });
     },
     GetPendingFriendRequestsQuery: (baseId: number) => {
-        console.log(baseId)
         return useQuery({
             queryKey: keys.getPendingFriendRequestsFunc(baseId),
             queryFn: () => FriendService.GetBasePendingRequests(baseId),
