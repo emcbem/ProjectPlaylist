@@ -147,6 +147,20 @@ public class GoalService : IGoalService
             .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync();
 
+        var possibleCurrentGoal = await context.Goals
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.IsCurrent == true)
+            .FirstOrDefaultAsync();
+
+        if (possibleCurrentGoal is not null)
+        {
+            if (request.IsCurrent == true)
+            {
+                possibleCurrentGoal.IsCurrent = false;
+                context.Update(possibleCurrentGoal);
+            }
+        }
+
         if (goal is null)
         {
             return new GoalDTO();

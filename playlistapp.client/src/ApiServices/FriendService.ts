@@ -24,7 +24,7 @@ export const FriendService = {
   },
   AddFriend: async(request: AddFriendRequest) => {
     try {
-      const response = await axios.patch<boolean>(
+      const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/friend/addfriend`,
         request,
         {
@@ -40,7 +40,6 @@ export const FriendService = {
     }
   },
   GetAllFriendsByBaseId: async (baseId: string) => {
-    console.log("BHAHHHHH")
     try {
       const response = await axios.get<UserAccount[]>(
         `${import.meta.env.VITE_URL}/Friend/getallfriendsbybaseid`,
@@ -98,7 +97,6 @@ export const FriendService = {
           },
         }
       );
-      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Failed to get friend by id");

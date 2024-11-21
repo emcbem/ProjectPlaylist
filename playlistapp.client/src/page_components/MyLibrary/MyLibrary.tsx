@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import MyLibraryGridView from "./MyLibraryGridView";
-import MyLibraryListView from "./MyLibraryListView";
+import MyLibraryListView from "./Components/MyLibraryListView";
 import GridAndListIcons from "../../individual_components/GridAndListIcons";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { Link } from "react-router-dom";
+import MyLibraryGridView from "./Components/MyLibraryGridView";
 
 const MyLibrary = () => {
   const [isListView, setIsListView] = useState<boolean>(true);

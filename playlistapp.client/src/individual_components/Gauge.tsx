@@ -6,13 +6,14 @@ const Gauge: FC<{ earnedAchievements: number; totalAchievments: number }> = ({
   totalAchievments,
 }) => {
   return (
-    <div className="relative size-40">
+    <div className="relative">
       <AnimatedCircularProgressBar
         max={100}
         min={0}
         value={(earnedAchievements / totalAchievments) * 100}
         gaugePrimaryColor="rgb(21 128 61)"
-        gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
+        gaugeSecondaryColor="rgb(115 117 117)"
+        className="w-24 h-24"
       />
     </div>
   );

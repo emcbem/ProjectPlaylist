@@ -37,12 +37,12 @@ export const GoalQueries = {
       },
     });
   },
-  useDeleteGoal: (goalId: number) => {
+  useDeleteGoal: (goalId: number, userGuid: string) => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () => GoalService.deleteGoal(goalId),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.DeleteGoal(goalId) });
+        queryClient.invalidateQueries({ queryKey: keys.GetGoalsByUser(userGuid) });
       },
     });
   },

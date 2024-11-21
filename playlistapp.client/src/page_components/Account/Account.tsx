@@ -38,6 +38,8 @@ const Account = () => {
     setCurrentGoal(foundCurrentGoal);
   }, [allUserGoals]);
 
+  console.log(usr, "sadasd")
+
   return (
     isAuthenticated &&
     usr?.profileURL &&

@@ -9,6 +9,8 @@ const AchievementsPage: React.FC<{
 }> = ({ passedGameAchievements }) => {
   const { gameId } = useParams<{ gameId: string }>();
 
+
+  console.log(passedGameAchievements, "yurrr")
   const allAchievements =
     passedGameAchievements ??
     Array.from(
@@ -20,7 +22,7 @@ const AchievementsPage: React.FC<{
     );
 
   return (
-    <div className="dark:text-white text-black">
+    <div className="dark:text-white text-black w-full">
       <div>
         {allAchievements ? (
           allAchievements.length > 0 ? (

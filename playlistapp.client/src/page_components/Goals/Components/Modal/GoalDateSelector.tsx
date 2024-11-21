@@ -21,7 +21,7 @@ const GoalDateSelector: FC<props> = ({
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-black text-center">
+        <label className="block mb-2 text-black text-center dark:text-white">
           What date do you want to achieve this by?
         </label>
         <div className="flex justify-center">

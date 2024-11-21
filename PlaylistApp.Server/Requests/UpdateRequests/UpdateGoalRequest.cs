@@ -6,4 +6,5 @@ public class UpdateGoalRequest
     public DateTime DateToAchieve { get; set; }
     public bool IsCurrent { get; set; }
     public bool IsComplete { get; set; }
+    public Guid? UserId { get; set; }
 }
