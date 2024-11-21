@@ -166,10 +166,12 @@ public class FriendService : IFriendService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
+        // find the users base of the GUID userid then get the number id from that
+
         var pendingFriends = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => x.BaseId == userId)
+            .Where(x => (x.BaseId == userId) || (x.RecievedId == userId))
             .Where(x => x.IsAccepted == false)
             .ToListAsync();
 
