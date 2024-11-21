@@ -1,7 +1,7 @@
 import TimelineItem from "./TimelineItem";
 
 const Timeline = () => {
-  const colors = ["#602B53", "#A43845", "#DE5152", "#EDBD68"];
+  // const colors = ["#602B53", "#A43845", "#DE5152", "#EDBD68"];
 
   return (
     <div className="flex flex-col">

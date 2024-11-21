@@ -26,17 +26,17 @@ const ViewAllGoals = () => {
     );
   });
 
-  const openEditModal = (goal: Goal) => {
+  const OpenEditModal = (goal: Goal) => {
     setSelectedGoal(goal);
     setIsEditModalOpen(true);
   };
 
-  const openDeleteModal = (goal: Goal) => {
+  const OpenDeleteModal = (goal: Goal) => {
     setSelectedGoal(goal);
     setIsDeleteModalOpen(true);
   };
 
-  const closeModal = () => {
+  const CloseModal = () => {
     setSelectedGoal(undefined);
     setIsEditModalOpen(false);
     setIsDeleteModalOpen(false);
@@ -51,15 +51,15 @@ const ViewAllGoals = () => {
             <div key={goal.id} className="">
               <GoalCard
                 goal={goal}
-                onEditClick={() => openEditModal(goal)}
-                onDeleteClick={() => openDeleteModal(goal)}
+                onEditClick={() => OpenEditModal(goal)}
+                onDeleteClick={() => OpenDeleteModal(goal)}
               ></GoalCard>
             </div>
           ))}
           {isEditModalOpen && selectedGoal && (
             <GoalModalParent
               user={usr}
-              onClose={closeModal}
+              onClose={CloseModal}
               goal={selectedGoal}
               edit={true}
             ></GoalModalParent>
@@ -67,7 +67,7 @@ const ViewAllGoals = () => {
           {isDeleteModalOpen && selectedGoal && (
             <GoalModalParent
               user={usr}
-              onClose={closeModal}
+              onClose={CloseModal}
               goal={selectedGoal}
               edit={false}
             ></GoalModalParent>

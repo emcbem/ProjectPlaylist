@@ -1,7 +1,7 @@
 import { UserGame } from "@/@types/usergame";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import RemoveFromLibButton from "./RemoveButton";
+import RemoveFromLibButton from "./Buttons/RemoveButton";
 
 interface MyLibraryGridViewProps {
   games: UserGame[];

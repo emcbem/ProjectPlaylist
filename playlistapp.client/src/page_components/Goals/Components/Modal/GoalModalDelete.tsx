@@ -3,6 +3,9 @@ import { GoalQueries } from "@/hooks/GoalQueries";
 import { FC } from "react";
 import CancelGoalButton from "../Buttons/CancelGoalButton";
 import DeleteGoalButton from "../Buttons/DeleteGoalButton";
+import React from "react";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
 
 interface GoalModalDeleteProps {
   goal: Goal;
@@ -10,7 +13,14 @@ interface GoalModalDeleteProps {
 }
 
 const GoalModalDelete: FC<GoalModalDeleteProps> = ({ goal, onClose }) => {
-  const { mutate: DeleteGoal } = GoalQueries.useDeleteGoal(goal.id);
+  const { usr } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
+
+  const { mutate: DeleteGoal } = GoalQueries.useDeleteGoal(
+    goal.id,
+    usr?.guid ?? ""
+  );
 
   const handleDelete = () => {
     DeleteGoal();

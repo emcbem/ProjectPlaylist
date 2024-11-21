@@ -20,7 +20,7 @@ import { materialTheme } from "./lib/theme";
 import Settings from "./page_components/Settings/Settings";
 import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
-import ViewLibraryGame from "./page_components/ViewLibraryGame";
+import ViewLibraryGame from "./page_components/MyLibrary/ViewLibraryGame";
 import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 

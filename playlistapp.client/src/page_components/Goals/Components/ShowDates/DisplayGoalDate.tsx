@@ -17,14 +17,12 @@ const GoalAccomplishDate: FC<DisplayGoalDateProps> = ({
       <div className="w-2/3">
         <div className="">
           {daysRemaining === 0 && !goal.isCompleted && (
-            <p className=" font-bold">
-              Looks like you ran out of time!
-            </p>
+            <p className=" font-bold">Looks like you ran out of time!</p>
           )}
           {goal.isCompleted && (
             <p className="text-nowrap font-bold">Congratualtions!</p>
           )}
-          {daysRemaining! > 0 && (
+          {daysRemaining! > 0 && !goal.isCompleted && (
             <p className="text-nowrap font-bold">
               Due in {daysRemaining} day{daysRemaining != 1 ? "s" : ""}
             </p>
