@@ -1,13 +1,17 @@
 import { useParams } from "react-router-dom";
 import formatDate from "@/lib/date";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
-import LibraryTabs from "@/individual_components/LibraryTabs";
+import LibraryGameStats from "@/individual_components/ViewLibraryGame/LibrayGameStats";
+import AchievementsPage from "./Achievements";
 
 const ViewLibraryGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: userGame } = UserGameQueries.useGetUserGameByUserGameId(
-    Number(gameId)
-  );
+  const { data: userGame, isLoading } =
+    UserGameQueries.useGetUserGameByUserGameId(Number(gameId));
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -37,11 +41,15 @@ const ViewLibraryGame = () => {
             <h1 className="dark:text-white text-black sm:text-base text-tiny line-clamp-3 my-3 ">
               {userGame?.platformGame.game?.description}
             </h1>
+
             <div className="lgmd:flex hidden">
-              <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-full">
-                <LibraryTabs
-                  userGame={userGame}
-                />
+              <ul className="flex flex-row text-sm font-medium text-gray-500 dark:text-gray-400 w-full">
+                <LibraryGameStats userGame={userGame!} />
+                {userGame && userGame?.platformGame.achievements.length > 0 && (
+                  <AchievementsPage
+                    passedGameAchievements={userGame?.platformGame.achievements}
+                  />
+                )}
               </ul>
             </div>
           </div>

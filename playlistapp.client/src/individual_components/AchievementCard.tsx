@@ -36,7 +36,7 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
               {achievement.name}
             </p>
             <p className="md:text-lg sm:text-base text-tiny text-gray-500 dark:text-gray-400">
-              {achievement.description}
+              {usr?.guid && !showAddButton && <p>{achievement.description}</p>}
             </p>
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
