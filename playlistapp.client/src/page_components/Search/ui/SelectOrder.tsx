@@ -26,12 +26,18 @@ function Dropdown({
   };
 
   return (
-    <div className="relative inline-block text-left">
-      <div className="flex flex-row gap-3 items-center">
-        <p className="text-center">Sort: </p>
+    <div className="relative inline-block text-left h-[50px]">
+      <div className="flex flex-row gap-3 h-full items-center">
+        <div className=" flex flex-col items-center">
+          <p className="text-center">Sort:</p>
+        </div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex justify-between items-center w-[213.69px] px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-black rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
+          className="inline-flex justify-between items-center dark:text-white
+           dark:bg-black outline outline-1 outline-white w-[213.69px]
+            px-4 py-2 text-sm font-medium text-gray-700 bg-white border
+             border-black rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-800 focus:outline-none 
+             focus:ring-2  focus:ring-purple-400 dark:focus:ring-pporange-500"
         >
           {HumanizeOrder(orderingMethod)}
           <svg
@@ -50,7 +56,7 @@ function Dropdown({
         </button>
       </div>
       {isOpen && (
-        <div className="absolute right-0 z-10 w-[213.683px] mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg">
+        <div className="absolute right-0 z-10 w-[213.683px] mt-2 origin-top-right  dark:bg-black dark:text-white bg-white border border-gray-300 rounded-md shadow-lg">
           <div
             className="py-1"
             role="menu"
@@ -59,28 +65,28 @@ function Dropdown({
           >
             <button
               onClick={() => handleClick(OrderingMethods.AZ)}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block w-full px-4 py-2 text-sm  dark:hover:bg-neutral-800  hover:bg-gray-100 "
               role="menuitem"
             >
               A-Z
             </button>
             <button
               onClick={() => handleClick(OrderingMethods.ZA)}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block w-full px-4 py-2 text-sm dark:hover:bg-neutral-800  hover:bg-gray-100 "
               role="menuitem"
             >
               Z-A
             </button>
             <button
               onClick={() => handleClick(OrderingMethods.HighestRating)}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block w-full px-4 py-2 text-sm dark:hover:bg-neutral-800  hover:bg-gray-100 "
               role="menuitem"
             >
               Highest Rating
             </button>
             <button
               onClick={() => handleClick(OrderingMethods.ReleaseDate)}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block w-full px-4 py-2 text-sm dark:hover:bg-neutral-800  hover:bg-gray-100 "
               role="menuitem"
             >
               Release Date

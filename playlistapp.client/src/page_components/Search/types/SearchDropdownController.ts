@@ -4,4 +4,5 @@ export interface SearchDropdownController<T> {
     selectedOptions: T[];
     setSelectedOptions: React.Dispatch<React.SetStateAction<T[]>>;
     stringify_option_fn: (option: T) => string;
+    minLength: number
   }

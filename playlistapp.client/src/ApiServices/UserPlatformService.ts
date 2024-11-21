@@ -23,7 +23,6 @@ export const UserPlatformService = {
         }
     },
     UpdateUserPlatform: async (request: UpdateUserPlatformRequest) => {
-        console.log(request)
         try {
             const response = await axios.patch<UserPlatform>(
                 `${import.meta.env.VITE_URL}/UserPlatform/updateuserplatform`,
@@ -34,7 +33,6 @@ export const UserPlatformService = {
                     },
                 }
             );
-            console.log(response.data)
             return response.data;
         } catch (error) {
             console.error("Failed to update user platforms");
@@ -60,7 +58,6 @@ export const UserPlatformService = {
         }
     },
     DeleteUserPlatform: async(userPlatformId: number) => {
-        console.log("RAHHH", userPlatformId)
         try {
             const response = await axios.delete<boolean>(
                 `${import.meta.env.VITE_URL}/UserPlatform/deleteuserplatform`,
@@ -70,7 +67,6 @@ export const UserPlatformService = {
                     },
                   }
             );
-            console.log(response)
             return response.data;
         } catch (error) {
             toast.error("Failed to remove user platform. Try again.")

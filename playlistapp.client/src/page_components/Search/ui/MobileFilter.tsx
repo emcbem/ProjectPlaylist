@@ -1,48 +1,29 @@
 import { FilterController } from "../types/FilterController";
-import { useState } from "react";
 import SearchDropdown from "./SearchDropdown";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export const MobileFilter = ({
   filterController,
+  dropdownController
 }: {
   filterController: FilterController;
+  dropdownController: {open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>>}
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
 
   const toggleDiv = () => {
-    setIsVisible(!isVisible);
+    dropdownController.setOpen(!dropdownController.open);
   };
 
   return (
     <>
-      <div className={`${isVisible ? "relative dark:bg-black h-screen w-full" : ""} pt-3 md:hidden block`}>
-        <div className="md:hidden block dark:bg-black">
-          {!isVisible ? (
-            <button
-              className="border border-black dark:border-white dark:text-white w-full h-14 text-2xl rounded-lg pt-3"
-              onClick={toggleDiv}
-            >
-              Filter
-            </button>
-          ) : (
-            <div className="flex w-full bg-white dark:bg-black">
-              <button
-                className="dark:text-white  text-2xl rounded-lg"
-                onClick={toggleDiv}
-              >
-                <XMarkIcon width={40} height={40} />
-              </button>
-              <button className="border border-black dark:border-white dark:text-white p-2 px-8 w-30 h-14 text-2xl rounded-lg justify-self-end">
-                Clear All
-              </button>
-            </div>
-          )}
-        </div>
-        <hr className="my-3"></hr>
+      <div
+        className={`${
+          dropdownController.open ? "relative dark:bg-black  w-full" : ""
+        } pt-3 md:hidden block`}
+      >
+        
         <div
           className={`${
-            isVisible ? "block" : "hidden"
+            dropdownController.open ? "block" : "hidden"
           }  md:hidden overflow-y-auto w-full bg-white dark:bg-black h-full z-auto`}
         >
           <div className="">
@@ -62,10 +43,10 @@ export const MobileFilter = ({
             <hr className="my-3 border border-clay-100" />
 
             <button
-              className="border border-black dark:border-white dark:text-black p-2 px-8 w-30 h-14 text-2xl rounded-lg sticky bottom-0 dark:bg-white "
+              className="border border-black dark:border-white w-full dark:text-white hover:bg-pppurple-300 dark:hover:bg-pporange-600 transition-all p-2 px-8 w-30 h-14 text-2xl rounded-lg sticky bottom-0 dark:bg-black "
               onClick={toggleDiv}
             >
-              Apply Filter
+              Close Filters
             </button>
           </div>
         </div>

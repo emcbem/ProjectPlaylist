@@ -35,6 +35,7 @@ const GoalModalEdit: FC<GoalModalEditProps> = ({ goal, onClose }) => {
     isComplete: isComplete,
     isCurrent: isCurrent,
     dateToAchieve: new Date(`${month}/${day}/${year}`),
+    userId: user?.userGuid ?? "",
   };
 
   const { mutate: UpdateGoal } = GoalQueries.useUpdateGoal(
@@ -51,7 +52,7 @@ const GoalModalEdit: FC<GoalModalEditProps> = ({ goal, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pointer-events-auto">
-      <div className="dark:bg-clay-100 bg-gray-100 p-6 rounded shadow-md w-1/2">
+      <div className="dark:bg-clay-400 bg-gray-100 p-6 rounded shadow-md sm:w-1/2 sm:mx-0 w-full mx-4">
         <div className="flex items-center justify-center">
           <h2 className="text-lg font-bold text-center">Edit Goal</h2>
         </div>

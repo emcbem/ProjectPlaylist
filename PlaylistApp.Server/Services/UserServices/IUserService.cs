@@ -11,5 +11,6 @@ public interface IUserService
     public Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest);
     public Task<UserDTO> GetUserByAuthId(string authId);
     public Task<UserDTO> GetUsersByName(string username);
+    public Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery);
     public Task<bool> AddUser(AddUserRequest addUserRequest);
 }

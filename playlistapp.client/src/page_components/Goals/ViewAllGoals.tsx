@@ -7,7 +7,8 @@ import { Goal } from "@/@types/goal";
 import GoalModalParent from "./Components/Modal/GoalModalParent";
 
 const ViewAllGoals = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal>();
 
   const { usr } = React.useContext(
@@ -15,35 +16,60 @@ const ViewAllGoals = () => {
   ) as UserAccountContextInterface;
 
   const { data: userGoals } = GoalQueries.useGetGoalsByUser(usr?.guid ?? "");
+  const filteredGoals = userGoals?.sort((a, b) => {
+    if (a.isCurrent !== b.isCurrent) {
+      return b.isCurrent ? 1 : -1;
+    }
 
-  const openModal = (goal: Goal) => {
+    return (
+      new Date(a.dateToAchieve).getTime() - new Date(b.dateToAchieve).getTime()
+    );
+  });
+
+  const openEditModal = (goal: Goal) => {
     setSelectedGoal(goal);
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
+  };
+
+  const openDeleteModal = (goal: Goal) => {
+    setSelectedGoal(goal);
+    setIsDeleteModalOpen(true);
   };
 
   const closeModal = () => {
     setSelectedGoal(undefined);
-    setIsModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
   };
 
   return (
     usr &&
-    userGoals && (
+    filteredGoals && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="w-full" style={{ maxWidth: "1200px" }}>
-          {userGoals.map((goal) => (
+          {filteredGoals.map((goal) => (
             <div key={goal.id} className="">
               <GoalCard
                 goal={goal}
-                onEditClick={() => openModal(goal)}
+                onEditClick={() => openEditModal(goal)}
+                onDeleteClick={() => openDeleteModal(goal)}
               ></GoalCard>
             </div>
           ))}
-          {isModalOpen && selectedGoal && (
+          {isEditModalOpen && selectedGoal && (
             <GoalModalParent
               user={usr}
               onClose={closeModal}
               goal={selectedGoal}
+              edit={true}
+            ></GoalModalParent>
+          )}
+          {isDeleteModalOpen && selectedGoal && (
+            <GoalModalParent
+              user={usr}
+              onClose={closeModal}
+              goal={selectedGoal}
+              edit={false}
             ></GoalModalParent>
           )}
         </div>

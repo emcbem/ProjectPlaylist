@@ -124,7 +124,35 @@ public class UserService : IUserService
 		return user.ToDTO();
 	}
 
-	public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
+    public async Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var user = await context.UserAccounts
+            .Include(x => x.UserGenres)
+            .Include(x => x.UserPlatforms)
+            .Include(x => x.Lists)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.InvolvedCompanies)
+                            .ThenInclude(x => x.Company)
+            .Include(x => x.UserGames)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Platform)
+            .Include(x => x.UserImage)
+            .Where(x => x.Username.ToLower().Contains(searchQuery.ToLower()) || (x.Bio != null && x.Bio.ToLower().Contains(searchQuery.ToLower())))
+            .ToListAsync();
+
+        if (user is null)
+        {
+            return new List<UserDTO>();
+        }
+
+        return user.Select(x => x.ToDTO()).ToList();
+    }
+
+    public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 

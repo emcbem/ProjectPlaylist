@@ -22,15 +22,14 @@ export const FriendQueries = {
             },
         });
     },
-    AddFriend: () => {
+    AddFriend: (user_guid: string) => {
         const queryClient = useQueryClient();
         return useMutation({
             mutationFn: (request: AddFriendRequest) => FriendService.AddFriend(request),
             onSuccess: () => {
                 toast.success("Request Sent");
                 queryClient.invalidateQueries({
-                    queryKey: keys.addFriend,
-                    refetchType: "all",
+                    queryKey: keys.getFriendByBaseIdFunc(user_guid),
                 });
             },
             onError: (error) => {
@@ -51,6 +50,7 @@ export const FriendQueries = {
         });
     },
     GetPendingFriendRequestsQuery: (baseId: number) => {
+        console.log(baseId)
         return useQuery({
             queryKey: keys.getPendingFriendRequestsFunc(baseId),
             queryFn: () => FriendService.GetBasePendingRequests(baseId),

@@ -12,7 +12,7 @@ export const useSearchRequest = () => {
     companyIds: [],
     genreIds: [],
     platformIds: [],
-    pageSize: 10,
+    pageSize: 18,
     orderingMethod: OrderingMethods.AZ,
   });
 
