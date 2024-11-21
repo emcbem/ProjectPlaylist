@@ -1,54 +1,33 @@
-import React, { useEffect, useState } from "react";
 import "./Account.modules.scss";
 import { useAuth0 } from "@auth0/auth0-react";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAccountContextInterface } from "@/@types/userAccount";
-import PlaylistLists from "./PlaylistLists";
+import PlaylistLists from "./UserPlaylistLists";
 import LibraryLoading from "./LibraryViewsComponents/LibraryLoading";
 import LibraryList from "./LibraryViewsComponents/LibraryList";
 import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
 import { UserGameQueries } from "@/hooks/UserGameQueries";
 import UserGenresList from "./UserGenresList";
-import DisplayCurrentGoal from "../Goals/DisplayCurrentGoal";
-import { GoalQueries } from "@/hooks/GoalQueries";
-import { Goal } from "@/@types/goal";
-import ViewAllGoalsButton from "../Goals/Components/Buttons/ViewAllGoalsButton";
 import GamerTags from "./GamerTags";
+import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import { useParams } from "react-router-dom";
 
-const Account = () => {
+const ViewAccount = () => {
   const { isAuthenticated } = useAuth0();
-  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
-  console.log("CurrentGoal: ", currentGoal);
+  const { id } = useParams<{ id: string }>();
 
-  const { usr, userGuid } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
+  const { data: usr } = UserAccountQueries.useGetUserById(id!);
 
   const {
     data: userGamesFromUser,
     isLoading,
     isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
-
-  const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
-    GoalQueries.useGetGoalsByUser(userGuid ?? "");
-
-  useEffect(() => {
-    const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
-    setCurrentGoal(foundCurrentGoal);
-  }, [allUserGoals]);
-
-  console.log(usr, "sadasd")
+  } = UserGameQueries.useGetAllUserGamesByUser(usr?.guid ?? "");
 
   return (
     isAuthenticated &&
     usr?.profileURL &&
-    isSuccess &&
-    isGettingGoalsSuccess && (
+    isSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
-
-
           <div className="flex flex-wrap">
             <img
               className="rounded-full md:w-24 w-14 shadow-inner"
@@ -56,26 +35,23 @@ const Account = () => {
             />
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
-              <p className="md:text-2xl text-lg ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
+              <p className="md:text-2xl text-lg ms-8">
+                {usr?.xp == 0 ? 0 : usr?.xp} Xp
+              </p>
             </div>
           </div>
 
-
           <div className="flex md:flex-row flex-col my-6">
             <div className="md:w-1/4 w-full md:order-1 order-2">
-              <GamerTags />
+              <GamerTags userGuid={usr.guid} />
             </div>
             <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
               <p className="text-xl">Bio</p>
               <p className="text-clay-700 dark:text-clay-950">{usr.bio}</p>
-              <hr className="md:hidden my-5"/>
-              
-              <UserGenresList userGuid={userGuid} />
-              <hr className="md:hidden my-5"/>
-            </div>
-            <div className="md:w-1/4 w-full md:order-3 order-3">
-              <DisplayCurrentGoal currentGoal={currentGoal} />
-              <ViewAllGoalsButton />
+              <hr className="md:hidden my-5" />
+
+              <UserGenresList userGuid={usr.guid} />
+              <hr className="md:hidden my-5" />
             </div>
           </div>
 
@@ -88,11 +64,11 @@ const Account = () => {
             <LibraryListNoGames />
           )}
 
-          <PlaylistLists />
+          <PlaylistLists usr={usr} />
         </div>
       </div>
     )
   );
 };
 
-export default Account;
+export default ViewAccount;
