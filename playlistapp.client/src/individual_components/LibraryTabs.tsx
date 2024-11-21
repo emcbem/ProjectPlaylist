@@ -67,10 +67,10 @@ const LibraryTabs: FC<{ userGame?: UserGame }> = ({ userGame }) => {
         {activeTab === "Your Stats" &&
         userEarnedAchievement != undefined &&
         userGame != undefined ? (
-          <div className="flex flex-row w-full">
-            <div className="bg-[#f1f3f4] dark:bg-clay-100 shadow-xl w-fit rounded-xl flex flex-row items-start m-2 p-8">
-              <div className="flex flex-col">
-                <h1>Progress</h1>
+          <div className="shadow-xl w-fit rounded-xl flex flex-col items-start m-2 p-8">
+            <div className="flex flex-col items-start">
+              <h1 className="text-lg">Your Progress</h1>
+              <div className="p-4 pl-0">
                 <Gauge
                   totalAchievments={Number(
                     userGame?.platformGame.achievements.length
@@ -78,14 +78,15 @@ const LibraryTabs: FC<{ userGame?: UserGame }> = ({ userGame }) => {
                   earnedAchievements={Number(userEarnedAchievement?.length)}
                 />
               </div>
-              <div className="flex flex-col">
-                <h1>Hours Played</h1>
-                <div className="p-4">
-                  <NumberTicker
-                    value={Number(userGame.timePlayed)}
-                    className="text-5xl"
-                  />
-                </div>
+            </div>
+
+            <div className="flex flex-col items-start">
+              <h1 className="text-lg">Hours Played</h1>
+              <div className="p-4">
+                <NumberTicker
+                  value={Number(userGame.timePlayed)}
+                  className="text-5xl"
+                />
               </div>
             </div>
           </div>
