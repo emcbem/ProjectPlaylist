@@ -8,6 +8,9 @@ import { GoalQueries } from "@/queries/GoalQueries";
 import GoalAddButton from "./GoalAddButton";
 import GoalSelectComponent from "./GoalSelectComponent";
 import CheckBox from "@/individual_components/Checkbox";
+import { GetClaimedAchievementsForGameForUserRequest } from "@/@types/Requests/GetRequests/getClaimedAchievementsForGameForUserRequest";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
+import toast from "react-hot-toast";
 
 interface props {
   userGame: UserGame;
@@ -30,6 +33,12 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
     Number(achievementId)
   );
 
+  const getClaimedAchievementsRequest: GetClaimedAchievementsForGameForUserRequest =
+    {
+      platformGameId: userGame.platformGame.id,
+      userId: userGame.user.guid,
+    };
+
   const addGoalRequest: AddGoalRequest = {
     achievementId: achievement?.id ?? 0,
     dateToAchieve: new Date(`${month}-${day}-${year}`),
@@ -37,11 +46,34 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
     userId: userGame.user.guid,
   };
 
+  console.log("Add Request: ", addGoalRequest);
+
+  const { data: claimedAchievements } =
+    UserAchievementQueries.useGetClaimedAchievementsForGameForUser(
+      getClaimedAchievementsRequest
+    );
+
+  const filteredAchievements = allGamesAchievements?.filter(
+    (achievement) =>
+      !claimedAchievements?.some((claimed) => claimed.id === achievement.id)
+  );
+
   const { mutate: AddGoal } = GoalQueries.useAddGoal(addGoalRequest);
 
   const handleAdd = () => {
-    AddGoal();
-    onClose();
+    AddGoal(undefined, {
+      onSuccess: (newId) => {
+        if (newId === 0) {
+          toast.error("Goal Already Exists");
+        } else {
+          toast.success("Goal Added");
+          onClose();
+        }
+      },
+      onError: () => {
+        toast.error("Failed to add Goal");
+      },
+    });
   };
 
   return (
@@ -53,7 +85,7 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
           </div>
           <GoalSelectComponent
             achievementId={achievementId}
-            allGamesAchievements={allGamesAchievements}
+            allGamesAchievements={filteredAchievements}
             setAchievementId={setAchievementId}
           />
           <div className="flex items-center justify-center pt-2">
