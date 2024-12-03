@@ -1,6 +1,6 @@
 import { List } from '@/@types/list';
 import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
-import { ListQueries } from '@/hooks/ListQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import React, { useEffect, useRef, useState } from 'react';
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 

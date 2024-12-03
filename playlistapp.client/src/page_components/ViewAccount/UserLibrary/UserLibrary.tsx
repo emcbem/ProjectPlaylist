@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UserLibraryGridView from "./UserLibraryGridView";
 import UserLibraryListView from "./UserLibraryListView";
-import { UserGameQueries } from "@/hooks/UserGameQueries";
+import { UserGameQueries } from "@/queries/UserGameQueries";
 import { Link, useParams } from "react-router-dom";
 import GridAndListIcons from "@/individual_components/GridAndListIcons";
 import { UserAccountQueries } from "@/hooks/UserAccountQueries";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import AchievementList from "@/individual_components/AchievementList";
-import { GameQueries } from "@/hooks/GameQueries";
+import { GameQueries } from "@/queries/GameQueries";
 import { Achievement } from "@/@types/achievement";
 
 const AchievementsPage: React.FC<{

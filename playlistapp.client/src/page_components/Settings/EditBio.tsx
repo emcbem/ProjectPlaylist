@@ -2,7 +2,7 @@ import { UpdateUserRequest } from '@/@types/Requests/UpdateRequests/updateUserRe
 import { UserAccountContextInterface } from '@/@types/userAccount'
 import { UserImage } from '@/@types/userImage';
 import { UserAccountContext } from '@/contexts/UserAccountContext';
-import { ImageQueries } from '@/hooks/ImageQueries';
+import { ImageQueries } from '@/queries/ImageQueries';
 import { UserAccountQueries } from '@/hooks/UserAccountQueries';
 import React from 'react';
 import { useState } from 'react'

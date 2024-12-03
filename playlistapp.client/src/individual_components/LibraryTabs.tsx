@@ -5,7 +5,7 @@ import NumberTicker from "@/components/ui/number-ticker";
 import { UserGame } from "@/@types/usergame";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 
 interface TabProps {
   TabName: string;

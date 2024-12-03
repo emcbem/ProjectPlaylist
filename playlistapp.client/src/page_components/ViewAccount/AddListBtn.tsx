@@ -1,6 +1,6 @@
 import { AddListRequest } from '@/@types/Requests/AddRequests/addListRequest';
 import { PlusIcon } from '@/assets/plusIcon'
-import { ListQueries } from '@/hooks/ListQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import { User } from '@auth0/auth0-react';
 import { FC, useState } from 'react'
 import toast from 'react-hot-toast';

@@ -1,7 +1,7 @@
 import EpicIconCustom from "@/assets/CustomPlatformIcons/EpicLogoCustom";
 import SwitchIconCustom from "@/assets/CustomPlatformIcons/SwitchIconCustom";
 import XboxIconCustom from "@/assets/CustomPlatformIcons/XboxIconCustom";
-import { UserPlatformQueries } from "@/hooks/UserPlatformQueries";
+import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
 import GamerTag from "./GamerTag";
 
 const GamerTags = ({userGuid} : {userGuid:string}) => {

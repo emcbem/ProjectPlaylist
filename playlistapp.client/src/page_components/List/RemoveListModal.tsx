@@ -1,6 +1,6 @@
 import { List } from "@/@types/list";
 import TrashIconGray from "@/assets/Icons/Trash";
-import { ListQueries } from "@/hooks/ListQueries";
+import { ListQueries } from "@/queries/ListQueries";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

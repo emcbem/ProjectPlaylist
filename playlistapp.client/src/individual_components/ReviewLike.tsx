@@ -4,7 +4,7 @@ import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/update
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 
-import { ReviewLikeQueries } from "@/hooks/ReviewLikeQueries";
+import { ReviewLikeQueries } from "@/queries/ReviewLikeQueries";
 import { FC, useContext, useEffect, useState } from "react";
 import DeleteModal from "./DeleteModal";
 import ReviewModal from "./ReviewModal";

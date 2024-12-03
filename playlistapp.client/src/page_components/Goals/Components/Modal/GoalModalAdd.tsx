@@ -4,7 +4,7 @@ import CancelGoalButton from "../Buttons/CancelGoalButton";
 import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
 import { AchievementQueries } from "@/hooks/AchievementQueries";
 import GoalDateSelector from "./GoalDateSelector";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import GoalAddButton from "./GoalAddButton";
 import EditGoalCheckbox from "./EditGoalCheckbox";
 import GoalSelectComponent from "./GoalSelectComponent";

@@ -1,4 +1,4 @@
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { GameReviewQueries } from "@/queries/GameReviewQueries";
 import React, { FC } from "react";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";

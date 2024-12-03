@@ -3,7 +3,7 @@ import { FC, useContext } from "react";
 import AchievementModalParent from "./AchievementModalParent";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 
 interface props {
   achievement: Achievement;

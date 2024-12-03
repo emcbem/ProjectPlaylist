@@ -3,7 +3,7 @@ import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserImage } from "@/@types/userImage";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountQueries } from "@/hooks/UserAccountQueries";
-import { UserImageQueries } from "@/hooks/UserImageQueries";
+import { UserImageQueries } from "@/queries/UserImageQueries";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 

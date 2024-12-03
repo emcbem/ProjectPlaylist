@@ -1,6 +1,6 @@
 import { Goal } from "@/@types/goal";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import { FC, useContext, useState } from "react";
 import UpdateGoalButton from "../Buttons/UpdateGoalButton";
 import CancelGoalButton from "../Buttons/CancelGoalButton";

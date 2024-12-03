@@ -2,7 +2,7 @@ import { Platform } from '@/@types/platform'
 import { AddUserPlatformRequest } from '@/@types/Requests/AddRequests/addUserPlatformRequest';
 import { UpdateUserPlatformRequest } from '@/@types/Requests/UpdateRequests/UpdateUserPlatformRequest';
 import { UserPlatform } from '@/@types/userPlatform';
-import { UserPlatformQueries } from '@/hooks/UserPlatformQueries';
+import { UserPlatformQueries } from '@/queries/UserPlatformQueries';
 import { FC, ReactNode, useEffect, useState } from 'react'
 
 interface EditGamerTagFieldProps {
