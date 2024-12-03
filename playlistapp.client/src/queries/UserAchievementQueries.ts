@@ -125,23 +125,5 @@ export const UserAchievementQueries = {
         });
       },
     });
-    /*
-      const {
-      mutate: deleteUserAchievement,
-      data: deletedUserAchievement,
-      isPending: isDeleting,
-      isError: isDeletingError,
-      isSuccess: isDeletingSuccess,
-      } = UserAchievementQueries.useDeleteUserAchievement(userAchievementId);
-
-      const handleDeleteUserAchievement = async () => {
-      try {
-      const result = await deleteUserAchievement(); // Capture the result
-      console.log("Deletion result: ", result); // Log the result
-      } catch (error) {
-      console.error("Error deleting user achievement: ", error);
-      }
-      };
-    */
   },
 };

@@ -5,15 +5,16 @@ import { FC } from "react";
 
 interface props {
   userGame: UserGame;
+  onAddClick: () => void;
 }
 
-const MyLibraryDescription: FC<props> = ({ userGame }) => {
+const MyLibraryDescription: FC<props> = ({ userGame, onAddClick }) => {
   return (
     <div>
       <div className="flex flex-col">
         <div className="flex items-center justify-between relative">
           <div>
-            <h1 className="dark:text-white text-black font-extrabold 2xl:text-5xl xl:text-3xl lg:text-1xl sm:text-2xl text-base">
+            <h1 className="dark:text-white text-black font-extrabold text-base">
               {userGame?.platformGame.game?.title}
             </h1>
             <p className="text-clay-950 dark:text-clay-900"></p>
@@ -26,7 +27,7 @@ const MyLibraryDescription: FC<props> = ({ userGame }) => {
                 : "No publish date"}
             </p>
           </div>
-          <AddGoalButton />
+          <AddGoalButton onAddClick={onAddClick} />
         </div>
       </div>
 

@@ -24,7 +24,6 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     };
 
     const updateList = async () => {
-        console.log("Updating list, ", value)
         if (value && !isEmpty) {
             const updatedList: UpdateListRequest = {
                 listId: list?.id ?? -1,
@@ -44,21 +43,16 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     };
 
     useEffect(() => {
-        // console.log("Entering useEffect")
 
         const handleClick = (event: MouseEvent) => {
-            // Check if the click is outside the input box
             if (inputRef.current && !inputRef.current.contains(event.target as Node) && isEditing) {
-                console.log("click outside of list")
                 updateList();
             }
         };
         
-        // console.log("adding event listener")
         document.addEventListener("click", handleClick, true);
 
         return () => {
-            // console.log("removing event listener")
             document.removeEventListener("click", handleClick, true);
         };
     }, [value, isEmpty, list, mutateAsync]);
@@ -70,7 +64,6 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     };
 
     useEffect(() => {
-        console.log("showing edit name box")
 
         if (showEditNameBox) {
             inputRef.current?.focus();
@@ -79,7 +72,6 @@ const EditListComponent: React.FC<EditListProps> = ({ list }) => {
     }, [showEditNameBox]);
 
     const handleEditButtonClick = () => {
-        console.log("clicked edit button");
         setIsEditing(true);
         setShowEditNameBox(!showEditNameBox);
     };

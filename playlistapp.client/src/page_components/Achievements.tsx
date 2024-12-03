@@ -10,7 +10,6 @@ const AchievementsPage: React.FC<{
   const { gameId } = useParams<{ gameId: string }>();
 
 
-  console.log(passedGameAchievements, "yurrr")
   const allAchievements =
     passedGameAchievements ??
     Array.from(
