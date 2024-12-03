@@ -48,7 +48,7 @@ export const UserAccountQueries = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
         queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId});
-        toast.success("User Image Updated!");
+        toast.success("User updated");
       },
     });
   },
