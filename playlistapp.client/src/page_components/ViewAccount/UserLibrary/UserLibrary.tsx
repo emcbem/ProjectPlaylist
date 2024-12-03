@@ -29,9 +29,9 @@ const UserLibrary = () => {
         <div className="grid justify-items-center ">
           <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
             <div className="text-lg mt-6">
-              <Link to={"/account"}>
+              <Link to={`/user/${usr.guid}`}>
                 <span className="hover:underline underline-offset-2">
-                  Account
+                  {usr.username}
                 </span>
               </Link>{" "}
               <span className="text-clay-950  font-light">/ Library</span>

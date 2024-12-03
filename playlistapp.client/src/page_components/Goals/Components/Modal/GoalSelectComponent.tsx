@@ -15,7 +15,6 @@ const GoalSelectComponent: FC<props> = ({
   return (
     allGamesAchievements && (
       <div>
-        <label className="block text-sm font-medium mb-1">Achievement</label>
         <select
           value={achievementId}
           onChange={(e) => setAchievementId(e.target.value)}

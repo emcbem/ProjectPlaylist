@@ -53,7 +53,9 @@ const Account = () => {
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
               <p className="md:text-2xl text-lg ms-8">
+                
                 {usr?.xp == 0 ? 0 : usr?.xp} Xp
+              
               </p>
             </div>
           </div>
@@ -65,7 +67,7 @@ const Account = () => {
               <ExpandableBio bio={usr.bio} />
               <hr className="md:hidden my-5" />
               <UserGenresList userGuid={userGuid} />
-              <hr className="md:hidden my-5" />
+              <hr className="md:hidden my-5"  />
             </div>
             <div className="md:w-1/4 w-full md:order-3 order-3">
               <DisplayCurrentGoal currentGoal={currentGoal} />
