@@ -3,7 +3,7 @@ import { UserAccount, UserAccountContextInterface } from "@/@types/userAccount";
 import { UserImage } from "@/@types/userImage";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { ImageQueries } from "@/queries/ImageQueries";
-import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import CheckBox from "@/individual_components/Checkbox";
 import React, { useState } from "react";
 

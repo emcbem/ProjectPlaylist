@@ -7,7 +7,7 @@ import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
 import { UserGameQueries } from "@/queries/UserGameQueries";
 import UserGenresList from "./UserGenresList";
 import GamerTags from "./GamerTags";
-import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import { useParams } from "react-router-dom";
 
 const ViewAccount = () => {

@@ -1,5 +1,5 @@
 import { ListGame } from "@/@types/listgame";
-import { ListQueries } from "@/hooks/ListQueries";
+import { ListQueries } from "@/queries/ListQueries";
 import GridAndListIcons from "@/individual_components/GridAndListIcons";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";

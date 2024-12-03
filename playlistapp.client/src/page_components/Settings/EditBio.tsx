@@ -3,7 +3,7 @@ import { UserAccountContextInterface } from '@/@types/userAccount'
 import { UserImage } from '@/@types/userImage';
 import { UserAccountContext } from '@/contexts/UserAccountContext';
 import { ImageQueries } from '@/queries/ImageQueries';
-import { UserAccountQueries } from '@/hooks/UserAccountQueries';
+import { UserAccountQueries } from '@/queries/UserAccountQueries';
 import React from 'react';
 import { useState } from 'react'
 
@@ -29,7 +29,7 @@ const EditBio = () => {
                 strikes: usr.strikes ?? 0,
                 xp: usr.xp ?? 0,
                 userImageID: userImage[0].id
-            }
+            } as UpdateUserRequest
             await editUser(newUpdateUserRequest)
             setShowTextBox(false);
         }

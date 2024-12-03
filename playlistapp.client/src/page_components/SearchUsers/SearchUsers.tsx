@@ -1,7 +1,7 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { FriendQueries } from "@/queries/FriendQueries";
-import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import { useSearchBarContext } from "@/queries/useSearchBarContext";
 import React from "react";
 import PendingFriends from "../Account/PendingFriends";

@@ -2,7 +2,7 @@ import { UserGame } from "@/@types/usergame";
 import { FC, useState } from "react";
 import CancelGoalButton from "../Buttons/CancelGoalButton";
 import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
-import { AchievementQueries } from "@/hooks/AchievementQueries";
+import { AchievementQueries } from "@/queries/AchievementQueries";
 import GoalDateSelector from "./GoalDateSelector";
 import { GoalQueries } from "@/queries/GoalQueries";
 import GoalAddButton from "./GoalAddButton";
