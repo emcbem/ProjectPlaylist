@@ -32,7 +32,6 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
             : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
         }`}
       >
-        {/* SVG Icon */}
         <svg
           className={`w-4 h-4 me-2 ${
             isActive ? "text-black dark:text-white" : "text-gray-500"
@@ -61,7 +60,7 @@ const Tabs = () => {
   const [filter, setFilter] = useState<string>("Recommended");
   const [sortedReviews, setSortedReviews] = useState<GameReview[]>([]);
 
-  const tabs = ["Reviews", "Your Stats", "Achievements", "Global Leaderboard"];
+  const tabs = ["Reviews", "Achievements", "Global Leaderboard"];
   let hideReviewButton = false;
 
   useEffect(() => {
@@ -159,7 +158,9 @@ const Tabs = () => {
               </div>
 
               {usr && !loading ? (
-                AllGameReviewsForGame && AllGameReviewsForGame.length > 0 ? (
+                AllGameReviewsForGame &&
+                AllGameReviewsForGame.length > 0 &&
+                sortedReviews[0] != undefined ? (
                   sortedReviews.map((review) => {
                     if (usr.guid === review.user.guid) {
                       hideReviewButton = true;
@@ -182,7 +183,6 @@ const Tabs = () => {
             <ReviewModal hideReview={hideReviewButton} />
           </>
         )}
-        {activeTab === "Your Stats" && <div>Coming soon...</div>}
         {activeTab === "Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
             <AchievementsPage />
