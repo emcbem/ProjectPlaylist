@@ -27,7 +27,16 @@ const ChooseProfileImg = () => {
                 bio: usr.bio,
                 strikes: usr.strikes ?? 0,
                 xp: usr.xp ?? 0,
-                userImageID: selectedUserImage?.id
+                userImageID: selectedUserImage?.id,
+                notifyOnReviewLiked: usr.notifyOnReviewLiked,
+                notifyOnReviewDisliked: usr.notifyOnReviewDisliked,
+                notifyOnGoalEndingSoon: usr.notifyOnGoalEndingSoon,
+                notifyOnGoalLiked: usr.notifyOnGoalLiked,
+                notifyOnGoalDisliked: usr.notifyOnGoalDisliked,
+                notifyOnAchievementLiked: usr.notifyOnAchievementLiked,
+                notifyOnAchievementDisliked: usr.notifyOnAchievementDisliked,
+                notifyOnFriendRequestRecieved: usr.notifyOnFriendRequestRecieved,
+                notifyOnFriendRequestAccepted: usr.notifyOnFriendRequestAccepted
             }
             await editUser(newUpdateUserRequest);
             navigate("/settings")

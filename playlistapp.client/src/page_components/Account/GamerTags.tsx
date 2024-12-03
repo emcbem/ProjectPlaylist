@@ -24,8 +24,6 @@ const GamerTags = () => {
         )
     }
 
-    console.log("users platforms", usersPlatforms)
-
     return (
         <div className="">
             {usersPlatforms &&

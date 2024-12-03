@@ -18,7 +18,6 @@ import GamerTags from "./GamerTags";
 const Account = () => {
   const { isAuthenticated } = useAuth0();
   const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
-  console.log("CurrentGoal: ", currentGoal);
 
   const { usr, userGuid } = React.useContext(
     UserAccountContext
@@ -38,7 +37,6 @@ const Account = () => {
     setCurrentGoal(foundCurrentGoal);
   }, [allUserGoals]);
 
-  console.log(usr, "sadasd")
 
   return (
     isAuthenticated &&

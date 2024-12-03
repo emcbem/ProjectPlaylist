@@ -2,7 +2,6 @@ import { Game } from "@/@types/game";
 import { Link } from "react-router-dom";
 
 const ListGame = (g: Game, key: number) => {
-  console.log(g)
   return (
     <Link to={`/view-game/${g.id}`}>
       <div

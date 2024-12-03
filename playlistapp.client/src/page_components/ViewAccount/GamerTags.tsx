@@ -11,8 +11,6 @@ const GamerTags = ({userGuid} : {userGuid:string}) => {
     return <p className="text-gray-400">Go to settings to add a gamertag.</p>;
   }
 
-  console.log("users platforms", usersPlatforms);
-
   return (
     <div className="">
       {usersPlatforms && (

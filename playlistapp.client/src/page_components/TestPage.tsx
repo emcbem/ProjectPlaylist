@@ -39,7 +39,6 @@ const TestPage = () => {
     userId: usr?.guid ?? "",
   };
 
-  console.log("RemoveGoalLikeRequest: ", removeGoalLikeRequest);
 
   const {
     data: newGoalLike,
