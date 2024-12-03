@@ -1,13 +1,13 @@
 import { AddListRequest } from '@/@types/Requests/AddRequests/addListRequest';
+import { UserAccount } from '@/@types/userAccount';
 import { PlusIcon } from '@/assets/plusIcon'
 import { ListQueries } from '@/queries/ListQueries';
-import { User } from '@auth0/auth0-react';
 import { FC, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
-    usr: User | undefined
+    usr: UserAccount | undefined
 }
 
 const AddListBtn: FC<Props> = ({ usr }) => {

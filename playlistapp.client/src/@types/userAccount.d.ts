@@ -6,6 +6,7 @@ import { UserNotification } from "./userNotification";
 export interface UserAccount {
     id: number;
     username: string;
+    email: string | null,
     bio: string;
     strikes: number | null;
     xp: number | null;
