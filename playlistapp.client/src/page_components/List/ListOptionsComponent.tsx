@@ -2,7 +2,7 @@ import React from 'react'
 import RemoveListModal from './RemoveListModal'
 import { List } from '@/@types/list';
 import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
-import { ListQueries } from '@/hooks/ListQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import OpenEyeIcon from '@/assets/Icons/OpenEyeIcon';
 import CloseEyeIcon from '@/assets/Icons/CloseEyeIcon';
 

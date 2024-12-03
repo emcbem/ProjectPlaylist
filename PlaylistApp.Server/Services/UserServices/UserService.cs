@@ -108,7 +108,7 @@ public class UserService : IUserService
 			return new UserDTO();
 		}
 
-		return user.ToDTO();
+		return user.ToPrivateDTO();
 	}
 
     public async Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery)
@@ -125,7 +125,7 @@ public class UserService : IUserService
             return new List<UserDTO>();
         }
 
-        return user.Select(x => x.ToDTO()).ToList();
+        return user.Select(x => x.ToPrivateDTO()).ToList();
     }
 
     public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
@@ -148,7 +148,17 @@ public class UserService : IUserService
 		userUnderChange.Strike = updateUserRequest.Strikes;
 		userUnderChange.UserImageId = updateUserRequest.UserImageID;
 
-		context.UserAccounts.Update(userUnderChange);
+		userUnderChange.NotifyOnReviewLiked = updateUserRequest.NotifyOnReviewLiked;
+        userUnderChange.NotifyOnReviewDisliked = updateUserRequest.NotifyOnReviewDisliked;
+		userUnderChange.NotifyOnGoalEndingSoon = updateUserRequest.NotifyOnGoalEndingSoon;
+        userUnderChange.NotifyOnGoalLiked = updateUserRequest.NotifyOnGoalLiked;
+        userUnderChange.NotifyOnGoalDisliked = updateUserRequest.NotifyOnGoalDisliked;
+        userUnderChange.NotifyOnAchievementLiked = updateUserRequest.NotifyOnAchievementLiked;
+        userUnderChange.NotifyOnAchievementDisliked = updateUserRequest.NotifyOnAchievementDisliked;
+        userUnderChange.NotifyOnFriendRequestRecieved = updateUserRequest.NotifyOnFriendRequestRecieved;
+        userUnderChange.NotifyOnFriendRequestAccepted = updateUserRequest.NotifyOnFriendRequestAccepted;
+
+        context.UserAccounts.Update(userUnderChange);
 		await context.SaveChangesAsync();
 
 		return userUnderChange.ToDTO();

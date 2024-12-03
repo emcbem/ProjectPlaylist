@@ -1,6 +1,6 @@
-import { CompanyQueries } from "@/hooks/CompanyQueries";
-import { GenreQueries } from "@/hooks/GenreQueries";
-import { PlatformQueries } from "@/hooks/PlatformQueries";
+import { CompanyQueries } from "@/queries/CompanyQueries";
+import { GenreQueries } from "@/queries/GenreQueries";
+import { PlatformQueries } from "@/queries/PlatformQueries";
 import { useSearchDropdown } from "./useDropdown";
 import { Company } from "@/@types/company";
 import { Genre } from "@/@types/genre";

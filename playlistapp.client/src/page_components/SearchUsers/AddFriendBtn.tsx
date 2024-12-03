@@ -1,10 +1,11 @@
-import { AddFriendRequest } from "@/@types/Requests/AddRequests/addFriendRequest";
-import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { FriendQueries } from "@/hooks/FriendQueries";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
-import React from "react";
-import toast from "react-hot-toast";
+import { AddFriendRequest } from '@/@types/Requests/AddRequests/addFriendRequest';
+import { UserAccountContextInterface } from '@/@types/userAccount';
+import { UserAccountContext } from '@/contexts/UserAccountContext';
+import { FriendQueries } from '@/queries/FriendQueries'
+import { UserPlusIcon } from '@heroicons/react/24/solid'
+import React from 'react'
+import toast from 'react-hot-toast';
+
 
 interface AddFriendBtnProps {
   baseUserId: string;

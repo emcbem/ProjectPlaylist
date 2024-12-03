@@ -1,6 +1,6 @@
 import { Goal } from "@/@types/goal";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import { FC, useContext, useState } from "react";
 import UpdateGoalButton from "../Buttons/UpdateGoalButton";
 import CancelGoalButton from "../Buttons/CancelGoalButton";
@@ -47,8 +47,6 @@ const GoalModalEdit: FC<GoalModalEditProps> = ({ goal, onClose }) => {
     UpdateGoal();
     onClose();
   };
-
-  console.log("updateGoalRequest: ", updateGoalRequest);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pointer-events-auto">

@@ -5,7 +5,7 @@ import EditUserGenresList from "./EditUserGenresList";
 import EditBio from "./EditBio";
 import { Link } from "react-router-dom";
 import EditGamerTags from "./EditGamerTags";
-import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import EditNotifications from "./EditNotifications";
 
 

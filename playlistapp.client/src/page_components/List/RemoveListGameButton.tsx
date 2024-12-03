@@ -1,7 +1,7 @@
 import { List } from '@/@types/list';
 import { ListGame } from '@/@types/listgame';
 import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
-import { ListQueries } from '@/hooks/ListQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import React from 'react';
 import { FC, useState } from 'react'
 

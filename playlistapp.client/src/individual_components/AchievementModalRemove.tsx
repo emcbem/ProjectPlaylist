@@ -1,4 +1,4 @@
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import React, { FC } from "react";
 import { useRef, useState } from "react";
 
@@ -27,8 +27,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
 
   const handleDeleteUserAchievement = async () => {
     try {
-      const result = await deleteUserAchievement();
-      console.log("Deletion result: ", result);
+      await deleteUserAchievement();
     } catch (error) {
       console.error("Error deleting user achievement: ", error);
     }

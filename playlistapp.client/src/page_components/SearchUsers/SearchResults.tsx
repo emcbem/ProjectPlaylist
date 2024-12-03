@@ -4,7 +4,7 @@ import AddFriendBtn from "./AddFriendBtn";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserAccount, UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { FriendQueries } from "@/hooks/FriendQueries";
+import { FriendQueries } from "@/queries/FriendQueries";
 import { Link } from "react-router-dom";
 
 const SearchResults = ({ user }: { user: UserAccount }) => {

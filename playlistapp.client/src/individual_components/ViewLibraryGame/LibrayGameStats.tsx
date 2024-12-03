@@ -1,7 +1,7 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import NumberTicker from "@/components/ui/number-ticker";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import { FC, useContext } from "react";
 import Gauge from "../Gauge";
 import { UserGame } from "@/@types/usergame";

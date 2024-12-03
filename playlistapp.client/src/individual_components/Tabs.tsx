@@ -3,7 +3,7 @@ import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
 import { useParams } from "react-router-dom";
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { GameReviewQueries } from "@/queries/GameReviewQueries";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import {

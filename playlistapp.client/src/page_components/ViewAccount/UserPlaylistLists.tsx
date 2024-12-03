@@ -1,4 +1,4 @@
-import { ListQueries } from "@/hooks/ListQueries";
+import { ListQueries } from "@/queries/ListQueries";
 
 import { Link } from "react-router-dom";
 import { Game } from "@/@types/game";

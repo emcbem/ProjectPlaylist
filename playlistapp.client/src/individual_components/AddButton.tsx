@@ -12,11 +12,11 @@ import {
 import { ChevronUpIcon } from "@heroicons/react/24/solid";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { ListQueries } from "@/hooks/ListQueries";
+import { ListQueries } from "@/queries/ListQueries";
 import loadingDotsGif from "../assets/LoadingIcons/icons8-3-dots.gif";
 import AddButtonListMenuItem from "./AddButtonListMenuItem";
-import { UserGameQueries } from "@/hooks/UserGameQueries";
-import { PlatformGameQueries } from "@/hooks/PlatfromGameQueries";
+import { UserGameQueries } from "@/queries/UserGameQueries";
+import { PlatformGameQueries } from "@/queries/PlatfromGameQueries";
 import { PlatformGameRequest } from "@/@types/Requests/GetRequests/getPlatformGameRequest";
 
 interface props {

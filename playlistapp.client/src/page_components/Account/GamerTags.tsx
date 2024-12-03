@@ -3,7 +3,7 @@ import EpicIconCustom from '@/assets/CustomPlatformIcons/EpicLogoCustom'
 import SwitchIconCustom from '@/assets/CustomPlatformIcons/SwitchIconCustom'
 import XboxIconCustom from '@/assets/CustomPlatformIcons/XboxIconCustom'
 import { UserAccountContext } from '@/contexts/UserAccountContext'
-import { UserPlatformQueries } from '@/hooks/UserPlatformQueries'
+import { UserPlatformQueries } from '@/queries/UserPlatformQueries'
 import React from 'react'
 import GamerTag from './GamerTag'
 
@@ -23,8 +23,6 @@ const GamerTags = () => {
             <p className='text-gray-400'>Go to settings to add a gamertag.</p>
         )
     }
-
-    console.log("users platforms", usersPlatforms)
 
     return (
         <div className="">

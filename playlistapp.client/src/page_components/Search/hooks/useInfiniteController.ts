@@ -1,6 +1,6 @@
 import { OrderingMethods } from "@/@types/Enums/OrderingMethod";
 import { GetGamesRequest } from "@/@types/Requests/GetRequests/getGamesRequest";
-import { useSearchBarContext } from "@/hooks/useSearchBarContext";
+import { useSearchBarContext } from "@/queries/useSearchBarContext";
 import { useEffect, useState } from "react";
 
 export const useSearchRequest = () => {

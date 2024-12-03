@@ -1,8 +1,8 @@
 import { Genre } from '@/@types/genre';
 import { AddUserGenreRequest } from '@/@types/Requests/AddRequests/addUserGenreRequest';
 import { RemoveUserGenreRequest } from '@/@types/Requests/DeleteRequests/removeUserGenreRequest';
-import { GenreQueries } from '@/hooks/GenreQueries';
-import { UserGenreQueries } from '@/hooks/UserGenreQueries'
+import { GenreQueries } from '@/queries/GenreQueries';
+import { UserGenreQueries } from '@/queries/UserGenreQueries'
 
 const EditUserGenresList = ({ userGuid }: { userGuid: string | undefined }) => {
   const { data: userGenres } = UserGenreQueries.useGetAllByUser(userGuid ?? "")

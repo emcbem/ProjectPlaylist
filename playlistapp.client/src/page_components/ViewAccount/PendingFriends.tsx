@@ -1,10 +1,10 @@
 import { Friend } from '@/@types/friend';
 import { UserAccount } from '@/@types/userAccount';
 import { FC } from 'react'
-import { FilterMyPendingFriends } from './logic/FilterMyPendingFriends';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { FriendQueries } from '@/queries/FriendQueries';
 import { AcceptFriendRequest } from '@/@types/Requests/AddRequests/acceptFriendRequest';
+import { FilterMyPendingFriends } from '../Account/logic/FilterMyPendingFriends';
 
 interface PendingFriendsProps {
     pendingFriends: Friend[],
