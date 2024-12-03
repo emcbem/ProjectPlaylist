@@ -108,7 +108,7 @@ public class UserService : IUserService
 			return new UserDTO();
 		}
 
-		return user.ToDTO();
+		return user.ToPrivateDTO();
 	}
 
     public async Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery)
@@ -125,7 +125,7 @@ public class UserService : IUserService
             return new List<UserDTO>();
         }
 
-        return user.Select(x => x.ToDTO()).ToList();
+        return user.Select(x => x.ToPrivateDTO()).ToList();
     }
 
     public async Task<UserDTO> UpdateUser(UpdateUserRequest updateUserRequest)
