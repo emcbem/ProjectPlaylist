@@ -3,21 +3,30 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.EmailServices;
 
 namespace PlaylistApp.Server.Services.NotificationServices;
 
 public class NotificationService : INotificationService
 {
 	private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
+	private readonly IEmailService emailService;
 
-	public NotificationService(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+	public NotificationService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IEmailService emailService)
     {
 		this.dbContextFactory = dbContextFactory;
+		this.emailService = emailService;
 	}
 
 	public async Task<bool> CreateNotification(AddNotificationRequest request)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
+
+		var user = await context.UserAccounts.FirstOrDefaultAsync(x => x.Id == request.UserId);
+		if(user is null)
+		{
+			return false;
+		}
 
 		var notificationToCreate = new Notification
 		{
@@ -28,6 +37,7 @@ public class NotificationService : INotificationService
 			UserNotified = false,
 			Url = request.Url
 		};
+		emailService.SendEmailFromNotification(notificationToCreate, user);
 
 		context.Notifications.Add(notificationToCreate);
 

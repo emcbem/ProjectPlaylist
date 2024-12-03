@@ -2,7 +2,7 @@ import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { FriendQueries } from "@/queries/FriendQueries";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
-import { useSearchBarContext } from "@/queries/useSearchBarContext";
+import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 import React from "react";
 import PendingFriends from "../Account/PendingFriends";
 import { FilterMyPendingFriends } from "../Account/logic/FilterMyPendingFriends";

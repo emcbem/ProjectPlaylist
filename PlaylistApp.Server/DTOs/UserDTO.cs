@@ -7,6 +7,7 @@ public class UserDTO
 {
     public int Id { get; set; }
     public string Username { get; set; } = "";
+	public string? Email { get; set; }
     public string Bio { get; set; } = "";
     public int? Strikes { get; set; }
     public int? XP { get; set; }
@@ -55,6 +56,7 @@ public static class UserConverter
 		{
 			Id = user.Id,
 			Username = user.Username,
+			Email = user.Email,
 			Bio = user.Bio ?? "",
 			Strikes = user.Strike,
 			XP = user.Xp,
