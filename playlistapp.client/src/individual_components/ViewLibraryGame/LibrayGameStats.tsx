@@ -13,7 +13,7 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
     data: userEarnedAchievement,
     isLoading,
     error,
-  } = UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
+  } = UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid ?? "");
 
   if (!usr?.guid) {
     return <p>Error: User not logged in.</p>;
@@ -34,12 +34,11 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
     );
 
   return userEarnedAchievement && userGame ? (
-    <div className="h-fit shadow-xl w-fit rounded-xl flex flex-col items-start py-3 mx-8 sticky top-10">
+    <div className="h-fit min-w-fit shadow-xl dark:shadow-pppurple-600 shadow-pporange-300 lg:w-fit rounded-xl flex flex-col items-start py-3 md:mx-8 mx-2 lg:sticky top-10 p-2">
       {userGame.platformGame.achievements.length > 0 && (
         <>
-          <div className="flex flex-col items-start dark:text-white text-black">
-            <h1>Your Progress</h1>
-            <div className="p-4 pl-0">
+          <div className="flex md:flex-col flex-row items-center justify-between lg:p-4 p-0 w-full">
+            <div className="md:flex-shrink-0 mb-4 md:mb-0 md:p-4 md:pl-0 p-0 flex-grow">
               <Gauge
                 totalAchievments={
                   userGame?.platformGame?.achievements?.length ?? 0
@@ -47,34 +46,37 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
                 earnedAchievements={earned?.length ?? 0}
               />
             </div>
-          </div>
 
-          <div className="flex flex-col items-start dark:text-white text-black">
-            <h1>Achievement Count</h1>
-            <div className="p-4 pl-0 flex flex-row text-5xl">
-              {earned && earned.length > 0 ? (
-                <NumberTicker value={earned.length} />
-              ) : (
-                <p className="text-5xl">0</p>
-              )}
-              <p>/</p>
-              <NumberTicker
-                value={userGame?.platformGame?.achievements?.length}
-              />
+            <div className="flex flex-col items-end ml-auto mt-4 md:mt-0">
+              <div className="text-lg font-bold dark:text-white text-black mb-2">
+                Achievement Count
+              </div>
+              <div className="flex flex-row text-5xl mb-4">
+                {earned && earned.length > 0 ? (
+                  <NumberTicker value={earned.length} />
+                ) : (
+                  <p className="text-5xl">0</p>
+                )}
+                <p>/</p>
+                <NumberTicker
+                  value={userGame?.platformGame?.achievements?.length}
+                />
+              </div>
+
+              <div className="text-lg font-bold dark:text-white text-black">
+                Hours Played
+              </div>
+              <div className="text-5xl">
+                {userGame && userGame.timePlayed > 0 ? (
+                  <NumberTicker value={userGame.timePlayed} />
+                ) : (
+                  <p className="text-5xl">0</p>
+                )}
+              </div>
             </div>
           </div>
         </>
       )}
-      <div className="flex flex-col items-start dark:text-white text-black">
-        <h1>Hours Played</h1>
-        <div className="p-4 pl-0">
-          {userGame && userGame.timePlayed > 0 ? (
-            <NumberTicker value={userGame.timePlayed} className="text-5xl" />
-          ) : (
-            <p className="text-5xl">0</p>
-          )}
-        </div>
-      </div>
     </div>
   ) : (
     <p>No data available.</p>

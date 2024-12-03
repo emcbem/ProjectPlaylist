@@ -9,7 +9,7 @@ interface props {
 const EditGoalCheckbox: FC<props> = ({ setCheckbox, title, isChecked }) => {
   return (
     <div className="p-1">
-      <label className="flex items-center">
+      <label className="flex items-center justify-center">
         <input
           type="checkbox"
           checked={isChecked}
