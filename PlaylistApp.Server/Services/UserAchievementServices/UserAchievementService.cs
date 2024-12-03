@@ -2,7 +2,9 @@
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PlaylistApp.Server.Services.UserAchievementServices;
@@ -62,6 +64,24 @@ public class UserAchievementService : IUserAchievementService
         return true;
     }
 
+    public async Task<List<AchievementDTO>> GetClaimedAchievementsForGameForUser(GetClaimedAchievementsForGameForUserRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var claimedAchievements = await context.UserAchievements
+            .Include(x => x.Achievement)
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.Achievement.PlatformGameId == request.PlatformGameId)
+            .ToListAsync();
+
+        if (claimedAchievements is null)
+        {
+            return new List<AchievementDTO>();
+        }
+
+        return claimedAchievements.Select(x => x.Achievement.ToDTO()).ToList();
+    }
+
     public async Task<List<UserAchievementDTO>> GetUserAchievementByAchievementId(int id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
@@ -70,8 +90,6 @@ public class UserAchievementService : IUserAchievementService
             .Include(x => x.Achievement)
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Game)
-            //.ThenInclude(x => x.InvolvedCompanies)
-            //    .ThenInclude(x => x.Company)
             .Include(x => x.Achievement)
                 .ThenInclude(x => x.PlatformGame)
                     .ThenInclude(x => x.Platform)

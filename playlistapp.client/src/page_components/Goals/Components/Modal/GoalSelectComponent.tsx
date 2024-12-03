@@ -25,7 +25,7 @@ const GoalSelectComponent: FC<props> = ({
             Select an achievement for the goal
           </option>
           {allGamesAchievements.map((x) => (
-            <option key={x.id} value={x.name}>
+            <option key={x.id} value={x.id}>
               {x.name}
             </option>
           ))}
