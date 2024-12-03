@@ -1,5 +1,5 @@
 import Navbar from "./individual_components/Navbar";
-import HomePageNLI from "./page_components/HomePageNLI";
+import LandingPage from "./page_components/LandingPage";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/Search/ui/SearchPage";
 import HomePageLoggedIn from "./page_components/HomePageLoggedIn";
@@ -10,7 +10,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
 import AchievementsPage from "./page_components/Achievements";
 import TestPage from "./page_components/TestPage";
-import ViewSearchedGame from "./page_components/ViewSearchedGame";
+import ViewGame from "./page_components/ViewGame/ViewGame";
 import { Toaster } from "react-hot-toast";
 import MyLibrary from "./page_components/MyLibrary/MyLibrary";
 import Playlist from "./page_components/List/Playlist";
@@ -49,15 +49,12 @@ function App() {
                     <Route
                       path="/"
                       element={
-                        isAuthenticated ? <HomePageLoggedIn /> : <HomePageNLI />
+                        isAuthenticated ? <HomePageLoggedIn /> : <LandingPage />
                       }
                     />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/searchusers" element={<SearchUsers />} />
-                    <Route
-                      path="/view-game/:gameId"
-                      element={<ViewSearchedGame />}
-                    />
+                    <Route path="/view-game/:gameId" element={<ViewGame />} />
                     <Route
                       path="/user-library-game/:gameId"
                       element={<ViewLibraryGame />}
