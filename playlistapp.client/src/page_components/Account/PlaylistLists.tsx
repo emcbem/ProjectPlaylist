@@ -29,9 +29,9 @@ const PlaylistLists = () => {
 
   return (
     <>
-      <div className="flex flex-row">
-        <p className="mt-8 text-6xl">Your Playlists</p>
-        <div className="mt-auto mb-3 ms-6">
+      <div className="flex flex-row md:justify-normal justify-between mb-8 mt-6">
+        <p className="md:mt-8 md:text-5xl text-3xl mt-16">Your Playlists</p>
+        <div className="mt-auto mb-3 ms-6 md:me-0 me-5">
           <AddListBtn usr={usr} />
         </div>
       </div>
