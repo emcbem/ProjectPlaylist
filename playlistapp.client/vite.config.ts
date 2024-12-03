@@ -7,6 +7,7 @@ import path from "path";
 import child_process from "child_process";
 import { env } from "process";
 import dotenv from "dotenv";
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== ""
@@ -49,7 +50,7 @@ dotenv.config();
 const isNoCert = process.env.VITE_CERT === "true";
 
 export default defineConfig({
-  plugins: [plugin()],
+  plugins: [plugin(), chunkSplitPlugin()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
