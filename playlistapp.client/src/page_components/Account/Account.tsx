@@ -38,7 +38,7 @@ const Account = () => {
     setCurrentGoal(foundCurrentGoal);
   }, [allUserGoals]);
 
-  console.log(usr, "sadasd")
+  console.log(usr, "sadasd");
 
   return (
     isAuthenticated &&
@@ -47,8 +47,6 @@ const Account = () => {
     isGettingGoalsSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
-
-
           <div className="flex flex-wrap">
             <img
               className="rounded-full md:w-24 w-14 shadow-inner"
@@ -56,10 +54,11 @@ const Account = () => {
             />
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
-              <p className="md:text-2xl text-lg ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
+              <p className="md:text-2xl text-lg ms-8">
+                {usr?.xp == 0 ? 0 : usr?.xp} Xp
+              </p>
             </div>
           </div>
-
 
           <div className="flex md:flex-row flex-col my-6">
             <div className="md:w-1/4 w-full md:order-1 order-2">
@@ -68,10 +67,10 @@ const Account = () => {
             <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
               <p className="text-xl">Bio</p>
               <p className="text-clay-700 dark:text-clay-950">{usr.bio}</p>
-              <hr className="md:hidden my-5"/>
-              
+              <hr className="md:hidden my-5" />
+
               <UserGenresList userGuid={userGuid} />
-              <hr className="md:hidden my-5"/>
+              <hr className="md:hidden my-5" />
             </div>
             <div className="md:w-1/4 w-full md:order-3 order-3">
               <DisplayCurrentGoal currentGoal={currentGoal} />

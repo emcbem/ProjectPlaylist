@@ -8,7 +8,7 @@ import PlaylistTableView from "./ViewPlaylistListView";
 import "./ViewPlaylist.modules.scss";
 
 const Playlist = () => {
-  const { listId } = useParams<{ listId: string }>();
+  const { id, listId } = useParams<{ id: string; listId: string }>();
   const { data: list, isLoading } = ListQueries.useGetListByListId(
     listId ?? ""
   );
@@ -32,9 +32,9 @@ const Playlist = () => {
       <div className="grid justify-items-center ">
         <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
           <div className="text-lg mt-6 mb-6">
-            <Link to={"/account"}>
+            <Link to={`/user/${id}`}>
               <span className="hover:underline underline-offset-2">
-                Account
+                {list?.ownerName}
               </span>
             </Link>{" "}
             <span className="text-clay-950  font-light">/ {list?.name}</span>
