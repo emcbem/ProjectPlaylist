@@ -6,8 +6,8 @@ import { AchievementQueries } from "@/queries/AchievementQueries";
 import GoalDateSelector from "./GoalDateSelector";
 import { GoalQueries } from "@/queries/GoalQueries";
 import GoalAddButton from "./GoalAddButton";
-import EditGoalCheckbox from "./EditGoalCheckbox";
 import GoalSelectComponent from "./GoalSelectComponent";
+import CheckBox from "@/individual_components/Checkbox";
 
 interface props {
   userGame: UserGame;
@@ -15,11 +15,11 @@ interface props {
 }
 
 const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
-  const [achievementId, setAchievementId] = useState("");
+  const [achievementId, setAchievementId] = useState<string>("");
   const [isCurrent, setIsCurrent] = useState<boolean>(true);
-  const [month, setMonth] = useState<string>();
-  const [day, setDay] = useState<string>();
-  const [year, setYear] = useState<string>();
+  const [month, setMonth] = useState<string>("");
+  const [day, setDay] = useState<string>("");
+  const [year, setYear] = useState<string>("");
 
   const { data: allGamesAchievements } =
     AchievementQueries.useGetAchievementByPlatformGameId(
@@ -32,7 +32,7 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
 
   const addGoalRequest: AddGoalRequest = {
     achievementId: achievement?.id ?? 0,
-    dateToAchieve: new Date(`${month}/${day}/${year}`),
+    dateToAchieve: new Date(`${month}-${day}-${year}`),
     isCurrent: isCurrent,
     userId: userGame.user.guid,
   };
@@ -56,15 +56,17 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
             allGamesAchievements={allGamesAchievements}
             setAchievementId={setAchievementId}
           />
-          <EditGoalCheckbox
-            title="Is Current Goal"
-            isChecked={false}
-            setCheckbox={setIsCurrent}
-          />
+          <div className="flex items-center justify-center pt-2">
+            <CheckBox
+              value={isCurrent}
+              onChange={(e) => setIsCurrent(e.target.checked)}
+              title="Is Current Goal"
+            />
+          </div>
           <GoalDateSelector
-            month={""}
-            day={""}
-            year={""}
+            month={month}
+            day={day}
+            year={year}
             setDay={setDay}
             setMonth={setMonth}
             setYear={setYear}

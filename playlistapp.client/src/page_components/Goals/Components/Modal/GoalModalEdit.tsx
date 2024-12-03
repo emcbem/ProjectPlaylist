@@ -4,10 +4,10 @@ import { GoalQueries } from "@/queries/GoalQueries";
 import { FC, useContext, useState } from "react";
 import UpdateGoalButton from "../Buttons/UpdateGoalButton";
 import CancelGoalButton from "../Buttons/CancelGoalButton";
-import EditGoalCheckbox from "./EditGoalCheckbox";
 import GoalAchievementCard from "../AchievementCard";
 import GoalDateSelector from "./GoalDateSelector";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
+import CheckBox from "@/individual_components/Checkbox";
 
 interface GoalModalEditProps {
   goal: Goal;
@@ -58,15 +58,15 @@ const GoalModalEdit: FC<GoalModalEditProps> = ({ goal, onClose }) => {
         <GoalAchievementCard goal={goal} />
 
         <div className="flex items-center justify-center space-x-4">
-          <EditGoalCheckbox
+          <CheckBox
             title="Completed"
-            isChecked={isComplete}
-            setCheckbox={setIsComplete}
+            value={isComplete}
+            onChange={(e) => setIsComplete(e.target.checked)}
           />
-          <EditGoalCheckbox
+          <CheckBox
             title="Current"
-            isChecked={isCurrent}
-            setCheckbox={setIsCurrent}
+            value={isCurrent}
+            onChange={(e) => setIsCurrent(e.target.checked)}
           />
         </div>
         <GoalDateSelector
