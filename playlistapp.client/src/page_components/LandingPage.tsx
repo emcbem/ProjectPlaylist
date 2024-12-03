@@ -4,7 +4,7 @@ import ExpandingColumns from "../individual_components/Platforms";
 import { Link } from "react-router-dom";
 import { GameMarquee } from "@/individual_components/Marquee";
 
-const HomePageNLI: React.FC = () => {
+const LandingPage: React.FC = () => {
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-black">
@@ -30,4 +30,4 @@ const HomePageNLI: React.FC = () => {
   );
 };
 
-export default HomePageNLI;
+export default LandingPage;
