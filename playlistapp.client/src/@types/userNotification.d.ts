@@ -3,5 +3,6 @@ export interface UserNotification {
     title: string | null ,
     body: string | null,
     dateNotified: Date | null,
-    userNotified: boolean | null
+    userNotified: boolean | null,
+    url: string | null
 }
