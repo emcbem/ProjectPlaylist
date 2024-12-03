@@ -1,7 +1,6 @@
 import { ListQueries } from "@/hooks/ListQueries";
 
 import { Link } from "react-router-dom";
-import AddListBtn from "./AddListBtn";
 import { Game } from "@/@types/game";
 import { UserAccount } from "@/@types/userAccount";
 
@@ -26,10 +25,7 @@ const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
   return (
     <>
       <div className="flex flex-row">
-        <p className="mt-8 text-6xl">Your Playlists</p>
-        <div className="mt-auto mb-3 ms-6">
-          <AddListBtn usr={usr} />
-        </div>
+        <p className="mt-8 text-6xl">{usr.username}`s Playlists</p>
       </div>
 
       <div className="flex flex-row overflow-x-auto flex-wrap">
@@ -51,7 +47,7 @@ const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
                       </div>
                     ))}
                 </div>
-                <Link to={`/list/${list.id}`}>
+                <Link to={`${location.pathname}/list/${list.id}`}>
                   <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end opacity-100 dark:opacity-100 customGradient p-2">
                     <div>
                       <p className="text-white text-2xl me-2">
