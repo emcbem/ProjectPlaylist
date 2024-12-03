@@ -6,14 +6,13 @@ import EditBio from "./EditBio";
 import { Link } from "react-router-dom";
 import EditGamerTags from "./EditGamerTags";
 import { UserAccountQueries } from "@/hooks/UserAccountQueries";
+import EditNotifications from "./EditNotifications";
 
 
 const Settings = () => {
     const { usr, isLoading } = React.useContext(
         UserAccountContext
     ) as UserAccountContextInterface;
-
-    console.log(usr)
 
     const { mutateAsync: deleteAccount } = UserAccountQueries.useDeleteUser(usr?.guid ?? "");
 
@@ -56,37 +55,37 @@ const Settings = () => {
                     {usr &&
                         <div className="flex flex-col px-8" style={{ maxWidth: "900px" }}>
                             <h1 className="mb-7">Account &gt; Settings</h1>
-                            <section className="mb-5" id="profile-info" ref={profileInfoRef}>
+                            <section className="mb-16" id="profile-info" ref={profileInfoRef}>
                                 <h2 className="text-2xl">Profile Info</h2>
                                 <p className="font-sans">{usr.username}</p>
                                 <p className="text-teal-500 underline underline-offset-1">edit username</p>
                             </section>
-                            <section className="mb-5" id="bio" ref={bioRef}>
+                            <section className="mb-16" id="bio" ref={bioRef}>
                                 <h2 className="text-2xl">Bio</h2>
                                 <EditBio />
                             </section>
-                            <hr className="mb-8" />
-                            <section className="mb-5" id="platforms" ref={platformsRef}>
+                            <hr className="mb-16" />
+                            <section className="mb-16" id="platforms" ref={platformsRef}>
                                 <h2 className="text-2xl">Platforms</h2>
                                 <EditGamerTags />
                             </section>
-                            <hr className="mb-8" />
-                            <section className="mb-5" id="favorite-genres" ref={genresRef}>
+                            <hr className="mb-16" />
+                            <section className="mb-16" id="favorite-genres" ref={genresRef}>
                                 <h2 className="text-2xl">Favorite Genres</h2>
                                 <EditUserGenresList userGuid={usr.guid} />
                             </section>
-                            <hr className="mb-8" />
-                            <section className="mb-5" id="favorite-games" ref={gamesRef}>
+                            <hr className="mb-16" />
+                            <section className="mb-16" id="favorite-games" ref={gamesRef}>
                                 <h2 className="text-2xl">Favorite Games</h2>
                                 <p>Not Implemented Yet...</p>
                             </section>
-                            <hr className="mb-8" />
-                            <section className="mb-5">
+                            <hr className="mb-16" />
+                            <section className="mb-16">
                                 <h2 className="text-2xl">Notifications</h2>
-                                <p>No notification functionality yet ...</p>
+                                <EditNotifications />
                             </section>
                             <hr className="mb-8" />
-                            <section className="mb-5" id="delete-account" ref={deleteAccountRef}>
+                            <section className="mb-16" id="delete-account" ref={deleteAccountRef}>
                                 <h2 className="text-2xl">Delete Account</h2>
                                 <p>Not implemented yet ...</p>
                                 <button
