@@ -19,7 +19,9 @@ public partial class UserAccount
 
 	public string? Bio { get; set; }
 
-	public int? Strike { get; set; }
+    public string? Email { get; set; }
+
+    public int? Strike { get; set; }
 
 	public int? Xp { get; set; }
 

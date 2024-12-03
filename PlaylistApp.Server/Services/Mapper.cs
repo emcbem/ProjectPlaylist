@@ -1,5 +1,6 @@
 ﻿using PlaylistApp.Server.Services.Achievement;
 using PlaylistApp.Server.Services.CompanyServices;
+using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.FriendServices;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.GenreServices;
@@ -7,6 +8,7 @@ using PlaylistApp.Server.Services.GoalLikeServices;
 using PlaylistApp.Server.Services.GoalServices;
 using PlaylistApp.Server.Services.ImageServices;
 using PlaylistApp.Server.Services.ListServices;
+using PlaylistApp.Server.Services.NotificationServices;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.PlatformServices;
 using PlaylistApp.Server.Services.ReviewLikeServices;
@@ -40,5 +42,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
+		builder.Services.AddSingleton<INotificationService, NotificationService>();
+		builder.Services.AddSingleton<IEmailService, EmailService>();
     }
 }

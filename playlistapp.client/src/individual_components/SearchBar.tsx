@@ -1,4 +1,4 @@
-import { useSearchBarContext } from "@/queries/useSearchBarContext";
+import { useSearchBarContext } from "@/hooks/useSearchBarContext";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.GenreServices;
 
 namespace PlaylistApp.Server.Controllers;
@@ -8,10 +9,12 @@ namespace PlaylistApp.Server.Controllers;
 public class GenreController : Controller
 {
     private readonly IGenreService genreService;
+    private readonly IEmailService emailService;
 
-    public GenreController(IGenreService genreService)
+    public GenreController(IGenreService genreService, IEmailService emailService)
     {
         this.genreService = genreService;
+        this.emailService = emailService;
     }
 
     [HttpGet("getallgenres")]
