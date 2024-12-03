@@ -89,4 +89,48 @@ public static class UserConverter
 			XpPrivate = user.XpPrivate
 		};
 	}
+
+	public static UserDTO ToPrivateDTO(this UserAccount user)
+	{
+		if (user is null)
+		{
+			return new UserDTO();
+		}
+
+		return new UserDTO()
+		{
+			Id = user.Id,
+			Username = user.Username,
+			Bio = user.Bio ?? "",
+			Strikes = user.Strike,
+			XP = user.Xp,
+			CreationDate = user.JoinDate,
+			ProfileURL = user.UserImage?.Url ?? "",
+			ProfileImageId = user.UserImage?.Id ?? 0,
+			Platforms = user.UserPlatforms.Select(x => x.Platform.ToDTO()).ToList(),
+			Guid = user.Guid,
+			GameLists = user.Lists.Select(x => x.ToDTO()).ToList(),
+			UserGames = user.UserGames.Select(x => x.ToDTONoUser()).ToList(),
+			AchievementsPrivate = user.AchievementsPrivate,
+			BioPrivate = user.BioPrivate,
+			FavoriteGamesPrivate = user.FavoriteGamesPrivate,
+			FavoriteGenresPrivate = user.FavoriteGenresPrivate,
+			GamertagsPrivate = user.GamertagsPrivate,
+			GoalPrivate = user.GoalPrivate,
+			LibraryPrivate = user.LibraryPrivate,
+			NotifyOnAchievementDisliked = user.NotifyOnAchievementDisliked,
+			NotifyOnAchievementLiked = user.NotifyOnAchievementLiked,
+			NotifyOnFriendRequestAccepted = user.NotifyOnFriendRequestAccepted,
+			NotifyOnFriendRequestRecieved = user.NotifyOnFriendRequestRecieved,
+			NotifyOnGoalDisliked = user.NotifyOnGoalDisliked,
+			NotifyOnGoalEndingSoon = user.NotifyOnGoalEndingSoon,
+			NotifyOnGoalLiked = user.NotifyOnGoalLiked,
+			NotifyOnReviewDisliked = user.NotifyOnReviewDisliked,
+			NotifyOnReviewLiked = user.NotifyOnReviewLiked,
+			PlaytimePrivate = user.PlaytimePrivate,
+			ReviewsPrivate = user.ReviewsPrivate,
+			UsernamePrivate = user.UsernamePrivate,
+			XpPrivate = user.XpPrivate
+		};
+	}
 }

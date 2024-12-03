@@ -1,5 +1,5 @@
 import { ListGame } from '@/@types/listgame';
-import { ListQueries } from '@/hooks/ListQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import EditListComponent from './EditNameComponent';

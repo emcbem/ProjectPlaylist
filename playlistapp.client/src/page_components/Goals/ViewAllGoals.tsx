@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import GoalCard from "./ViewSingleGoal";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import { Goal } from "@/@types/goal";
 import GoalModalParent from "./Components/Modal/GoalModalParent";
 

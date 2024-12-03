@@ -1,4 +1,4 @@
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import React, { FC } from "react";
 import { useRef, useState } from "react";
 

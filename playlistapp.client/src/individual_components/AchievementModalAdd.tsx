@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from "react";
 import DateSelector from "./DateSelector";
 import { Achievement } from "@/@types/achievement";
-import { UserAchievementQueries } from "@/hooks/UserAchievementQueries";
+import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import { AddUserAchievementRequest } from "@/@types/Requests/AddRequests/addUserAchievementRequest";
 
 interface props {

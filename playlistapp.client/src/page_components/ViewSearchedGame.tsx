@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import Tabs from "@/individual_components/Tabs";
 import AddButton from "@/individual_components/AddButton";
-import { GameQueries } from "@/hooks/GameQueries";
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { GameQueries } from "@/queries/GameQueries";
+import { GameReviewQueries } from "@/queries/GameReviewQueries";
 import { useEffect, useState } from "react";
 import formatDate from "@/lib/date";
 

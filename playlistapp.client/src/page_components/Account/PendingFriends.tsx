@@ -3,7 +3,7 @@ import { UserAccount } from '@/@types/userAccount';
 import { FC } from 'react'
 import { FilterMyPendingFriends } from './logic/FilterMyPendingFriends';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
-import { FriendQueries } from '@/hooks/FriendQueries';
+import { FriendQueries } from '@/queries/FriendQueries';
 import { AcceptFriendRequest } from '@/@types/Requests/AddRequests/acceptFriendRequest';
 
 interface PendingFriendsProps {

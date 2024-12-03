@@ -1,6 +1,6 @@
 import Marquee from "@/components/ui/marquee";
 import GameCard from "./GameCard";
-import { GameQueries } from "@/hooks/GameQueries";
+import { GameQueries } from "@/queries/GameQueries";
 
 export function GameMarquee() {
   const { data: games, isSuccess } = GameQueries.useGetAllGames();

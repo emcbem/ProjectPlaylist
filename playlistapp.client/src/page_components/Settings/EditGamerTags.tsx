@@ -3,7 +3,7 @@ import EpicIconCustom from '@/assets/CustomPlatformIcons/EpicLogoCustom'
 import SwitchIconCustom from '@/assets/CustomPlatformIcons/SwitchIconCustom'
 import XboxIconCustom from '@/assets/CustomPlatformIcons/XboxIconCustom'
 import { UserAccountContext } from '@/contexts/UserAccountContext'
-import { UserPlatformQueries } from '@/hooks/UserPlatformQueries'
+import { UserPlatformQueries } from '@/queries/UserPlatformQueries'
 import React from 'react'
 import EditGamerTagField from './EditGamerTagField'
 
