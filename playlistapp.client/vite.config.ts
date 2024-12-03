@@ -35,15 +35,8 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
       { stdio: "inherit" }
     ).status
   ) {
-    // throw new Error("Could not create certificate.");
   }
 }
-
-// const target = env.ASPNETCORE_HTTPS_PORT
-//   ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
-//   : env.ASPNETCORE_URLS
-//   ? env.ASPNETCORE_URLS.split(";")[0]
-//   : "https://localhost:7041";
 
 // Load environment variables
 dotenv.config();
