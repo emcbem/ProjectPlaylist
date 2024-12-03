@@ -4,7 +4,7 @@ import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeReq
 import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { GoalLikeQueries } from "@/hooks/GoalLikeQueries";
+import { GoalLikeQueries } from "@/queries/GoalLikeQueries";
 import formatDate from "@/lib/date";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
@@ -39,7 +39,6 @@ const TestPage = () => {
     userId: usr?.guid ?? "",
   };
 
-  console.log("RemoveGoalLikeRequest: ", removeGoalLikeRequest);
 
   const {
     data: newGoalLike,

@@ -1,4 +1,4 @@
-import { UserGenreQueries } from '@/hooks/UserGenreQueries'
+import { UserGenreQueries } from '@/queries/UserGenreQueries'
 
 const UserGenresList = ({ userGuid }: { userGuid: string | undefined }) => {
   const { data: userGenres } = UserGenreQueries.useGetAllByUser(userGuid ?? "")

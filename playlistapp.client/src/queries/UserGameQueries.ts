@@ -61,22 +61,6 @@ export const UserGameQueries = {
         console.error("Error updating user game: ", error);
       },
     });
-    /*
-    const { mutate: updateUserGame, isPending: isUpdating } =
-      UserGameQueries.useUpdateUserGame();
-
-    const handleUpdateUserGame = async (userGame: UserGame) => {
-      console.log("Handling an update");
-      if (userGame) {
-      const newUpdateUserGameRequest: updateUserGameRequest = {
-        dateAdded: new Date(),
-        userGameId: userGame.userGameId,
-        timePlayed: userGame.timePlayed + 1,
-      };
-      updateUserGame(newUpdateUserGameRequest);
-    }
-  };
-    */
   },
   useAddUserGame: (addUserGameRequest: AddUserGameRequest | undefined) => {
     const queryClient = useQueryClient();

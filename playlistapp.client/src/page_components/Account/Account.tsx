@@ -7,18 +7,18 @@ import PlaylistLists from "./PlaylistLists";
 import LibraryLoading from "./LibraryViewsComponents/LibraryLoading";
 import LibraryList from "./LibraryViewsComponents/LibraryList";
 import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
-import { UserGameQueries } from "@/hooks/UserGameQueries";
+import { UserGameQueries } from "@/queries/UserGameQueries";
 import UserGenresList from "./UserGenresList";
 import DisplayCurrentGoal from "../Goals/DisplayCurrentGoal";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import { Goal } from "@/@types/goal";
 import ViewAllGoalsButton from "../Goals/Components/Buttons/ViewAllGoalsButton";
 import GamerTags from "./GamerTags";
+import ExpandableBio from "./Bio";
 
 const Account = () => {
   const { isAuthenticated } = useAuth0();
   const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
-  console.log("CurrentGoal: ", currentGoal);
 
   const { usr, userGuid } = React.useContext(
     UserAccountContext
@@ -38,8 +38,6 @@ const Account = () => {
     setCurrentGoal(foundCurrentGoal);
   }, [allUserGoals]);
 
-  console.log(usr, "sadasd")
-
   return (
     isAuthenticated &&
     usr?.profileURL &&
@@ -47,7 +45,6 @@ const Account = () => {
     isGettingGoalsSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
-
 
           <div className="flex flex-wrap">
             <img
@@ -59,19 +56,15 @@ const Account = () => {
               <p className="md:text-2xl text-lg ms-8">{usr?.xp == 0 ? 0 : usr?.xp} Xp</p>
             </div>
           </div>
-
-
           <div className="flex md:flex-row flex-col my-6">
             <div className="md:w-1/4 w-full md:order-1 order-2">
               <GamerTags />
             </div>
             <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
-              <p className="text-xl">Bio</p>
-              <p className="text-clay-700 dark:text-clay-950">{usr.bio}</p>
-              <hr className="md:hidden my-5"/>
-              
+              <ExpandableBio bio={usr.bio} />
+              <hr className="md:hidden my-5" />
               <UserGenresList userGuid={userGuid} />
-              <hr className="md:hidden my-5"/>
+              <hr className="md:hidden my-5" />
             </div>
             <div className="md:w-1/4 w-full md:order-3 order-3">
               <DisplayCurrentGoal currentGoal={currentGoal} />

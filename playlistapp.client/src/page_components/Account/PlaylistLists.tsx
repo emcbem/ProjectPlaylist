@@ -1,6 +1,6 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { ListQueries } from "@/hooks/ListQueries";
+import { ListQueries } from "@/queries/ListQueries";
 import React from "react";
 import { Link } from "react-router-dom";
 import AddListBtn from "./AddListBtn";

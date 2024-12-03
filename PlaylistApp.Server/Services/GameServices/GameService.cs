@@ -23,7 +23,8 @@ internal static class GameIncluder
 			.Include(x => x.GameReviews)
 				.ThenInclude(x => x.ReviewLikes)
 			.Include(x => x.GameReviews)
-				.ThenInclude(x => x.User);
+				.ThenInclude(x => x.User)
+					.ThenInclude(x => x.UserImage);
 	}
 }
 public class GameService : IGameService

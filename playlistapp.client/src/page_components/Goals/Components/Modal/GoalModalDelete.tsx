@@ -1,5 +1,5 @@
 import { Goal } from "@/@types/goal";
-import { GoalQueries } from "@/hooks/GoalQueries";
+import { GoalQueries } from "@/queries/GoalQueries";
 import { FC } from "react";
 import CancelGoalButton from "../Buttons/CancelGoalButton";
 import DeleteGoalButton from "../Buttons/DeleteGoalButton";

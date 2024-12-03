@@ -1,7 +1,7 @@
 import React from "react";
 import MasonryCards from "../individual_components/MasonryCards";
 import { Link } from "react-router-dom";
-import { GameQueries } from "@/hooks/GameQueries";
+import { GameQueries } from "@/queries/GameQueries";
 
 const HomePageLoggedIn: React.FC = () => {
   const { data: games } = GameQueries.useGetAllGames();

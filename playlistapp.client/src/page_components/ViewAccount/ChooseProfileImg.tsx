@@ -2,8 +2,8 @@ import { UpdateUserRequest } from "@/@types/Requests/UpdateRequests/updateUserRe
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserImage } from "@/@types/userImage";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAccountQueries } from "@/hooks/UserAccountQueries";
-import { UserImageQueries } from "@/hooks/UserImageQueries";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
+import { UserImageQueries } from "@/queries/UserImageQueries";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -27,8 +27,17 @@ const ChooseProfileImg = () => {
                 bio: usr.bio,
                 strikes: usr.strikes ?? 0,
                 xp: usr.xp ?? 0,
-                userImageID: selectedUserImage?.id
-            }
+                userImageID: selectedUserImage?.id,
+                notifyOnReviewLiked: usr.notifyOnReviewLiked,
+                notifyOnReviewDisliked: usr.notifyOnReviewDisliked,
+                notifyOnGoalEndingSoon: usr.notifyOnGoalEndingSoon,
+                notifyOnGoalLiked: usr.notifyOnGoalLiked,
+                notifyOnGoalDisliked: usr.notifyOnGoalDisliked,
+                notifyOnAchievementLiked: usr.notifyOnAchievementLiked,
+                notifyOnAchievementDisliked: usr.notifyOnAchievementDisliked,
+                notifyOnFriendRequestRecieved: usr.notifyOnFriendRequestRecieved,
+                notifyOnFriendRequestAccepted: usr.notifyOnFriendRequestAccepted
+            } as UpdateUserRequest
             await editUser(newUpdateUserRequest);
             navigate("/settings")
         }

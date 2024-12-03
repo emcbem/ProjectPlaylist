@@ -41,6 +41,8 @@ public partial class PlaylistDbContext : DbContext
 
 	public virtual DbSet<ListGame> ListGames { get; set; }
 
+	public virtual DbSet<Notification> Notifications { get; set; }
+
 	public virtual DbSet<Platform> Platforms { get; set; }
 
 	public virtual DbSet<PlatformGame> PlatformGames { get; set; }
@@ -59,6 +61,9 @@ public partial class PlaylistDbContext : DbContext
 
 	public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
 
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		=> optionsBuilder.UseNpgsql("Name=ppdb");
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<Achievement>(entity =>
@@ -67,7 +72,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("achievement", "playlistdb");
 
-			entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.AchievementDesc).HasColumnName("achievement_desc");
 			entity.Property(e => e.AchievementName).HasColumnName("achievement_name");
 			entity.Property(e => e.ImageUrl).HasColumnName("image_url");
@@ -75,7 +80,6 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.HasOne(d => d.PlatformGame).WithMany(p => p.Achievements)
 				.HasForeignKey(d => d.PlatformGameId)
-				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("achievement_platform_game_id_fkey");
 		});
 
@@ -126,6 +130,12 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.AcceptedDate).HasColumnName("accepted_date");
 			entity.Property(e => e.BaseId).HasColumnName("base_id");
 			entity.Property(e => e.IsAccepted).HasColumnName("is_accepted");
+			entity.Property(e => e.NotifyBaseFriendOnRecievedFriend)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_base_friend_on_recieved_friend");
+			entity.Property(e => e.NotifyRecievedFriendOnBaseFriend)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_recieved_friend_on_base_friend");
 			entity.Property(e => e.RecievedId).HasColumnName("recieved_id");
 
 			entity.HasOne(d => d.Base).WithMany(p => p.FriendBases)
@@ -162,7 +172,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("game_genre", "playlistdb");
 
-			entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GameId).HasColumnName("game_id");
 			entity.Property(e => e.GenreId).HasColumnName("genre_id");
 
@@ -186,13 +196,12 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GameId).HasColumnName("game_id");
 			entity.Property(e => e.LastEditDate).HasColumnName("last_edit_date");
+			entity.Property(e => e.PlaytimeAtModification).HasColumnName("playtime_at_modification");
+			entity.Property(e => e.PlaytimeAtReview).HasColumnName("playtime_at_review");
 			entity.Property(e => e.PublishDate).HasColumnName("publish_date");
 			entity.Property(e => e.Rating).HasColumnName("rating");
 			entity.Property(e => e.Review).HasColumnName("review");
 			entity.Property(e => e.UserId).HasColumnName("user_id");
-			entity.Property(e => e.PlaytimeAtReview).HasColumnName("playtime_at_review");
-			entity.Property(e => e.PlaytimeAtModification).HasColumnName("playtime_at_modification");
-
 
 			entity.HasOne(d => d.Game).WithMany(p => p.GameReviews)
 				.HasForeignKey(d => d.GameId)
@@ -266,7 +275,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("involved_company", "playlistdb");
 
-			entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.CompanyId).HasColumnName("company_id");
 			entity.Property(e => e.GameId).HasColumnName("game_id");
 			entity.Property(e => e.IsDeveloper).HasColumnName("is_developer");
@@ -323,6 +332,26 @@ public partial class PlaylistDbContext : DbContext
 				.HasConstraintName("list_game_list_id_fkey");
 		});
 
+		modelBuilder.Entity<Notification>(entity =>
+		{
+			entity.HasKey(e => e.Id).HasName("notification_pkey");
+
+			entity.ToTable("notification", "playlistdb");
+
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Body).HasColumnName("body");
+			entity.Property(e => e.DateNotified).HasColumnName("date_notified");
+			entity.Property(e => e.Title).HasColumnName("title");
+			entity.Property(e => e.UserId).HasColumnName("user_id");
+			entity.Property(e => e.UserNotified).HasColumnName("user_notified");
+			entity.Property(e => e.Url).HasColumnName("url");
+
+
+			entity.HasOne(d => d.User).WithMany(p => p.Notifications)
+				.HasForeignKey(d => d.UserId)
+				.HasConstraintName("notification_user_id_fkey");
+		});
+
 		modelBuilder.Entity<Platform>(entity =>
 		{
 			entity.HasKey(e => e.Id).HasName("platform_pkey");
@@ -342,6 +371,8 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("platform_game", "playlistdb");
 
+			entity.HasIndex(e => e.PlatformId, "idx_platform_game_platform_id");
+
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GameId).HasColumnName("game_id");
 			entity.Property(e => e.PlatformId).HasColumnName("platform_id");
@@ -350,12 +381,10 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.HasOne(d => d.Game).WithMany(p => p.PlatformGames)
 				.HasForeignKey(d => d.GameId)
-				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("platform_game_game_id_fkey");
 
 			entity.HasOne(d => d.Platform).WithMany(p => p.PlatformGames)
 				.HasForeignKey(d => d.PlatformId)
-				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("platform_game_platform_id_fkey");
 		});
 
@@ -386,17 +415,77 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("user_account", "playlistdb");
 
-			entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.AchievementsPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("achievements_private");
 			entity.Property(e => e.AuthId).HasColumnName("auth_id");
 			entity.Property(e => e.Bio).HasColumnName("bio");
+			entity.Property(e => e.BioPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("bio_private");
+			entity.Property(e => e.FavoriteGamesPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("favorite_games_private");
+			entity.Property(e => e.FavoriteGenresPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("favorite_genres_private");
+			entity.Property(e => e.GamertagsPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("gamertags_private");
+			entity.Property(e => e.GoalPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("goal_private");
 			entity.Property(e => e.Guid).HasColumnName("guid");
 			entity.Property(e => e.JoinDate).HasColumnName("join_date");
+			entity.Property(e => e.LibraryPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("library_private");
+			entity.Property(e => e.NotifyOnAchievementDisliked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_achievement_disliked");
+			entity.Property(e => e.NotifyOnAchievementLiked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_achievement_liked");
+			entity.Property(e => e.NotifyOnFriendRequestAccepted)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_friend_request_accepted");
+			entity.Property(e => e.NotifyOnFriendRequestRecieved)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_friend_request_recieved");
+			entity.Property(e => e.NotifyOnGoalDisliked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_goal_disliked");
+			entity.Property(e => e.NotifyOnGoalEndingSoon)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_goal_ending_soon");
+			entity.Property(e => e.NotifyOnGoalLiked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_goal_liked");
+			entity.Property(e => e.NotifyOnReviewDisliked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_review_disliked");
+			entity.Property(e => e.NotifyOnReviewLiked)
+				.HasDefaultValue(false)
+				.HasColumnName("notify_on_review_liked");
+			entity.Property(e => e.PlaytimePrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("playtime_private");
+			entity.Property(e => e.ReviewsPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("reviews_private");
 			entity.Property(e => e.Strike).HasColumnName("strike");
 			entity.Property(e => e.UserImageId).HasColumnName("user_image_id");
 			entity.Property(e => e.Username)
 				.HasMaxLength(32)
 				.HasColumnName("username");
+			entity.Property(e => e.UsernamePrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("username_private");
 			entity.Property(e => e.Xp).HasColumnName("xp");
+			entity.Property(e => e.XpPrivate)
+				.HasDefaultValue(false)
+				.HasColumnName("xp_private");
 
 			entity.HasOne(d => d.UserImage).WithMany(p => p.UserAccounts)
 				.HasForeignKey(d => d.UserImageId)
@@ -434,13 +523,16 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.DateAdded).HasColumnName("date_added");
+			entity.Property(e => e.GameRank).HasColumnName("game_rank");
+			entity.Property(e => e.IsFavorite)
+				.HasDefaultValue(false)
+				.HasColumnName("is_favorite");
 			entity.Property(e => e.PlatformGameId).HasColumnName("platform_game_id");
 			entity.Property(e => e.TimePlayed).HasColumnName("time_played");
 			entity.Property(e => e.UserId).HasColumnName("user_id");
 
 			entity.HasOne(d => d.PlatformGame).WithMany(p => p.UserGames)
 				.HasForeignKey(d => d.PlatformGameId)
-				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("user_game_platform_game_id_fkey");
 
 			entity.HasOne(d => d.User).WithMany(p => p.UserGames)
@@ -465,7 +557,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.HasOne(d => d.User).WithMany(p => p.UserGenres)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.Cascade)
+				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("user_genre_user_id_fkey");
 		});
 
@@ -476,8 +568,10 @@ public partial class PlaylistDbContext : DbContext
 			entity.ToTable("user_image", "playlistdb");
 
 			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Alt)
+				.HasMaxLength(20)
+				.HasColumnName("alt");
 			entity.Property(e => e.Url).HasColumnName("url");
-			entity.Property(e => e.Alt).HasColumnName("alt");
 		});
 
 		modelBuilder.Entity<UserPlatform>(entity =>

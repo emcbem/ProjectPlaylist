@@ -2,8 +2,8 @@ import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameRevie
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { GameQueries } from "@/hooks/GameQueries";
-import { GameReviewQueries } from "@/hooks/GameReviewQueries";
+import { GameQueries } from "@/queries/GameQueries";
+import { GameReviewQueries } from "@/queries/GameReviewQueries";
 import Slider from "@mui/material/Slider";
 import React, { FC } from "react";
 import { useRef, useState } from "react";

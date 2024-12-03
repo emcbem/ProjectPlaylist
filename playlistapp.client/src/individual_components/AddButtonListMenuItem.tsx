@@ -1,7 +1,7 @@
 import { List } from '@/@types/list';
 import { UpdateListRequest } from '@/@types/Requests/UpdateRequests/updateListRequest';
-import { GameQueries } from '@/hooks/GameQueries';
-import { ListQueries } from '@/hooks/ListQueries';
+import { GameQueries } from '@/queries/GameQueries';
+import { ListQueries } from '@/queries/ListQueries';
 import { MenuItem } from '@material-tailwind/react';
 import React from 'react'
 

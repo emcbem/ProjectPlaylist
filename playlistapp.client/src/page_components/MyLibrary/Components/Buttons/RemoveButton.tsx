@@ -1,6 +1,6 @@
 import { UserAccountContextInterface } from '@/@types/userAccount';
 import { UserAccountContext } from '@/contexts/UserAccountContext';
-import { UserGameQueries } from '@/hooks/UserGameQueries';
+import { UserGameQueries } from '@/queries/UserGameQueries';
 import React from 'react';
 import { FC, useState } from 'react'
 

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { UserGameQueries } from "@/hooks/UserGameQueries";
+import { UserGameQueries } from "@/queries/UserGameQueries";
 import LibraryGameStats from "@/individual_components/ViewLibraryGame/LibrayGameStats";
 import AchievementsPage from "../Achievements";
 import MyLibraryDescription from "./Components/MyLibraryDescription";
