@@ -17,5 +17,7 @@ public partial class Notification
 
     public bool? UserNotified { get; set; }
 
+    public string? Url { get; set; }
+
     public virtual UserAccount? User { get; set; }
 }

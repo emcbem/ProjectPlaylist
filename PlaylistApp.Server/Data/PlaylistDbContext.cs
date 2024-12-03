@@ -344,6 +344,8 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Title).HasColumnName("title");
 			entity.Property(e => e.UserId).HasColumnName("user_id");
 			entity.Property(e => e.UserNotified).HasColumnName("user_notified");
+			entity.Property(e => e.Url).HasColumnName("url");
+
 
 			entity.HasOne(d => d.User).WithMany(p => p.Notifications)
 				.HasForeignKey(d => d.UserId)

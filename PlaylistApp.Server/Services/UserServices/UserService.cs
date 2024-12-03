@@ -6,6 +6,26 @@ using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.UserServices;
 
+internal static class UserIncluder
+{
+	public static IQueryable<Data.UserAccount> IncludeUser(this DbSet<Data.UserAccount> user)
+	{
+		return user.Include(x => x.UserGenres)
+			.Include(x => x.UserPlatforms)
+			.Include(x => x.Lists)
+			.Include(x => x.Notifications)
+			.Include(x => x.UserGames)
+				.ThenInclude(x => x.PlatformGame)
+					.ThenInclude(x => x.Game)
+						.ThenInclude(x => x.InvolvedCompanies)
+							.ThenInclude(x => x.Company)
+			.Include(x => x.UserGames)
+				.ThenInclude(x => x.PlatformGame)
+					.ThenInclude(x => x.Platform)
+			.Include(x => x.UserImage);
+	}
+}
+
 public class UserService : IUserService
 {
 	private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
@@ -45,18 +65,7 @@ public class UserService : IUserService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var user = await context.UserAccounts
-			.Include(x => x.UserGenres)
-			.Include(x => x.UserPlatforms)
-			.Include(x => x.Lists)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Game)
-						.ThenInclude(x => x.InvolvedCompanies)
-							.ThenInclude(x => x.Company)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Platform)
-			.Include(x => x.UserImage)
+			.IncludeUser()
 			.Where(x => x.AuthId == authId)
 			.FirstOrDefaultAsync();
 
@@ -73,18 +82,7 @@ public class UserService : IUserService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var user = await context.UserAccounts
-			.Include(x => x.UserGenres)
-			.Include(x => x.UserPlatforms)
-			.Include(x => x.Lists)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Game)
-						.ThenInclude(x => x.InvolvedCompanies)
-							.ThenInclude(x => x.Company)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Platform)
-			.Include(x => x.UserImage)
+			.IncludeUser()
 			.Where(x => x.Guid == guid)
 			.FirstOrDefaultAsync();
 
@@ -101,18 +99,7 @@ public class UserService : IUserService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var user = await context.UserAccounts
-			.Include(x => x.UserGenres)
-			.Include(x => x.UserPlatforms)
-			.Include(x => x.Lists)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Game)
-						.ThenInclude(x => x.InvolvedCompanies)
-							.ThenInclude(x => x.Company)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Platform)
-			.Include(x => x.UserImage)
+			.IncludeUser()
 			.Where(x => x.Username.Contains(username))
 			.FirstOrDefaultAsync();
 
@@ -129,18 +116,7 @@ public class UserService : IUserService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
-            .Include(x => x.UserGenres)
-            .Include(x => x.UserPlatforms)
-            .Include(x => x.Lists)
-            .Include(x => x.UserGames)
-                .ThenInclude(x => x.PlatformGame)
-                    .ThenInclude(x => x.Game)
-                        .ThenInclude(x => x.InvolvedCompanies)
-                            .ThenInclude(x => x.Company)
-            .Include(x => x.UserGames)
-                .ThenInclude(x => x.PlatformGame)
-                    .ThenInclude(x => x.Platform)
-            .Include(x => x.UserImage)
+            .IncludeUser()
             .Where(x => x.Username.ToLower().Contains(searchQuery.ToLower()) || (x.Bio != null && x.Bio.ToLower().Contains(searchQuery.ToLower())))
             .ToListAsync();
 
@@ -157,18 +133,7 @@ public class UserService : IUserService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var userUnderChange = await context.UserAccounts
-			.Include(x => x.UserGenres)
-			.Include(x => x.UserPlatforms)
-			.Include(x => x.Lists)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Game)
-						.ThenInclude(x => x.InvolvedCompanies)
-							.ThenInclude(x => x.Company)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Platform)
-			.Include(x => x.UserImage)
+			.IncludeUser()
 			.Where(x => x.Guid == updateUserRequest.Guid)
 			.FirstOrDefaultAsync();
 
