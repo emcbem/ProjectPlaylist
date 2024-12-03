@@ -41,6 +41,8 @@ public class NotificationService : INotificationService
 
 		context.Notifications.Add(notificationToCreate);
 
+		await context.SaveChangesAsync();
+
 		return true;
 	}
 
