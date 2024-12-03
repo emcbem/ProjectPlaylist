@@ -24,6 +24,7 @@ import ViewLibraryGame from "./page_components/MyLibrary/ViewLibraryGame";
 import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 import ViewAccount from "./page_components/ViewAccount/ViewAccount";
 import UserLibrary from "./page_components/ViewAccount/UserLibrary/UserLibrary";
+import ViewPlaylist from "./page_components/ViewAccount/Playlists/ViewPlaylist";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -77,6 +78,10 @@ function App() {
                     <Route path="viewallgoals" element={<ViewAllGoals />} />
                     <Route path="user/:id" element={<ViewAccount />} />
                     <Route path="user/:id/library" element={<UserLibrary />} />
+                    <Route
+                      path="user/:id/list/:listId"
+                      element={<ViewPlaylist />}
+                    />
                   </Routes>
                 </div>
               </div>
