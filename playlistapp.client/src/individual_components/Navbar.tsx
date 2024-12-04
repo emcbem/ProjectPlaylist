@@ -12,6 +12,8 @@ const Navbar: React.FC = () => {
   return (
     <div className="z-20">
       <nav className="w-full flex items-center sm:px-4 sm:pt-8 h-20 mb-2 z-20">
+        {/* <div className="z-20 flex justify-center ">
+      <nav className="flex max-w-[1264px] w-full justify-center items-center sm:px-4 sm:pt-8 h-20 mb-2 z-20"> */}
         <div className="flex-shrink-0 z-20">
           <a href="/">
             <img
