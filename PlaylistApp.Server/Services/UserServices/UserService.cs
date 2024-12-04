@@ -3,6 +3,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using System;
 
 namespace PlaylistApp.Server.Services.UserServices;
 
@@ -188,5 +189,29 @@ public class UserService : IUserService
 
 		return true;
 	}
+
+	public async Task<bool> StrikeUser(string guid)
+	{
+		using var context = await dbContextFactory.CreateDbContextAsync();
+
+		Guid g = new Guid(guid);
+
+        var user = await context.UserAccounts
+                .IncludeUser()
+                .Where(x => x.Guid == g)
+                .FirstOrDefaultAsync();
+
+        if (user == null)
+		{
+			return false;
+		}
+
+        user.Strike = user.Strike + 1;
+
+		context.UserAccounts.Update(user);
+		await context.SaveChangesAsync();
+
+		return true;
+    }
 
 }

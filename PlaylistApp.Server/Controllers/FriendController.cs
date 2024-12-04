@@ -52,4 +52,7 @@ public class FriendController : Controller
     {
         return await friendService.RemoveFriend(friendId);
     }
+
+    //[HttpPost("updateNotifications")]
+    //public async Task<bool> UpdateNotifications()
 }

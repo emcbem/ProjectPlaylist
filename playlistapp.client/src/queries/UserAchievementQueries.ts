@@ -3,6 +3,7 @@ import { UserAchievementService } from "@/ApiServices/UserAchievementService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserAchievementKeys";
 import { UpdateUserAchievementRequest } from "@/@types/Requests/UpdateRequests/updateUserAchievementRequest";
+import { GetClaimedAchievementsForGameForUserRequest } from "@/@types/Requests/GetRequests/getClaimedAchievementsForGameForUserRequest";
 
 export const UserAchievementQueries = {
   useAddUserAchievement: (
@@ -124,6 +125,17 @@ export const UserAchievementQueries = {
           queryKey: keys.GetUserAchievementByUserId(userId),
         });
       },
+    });
+  },
+  useGetClaimedAchievementsForGameForUser: (
+    getClaimedAchievementsRequest: GetClaimedAchievementsForGameForUserRequest
+  ) => {
+    return useQuery({
+      queryFn: () =>
+        UserAchievementService.GetClaimedAchievementsForGameForUser(
+          getClaimedAchievementsRequest
+        ),
+      queryKey: keys.GetClaimedAchievements,
     });
   },
 };

@@ -29,12 +29,14 @@ public class EmailService : IEmailService
 			email.From.Add(new MailboxAddress("Project Playlist", senderEmail));
 			email.To.Add(new MailboxAddress(user.Username, recipientEmail));
 			email.Subject = subject;
+			
 
 			// Set the email body
-			email.Body = new TextPart("plain")
+			email.Body = new TextPart("html")
 			{
 				Text = body
 			};
+
 
 			// Connect to the SMTP server and send the email
 			using (var smtpClient = new SmtpClient())

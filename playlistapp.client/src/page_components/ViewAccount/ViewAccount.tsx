@@ -9,6 +9,7 @@ import UserGenresList from "./UserGenresList";
 import GamerTags from "./GamerTags";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import { useParams } from "react-router-dom";
+import AddUserStrike from "./AddUserStrike";
 
 const ViewAccount = () => {
   const { isAuthenticated } = useAuth0();
@@ -28,17 +29,20 @@ const ViewAccount = () => {
     isSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
-          <div className="flex flex-wrap">
-            <img
-              className="rounded-full md:w-24 w-14 shadow-inner"
-              src={usr?.profileURL}
-            />
-            <div className="">
-              <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
-              <p className="md:text-2xl text-lg ms-8">
-                {usr?.xp == 0 ? 0 : usr?.xp} Xp
-              </p>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-wrap">
+              <img
+                className="rounded-full md:w-24 w-14 shadow-inner"
+                src={usr?.profileURL}
+              />
+              <div className="">
+                <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
+                <p className="md:text-2xl text-lg ms-8">
+                  {usr?.xp == 0 ? 0 : usr?.xp} Xp
+                </p>
+              </div>
             </div>
+            <AddUserStrike userGuid={usr.guid} userName={usr.username} />
           </div>
 
           <div className="flex md:flex-row flex-col my-6">
