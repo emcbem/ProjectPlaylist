@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     env:
-      VITE_URL: "https://localhost:7041"
+      VITE_URL: "https://projectplaylist.azurewebsites.net"
     steps:
       - uses: actions/checkout@v3
         with:
