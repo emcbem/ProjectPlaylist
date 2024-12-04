@@ -7,6 +7,7 @@ import path from "path";
 import child_process from "child_process";
 import { env } from "process";
 import dotenv from "dotenv";
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== ""
@@ -34,22 +35,15 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
       { stdio: "inherit" }
     ).status
   ) {
-    // throw new Error("Could not create certificate.");
   }
 }
-
-// const target = env.ASPNETCORE_HTTPS_PORT
-//   ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
-//   : env.ASPNETCORE_URLS
-//   ? env.ASPNETCORE_URLS.split(";")[0]
-//   : "https://localhost:7041";
 
 // Load environment variables
 dotenv.config();
 const isNoCert = process.env.VITE_CERT === "true";
 
 export default defineConfig({
-  plugins: [plugin()],
+  plugins: [plugin(), chunkSplitPlugin()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

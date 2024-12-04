@@ -66,6 +66,8 @@ public class FriendService : IFriendService
             Recieved = recievingUser,
             RecievedId = recievingUser.Id,
             IsAccepted = false,
+            NotifyBaseFriendOnRecievedFriend = true,
+            NotifyRecievedFriendOnBaseFriend = true,
         };
 
         await context.Friends.AddAsync(newFriend);

@@ -1,4 +1,6 @@
+import { Achievement } from "@/@types/achievement";
 import { AddUserAchievementRequest } from "@/@types/Requests/AddRequests/addUserAchievementRequest";
+import { GetClaimedAchievementsForGameForUserRequest } from "@/@types/Requests/GetRequests/getClaimedAchievementsForGameForUserRequest";
 import { UpdateUserAchievementRequest } from "@/@types/Requests/UpdateRequests/updateUserAchievementRequest";
 import { UserAchievement } from "@/@types/userAchievement";
 import axios from "axios";
@@ -131,6 +133,31 @@ export const UserAchievementService = {
       return response.data;
     } catch (error) {
       console.error("Failed to delete user achievement: ", error);
+      throw error;
+    }
+  },
+  GetClaimedAchievementsForGameForUser: async (
+    getClaimedAchievementsRequest: GetClaimedAchievementsForGameForUserRequest
+  ) => {
+    if (!getClaimedAchievementsRequest) {
+      console.error("Get Claimed Achievements Request is undefined or empty");
+      throw new Error("Get Claimed Achievements Request must be provided");
+    }
+    try {
+      const response = await axios.post<Achievement[]>(
+        `${
+          import.meta.env.VITE_URL
+        }/UserAchievement/getachievementsfromgamefromuser`,
+        getClaimedAchievementsRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get claimed achievements for game and user");
       throw error;
     }
   },

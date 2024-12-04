@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserAchievementServices;
 
@@ -50,5 +51,11 @@ public class UserAchievementController : Controller
     public async Task<UserAchievementDTO> UpdateuserAchievement(UpdateUserAchievementRequest request)
     {
         return await userAchievementService.UpdateUserAchievement(request);
+    }
+
+    [HttpPost("getachievementsfromgamefromuser")]
+    public async Task<List<AchievementDTO>> GetAchievementFromGameFromUser(GetClaimedAchievementsForGameForUserRequest request)
+    {
+        return await userAchievementService.GetClaimedAchievementsForGameForUser(request);
     }
 }

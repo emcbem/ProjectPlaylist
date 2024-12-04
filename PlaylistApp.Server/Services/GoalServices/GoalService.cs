@@ -20,6 +20,16 @@ public class GoalService : IGoalService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
+        var possibleGoal = await context.Goals
+            .Where(x => x.AchievementId == request.AchievementId)
+            .Where(x => x.User.Guid == request.UserId)
+            .FirstOrDefaultAsync();
+
+        if (possibleGoal != null)
+        {
+            return 0;
+        }
+
         var user = await context.UserAccounts
             .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
