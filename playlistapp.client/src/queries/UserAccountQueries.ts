@@ -62,4 +62,16 @@ export const UserAccountQueries = {
       },
     });
   },
+  useAddUserStrike: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (userGuid: string) => UserAccountService.AddUserStrike(userGuid),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
+        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId});
+        toast.success("User updated");
+      },
+    });
+  },
 };

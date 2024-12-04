@@ -124,6 +124,27 @@ export const UserAccountService = {
       throw error;
     }
   },
+  AddUserStrike: async (userGuid: string) => {
+    if (!userGuid) {
+      console.error("Update user request was undefined or empty");
+      throw new Error("Update user request must be provided");
+    }
+    try {
+      const response = await axios.patch<boolean>(
+        `${import.meta.env.VITE_URL}/User/strikeuser`,
+        userGuid ,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to strike user.");
+      throw error;
+    }
+  },
   DeleteUser: async (userId: string) => {
     if (!userId) {
       console.error("User id was undefined or empty");

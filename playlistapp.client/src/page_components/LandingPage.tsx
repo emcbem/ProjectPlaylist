@@ -1,7 +1,6 @@
 import React from "react";
 import HorizontalRule from "../individual_components/HorizontalRule";
 import ExpandingColumns from "../individual_components/Platforms";
-import { Link } from "react-router-dom";
 import { GameMarquee } from "@/individual_components/Marquee";
 
 const LandingPage: React.FC = () => {
@@ -22,9 +21,6 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
         <ExpandingColumns />
-        <Link to="/search">
-          <button className="text-white">Search Page</button>
-        </Link>
       </div>
     </>
   );
