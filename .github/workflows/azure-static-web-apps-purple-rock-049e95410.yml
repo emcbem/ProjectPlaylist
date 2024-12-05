@@ -16,6 +16,8 @@ jobs:
     name: Build and Deploy Job
     env:
       VITE_URL: "https://projectplaylist.azurewebsites.net"
+      VITE_AUTH0_CLIENT_ID: "ubMKeoY2RUXas6SYMEwlzoX30ByMxpwt"
+      VITE_AUTH0_DOMAIN: "dev-hto6puiswhque3fr.us.auth0.com"
     steps:
       - uses: actions/checkout@v3
         with:
