@@ -13,4 +13,6 @@ public interface IUserService
     public Task<UserDTO> GetUsersByName(string username);
     public Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery);
     public Task<bool> AddUser(AddUserRequest addUserRequest);
+    public Task<bool> StrikeUser(string request);
+
 }

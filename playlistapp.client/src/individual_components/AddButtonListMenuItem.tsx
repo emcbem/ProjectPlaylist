@@ -24,8 +24,9 @@ const AddButtonListMenuItem: React.FC<props> = ({ lists, gameId, userGuid }) => 
                 listName: selectedList.name,
                 isPublic: selectedList.isPublic,
                 gamesToRemove: [],
-                newGames: [game],
+                newGames: [{...game, platforms: [], reviews: []}],
             };
+            console.log(updateListRequest)
             await updateListMutation(updateListRequest);
         }
     };

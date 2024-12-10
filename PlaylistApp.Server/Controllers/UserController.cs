@@ -58,4 +58,10 @@ public class UserController : Controller
     {
         return await userService.AddUser(addUserRequest);
     }
+
+    [HttpPatch("strikeuser")]
+    public async Task<bool> StrikeUser([FromBody] string userGuid)
+    {
+        return await userService.StrikeUser(userGuid);
+    }
 }

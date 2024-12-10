@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React from "react";
+import { BellIcon } from "@heroicons/react/24/outline";
+import Badge from "@mui/material/Badge";
 
 const Profile: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -24,11 +26,20 @@ const Profile: React.FC = () => {
 
   const MenuList = (props: any) => <MTMenuList {...props} />;
   const MenuItem = (props: any) => <MTMenuItem {...props} />;
-  
+
   return (
     isAuthenticated &&
     usr && (
-      <div className="lg:w-[213.69px] flex justify-end relative z-20">
+      <div className="flex justify-end relative z-20">
+        <Link
+          className="flex justify-center items-center sm:h-14 sm:w-14 h-8 w-8 rounded-full hover:bg-clay-400 transition-all cursor-pointer mx-4"
+          to="/notifications"
+        >
+          <Badge badgeContent={usr.notifications.length} color="warning">
+            <BellIcon strokeWidth={2.5} className={`h-6 w-6`} />
+          </Badge>
+        </Link>
+
         <div className="flex flex-row flex-shrink-0 sm:h-14 sm:w-14 h-8 w-8">
           <Menu placement="bottom-start">
             <MenuHandler>

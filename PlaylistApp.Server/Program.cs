@@ -43,8 +43,8 @@ builder.Services.AddSingleton<SyncService>();
 builder.Services.AddSingleton<DownloadCsv>();
 builder.Services.AddSingleton<UploadData>();
 
-var igdb_client_id = builder.Configuration.GetValue<string>("Client-ID", "");
-var igdb_client_secret = builder.Configuration.GetValue<string>("Client-Secret", "");
+var igdb_client_id = builder.Configuration.GetValue<string>("Client_ID", "");
+var igdb_client_secret = builder.Configuration.GetValue<string>("Client_Secret", "");
 
 builder.Services.AddSingleton(new IGDBClient(igdb_client_id, igdb_client_secret));
 

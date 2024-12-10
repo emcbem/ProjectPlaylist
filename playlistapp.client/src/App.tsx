@@ -25,6 +25,7 @@ import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 import ViewAccount from "./page_components/ViewAccount/ViewAccount";
 import UserLibrary from "./page_components/ViewAccount/UserLibrary/UserLibrary";
 import ViewPlaylist from "./page_components/ViewAccount/Playlists/ViewPlaylist";
+import NotificationPage from "./page_components/Notifications/Notifications";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -54,6 +55,10 @@ function App() {
                     />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/searchusers" element={<SearchUsers />} />
+                    <Route
+                      path="/notifications"
+                      element={<NotificationPage />}
+                    />
                     <Route path="/view-game/:gameId" element={<ViewGame />} />
                     <Route
                       path="/user-library-game/:gameId"
