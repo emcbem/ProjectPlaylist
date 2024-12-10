@@ -2,6 +2,7 @@
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using System.Runtime.InteropServices;
 
@@ -112,6 +113,27 @@ public class GoalService : IGoalService
         }
 
         return goal.ToDTO();
+    }
+
+    public async Task<GoalDTO> GetGoalForUserForAchievement(GetGoalToCompleteRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var goalToComplete = await context.Goals
+             .Include(x => x.Achievement)
+                .ThenInclude(x => x.PlatformGame)
+                    .ThenInclude(x => x.Game)
+            .Include(x => x.User)
+            .Where(x => x.AchievementId == request.AchievementId)
+            .Where(x => x.User.Guid == request.UserId)
+            .FirstOrDefaultAsync();
+
+        if (goalToComplete == null) 
+        {
+            return new GoalDTO(); 
+        }
+
+        return goalToComplete.ToDTO();
     }
 
     public async Task<List<GoalDTO>> GetGoalsFromUser(Guid userId)

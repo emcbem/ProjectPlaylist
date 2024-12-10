@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.GoalServices;
 
@@ -45,5 +46,11 @@ public class GoalController : Controller
     public async Task<GoalDTO> UpdateGoal(UpdateGoalRequest request)
     {
         return await goalService.UpdateGoal(request);
+    }
+
+    [HttpPost("getgoaltocomplete")]
+    public async Task<GoalDTO> GetGoalToComplete(GetGoalToCompleteRequest request)
+    {
+        return await goalService.GetGoalForUserForAchievement(request);
     }
 }

@@ -3,6 +3,7 @@ import { GoalService } from "@/ApiServices/GoalService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/GoalKeys";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
+import { GetGoalToCompleteRequest } from "@/@types/Requests/GetRequests/getGoalToCompleteRequest";
 
 export const GoalQueries = {
   useAddGoal: (addGoalRequest: AddGoalRequest) => {
@@ -42,8 +43,18 @@ export const GoalQueries = {
     return useMutation({
       mutationFn: () => GoalService.deleteGoal(goalId),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.GetGoalsByUser(userGuid) });
+        queryClient.invalidateQueries({
+          queryKey: keys.GetGoalsByUser(userGuid),
+        });
       },
+    });
+  },
+  useGetGoalToComplete: (
+    getGoalToCompleteRequest: GetGoalToCompleteRequest
+  ) => {
+    return useQuery({
+      queryFn: () => GoalService.getGoalToComplete(getGoalToCompleteRequest),
+      queryKey: keys.GetGoalToComplete,
     });
   },
 };

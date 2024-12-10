@@ -1,9 +1,9 @@
 import { Achievement } from "@/@types/achievement";
 import { FC, useContext } from "react";
-import AchievementModalParent from "./AchievementModalParent";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
+import AchievementModalParent from "./Modal/AchievementModalParent";
 
 interface props {
   achievement: Achievement;
@@ -14,7 +14,7 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
   const { data: userEarnedAchievement } =
-    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
+    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid ?? "");
 
   const earnedAchievement =
     userEarnedAchievement &&

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import AchievementsPage from "@/page_components/Achievements";
 import Review from "./Review";
 import ReviewModal from "./ReviewModal";
 import { useParams } from "react-router-dom";
@@ -13,6 +12,7 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 import { GameReview } from "@/@types/gameReview";
+import AchievementsPage from "@/page_components/Achievements/Achievements";
 
 interface TabProps {
   TabName: string;
