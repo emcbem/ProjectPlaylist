@@ -8,7 +8,7 @@ import Account from "./page_components/Account/Account";
 import ShineBorder from "./components/ui/shine-border";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { UserAccountContextProvider } from "./contexts/UserAccountContext";
-import AchievementsPage from "./page_components/Achievements";
+import AchievementsPage from "./page_components/Achievements/Achievements";
 import TestPage from "./page_components/TestPage";
 import ViewGame from "./page_components/ViewGame/ViewGame";
 import { Toaster } from "react-hot-toast";

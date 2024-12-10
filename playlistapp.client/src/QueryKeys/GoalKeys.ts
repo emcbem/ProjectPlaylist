@@ -5,6 +5,7 @@ const GoalKeys = {
     ["Goal", "GetGoalsByUser", userId] as const,
   UpdateGoal: (goalId: number) => ["Goal", "UpdateGoal", goalId] as const,
   DeleteGoal: (goalId: number) => ["Goal", "DeleteGoal", goalId] as const,
+  GetGoalToComplete: ["Goal", "GetGoalToComplete"] as const,
 };
 
 export default GoalKeys;

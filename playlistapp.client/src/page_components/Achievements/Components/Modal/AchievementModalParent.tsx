@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Achievement } from "@/@types/achievement";
+import { UserAchievement } from "@/@types/userAchievement";
 import AchievementModalRemove from "./AchievementModalRemove";
 import AchievementModalAdd from "./AchievementModalAdd";
-import { UserAchievement } from "@/@types/userAchievement";
 
 interface props {
   achievement: Achievement;
@@ -23,10 +23,7 @@ const AchievementModalParent: FC<props> = ({
           userGuid={userGuid}
         />
       ) : (
-        <AchievementModalAdd
-          achievement={achievement}
-          userGuid={userGuid}
-        />
+        <AchievementModalAdd achievement={achievement} userGuid={userGuid} />
       )}
     </>
   );

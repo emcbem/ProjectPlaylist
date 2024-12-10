@@ -46,8 +46,6 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
     userId: userGame.user.guid,
   };
 
-  console.log("Add Request: ", addGoalRequest);
-
   const { data: claimedAchievements } =
     UserAchievementQueries.useGetClaimedAchievementsForGameForUser(
       getClaimedAchievementsRequest

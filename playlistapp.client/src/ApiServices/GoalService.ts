@@ -1,5 +1,6 @@
 import { Goal } from "@/@types/goal";
 import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
+import { GetGoalToCompleteRequest } from "@/@types/Requests/GetRequests/getGoalToCompleteRequest";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
 import axios from "axios";
 
@@ -103,6 +104,29 @@ export const GoalService = {
       return response.data;
     } catch (error) {
       console.error("Failed to delete goal");
+      throw error;
+    }
+  },
+  getGoalToComplete: async (
+    getGoalToCompleteRequest: GetGoalToCompleteRequest
+  ) => {
+    if (!getGoalToCompleteRequest) {
+      console.error("Get Goal To Complete Request is undefined or empty");
+      throw new Error("Get Goal To Complete Request must be provided");
+    }
+    try {
+      const response = await axios.post<Goal>(
+        `${import.meta.env.VITE_UTL}/Goal/getgoaltocomplete`,
+        getGoalToCompleteRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get goal to complete");
       throw error;
     }
   },

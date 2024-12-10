@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { UserGameQueries } from "@/queries/UserGameQueries";
 import LibraryGameStats from "@/individual_components/ViewLibraryGame/LibrayGameStats";
-import AchievementsPage from "../Achievements";
+import AchievementsPage from "../Achievements/Achievements";
 import MyLibraryDescription from "./Components/MyLibraryDescription";
 import { useState } from "react";
 import GoalModalAdd from "../Goals/Components/Modal/GoalModalAdd";

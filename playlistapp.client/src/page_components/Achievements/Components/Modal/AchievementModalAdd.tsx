@@ -1,8 +1,14 @@
 import React, { FC, useState, useRef } from "react";
-import DateSelector from "./DateSelector";
+import DateSelector from "../../../../individual_components/DateSelector";
 import { Achievement } from "@/@types/achievement";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import { AddUserAchievementRequest } from "@/@types/Requests/AddRequests/addUserAchievementRequest";
+import { AddAchievementButton } from "../Buttons/AddAchievementButton";
+import { SubmitAchievementButton } from "../Buttons/SubmitAchievementButton";
+import { AchievementPictureDisplay } from "../AchievementPictureDisplay";
+import { GoalQueries } from "@/queries/GoalQueries";
+import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
+import { GetGoalToCompleteRequest } from "@/@types/Requests/GetRequests/getGoalToCompleteRequest";
 
 interface props {
   achievement: Achievement;
@@ -24,11 +30,33 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
     achievementId: Number(achievement.id),
   };
 
+  const getGoalToCompleteRequest: GetGoalToCompleteRequest = {
+    achievementId: achievement.id,
+    userId: userGuid,
+  };
+
+  const { data: goalToComplete } = GoalQueries.useGetGoalToComplete(
+    getGoalToCompleteRequest
+  );
+
+  const updateGoalRequest: UpdateGoalRequest = {
+    dateToAchieve: new Date(`${month}/${day}/${year}`),
+    isComplete: true,
+    isCurrent: false,
+    userId: userGuid ?? "",
+    id: goalToComplete?.id ?? 0,
+  };
+
   const { mutate: addUserAchievement } =
     UserAchievementQueries.useAddUserAchievement(
       addUserAchievementRequest,
       userGuid
     );
+
+  const { mutate: CompleteGoal } = GoalQueries.useUpdateGoal(
+    updateGoalRequest,
+    userGuid
+  );
 
   const openModal = () => {
     setIsOpen(true);
@@ -41,6 +69,9 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     addUserAchievement();
+    if (goalToComplete?.id !== 0) {
+      CompleteGoal();
+    }
     closeModal();
   };
 
@@ -52,21 +83,7 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
 
   return (
     <>
-      <button onClick={openModal} className="" type="button">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          className={`w-[35px] h-[35px] md:m-1 ml-1 mb-1 fill-current`}
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            className="text-black dark:text-white"
-            d="M13 9C13 8.44772 12.5523 8 12 8C11.4477 8 11 8.44772 11 9V11H9C8.44772 11 8 11.4477 8 12C8 12.5523 8.44772 13 9 13H11V15C11 15.5523 11.4477 16 12 16C12.5523 16 13 15.5523 13 15V13H15C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11H13V9ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z"
-          />
-        </svg>
-      </button>
+      <AddAchievementButton openModal={openModal} />
 
       <div
         onClick={handleBackdropClick}
@@ -82,14 +99,7 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
             isOpen ? "scale-100" : "scale-95"
           }`}
         >
-          <div className="mx-5 flex flex-col justify-center items-center">
-            <img
-              src={achievement.imageURL}
-              className="w-40 h-40 object-cover rounded-lg shadow-xl sticky top-10"
-              alt={`Achievement`}
-            />
-            <p>{achievement.name}</p>
-          </div>
+          <AchievementPictureDisplay achievement={achievement} />
 
           <form
             onSubmit={handleSubmit}
@@ -109,14 +119,7 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
               />
             </div>
 
-            <div className="p-6 pb-0">
-              <button
-                className="w-full rounded-md bg-clay-950 py-2 px-4 text-sm text-white"
-                type="submit"
-              >
-                Submit
-              </button>
-            </div>
+            <SubmitAchievementButton />
           </form>
         </div>
       </div>
