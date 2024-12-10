@@ -1,5 +1,3 @@
-import React, { useRef } from "react";
-
 interface DateSelectorProps {
   month: string;
   day: string;
@@ -17,9 +15,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   setDay,
   setYear,
 }) => {
-  const monthRef = useRef<HTMLInputElement>(null);
-  const dayRef = useRef<HTMLInputElement>(null);
-  const yearRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (
@@ -27,30 +22,12 @@ const DateSelector: React.FC<DateSelectorProps> = ({
       event.key !== "Backspace" &&
       event.key !== "Delete"
     ) {
-      event.preventDefault();
-    }
-  };
-
-  const handleDayKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    ref: React.RefObject<HTMLInputElement>
-  ) => {
-    if (event.key === "Tab" && ref == monthRef) {
-      event.preventDefault();
-      dayRef.current?.focus();
-    } else if (event.key === "Tab" && ref == dayRef) {
-      event.preventDefault();
-      yearRef.current?.focus();
-    } else if (event.key === "Tab" && ref == yearRef) {
-      event.preventDefault();
-      monthRef.current?.focus();
     }
   };
 
   return (
     <div className="flex flex-row w-full items-center">
       <input
-        ref={monthRef}
         value={month}
         onChange={(e) => setMonth(e.target.value)}
         maxLength={2}
@@ -60,14 +37,13 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         placeholder="MM"
         onKeyDown={(e) => {
           handleKeyDown(e);
-          handleDayKeyDown(e, monthRef);
         }}
       />
       <h1>/</h1>
       <input
-        ref={dayRef}
         value={day}
         onChange={(e) => setDay(e.target.value)}
+
         maxLength={2}
         min="1"
         max="31"
@@ -75,14 +51,13 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         placeholder="DD"
         onKeyDown={(e) => {
           handleKeyDown(e);
-          handleDayKeyDown(e, dayRef);
         }}
       />
       <h1>/</h1>
       <input
-        ref={yearRef}
         value={year}
         onChange={(e) => setYear(e.target.value)}
+
         maxLength={4}
         min="1900"
         max="2100"
@@ -90,7 +65,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         placeholder="YYYY"
         onKeyDown={(e) => {
           handleKeyDown(e);
-          handleDayKeyDown(e, yearRef);
         }}
       />
     </div>
