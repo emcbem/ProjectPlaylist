@@ -1,11 +1,11 @@
 import React, { FC, useContext, useState } from "react";
-import AchievementsPage from "@/page_components/Achievements";
 import Gauge from "./Gauge";
 import NumberTicker from "@/components/ui/number-ticker";
 import { UserGame } from "@/@types/usergame";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
+import AchievementsPage from "@/page_components/Achievements/Achievements";
 
 interface TabProps {
   TabName: string;
@@ -49,7 +49,7 @@ const LibraryTabs: FC<{ userGame?: UserGame }> = ({ userGame }) => {
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
 
   const { data: userEarnedAchievement } =
-    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid!);
+    UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid ?? "");
 
   return (
     <div className="w-full">
