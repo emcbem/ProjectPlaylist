@@ -9,7 +9,7 @@ const ViewGameInfo = ({ game }: { game: Game }) => {
         {game?.title}
       </h1>
       <p className="text-clay-950 dark:text-clay-900">
-        {game?.companies[0].name} -&nbsp;Released&nbsp;
+        {game?.companies.length > 0 && game?.companies[0].name  || "No Companies"} -&nbsp;Released&nbsp;
         {game?.publishDate
           ? formatDate(new Date(game.publishDate))
           : "No publish date"}

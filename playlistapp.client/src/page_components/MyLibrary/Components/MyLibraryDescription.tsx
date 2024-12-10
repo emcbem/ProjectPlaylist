@@ -20,7 +20,7 @@ const MyLibraryDescription: FC<props> = ({ userGame, onAddClick }) => {
             <p className="text-clay-950 dark:text-clay-900"></p>
             <p className="text-clay-950 dark:text-clay-900">
               {userGame?.platformGame.platform.name} -&nbsp;
-              {userGame?.platformGame.game?.companies[0].name}{" "}
+              {userGame?.platformGame.game?.companies.length > 0 && userGame?.platformGame.game?.companies[0].name || "No Companies"}{" "}
               -&nbsp;Released&nbsp;
               {userGame?.platformGame.game?.publishDate
                 ? formatDate(new Date(userGame?.platformGame.game.publishDate))
