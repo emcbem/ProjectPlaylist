@@ -118,6 +118,7 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.LogoUrl).HasColumnName("logo_url");
 			entity.Property(e => e.Slug).HasColumnName("slug");
 			entity.Property(e => e.StartDate).HasColumnName("start_date");
+			entity.Property(e => e.Checksum).HasColumnName("checksum");
 		});
 
 		modelBuilder.Entity<Friend>(entity =>
@@ -164,7 +165,8 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Title)
 				.HasMaxLength(350)
 				.HasColumnName("title");
-		});
+            entity.Property(e => e.Checksum).HasColumnName("checksum");
+        });
 
 		modelBuilder.Entity<GameGenre>(entity =>
 		{
@@ -221,7 +223,8 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GenreName).HasColumnName("genre_name");
-		});
+            entity.Property(e => e.Checksum).HasColumnName("checksum");
+        });
 
 		modelBuilder.Entity<Goal>(entity =>
 		{
@@ -363,7 +366,8 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.PlatformName)
 				.HasMaxLength(40)
 				.HasColumnName("platform_name");
-		});
+            entity.Property(e => e.Checksum).HasColumnName("checksum");
+        });
 
 		modelBuilder.Entity<PlatformGame>(entity =>
 		{
