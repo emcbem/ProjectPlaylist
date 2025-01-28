@@ -33,6 +33,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     company.Name = csv.GetField("name");
                     company.Description = csv.GetField("description");
                     company.StartDate = csv.GetField<DateTime?>("start_date") ?? new DateTime();
+                    company.Checksum = csv.GetField<string>("checksum");
 
                     companies.Add(company);
                 }
@@ -83,6 +84,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     platform.Id = csv.GetField<long?>("id");
                     platform.Name = csv.GetField("name");
                     var platformLogoId = csv.GetField<long?>("platform_logo");
+                    platform.Checksum = csv.GetField < string > ("checksum");
 
                     platform.PlatformLogo = platformLogoId.HasValue ? new IdentityOrValue<PlatformLogo>(platformLogoId.Value) : new IdentityOrValue<PlatformLogo>(-1);
 
@@ -235,6 +237,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     var genre = new IGDB.Models.Genre();
                     genre.Name = csv.GetField<string>("name");
                     genre.Id = csv.GetField<long?>("id");
+                    genre.Checksum = csv.GetField<string>("checksum");
                     genres.Add(genre);
                 }
             }
@@ -285,7 +288,6 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.Name = csv.GetField<string>("name");
                     game.Summary = csv.GetField<string>("summary");
                     game.Category = (Category)(csv.GetField<long>("category"));
-                    game.PlayerPerspectives = new IdentitiesOrValues<PlayerPerspective>(ParseLongArray(csv.GetField<string>("player_perspectives")!));
                     game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")!));
                     game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")!));
                     game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")!));
@@ -300,6 +302,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
 					var parentGameId = csv.GetField<long?>("parent_game");
                     game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1); 
+                    game.Checksum = csv.GetField<string>("checksum");
                     // Example null check
                     if (string.IsNullOrWhiteSpace(game.Name))
                     {

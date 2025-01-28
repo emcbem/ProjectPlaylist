@@ -19,7 +19,7 @@ public partial class Game
 
     public int? IdgbId { get; set; }
 
-    public int? Checksum { get; set; }
+    public string? Checksum { get; set; }
 
     public virtual ICollection<GameGenre> GameGenres { get; set; } = new List<GameGenre>();
 

@@ -9,7 +9,7 @@ public partial class Genre
 
     public string GenreName { get; set; } = null!;
 
-    public int? Checksum { get; set; }
+    public string? Checksum { get; set; }
 
     public virtual ICollection<GameGenre> GameGenres { get; set; } = new List<GameGenre>();
 

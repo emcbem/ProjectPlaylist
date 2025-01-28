@@ -15,7 +15,7 @@ public partial class Company
 
     public DateTime? StartDate { get; set; }
 
-    public int? Checksum { get; set; }
+    public string? Checksum { get; set; }
 
     public string? Slug { get; set; }
 
