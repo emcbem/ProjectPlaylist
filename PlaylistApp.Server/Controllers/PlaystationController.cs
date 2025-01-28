@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Services.PlaystationServices;
+using PsnApiWrapperNet.Model;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -35,5 +37,11 @@ public class PlaystationController : Controller
         {
             return StatusCode(500, new {Error = ex.Message});
         }
+    }
+
+    [HttpPost("searchplayers")]
+    public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers(string username)
+    {
+        return await playstationService.SearchPlayer(username);
     }
 }

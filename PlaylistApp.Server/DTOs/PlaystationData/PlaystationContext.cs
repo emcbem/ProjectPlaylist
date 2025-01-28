@@ -1,6 +1,4 @@
-﻿using Org.BouncyCastle.Bcpg.OpenPgp;
-
-namespace PlaylistApp.Server.DTOs.PlaystationData;
+﻿namespace PlaylistApp.Server.DTOs.PlaystationData;
 
 public class PlaystationContext
 {
