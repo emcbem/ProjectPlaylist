@@ -32,9 +32,14 @@ public static class Strainer
 			42
 		};
 
+	public static HashSet<string> FlaggedNames = new HashSet<string>()
+	{
+		"feet", "furry", "hentai", "girlfriend", "hitler", "boob", "penis", "dick","lewd", "nsfw"
+	};
+
 	public static List<IGDB.Models.Game> StrainGames(List<IGDB.Models.Game> games)
 	{
-		var uselessGames = games.Where(p =>
+		var cleanedGames = games.Where(p =>
 		{
 			bool keywordFlagged = p.Keywords?.Ids.Any(id => FlaggedKeywords.Contains((int?)id)) ?? false;
 			bool platformFlagged = p.Platforms.Ids.Count() == 0 || p.Platforms.Ids.All(id => FlaggedPlatforms.Contains((int)id));
@@ -42,9 +47,9 @@ public static class Strainer
 			bool themeFlagged = p.Themes?.Ids.Any(id => FlaggedThemes.Contains((int)id)) ?? false;
 			bool flaggedAsDlc = p.Category != IGDB.Models.Category.MainGame;
 
-			return keywordFlagged || platformFlagged || coverFlagged || themeFlagged || flaggedAsDlc;
+			return !(keywordFlagged || platformFlagged || coverFlagged || themeFlagged || flaggedAsDlc);
 		}).ToList();
 
-		return uselessGames;
+		return cleanedGames;
 	}
 }

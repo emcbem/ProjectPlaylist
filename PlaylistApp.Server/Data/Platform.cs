@@ -11,6 +11,8 @@ public partial class Platform
 
     public string PlatformName { get; set; } = null!;
 
+    public int? Checksum { get; set; }
+
     public virtual ICollection<PlatformGame> PlatformGames { get; set; } = new List<PlatformGame>();
 
     public virtual ICollection<UserPlatform> UserPlatforms { get; set; } = new List<UserPlatform>();

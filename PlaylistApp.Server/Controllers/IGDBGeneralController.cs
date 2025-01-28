@@ -35,98 +35,98 @@ public class IGDBGeneralController
 
     //Don't uncomment unless you need to reseed the database with games!
 
-    [HttpGet("Reset Games")]
-    public async Task ResetGames()
-    {
-        await downloader.DownloadCSV(IGDBClient.Endpoints.Keywords);
+  //  [HttpGet("Reset Games")]
+  //  public async Task ResetGames()
+  //  {
+  //      await downloader.DownloadCSV(IGDBClient.Endpoints.Keywords);
 
-		var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
-        var igdbGames = Parser.ParseGameCsv(gameLocalPath);
-        var filteredGames = Strainer.StrainGames(igdbGames);
-        var coverLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Covers);
-        var igdbCovers = Parser.ParseCoverCsv(coverLocalPath);
-        var ageRatingLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.AgeRating);
+		//var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+  //      var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+  //      var filteredGames = Strainer.StrainGames(igdbGames);
+  //      var coverLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Covers);
+  //      var igdbCovers = Parser.ParseCoverCsv(coverLocalPath);
+  //      var ageRatingLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.AgeRating);
 
-		var igdbRatings = Parser.ParseRatingCsv(ageRatingLocalPath);
-        var localGames = Translator.TranslateIGDBGamesIntoPersonalData(filteredGames, igdbCovers, igdbRatings);
-        var allGames = await uploader.GetAllGames();
-        var gameDict = allGames.ToDictionary(p => p?.IdgbId ?? 0, p => p);
-        var realGamesToRemove = localGames.Where(p => gameDict.ContainsKey(p?.IdgbId ?? 0)).Select(p => gameDict[p?.IdgbId ?? 0]).ToList();
-        Console.WriteLine("Hi");
-        await uploader.RemoveGames(realGamesToRemove);
-    }
+		//var igdbRatings = Parser.ParseRatingCsv(ageRatingLocalPath);
+  //      var localGames = Translator.TranslateIGDBGamesIntoPersonalData(filteredGames, igdbCovers, igdbRatings);
+  //      var allGames = await uploader.GetAllGames();
+  //      var gameDict = allGames.ToDictionary(p => p?.IdgbId ?? 0, p => p);
+  //      var realGamesToRemove = localGames.Where(p => gameDict.ContainsKey(p?.IdgbId ?? 0)).Select(p => gameDict[p?.IdgbId ?? 0]).ToList();
+  //      Console.WriteLine("Hi");
+  //      await uploader.RemoveGames(realGamesToRemove);
+  //  }
 
-    [HttpGet("Upload Companies")]
-    public async Task UploadCompanies()
-    {
-        var companiesLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Companies);
-        var igdbCompanies = Parser.ParseCompanyCsv(companiesLocalPath);
-        var companyLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.CompanyLogos);
-        var igdbCompanyLogos = Parser.ParseCompanyLogoCsv(companyLogoUrl);
-        var localCompanies = Translator.TranslateIGDBCompaniesIntoPersonalData(igdbCompanies, igdbCompanyLogos);
-        var test = localCompanies.GroupBy(x => x.Id).Where(x => x.Count() > 1).ToList();
-        await uploader.UploadCompaniesToDatabase(localCompanies);
-    }
+  //  [HttpGet("Upload Companies")]
+  //  public async Task UploadCompanies()
+  //  {
+  //      var companiesLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Companies);
+  //      var igdbCompanies = Parser.ParseCompanyCsv(companiesLocalPath);
+  //      var companyLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.CompanyLogos);
+  //      var igdbCompanyLogos = Parser.ParseCompanyLogoCsv(companyLogoUrl);
+  //      var localCompanies = Translator.TranslateIGDBCompaniesIntoPersonalData(igdbCompanies, igdbCompanyLogos);
+  //      var test = localCompanies.GroupBy(x => x.Id).Where(x => x.Count() > 1).ToList();
+  //      await uploader.UploadCompaniesToDatabase(localCompanies);
+  //  }
 
-    [HttpGet("uploadPlatforms")]
-    [EndpointName("Upload Platforms")]
-    [EndpointDescription("A way to upload the platforms from IGDB in a quick and easy way")]
-    public async Task UploadPlatforms()
-    {
-        var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
-        var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
-        var platformLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.PlatformLogos);
-        var igdbPlatformLogos = Parser.ParsePlatformLogoCsv(platformLogoUrl);
-        var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
-        await uploader.UploadPlatformsToDatabase(localPlatforms);
-    }
+  //  [HttpGet("uploadPlatforms")]
+  //  [EndpointName("Upload Platforms")]
+  //  [EndpointDescription("A way to upload the platforms from IGDB in a quick and easy way")]
+  //  public async Task UploadPlatforms()
+  //  {
+  //      var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
+  //      var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
+  //      var platformLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.PlatformLogos);
+  //      var igdbPlatformLogos = Parser.ParsePlatformLogoCsv(platformLogoUrl);
+  //      var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
+  //      await uploader.UploadPlatformsToDatabase(localPlatforms);
+  //  }
 
     [HttpDelete("PLEASE00")]
     public async Task Delete()
     {
-        await uploader.PleaseDeleteThem();
+        await downloader.DownloadCSV(IGDBClient.Endpoints.ExternalGames);
     }
 
-    [HttpGet("uploadPlatformsGames")]
-    public async Task UploadPlatformGames()
-    {
-        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
-        var igdbGames = Parser.ParseGameCsv(gameLocalPath);
-        var externalLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.ExternalGames);
-        var igdbExternalGames = Parser.ParseExternalGameCsv(externalLocalPath);
-        var websiteLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Websites);
-        var igdbWebsites = Parser.ParseWebsiteCsv(websiteLocalPath);
-        var localGames = await uploader.GetAllGames();
-        var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(localGames, igdbGames, igdbExternalGames, igdbWebsites);
-        await uploader.UploadPlatformGamesToDatabase(localPlatforms);
-    }
+    //[HttpGet("uploadPlatformsGames")]
+    //public async Task UploadPlatformGames()
+    //{
+    //    var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+    //    var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+    //    var externalLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.ExternalGames);
+    //    var igdbExternalGames = Parser.ParseExternalGameCsv(externalLocalPath);
+    //    var websiteLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Websites);
+    //    var igdbWebsites = Parser.ParseWebsiteCsv(websiteLocalPath);
+    //    var localGames = await uploader.GetAllGames();
+    //    var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(localGames, igdbGames, igdbExternalGames, igdbWebsites);
+    //    await uploader.UploadPlatformGamesToDatabase(localPlatforms);
+    //}
 
-    [HttpGet("uploadGenres")]
-    public async Task UploadGenres()
-    {
-        var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
-        var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
-        var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenre);
-        await uploader.UploadGenresToDatabase(localGenres);
-    }
+    //[HttpGet("uploadGenres")]
+    //public async Task UploadGenres()
+    //{
+    //    var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
+    //    var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
+    //    var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenre);
+    //    await uploader.UploadGenresToDatabase(localGenres);
+    //}
 
-    [HttpGet("uploadInvolvedCompany")]
-    public async Task UploadInvolvedCompany()
-    {
-        var involvedCompanyPath = await downloader.DownloadCSV(IGDBClient.Endpoints.InvolvedCompanies);
-        var igdbInvolvedCompany = Parser.ParseInvolvedCompanyCsv(involvedCompanyPath);
-        var localGames = await uploader.GetAllGames();
-        var localInvolvedCompanies = Translator.TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(igdbInvolvedCompany, localGames);
-        await uploader.UploadInvolvedCompaniesToDatabase(localInvolvedCompanies);
-    }
+    //[HttpGet("uploadInvolvedCompany")]
+    //public async Task UploadInvolvedCompany()
+    //{
+    //    var involvedCompanyPath = await downloader.DownloadCSV(IGDBClient.Endpoints.InvolvedCompanies);
+    //    var igdbInvolvedCompany = Parser.ParseInvolvedCompanyCsv(involvedCompanyPath);
+    //    var localGames = await uploader.GetAllGames();
+    //    var localInvolvedCompanies = Translator.TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(igdbInvolvedCompany, localGames);
+    //    await uploader.UploadInvolvedCompaniesToDatabase(localInvolvedCompanies);
+    //}
 
-    [HttpGet("uploadGameGenres")]
-    public async Task UploadGameGenres()
-    {
-        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
-        var igdbGames = Parser.ParseGameCsv(gameLocalPath);
-        var localGames = await uploader.GetAllGames();
-        var localGameGenres = Translator.TranslateIGDBGamesIntoLocalGameGenres(igdbGames, localGames);
-        await uploader.UploadGameGenres(localGameGenres);
-    }
+    //[HttpGet("uploadGameGenres")]
+    //public async Task UploadGameGenres()
+    //{
+    //    var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+    //    var igdbGames = Parser.ParseGameCsv(gameLocalPath);
+    //    var localGames = await uploader.GetAllGames();
+    //    var localGameGenres = Translator.TranslateIGDBGamesIntoLocalGameGenres(igdbGames, localGames);
+    //    await uploader.UploadGameGenres(localGameGenres);
+    //}
 }

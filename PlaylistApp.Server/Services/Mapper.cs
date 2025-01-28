@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.Services.Achievement;
+﻿using PlaylistApp.Server.DTOs.PlaystationData;
+using PlaylistApp.Server.Services.Achievement;
 using PlaylistApp.Server.Services.CompanyServices;
 using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.FriendServices;
@@ -11,6 +12,7 @@ using PlaylistApp.Server.Services.ListServices;
 using PlaylistApp.Server.Services.NotificationServices;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.PlatformServices;
+using PlaylistApp.Server.Services.PlaystationServices;
 using PlaylistApp.Server.Services.ReviewLikeServices;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 using PlaylistApp.Server.Services.UserAchievementServices;
@@ -44,5 +46,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<INotificationService, NotificationService>();
 		builder.Services.AddSingleton<IEmailService, EmailService>();
+		builder.Services.AddSingleton<PlaystationAuthenticationService>();
+		builder.Services.AddSingleton<PlaystationContext>();
     }
 }
