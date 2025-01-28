@@ -19,6 +19,8 @@ public partial class Game
 
     public int? IdgbId { get; set; }
 
+    public int? Checksum { get; set; }
+
     public virtual ICollection<GameGenre> GameGenres { get; set; } = new List<GameGenre>();
 
     public virtual ICollection<GameReview> GameReviews { get; set; } = new List<GameReview>();
