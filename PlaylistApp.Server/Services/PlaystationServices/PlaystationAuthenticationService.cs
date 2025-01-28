@@ -1,14 +1,22 @@
 ﻿using PlaylistApp.Server.DTOs.PlaystationData;
-using System.Net.Http;
 using System.Text.Json;
 using System.Web;
-using static System.Net.WebRequestMethods;
+using PsnApiWrapperNet;
+using PsnApiWrapperNet.Model;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
 
 public class PlaystationAuthenticationService
 {
     private readonly HttpClient httpClient = new();
+    private readonly IConfiguration config;
+
+    public PlaystationAuthenticationService(IConfiguration configuration)
+    {
+        config = configuration;
+    }
 
     public async Task GetPlaystationAuthenticationToken(string npsso)
     {
@@ -33,13 +41,13 @@ public class PlaystationAuthenticationService
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Cookie", $"npsso={npsso}");
 
-            var response = await httpClient.SendAsync( request );
+            var response = await httpClient.SendAsync(request);
 
             if (response.Headers.Location != null && response.Headers.Location.Query.Contains("?code=v3"))
             {
                 var query = HttpUtility.ParseQueryString(response.Headers.Location.Query);
 
-                string code = query["code"];
+                string code = query["code"]!;
 
                 // Exchange authorization code for tokens
                 await ExchangeAuthorizationCodeForTokenAsync(code);
@@ -103,5 +111,40 @@ public class PlaystationAuthenticationService
         {
             Console.WriteLine($"Error: Unable to obtain Authentication Token. Details: {ex.Message}");
         }
+    }
+
+    public async Task<List<PlaystationUserDTO>> SearchPlayer(string userName)
+    {
+        PAWN pawn = new(config["npsso"]);
+        List<PlaystationUserDTO> playstationUsers = new();
+
+        try
+        {
+            var response = await pawn.SearchPlayerAsync(userName);
+
+            foreach(var user in response.domainResponses)
+            {
+
+                foreach (var result in user.results)
+                {
+                    PlaystationUserDTO possiblePlaystationUser = new();
+
+                    possiblePlaystationUser.AccountId = result.socialMetadata.accountId;
+                    possiblePlaystationUser.OnlineId = result.socialMetadata.onlineId;
+                    possiblePlaystationUser.AvatarUrl = result.socialMetadata.avatarUrl;
+
+                    playstationUsers.Add(possiblePlaystationUser);
+                }
+
+            }
+
+            return playstationUsers;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to get user for username: {userName}. Details: {ex.Message}");
+        }
+
+        return new List<PlaystationUserDTO>();
     }
 }
