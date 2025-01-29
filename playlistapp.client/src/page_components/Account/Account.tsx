@@ -17,27 +17,26 @@ import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
 
 const Account = () => {
-  const { isAuthenticated } = useAuth0();
-  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+    const { isAuthenticated } = useAuth0();
+    const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
 
-  const { usr, userGuid } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
+    const { usr, userGuid } = React.useContext(
+        UserAccountContext
+    ) as UserAccountContextInterface;
 
-  const {
-    data: userGamesFromUser,
-    isLoading,
-    isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+    const {
+        data: userGamesFromUser,
+        isLoading,
+        isSuccess,
+    } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
-  const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
-    GoalQueries.useGetGoalsByUser(userGuid ?? "");
+    const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
+        GoalQueries.useGetGoalsByUser(userGuid ?? "");
 
-  useEffect(() => {
-    const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
-    setCurrentGoal(foundCurrentGoal);
-  }, [allUserGoals]);
-
+    useEffect(() => {
+        const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
+        setCurrentGoal(foundCurrentGoal);
+    }, [allUserGoals]);
   return (
     isAuthenticated &&
     usr?.profileURL &&
@@ -85,8 +84,8 @@ const Account = () => {
           <PlaylistLists />
         </div>
       </div>
-    )
-  );
+        )
+    );
 };
 
 export default Account;
