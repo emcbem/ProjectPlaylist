@@ -1,16 +1,20 @@
-﻿//namespace PlaylistApp.Server.Services.IGDBServices;
+﻿using PlaylistApp.Server.Interfaces;
 
-//public class Difference
-//{
-//    public static FindItemsThatNeedAttention()
-//    {
+namespace PlaylistApp.Server.Services.IGDBServices;
 
-//    }
-//}
 
-//public class DifferencesToCheck
-//{
-//    public List<int>? ChecksumsToCheck { get; set; }
-//    public List<int>? Missing { get; set; }
-//}
+
+public class Difference
+{
+    public static DifferencesToCheck FindItemsThatNeedAttention(List<IChecksum> personalDatabase, HashSet<(string, string)> igdbChecksums)
+    {
+
+    }
+}
+
+public class DifferencesToCheck
+{
+    public List<IChecksum>? ChecksumsThatChanged { get; set; }
+    public List<IChecksum>? Missing { get; set; }
+}
 

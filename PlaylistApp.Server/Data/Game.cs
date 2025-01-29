@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using PlaylistApp.Server.Interfaces;
 
 namespace PlaylistApp.Server.Data;
 
-public partial class Game
+public partial class Game : IChecksum
 {
     public int Id { get; set; }
 
