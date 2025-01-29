@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlaylistApp.Server.Services.SteamServices;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -6,6 +7,23 @@ namespace PlaylistApp.Server.Controllers;
 [Route("[controller]")]
 public class SteamController : Controller
 {
+	private readonly ISteamService steamService;
+	public SteamController(ISteamService steamService)
+	{
+		this.steamService = steamService;
+	}
+
+	[HttpGet("steam/getgames")]
+	public async Task GetGamesBySteamId(string steamId)
+	{
+		await steamService.GetGamesFromUserBasedOffOfSteamId(steamId);
+	}
+
+
+
+
+
+
 	//private static readonly OpenIdRelyingParty RelyingParty = new OpenIdRelyingParty();
 	//internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
 

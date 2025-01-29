@@ -71,7 +71,7 @@ function App() {
                       path="/achievements/:gameId"
                       element={<AchievementsPage />}
                     />
-                    <Route path="/test/:goalId" element={<TestPage />} />
+                    <Route path="/test" element={<TestPage />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route
                       path="/settings/setprofileimage"
