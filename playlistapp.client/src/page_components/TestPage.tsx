@@ -10,9 +10,10 @@ const TestPage = () => {
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { data: games } = SteamQueries.useGetUserDataForOneGame("76561199807777945");
+  const { data: games } =
+    SteamQueries.useGetUserDataForOneGame("76561199807777945");
 
-
+  console.log("STEAM DATA", games);
 
   return (
     isAuthenticated &&
