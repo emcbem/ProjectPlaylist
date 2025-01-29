@@ -12,16 +12,22 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import React from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Badge from "@mui/material/Badge";
+import LoginButton from "./login";
+import LoadingDots from "@/individual_components/NavbarProfileSection";
 
 const Profile: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
-  const { usr } = React.useContext(
+  const { usr, isLoading } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
   if (isLoading) {
-    return <div>Loading ...</div>;
+    return <LoadingDots />;
+  }
+
+  if (!usr && !isAuthenticated) {
+    return <LoginButton />;
   }
 
   const MenuList = (props: any) => <MTMenuList {...props} />;
@@ -32,7 +38,7 @@ const Profile: React.FC = () => {
     usr && (
       <div className="flex justify-end relative z-20">
         <Link
-          className="flex justify-center items-center sm:h-14 sm:w-14 h-8 w-8 rounded-full bg-clay-400 transition-all cursor-pointer lg:mx-4"
+          className="justify-center items-center sm:h-14 sm:w-14 h-8 w-8 rounded-full dark:bg-black bg-white border-2 dark:border-clay-950 border-black transition-all cursor-pointer lg:mx-4 lg:flex hidden"
           to="/notifications"
         >
           <Badge badgeContent={usr.notifications.length} color="warning">
@@ -40,13 +46,13 @@ const Profile: React.FC = () => {
           </Badge>
         </Link>
 
-        <div className="flex flex-row flex-shrink-0 sm:h-14 sm:w-14 h-8 w-8">
+        <div className="flex flex-row flex-shrink-0 sm:h-14 sm:w-14 h-11 w-11">
           <Menu placement="bottom-start">
             <MenuHandler>
               <img
                 src={usr.profileURL!}
                 alt={usr.username}
-                className="rounded-full border-2 border-clay-700 bg-clay-600"
+                className="rounded-full border-2  dark:bg-black bg-white dark:border-clay-950 border-black"
               />
             </MenuHandler>
             <MenuList>
@@ -57,6 +63,13 @@ const Profile: React.FC = () => {
               <hr className="my-3" />
               <Link to="/library" reloadDocument>
                 <MenuItem className="font-bold">My Library</MenuItem>
+              </Link>
+
+              <hr className="my-3 lg:hidden block" />
+              <Link to={"/notifications"}>
+                <MenuItem className="font-bold lg:hidden block">
+                  Notifications
+                </MenuItem>
               </Link>
 
               <hr className="my-3" />

@@ -47,15 +47,13 @@ const Account = () => {
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
           <div className="flex flex-wrap">
             <img
-              className="rounded-full md:w-24 w-14 shadow-inner"
+              className="rounded-full md:w-24 w-14 shadow-inner border-2  dark:bg-clay-600 bg-white dark:border-clay-950 border-black"
               src={usr?.profileURL}
             />
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
               <p className="md:text-2xl text-lg ms-8">
-                
                 {usr?.xp == 0 ? 0 : usr?.xp} Xp
-              
               </p>
             </div>
           </div>
@@ -67,7 +65,7 @@ const Account = () => {
               <ExpandableBio bio={usr.bio} />
               <hr className="md:hidden my-5" />
               <UserGenresList userGuid={userGuid} />
-              <hr className="md:hidden my-5"  />
+              <hr className="md:hidden my-5" />
             </div>
             <div className="md:w-1/4 w-full md:order-3 order-3">
               <DisplayCurrentGoal currentGoal={currentGoal} />
