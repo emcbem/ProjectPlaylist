@@ -72,39 +72,18 @@ const Account = () => {
             </div>
           </div>
 
-                                {usr?.xp == 0 ? 0 : usr?.xp} Xp
+          <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
+          {isLoading && <LibraryLoading />}
+          {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
+            <LibraryList userGamesFromUser={userGamesFromUser} />
+          )}
+          {!isLoading && userGamesFromUser.length <= 0 && (
+            <LibraryListNoGames />
+          )}
 
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex md:flex-row flex-col my-6">
-                        <div className="md:w-1/4 w-full md:order-1 order-2">
-                            <GamerTags />
-                        </div>
-                        <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
-                            <ExpandableBio bio={usr.bio} />
-                            <hr className="md:hidden my-5" />
-                            <UserGenresList userGuid={userGuid} />
-                            <hr className="md:hidden my-5" />
-                        </div>
-                        <div className="md:w-1/4 w-full md:order-3 order-3">
-                            <DisplayCurrentGoal currentGoal={currentGoal} />
-                            <ViewAllGoalsButton />
-                        </div>
-                    </div>
-
-                    <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
-                    {isLoading && <LibraryLoading />}
-                    {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
-                        <LibraryList userGamesFromUser={userGamesFromUser} />
-                    )}
-                    {!isLoading && userGamesFromUser.length <= 0 && (
-                        <LibraryListNoGames />
-                    )}
-
-                    <PlaylistLists />
-                </div>
-            </div>
+          <PlaylistLists />
+        </div>
+      </div>
         )
     );
 };

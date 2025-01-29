@@ -10,6 +10,8 @@ const TestPage = () => {
     UserAccountContext
   ) as UserAccountContextInterface;
 
+  console.log(usr);
+
   const { data: games } =
     SteamQueries.useGetUserDataForOneGame("");
 
