@@ -19,28 +19,13 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("gettoken")]
-    public async Task<IActionResult> GetPlaystationAuthenticationToken()
+    public async Task<PlaystationContext> GetPlaystationAuthenticationToken()
     {
-        var npsso = config["npsso"];
-
-        if (string.IsNullOrWhiteSpace(npsso))
-        {
-            return BadRequest(new { Error = "npsso token is required." });
-        }
-
-        try
-        {
-            await playstationService.GetPlaystationAuthenticationToken(npsso);
-            return Ok(new { Message = "Token successfully retrieved." });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new {Error = ex.Message});
-        }
+        return await playstationService.GetPlaystationAuthenticationToken();
     }
 
     [HttpPost("searchplayers")]
-    public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers(string username)
+    public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers([FromBody] string username)
     {
         return await playstationService.SearchPlayer(username);
     }

@@ -18,8 +18,10 @@ public class PlaystationAuthenticationService
         config = configuration;
     }
 
-    public async Task GetPlaystationAuthenticationToken(string npsso)
+    public async Task<PlaystationContext> GetPlaystationAuthenticationToken()
     {
+        var npsso = config["npsso"];
+
         if (string.IsNullOrEmpty(npsso))
         {
             throw new Exception("NPSSO value is required to get authentication token from playstation.");
@@ -49,8 +51,7 @@ public class PlaystationAuthenticationService
 
                 string code = query["code"]!;
 
-                // Exchange authorization code for tokens
-                await ExchangeAuthorizationCodeForTokenAsync(code);
+                return await ExchangeAuthorizationCodeForTokenAsync(code);
             }
             else
             {
@@ -61,9 +62,10 @@ public class PlaystationAuthenticationService
         {
             Console.WriteLine(ex.Message);
         }
+        return new PlaystationContext();
     }
 
-    private async Task ExchangeAuthorizationCodeForTokenAsync(string code)
+    private async Task<PlaystationContext> ExchangeAuthorizationCodeForTokenAsync(string code)
     {
         var tokenUrl = "https://ca.account.sony.com/api/authz/v3/oauth/token";
 
@@ -92,15 +94,9 @@ public class PlaystationAuthenticationService
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var tokenResponse = JsonSerializer.Deserialize<PlaystationContext>(jsonResponse);
 
-            if (!string.IsNullOrWhiteSpace(tokenResponse?.AccessToken))
+            if (!string.IsNullOrWhiteSpace(tokenResponse?.access_token))
             {
-                Console.WriteLine("Authentication Token successfully granted.");
-                Console.WriteLine($"AccessToken: {tokenResponse.AccessToken}");
-                Console.WriteLine($"TokenType: {tokenResponse.TokenType}");
-                Console.WriteLine($"ExpiresIn: {tokenResponse.ExpiresIn}");
-                Console.WriteLine($"Scope: {tokenResponse.Scope}");
-                Console.WriteLine($"IdToken: {tokenResponse.IdToken}");
-                Console.WriteLine($"RefreshToken: {tokenResponse.RefreshToken}");
+                return tokenResponse;
             }
             else
             {
@@ -111,6 +107,7 @@ public class PlaystationAuthenticationService
         {
             Console.WriteLine($"Error: Unable to obtain Authentication Token. Details: {ex.Message}");
         }
+        return new PlaystationContext();
     }
 
     public async Task<List<PlaystationUserDTO>> SearchPlayer(string userName)

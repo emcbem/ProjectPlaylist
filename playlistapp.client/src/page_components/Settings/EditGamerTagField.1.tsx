@@ -1,39 +1,26 @@
-import { Platform } from "@/@types/platform";
 import { AddUserPlatformRequest } from "@/@types/Requests/AddRequests/addUserPlatformRequest";
 import { UpdateUserPlatformRequest } from "@/@types/Requests/UpdateRequests/UpdateUserPlatformRequest";
 import { UserPlatform } from "@/@types/userPlatform";
 import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
-import { FC, ReactNode, useEffect, useState } from "react";
-import { SyncButton } from "./Buttons/SyncButton";
-import { PlaystationQueries } from "@/queries/PlaystationQueries";
-import { PlaystationUser } from "@/@types/Playstation/playstationUser";
+import { FC, useState, useEffect } from "react";
+import { EditGamerTagFieldProps, undefined } from "./EditGamerTagField";
 
-interface EditGamerTagFieldProps {
-  children: ReactNode;
-  platform: Platform;
-  userPlatforms: UserPlatform[] | undefined;
-  userGuid: string;
-}
-
-const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
+export const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
   children,
   platform,
   userPlatforms,
   userGuid,
 }) => {
-  const [userPlatform, setUserPlatform] = useState<UserPlatform | null>(null);
-  const [value, setValue] = useState<string>(""); // initialize to an empty string instead of undefined
-  const [playstationUser, setPlaystationUser] = useState<PlaystationUser[]>();
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
   const { mutateAsync: updateUserPlatforms } =
     UserPlatformQueries.UpdateUserPlatform();
   const { mutateAsync: addUserPlatform } =
     UserPlatformQueries.AddUserPlatform();
   const { mutateAsync: deleteUserPlatform } =
     UserPlatformQueries.DeleteUserPlatform();
-  const { mutateAsync: searchForPlaystationUser } =
-    PlaystationQueries.useGetPlaystationUsersBasedOffUsername(value);
+
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [userPlatform, setUserPlatform] = useState<UserPlatform | null>(null);
+  const [value, setValue] = useState<string>(""); // initialize to an empty string instead of undefined
 
   useEffect(() => {
     if (userPlatforms != undefined) {
@@ -60,7 +47,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
       handleRemove();
     }
     if (!userPlatform) {
-      await AddUserPlatform();
+      AddUserPlatform();
     } else {
       const updateRequest: UpdateUserPlatformRequest = {
         id: userPlatform?.id ?? 0,
@@ -68,9 +55,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
         externalPlatformId: String(platform.id),
         isPublic: true,
       };
-      console.log("Saving");
       await updateUserPlatforms(updateRequest);
-      await SearchPlaystationUsers();
       setIsVisible(!isVisible);
     }
   };
@@ -92,15 +77,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
       isPublic: true,
     };
     await addUserPlatform(request);
-    await SearchPlaystationUsers();
     setIsVisible(!isVisible);
-  };
-
-  const SearchPlaystationUsers = async () => {
-    if (value) {
-      const result: PlaystationUser[] = await searchForPlaystationUser();
-      setPlaystationUser(result);
-    }
   };
 
   return (
@@ -111,10 +88,10 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
         {children}
 
         {/* <h3 className={`${isVisible ? 'hidden' : ""} ml-4 text-xl font-sans`}>
-                    {userPlatforms?.filter(x => x.platformId == platform.id)?.map((x, key) =>
-                        <p key={key}>{x.gamerTag}</p>
-                    )}
-                </h3> */}
+                        {userPlatforms?.filter(x => x.platformId == platform.id)?.map((x, key) =>
+                            <p key={key}>{x.gamerTag}</p>
+                        )}
+                    </h3> */}
 
         {!isVisible && userPlatform && (
           <h3 className="ml-4 text-xl font-sans">{userPlatform.gamerTag}</h3>
@@ -148,7 +125,15 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
         </p>
 
         {platform.id == 7 && (
-          <SyncButton isVisible={isVisible} userPlatform={userPlatform} />
+          <p
+            role="button"
+            className={`text-teal-400 underline underline-offset-2 ms-5 ${
+              isVisible ? "hidden" : ""
+            }  ${!userPlatform ? "hidden" : ""}`}
+            onClick={handleRemove}
+          >
+            sync
+          </p>
         )}
 
         <button
@@ -177,5 +162,3 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
     </>
   );
 };
-
-export default EditGamerTagField;
