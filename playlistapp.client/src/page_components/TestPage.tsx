@@ -11,7 +11,7 @@ const TestPage = () => {
   ) as UserAccountContextInterface;
 
   const { data: games } =
-    SteamQueries.useGetUserDataForOneGame("76561199807777945");
+    SteamQueries.useGetUserDataForOneGame("");
 
   console.log("STEAM DATA", games);
 
