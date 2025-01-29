@@ -65,9 +65,10 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
       const updateRequest: UpdateUserPlatformRequest = {
         id: userPlatform?.id ?? 0,
         gamerTag: value ?? "",
-        externalPlatformId: String(platform.id),
+        externalPlatformId: userPlatform.externalPlatformId,
         isPublic: true,
       };
+      console.log("Update request: ", updateRequest)
       console.log("Saving");
       await updateUserPlatforms(updateRequest);
       await SearchPlaystationUsers();
