@@ -59,8 +59,9 @@ public class SyncService
 			await context.Achievements.AddAsync(achievement);
 		}
 		await context.SaveChangesAsync();
-
 	}
+
+
 }
 
 class AchievementDto

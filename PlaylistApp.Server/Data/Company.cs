@@ -15,6 +15,8 @@ public partial class Company
 
     public DateTime? StartDate { get; set; }
 
+    public string? Checksum { get; set; }
+
     public string? Slug { get; set; }
 
     public virtual ICollection<InvolvedCompany> InvolvedCompanies { get; set; } = new List<InvolvedCompany>();
