@@ -2,28 +2,30 @@ import React from "react";
 import PPLogoLight from "../assets/PPLogoLight.svg";
 import PPLogoDark from "../assets/PPLogoDark.svg";
 import PPDiamond from "../assets/PPDiamond.svg";
-import LoginButton from "../Auth0/login";
-import Profile from "../Auth0/profile";
-import { useAuth0 } from "@auth0/auth0-react";
 import SearchBar from "../individual_components/SearchBar";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
-import Contour from "./maze2.svg";
+import Abstract from "./maze.svg";
+import LightAbstract from "./mazelight.svg";
+import { useTheme } from "@/hooks/useDarkMode";
+import Profile from "@/Auth0/profile";
 const Navbar: React.FC = () => {
-  const { isAuthenticated } = useAuth0();
+  const { theme } = useTheme();
 
-  const backgroundImage = `url(${Contour})`;
+  const backgroundImage =
+    theme === "dark" ? `url(${Abstract})` : `url(${LightAbstract})`;
 
   return (
-    <>
+    <div className="sticky top-0 dark:bg-black bg-white z-[1000]">
       <div
         className="z-20 flex justify-center pb-4"
         style={{
           backgroundImage,
-          backgroundSize: "cover",
+          backgroundSize: "750px",
+          backgroundRepeat: "repeat",
           backgroundPosition: "center",
         }}
       >
-        <nav className="flex max-w-[1264px] w-full justify-center items-center sm:px-4 sm:pt-8 h-20 mb-2 z-20">
+        <nav className="flex max-w-[1264px] desk:w-[1264px] avg:w-[800px] w-[500px] justify-center items-center px-4 pt-8 h-20 mb-2 z-20">
           <div className="flex-shrink-0 z-20">
             <a href="/">
               <img
@@ -37,7 +39,7 @@ const Navbar: React.FC = () => {
                 alt="PP Logo"
               />
               <img
-                className="sm:h-14 h-8 lg:hidden block"
+                className="sm:h-14 h-11 lg:hidden block"
                 src={PPDiamond}
                 alt="PP Diamond"
               />
@@ -46,11 +48,11 @@ const Navbar: React.FC = () => {
 
           <SearchBar />
 
-          <div>{!isAuthenticated ? <LoginButton /> : <Profile />}</div>
+          <Profile />
         </nav>
       </div>
       <ScrollProgress className="top-[65px]" />
-    </>
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ export const SideFilter = ({
   return (
     <>
       <div
-        className={`fixed left-0 w-[300px] h-screen bg-gradient-to-b from-transparent from-2% via-gradientOrange via-[percentage:20%_35%] to-gradientBlue to-100% p-4 pt-[75px] overflow-y-auto md:block hidden`}
+        className={`fixed w-[250px] h-screen bg-gradient-to-b from-transparent from-2% via-gradientOrange via-[percentage:20%_35%] to-gradientBlue to-100% p-4 pt-[75px] overflow-y-auto md:block hidden`}
       >
         <SearchDropdown
           controller={filterController.platformSelectorController}
@@ -24,7 +24,7 @@ export const SideFilter = ({
           controller={filterController.companySelectorController}
         />
       </div>
-      <div className="w-[400px] md:block hidden"></div>
+      <div className="w-[350px] md:block hidden"></div>
     </>
   );
 };

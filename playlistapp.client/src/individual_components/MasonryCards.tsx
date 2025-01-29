@@ -31,10 +31,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
         <ResponsiveMasonry
           columnsCountBreakPoints={{
             300: 2,
-            600: 3,
-            900: 4,
-            1100: 5,
-            1600: 6,
+            600: 4,
             1800: 5,
           }}
         >
