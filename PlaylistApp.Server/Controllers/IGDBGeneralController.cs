@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.IGDBServices;
+using PlaylistApp.Server.Services.IGDBSyncServices;
 using System;
 using System.Formats.Asn1;
 using System.Globalization;
@@ -26,13 +27,15 @@ public class IGDBGeneralController
     private readonly UploadData uploader;
     private readonly IGameService gameService;
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
+    private readonly SyncOrchestrator syncOrchestrator;
 
-    public IGDBGeneralController(DownloadCsv downloader, UploadData uploader, IGameService gameService, IDbContextFactory<PlaylistDbContext> dbContextFactory)
+    public IGDBGeneralController(DownloadCsv downloader, UploadData uploader, IGameService gameService, IDbContextFactory<PlaylistDbContext> dbContextFactory, SyncOrchestrator syncOrchestrator)
     {
         this.downloader = downloader;
         this.uploader = uploader;
         this.gameService = gameService;
         this.dbContextFactory = dbContextFactory;
+        this.syncOrchestrator = syncOrchestrator;
     }
 
     //Don't uncomment unless you need to reseed the database with games!
@@ -123,16 +126,10 @@ public class IGDBGeneralController
 
     }
 
-    [HttpGet("Upload Companies")]
-    public async Task UploadCompanies()
+    [HttpGet("Sync Companies")]
+    public async Task<DifferencesToCheck> UploadCompanies()
     {
-        var companiesLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Companies);
-        var igdbCompanies = Parser.ParseCompanyCsv(companiesLocalPath);
-        var companyLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.CompanyLogos);
-        var igdbCompanyLogos = Parser.ParseCompanyLogoCsv(companyLogoUrl);
-        var localCompanies = Translator.TranslateIGDBCompaniesIntoPersonalData(igdbCompanies, igdbCompanyLogos);
-        var test = localCompanies.GroupBy(x => x.Id).Where(x => x.Count() > 1).ToList();
-        await uploader.UploadCompaniesToDatabase(localCompanies);
+        return await syncOrchestrator.OrchestrateCompanies();
     }
 
     [HttpGet("uploadPlatforms")]

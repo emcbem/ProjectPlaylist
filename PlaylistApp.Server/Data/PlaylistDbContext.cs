@@ -166,7 +166,7 @@ public partial class PlaylistDbContext : DbContext
 				.HasMaxLength(350)
 				.HasColumnName("title");
             entity.Property(e => e.Checksum).HasColumnName("checksum");
-        }));
+        });
 
 		modelBuilder.Entity<GameGenre>(entity =>
 		{

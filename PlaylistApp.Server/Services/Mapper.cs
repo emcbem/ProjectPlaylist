@@ -7,6 +7,7 @@ using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.GenreServices;
 using PlaylistApp.Server.Services.GoalLikeServices;
 using PlaylistApp.Server.Services.GoalServices;
+using PlaylistApp.Server.Services.IGDBSyncServices;
 using PlaylistApp.Server.Services.ImageServices;
 using PlaylistApp.Server.Services.ListServices;
 using PlaylistApp.Server.Services.NotificationServices;
@@ -48,5 +49,6 @@ public static class Mapper
 		builder.Services.AddSingleton<IEmailService, EmailService>();
 		builder.Services.AddSingleton<PlaystationAuthenticationService>();
 		builder.Services.AddSingleton<PlaystationContext>();
+		builder.Services.AddSingleton<SyncOrchestrator>();
     }
 }
