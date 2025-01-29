@@ -1,5 +1,5 @@
 const SteamKeys = {
-    GetSteamGamesBySteamId: ["steamgames"]
+    GetSteamUserActionLog: ["steamgames"]
 }
 
 export default SteamKeys;

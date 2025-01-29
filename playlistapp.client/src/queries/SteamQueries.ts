@@ -6,8 +6,8 @@ export const SteamQueries = {
   useGetUserDataForOneGame: (userSteamId: string) => {
     console.log("User steam id", userSteamId);
     return useQuery({
-      queryFn: () => SteamService.getDataFromSingleGame(userSteamId),
-      queryKey: keys.GetSteamGamesBySteamId,
+      queryFn: () => SteamService.GetSteamUserActionLog(userSteamId),
+      queryKey: keys.GetSteamUserActionLog,
     });
   },
 };

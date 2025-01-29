@@ -20,7 +20,7 @@ const TestPage = () => {
     user && (
       <div className="min-h-screen bg-white dark:bg-black">
         <h1>Test Page</h1>
-        <div>{games}</div>
+        <div>{games?.map(x => <p>{x.gameTitle}, {x.platformGameId}, {x.steamPlayTime} minutes</p>)}</div>
         {/* <div>
           {isAdding && <p>Adding goal like...</p>}
           {isAddingSuccess && <p>Goal is liked: {String(newGoalLike)}</p>}

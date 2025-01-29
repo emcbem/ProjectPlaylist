@@ -15,7 +15,7 @@ public class SteamController : Controller
         this.steamService = steamService;
     }
 
-    [HttpGet("steam/getgames")]
+    [HttpGet("getuseractionlog")]
     public async Task<List<UserSteamGame>> GetGamesBySteamId(string steamId)
     {
         return await steamService.GetGamesFromUserBasedOffOfSteamId(steamId);
