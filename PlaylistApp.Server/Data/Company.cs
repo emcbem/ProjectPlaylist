@@ -20,5 +20,7 @@ public partial class Company : IChecksum
 
     public string? Slug { get; set; }
 
+    public int? IgdbId { get; set; }
+
     public virtual ICollection<InvolvedCompany> InvolvedCompanies { get; set; } = new List<InvolvedCompany>();
 }

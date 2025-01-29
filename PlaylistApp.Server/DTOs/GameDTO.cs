@@ -37,7 +37,7 @@ public static class GameConverter
 			AgeRating = game.AgeRating,
 			CoverUrl = game.CoverUrl,
 			Description = game.Description,
-			IdgbId = game.IdgbId,
+			IdgbId = game.IgdbId,
 			Companies = game.InvolvedCompanies.Select(x => x.Company.ToDTO()).ToList(),
 			HoursPlayed = game.PlatformGames.Sum(x => x.UserGames.Sum(y => y.TimePlayed)),
 			TotalOwned = game.PlatformGames.Sum(x => x.UserGames.Count),

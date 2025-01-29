@@ -41,54 +41,54 @@ public class IGDBGeneralController
     {
         //var companiesLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Companies);
         //var igdbCompanies = Parser.ParseCompanyCsv(companiesLocalPath);
-        //var compNamesToChecksum = igdbCompanies
+        //var NamesToChecksum = igdbCompanies
         //.GroupBy(x => x.Name)
         //.Select(g => g.First()) // Keep only the first entry for each name
-        //.ToDictionary(x => x.Name, x => x.Checksum);
+        //.ToDictionary(x => x.Name, x => (x.Checksum, x.Id));
 
-        //var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
-        //var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
-        //var platNamesToChecksum = igdbPlatforms
-        //.GroupBy(x => x.Name)
-        //.Select(g => g.First()) // Keep only the first entry for each name
-        //.ToDictionary(x => x.Name, x => x.Checksum);
+        ////var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
+        ////var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
+        ////var NamesToChecksum = igdbPlatforms
+        ////.GroupBy(x => x.Name)
+        ////.Select(g => g.First()) // Keep only the first entry for each name
+        ////.ToDictionary(x => x.Name, x => (x.Checksum, x.Id));
 
-        var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
-        var igdbGenres = Parser.ParseGenreCsv(genreLocalPath);
-        var NamesToChecksum = igdbGenres
-        .GroupBy(x => x.Name)
-        .Select(g => g.First()) // Keep only the first entry for each name
-        .ToDictionary(x => x.Name, x => x.Checksum);
+        ////var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
+        ////var igdbGenres = Parser.ParseGenreCsv(genreLocalPath);
+        ////var NamesToChecksum = igdbGenres
+        ////.GroupBy(x => x.Name)
+        ////.Select(g => g.First()) // Keep only the first entry for each name
+        ////.ToDictionary(x => x.Name, x => (x.Checksum, x.Id));
 
-        //var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
-        //var igdbgames = Parser.ParseGameCsv(gameLocalPath);
-        //var igdbGameToChecksum = igdbgames.ToDictionary(x => (int?)x?.Id ?? 0, x => x.Checksum);
+        ////var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        ////var igdbgames = Parser.ParseGameCsv(gameLocalPath);
+        ////var igdbGameToChecksum = igdbgames.ToDictionary(x => (int?)x?.Id ?? 0, x => x.Checksum);
 
-        var context = await dbContextFactory.CreateDbContextAsync();
+        //var context = await dbContextFactory.CreateDbContextAsync();
 
-        //var platforms = await context.Platforms.ToListAsync();
+        //var companies = await context.Companies.ToListAsync();
 
-        //platforms.ForEach(x =>
+        ////platforms.ForEach(x =>
+        ////{
+        ////    if (platNamesToChecksum.ContainsKey(x.PlatformName))
+        ////    {
+        ////        x.Checksum = platNamesToChecksum[x.PlatformName];
+        ////        context.Platforms.Update(x);
+        ////    }
+        ////});
+
+
+        //companies.ForEach(x =>
         //{
-        //    if (platNamesToChecksum.ContainsKey(x.PlatformName))
+        //    if(NamesToChecksum.ContainsKey(x.CompanyName))
         //    {
-        //        x.Checksum = platNamesToChecksum[x.PlatformName];
-        //        context.Platforms.Update(x);
+        //        x.Checksum = NamesToChecksum[x.CompanyName].Checksum;
+        //        x.IgdbId = (int?)NamesToChecksum[x.CompanyName].Id;
+        //        context.Companies.Update(x);
         //    }
         //});
 
-        var genres = await context.Genres.ToListAsync();
-
-        genres.ForEach(x =>
-        {
-            if(NamesToChecksum.ContainsKey(x.GenreName))
-            {
-                x.Checksum = NamesToChecksum[x.GenreName];
-                context.Genres.Update(x);
-            }
-        });
-
-        await context.SaveChangesAsync();
+        //await context.SaveChangesAsync();
 
 
         ////var genres = await context.Genres.ToListAsync();

@@ -21,7 +21,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             {
                 var game = new Data.Game();
 
-                game.IdgbId = (int?)igdbGame.Id;
+                game.IgdbId = (int?)igdbGame.Id;
                 game.Description = igdbGame.Summary;
 
                 if(coversDict.TryGetValue(igdbGame.Cover.Id ?? 0, out cover))
@@ -115,7 +115,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         public static List<Data.InvolvedCompany> TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(List<IGDB.Models.InvolvedCompany> igdbInvolvedCompanies, List<Data.Game> localGames)
         {
-            var localGameDict = localGames.ToDictionary(x => x.IdgbId is not null ? (int)x.IdgbId : -1, x => x!.Id);
+            var localGameDict = localGames.ToDictionary(x => x.IgdbId is not null ? (int)x.IgdbId : -1, x => x!.Id);
             int gameId;
 
 
@@ -140,7 +140,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
         public static List<Data.GameGenre> TranslateIGDBGamesIntoLocalGameGenres(List<IGDB.Models.Game> igdbGames, List<Data.Game> localGames)
         {
-            var localGameDict = localGames.ToDictionary(x => x.IdgbId is not null ? (int)x.IdgbId : -1, x => x!.Id);
+            var localGameDict = localGames.ToDictionary(x => x.IgdbId is not null ? (int)x.IgdbId : -1, x => x!.Id);
             int gameId;
 
             return igdbGames.Select(x =>
@@ -164,7 +164,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
         {
             var websiteDict = igdbWesites.ToDictionary(x => x?.Id ?? 0);
             var externalDict = igdbExternalGames.ToDictionary(x => x?.Id ?? 0);
-            var localGameDict = localGames.ToDictionary(x => (int)x.IdgbId!, x => x.Id);
+            var localGameDict = localGames.ToDictionary(x => (int)x.IgdbId!, x => x.Id);
 
             //Sorry for doubting myself
             var PlatformToExternalPlatformCategory = new Dictionary<int, ExternalCategory>()

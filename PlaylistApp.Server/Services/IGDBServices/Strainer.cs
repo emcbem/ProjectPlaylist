@@ -34,7 +34,7 @@ public static class Strainer
 
 	public static HashSet<string> FlaggedNames = new HashSet<string>()
 	{
-		"feet", "furry", "hentai", "girlfriend", "hitler", "boob", "penis", "dick","lewd", "nsfw"
+		"feet", "furry", "hentai", "girlfriend", "hitler", "boob", "penis", "dick", "lewd", "nsfw"
 	};
 
 	public static List<IGDB.Models.Game> StrainGames(List<IGDB.Models.Game> games)

@@ -86,7 +86,7 @@ public class GameService : IGameService
 
 		var game = await context.Games
 			.IncludeGames()
-			.Where(x => x.IdgbId == id)
+			.Where(x => x.IgdbId == id)
 			.FirstOrDefaultAsync();
 
 		if (game == null)

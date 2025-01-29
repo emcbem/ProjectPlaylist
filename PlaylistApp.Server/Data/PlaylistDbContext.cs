@@ -119,7 +119,9 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Slug).HasColumnName("slug");
 			entity.Property(e => e.StartDate).HasColumnName("start_date");
 			entity.Property(e => e.Checksum).HasColumnName("checksum");
-		});
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
+
+        });
 
 		modelBuilder.Entity<Friend>(entity =>
 		{
@@ -148,25 +150,25 @@ public partial class PlaylistDbContext : DbContext
 				.HasConstraintName("friend_recieved_id_fkey");
 		});
 
-		modelBuilder.Entity<Game>(entity =>
+		modelBuilder.Entity<Game>((Action<Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Game>>)(entity =>
 		{
 			entity.HasKey(e => e.Id).HasName("game_pkey");
 
 			entity.ToTable("game", "playlistdb");
 
 			entity.Property(e => e.Id).HasColumnName("id");
-			entity.Property(e => e.AgeRating)
+			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.AgeRating))
 				.HasMaxLength(30)
 				.HasColumnName("age_rating");
-			entity.Property(e => e.CoverUrl).HasColumnName("cover_url");
-			entity.Property(e => e.Description).HasColumnName("description");
-			entity.Property(e => e.IdgbId).HasColumnName("idgb_id");
+			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.CoverUrl)).HasColumnName("cover_url");
+			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.Description)).HasColumnName("description");
+			entity.Property((System.Linq.Expressions.Expression<Func<Game, int?>>)(e => (int?)e.IgdbId)).HasColumnName("idgb_id");
 			entity.Property(e => e.PublishDate).HasColumnName("publish_date");
-			entity.Property(e => e.Title)
+			entity.Property((System.Linq.Expressions.Expression<Func<Game, string>>)(e => e.Title))
 				.HasMaxLength(350)
 				.HasColumnName("title");
-            entity.Property(e => e.Checksum).HasColumnName("checksum");
-        });
+            entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.Checksum)).HasColumnName("checksum");
+        }));
 
 		modelBuilder.Entity<GameGenre>(entity =>
 		{
@@ -223,6 +225,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GenreName).HasColumnName("genre_name");
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
             entity.Property(e => e.Checksum).HasColumnName("checksum");
         });
 
@@ -367,6 +370,7 @@ public partial class PlaylistDbContext : DbContext
 				.HasMaxLength(40)
 				.HasColumnName("platform_name");
             entity.Property(e => e.Checksum).HasColumnName("checksum");
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
         });
 
 		modelBuilder.Entity<PlatformGame>(entity =>

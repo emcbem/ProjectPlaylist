@@ -18,7 +18,7 @@ public partial class Game : IChecksum
 
     public string? AgeRating { get; set; }
 
-    public int? IdgbId { get; set; }
+    public int? IgdbId { get; set; }
 
     public string? Checksum { get; set; }
 

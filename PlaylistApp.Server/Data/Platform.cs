@@ -17,4 +17,5 @@ public partial class Platform : IChecksum
     public virtual ICollection<PlatformGame> PlatformGames { get; set; } = new List<PlatformGame>();
 
     public virtual ICollection<UserPlatform> UserPlatforms { get; set; } = new List<UserPlatform>();
+    public int? IgdbId { get; set; }
 }
