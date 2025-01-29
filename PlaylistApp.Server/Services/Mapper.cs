@@ -14,6 +14,7 @@ using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.PlatformServices;
 using PlaylistApp.Server.Services.PlaystationServices;
 using PlaylistApp.Server.Services.ReviewLikeServices;
+using PlaylistApp.Server.Services.SteamServices;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 using PlaylistApp.Server.Services.UserAchievementServices;
 using PlaylistApp.Server.Services.UserGameServices;
@@ -29,6 +30,7 @@ public static class Mapper
 	{
 		builder.Services.AddSingleton<IAchievementService, AchievementService>();
 		builder.Services.AddSingleton<ICompanyService, CompanyService>();
+		builder.Services.AddSingleton<IEmailService, EmailService>();
 		builder.Services.AddSingleton<IFriendService, FriendService>();
 		builder.Services.AddSingleton<IGameService, GameService>();
 		builder.Services.AddSingleton<IGenreService, GenreService>();
@@ -36,16 +38,16 @@ public static class Mapper
 		builder.Services.AddSingleton<IGoalService, GoalService>();
 		builder.Services.AddSingleton<IImageService, ImageService>();
 		builder.Services.AddSingleton<IListService, ListService>();
+		builder.Services.AddSingleton<INotificationService, NotificationService>();
 		builder.Services.AddSingleton<IPlatformGameService, PlatformGameService>();
 		builder.Services.AddSingleton<IPlatformService, PlatformService>();
 		builder.Services.AddSingleton<IReviewLikeService, ReviewLikeService>();
+		builder.Services.AddSingleton<ISteamService, SteamService>();
 		builder.Services.AddSingleton<IUserAchievementLikeService, UserAchievementLikeService>();
 		builder.Services.AddSingleton<IUserAchievementService, UserAchievementService>();
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
-		builder.Services.AddSingleton<INotificationService, NotificationService>();
-		builder.Services.AddSingleton<IEmailService, EmailService>();
 		builder.Services.AddSingleton<PlaystationAuthenticationService>();
 		builder.Services.AddSingleton<PlaystationContext>();
     }

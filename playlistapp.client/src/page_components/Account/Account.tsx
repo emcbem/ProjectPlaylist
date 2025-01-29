@@ -17,27 +17,26 @@ import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
 
 const Account = () => {
-  const { isAuthenticated } = useAuth0();
-  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+    const { isAuthenticated } = useAuth0();
+    const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
 
-  const { usr, userGuid } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
+    const { usr, userGuid } = React.useContext(
+        UserAccountContext
+    ) as UserAccountContextInterface;
 
-  const {
-    data: userGamesFromUser,
-    isLoading,
-    isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+    const {
+        data: userGamesFromUser,
+        isLoading,
+        isSuccess,
+    } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
-  const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
-    GoalQueries.useGetGoalsByUser(userGuid ?? "");
+    const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
+        GoalQueries.useGetGoalsByUser(userGuid ?? "");
 
-  useEffect(() => {
-    const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
-    setCurrentGoal(foundCurrentGoal);
-  }, [allUserGoals]);
-
+    useEffect(() => {
+        const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
+        setCurrentGoal(foundCurrentGoal);
+    }, [allUserGoals]);
   return (
     isAuthenticated &&
     usr?.profileURL &&
@@ -73,20 +72,41 @@ const Account = () => {
             </div>
           </div>
 
-          <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
-          {isLoading && <LibraryLoading />}
-          {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
-            <LibraryList userGamesFromUser={userGamesFromUser} />
-          )}
-          {!isLoading && userGamesFromUser.length <= 0 && (
-            <LibraryListNoGames />
-          )}
+                                {usr?.xp == 0 ? 0 : usr?.xp} Xp
 
-          <PlaylistLists />
-        </div>
-      </div>
-    )
-  );
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex md:flex-row flex-col my-6">
+                        <div className="md:w-1/4 w-full md:order-1 order-2">
+                            <GamerTags />
+                        </div>
+                        <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
+                            <ExpandableBio bio={usr.bio} />
+                            <hr className="md:hidden my-5" />
+                            <UserGenresList userGuid={userGuid} />
+                            <hr className="md:hidden my-5" />
+                        </div>
+                        <div className="md:w-1/4 w-full md:order-3 order-3">
+                            <DisplayCurrentGoal currentGoal={currentGoal} />
+                            <ViewAllGoalsButton />
+                        </div>
+                    </div>
+
+                    <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
+                    {isLoading && <LibraryLoading />}
+                    {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
+                        <LibraryList userGamesFromUser={userGamesFromUser} />
+                    )}
+                    {!isLoading && userGamesFromUser.length <= 0 && (
+                        <LibraryListNoGames />
+                    )}
+
+                    <PlaylistLists />
+                </div>
+            </div>
+        )
+    );
 };
 
 export default Account;
