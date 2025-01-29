@@ -1,4 +1,4 @@
-import Navbar from "./individual_components/Navbar";
+import Navbar from "./layout/Navbar";
 import LandingPage from "./page_components/LandingPage";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./page_components/Search/ui/SearchPage";
@@ -26,6 +26,7 @@ import ViewAccount from "./page_components/ViewAccount/ViewAccount";
 import UserLibrary from "./page_components/ViewAccount/UserLibrary/UserLibrary";
 import ViewPlaylist from "./page_components/ViewAccount/Playlists/ViewPlaylist";
 import NotificationPage from "./page_components/Notifications/Notifications";
+import AdminPage from "./page_components/Admin/Admin";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -37,14 +38,9 @@ function App() {
         <SearchBarProvider>
           <ThemeProvider value={materialTheme}>
             <Toaster />
-            <ShineBorder
-              className="w-full flex-grow flex min-h-screen flex-col rounded-lg border"
-              color={["#EDBD68", "#DE5152", "#A43845", "#602B53"]}
-              borderWidth={6}
-              duration={30}
-            >
-              <div className="min-h-screen flex-grow flex flex-col p-2 z-50 w-full">
-                <div className="dark:bg-black bg-white w-full">
+            <div className="w-full flex-grow flex min-h-screen flex-col rounded-lg">
+              <div className="min-h-screen flex-grow flex flex-col z-50 w-full">
+                <div className="dark:bg-black bg-white w-full ">
                   <Navbar />
                   <Routes>
                     <Route
@@ -64,6 +60,7 @@ function App() {
                       path="/user-library-game/:gameId"
                       element={<ViewLibraryGame />}
                     />
+                    <Route path="/admin" element={<AdminPage />} />
                     <Route path="/account" element={<Account />} />
                     <Route path="/library" element={<MyLibrary />} />
                     <Route path="/list/:listId" element={<Playlist />} />
@@ -87,7 +84,7 @@ function App() {
                   </Routes>
                 </div>
               </div>
-            </ShineBorder>
+            </div>
           </ThemeProvider>
         </SearchBarProvider>
       </UserAccountContextProvider>
@@ -96,7 +93,3 @@ function App() {
 }
 
 export default App;
-
-<span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
-  Shine Border
-</span>;

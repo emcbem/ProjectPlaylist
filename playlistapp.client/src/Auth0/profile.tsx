@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
     usr && (
       <div className="flex justify-end relative z-20">
         <Link
-          className="flex justify-center items-center sm:h-14 sm:w-14 h-8 w-8 rounded-full hover:bg-clay-400 transition-all cursor-pointer mx-4"
+          className="flex justify-center items-center sm:h-14 sm:w-14 h-8 w-8 rounded-full bg-clay-400 transition-all cursor-pointer lg:mx-4"
           to="/notifications"
         >
           <Badge badgeContent={usr.notifications.length} color="warning">
@@ -62,6 +62,11 @@ const Profile: React.FC = () => {
               <hr className="my-3" />
               <Link to={"/settings"}>
                 <MenuItem className="font-bold">Settings</MenuItem>
+              </Link>
+
+              <hr className="my-3" />
+              <Link to={"/admin"}>
+                <MenuItem className="font-bold">Admin Page</MenuItem>
               </Link>
 
               <hr className="my-3" />
