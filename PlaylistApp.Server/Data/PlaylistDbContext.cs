@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PlaylistApp.Server.Data;
 
@@ -150,24 +148,24 @@ public partial class PlaylistDbContext : DbContext
 				.HasConstraintName("friend_recieved_id_fkey");
 		});
 
-		modelBuilder.Entity<Game>((Action<Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Game>>)(entity =>
+		modelBuilder.Entity<Game>(entity =>
 		{
 			entity.HasKey(e => e.Id).HasName("game_pkey");
 
 			entity.ToTable("game", "playlistdb");
 
 			entity.Property(e => e.Id).HasColumnName("id");
-			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.AgeRating))
+			entity.Property(e => e.AgeRating)
 				.HasMaxLength(30)
 				.HasColumnName("age_rating");
-			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.CoverUrl)).HasColumnName("cover_url");
-			entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.Description)).HasColumnName("description");
-			entity.Property((System.Linq.Expressions.Expression<Func<Game, int?>>)(e => (int?)e.IgdbId)).HasColumnName("idgb_id");
+			entity.Property(e => e.CoverUrl).HasColumnName("cover_url");
+			entity.Property(e => e.Description).HasColumnName("description");
+			entity.Property(e => (int?)e.IgdbId).HasColumnName("idgb_id");
 			entity.Property(e => e.PublishDate).HasColumnName("publish_date");
-			entity.Property((System.Linq.Expressions.Expression<Func<Game, string>>)(e => e.Title))
+			entity.Property(e => e.Title)
 				.HasMaxLength(350)
 				.HasColumnName("title");
-            entity.Property((System.Linq.Expressions.Expression<Func<Game, string?>>)(e => e.Checksum)).HasColumnName("checksum");
+            entity.Property(e => e.Checksum).HasColumnName("checksum");
         }));
 
 		modelBuilder.Entity<GameGenre>(entity =>
