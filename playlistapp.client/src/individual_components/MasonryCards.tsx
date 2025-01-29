@@ -12,9 +12,9 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
   const [expand, setExpand] = useState<boolean>(false);
 
   return (
-    <div className="flex-grow w-full dark:text-white text-black">
+    <div className="w-full dark:text-white text-black">
       <div
-        className={`sm:mt-20 pt-10 font-bold lg:mx-20 md:mx-15 sm:mx-10 mx-5 pb-5 underline ${
+        className={`sm:mt-8 pt-10 font-bold pb-5 underline ${
           expand ? `sticky top-0` : ""
         } z-20 dark:bg-black bg-white`}
       >
@@ -22,7 +22,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
       </div>
 
       <div
-        className={`relative lg:mx-20 md:mx-15 sm:mx-10 mx-5 ${
+        className={`relative ${
           expand
             ? " "
             : "overflow-hidden lg:h-[50rem] md:h-[45rem] sm:h-[40rem] h-[25rem]"
@@ -35,7 +35,7 @@ const MasonryCards: React.FC<props> = ({ title, games }) => {
             900: 4,
             1100: 5,
             1600: 6,
-            1800: 8,
+            1800: 5,
           }}
         >
           <Masonry gutter="10px">

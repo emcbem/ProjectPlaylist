@@ -28,6 +28,14 @@ export default {
       },
       screens: {
         lgmd: "820px",
+        mobile: "500px",
+        sm: "640px",
+        md: "768px",
+        avg: "800px",
+        lg: "1024px",
+        desk: "1200px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
       colors: {
         pppurple: {
@@ -60,6 +68,7 @@ export default {
         gradientOrange: "rgba(242, 112, 78, 0.41780462184873945)",
 
         black: "#0E191C",
+        hazypurple: "#602B53",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
