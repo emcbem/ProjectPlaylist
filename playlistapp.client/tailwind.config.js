@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "media",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontSize: {
@@ -139,6 +140,7 @@ export default {
         grid: "grid 15s linear infinite",
         marquee: "marquee var(--duration) infinite linear",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+        bounce: "bounce 0.8s infinite",
       },
       keyframes: {
         shine: {
@@ -151,6 +153,10 @@ export default {
           to: {
             "background-position": "0% 0%",
           },
+        },
+        bounce: {
+          "0%, 100%": { transform: "translateY(-6px)" },
+          "50%": { transform: "translateY(0)" },
         },
         rainbow: {
           "0%": {

@@ -8,7 +8,7 @@ const LoginButton = () => {
   return (
     <>
       <button
-        className="border border-black dark:border-white dark:text-white p-2 px-8 lg:w-[213.69px] w-14 h-14 text-2xl rounded-lg hidden lg:block relative z-20"
+        className="border border-black dark:border-white dark:text-white p-2 px-8 lg:w-[213.69px] w-11 sm:h-fit h-11 text-2xl rounded-lg hidden lg:block relative z-20"
         onClick={() => loginWithRedirect()}
       >
         Login
