@@ -7,7 +7,7 @@ import Profile from "../Auth0/profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import SearchBar from "../individual_components/SearchBar";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
-import Contour from "./topographic.svg";
+import Contour from "./maze2.svg";
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth0();
 
