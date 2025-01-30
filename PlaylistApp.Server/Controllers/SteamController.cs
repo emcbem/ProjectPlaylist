@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.DTOs.SteamData;
+using PlaylistApp.Server.Services.SteamServices;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -6,6 +9,27 @@ namespace PlaylistApp.Server.Controllers;
 [Route("[controller]")]
 public class SteamController : Controller
 {
+    private readonly ISteamService steamService;
+    public SteamController(ISteamService steamService)
+    {
+        this.steamService = steamService;
+    }
+
+	[HttpPost("getuseractionlog/{userSteamId}")]
+	public async Task<List<UserSteamGame>> GetGamesBySteamId(string userSteamId)
+	{
+		return await steamService.GetGamesFromUserBasedOffOfSteamId(userSteamId);
+	}
+
+	//[HttpGet("auth/steam")]
+	//public async Task<IActionResult> AuthSteam()
+	//{
+	//	var request = new DiscoveryDocumentRequest
+	//}
+
+
+
+
 	//private static readonly OpenIdRelyingParty RelyingParty = new OpenIdRelyingParty();
 	//internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
 

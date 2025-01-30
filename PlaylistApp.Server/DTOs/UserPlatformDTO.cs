@@ -8,7 +8,7 @@ public class UserPlatformDTO
     public int PlatformId { get; set; }
     public Guid UserId { get; set; }
     public string? GamerTag { get; set; } 
-
+	public string? ExternalPlatformId { get; set; }
 }
 
 public static class UserPlatformConverter
@@ -26,6 +26,7 @@ public static class UserPlatformConverter
 			Id = userPlatform.Id,
 			PlatformId = userPlatform.PlatformId,
 			UserId = userPlatform.User.Guid,
+			ExternalPlatformId = userPlatform.ExternalPlatformId,
 		};
 	}
 }

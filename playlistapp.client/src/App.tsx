@@ -43,7 +43,6 @@ function App() {
                 <div className="min-h-screen dark:bg-black flex-grow flex flex-col z-50 w-full">
                   <div className="dark:bg-black bg-white w-full relative">
                     <Navbar />
-
                     <Routes>
                       <Route
                         path="/"
@@ -74,7 +73,7 @@ function App() {
                         path="/achievements/:gameId"
                         element={<AchievementsPage />}
                       />
-                      <Route path="/test/:goalId" element={<TestPage />} />
+                      <Route path="/test" element={<TestPage />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route
                         path="/settings/setprofileimage"
