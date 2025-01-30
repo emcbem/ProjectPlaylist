@@ -127,9 +127,9 @@ public class IGDBGeneralController
     }
 
     [HttpGet("Sync Companies")]
-    public async Task<DifferencesToCheck> UploadCompanies()
+    public async Task UploadCompanies()
     {
-        return await syncOrchestrator.OrchestrateCompanies();
+        await syncOrchestrator.OrchestrateCompanies();
     }
 
     [HttpGet("uploadPlatforms")]
