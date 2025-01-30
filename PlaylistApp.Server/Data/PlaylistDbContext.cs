@@ -60,7 +60,9 @@ public partial class PlaylistDbContext : DbContext
 	public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		=> optionsBuilder.UseNpgsql("Name=ppdb");
+		=> optionsBuilder.EnableSensitiveDataLogging();
+
+
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -118,6 +120,9 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.StartDate).HasColumnName("start_date");
 			entity.Property(e => e.Checksum).HasColumnName("checksum");
             entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
+
+            entity.Property(e => e.Id)
+					.UseIdentityAlwaysColumn();
 
         });
 

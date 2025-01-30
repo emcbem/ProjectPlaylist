@@ -58,7 +58,6 @@ namespace PlaylistApp.Server.Services.IGDBServices
             {
                 var company = new Data.Company();
 
-                company.Id = (int?)igdbCompany.Id ?? 0;
                 company.StartDate = igdbCompany.StartDate?.DateTime.ToUniversalTime();
                 company.Description = igdbCompany.Description;
                 company.CompanyName = igdbCompany.Name.Substring(0, Math.Min(igdbCompany.Name.Length, 64));
