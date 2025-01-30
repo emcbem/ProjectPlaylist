@@ -1,76 +1,42 @@
-import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { useState } from "react";
 import { SteamQueries } from "@/queries/SteamQueries";
 import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
 
 const TestPage = () => {
   const { user, isAuthenticated } = useAuth0();
-  const { usr } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
+  const [steamId, setSteamId] = useState(""); // State to hold the Steam ID input
+  const { data: games, mutateAsync } = SteamQueries.useGetUserDataForOneGame(steamId);
 
-  console.log(usr);
-
-  const { data: games } =
-    SteamQueries.useGetUserDataForOneGame("");
-
-  console.log("STEAM DATA", games);
+  const handleGetGames = async () => {
+    if (steamId) {
+      await mutateAsync(); // Pass the steamId when mutating
+    } else {
+      console.error("Please enter a Steam ID.");
+    }
+  };
 
   return (
     isAuthenticated &&
     user && (
       <div className="min-h-screen bg-white dark:bg-black">
-        <h1>Test Page</h1>
-        <div>{games?.map(x => <p>{x.gameTitle}, {x.platformGameId}, {x.steamPlayTime} minutes</p>)}</div>
-        {/* <div>
-          {isAdding && <p>Adding goal like...</p>}
-          {isAddingSuccess && <p>Goal is liked: {String(newGoalLike)}</p>}
-          {isAddingError && <p>Failed to add goal to like...</p>}
-          <button onClick={handleAddGoalLike}>Add Goal</button>
-        </div>
+        <h1 className="text-6xl">Test Page</h1>
+        <input
+          type="text"
+          placeholder="Enter Steam ID"
+          value={steamId}
+          onChange={(e) => setSteamId(e.target.value)} // Update state on input change
+          className="border border-gray-300 rounded p-2 mb-4"
+        />
+        <button onClick={handleGetGames} className="bg-blue-500 text-white p-2 rounded">
+          Click
+        </button>
         <div>
-          {isGettingFromUser && (
-            <p>Getting all like goals for user {usr?.username}...</p>
-          )}
-          {isGettingFromUserSuccess && (
-            <div>
-              {goalLikesFromUser.map((x) => (
-                <div key={x.id}>
-                  {x.id}: Goal: {x.achievement.name}, Goal Date:{" "}
-                  {formatDate(x.dateToAchieve)}
-                </div>
-              ))}
-              {isGettingFromUserError && (
-                <p>Failed to get goals user has liked</p>
-              )}
-            </div>
-          )}
+          {games?.map((x) => (
+            <p key={x.platformGameId}>
+              {x.gameTitle}, {x.platformGameId}, {x.steamPlayTime} minutes
+            </p>
+          ))}
         </div>
-        <div>
-          {isGettingGoalLike && <p>Getting goal like...</p>}
-          {isGettinggoalLikeSuccess && (
-            <p>Goal Like: {formatDate(goalLike.dateLiked)}</p>
-          )}
-          {isGettingGoalLikeError && <p>Failed to get goal like...</p>}
-          <button onClick={handleGetGoalLike}>Get Goal Like</button>
-        </div>
-        <div>
-          {isUpdating && <p>Updating goal like...</p>}
-          {isUpdatingSuccess && (
-            <p>Is goal like updated: {String(updatedGoalLike)}</p>
-          )}
-          {isUpdatingError && <p>Failed to update goal like...</p>}
-          <button onClick={handleUpdateGoalLike}>Update Goal Like</button>
-        </div>
-        <div>
-          {isRemoving && <p>Removing goal like...</p>}
-          {isRemovingSuccess && (
-            <p>Is goal like removed: {String(removedGoalLike)}</p>
-          )}
-          {isRemovingError && <p>Failed to remove goal like...</p>}
-          <button onClick={handleRemoveGoalLike}>Remove Goal Like</button>
-        </div> */}
       </div>
     )
   );

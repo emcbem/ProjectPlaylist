@@ -1,34 +1,33 @@
-import { Platform } from "@/@types/platform";
 import { AddUserPlatformRequest } from "@/@types/Requests/AddRequests/addUserPlatformRequest";
-import { UpdateUserPlatformRequest } from "@/@types/Requests/UpdateRequests/UpdateUserPlatformRequest";
 import { UserPlatform } from "@/@types/userPlatform";
 import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SyncButton } from "./Buttons/SyncButton";
 import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import { PlaystationUser } from "@/@types/Playstation/playstationUser";
-import PlaystationResult from "./Components/PlaystationResult";
 import PlaystationResultList from "./Components/PlaystationResultList";
+import LoadingDots from "./Components/LoadingDots";
+import PSIconCustom from "@/assets/CustomPlatformIcons/PSLogoCustom";
+import { UpdateUserPlatformRequest } from "@/@types/Requests/UpdateRequests/UpdateUserPlatformRequest";
 
 interface EditGamerTagFieldProps {
-  children: ReactNode;
-  platform: Platform;
   userPlatforms: UserPlatform[] | undefined;
   userGuid: string;
 }
 
-const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
-  children,
-  platform,
+const EditPSNTag: FC<EditGamerTagFieldProps> = ({
   userPlatforms,
   userGuid,
 }) => {
+  const [selectedPSUser, setSelectedPSUser] = useState<PlaystationUser>();
   const [userPlatform, setUserPlatform] = useState<UserPlatform | null>(null);
   const [value, setValue] = useState<string>(""); // initialize to an empty string instead of undefined
   const [playstationUserResults, setPlaystationUserResults] =
     useState<PlaystationUser[]>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
+  const [width, setWidth] = useState<string>("30");
+  const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const { mutateAsync: updateUserPlatforms } =
     UserPlatformQueries.UpdateUserPlatform();
   const { mutateAsync: addUserPlatform } =
@@ -40,9 +39,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
 
   useEffect(() => {
     if (userPlatforms != undefined) {
-      const matchedPlatform = userPlatforms.find(
-        (x) => x.platformId === platform.id
-      );
+      const matchedPlatform = userPlatforms.find((x) => x.platformId === 7);
       if (matchedPlatform) {
         setUserPlatform(matchedPlatform);
         setValue(matchedPlatform.gamerTag || "");
@@ -51,31 +48,47 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
         setValue("");
       }
     }
-  }, [platform.id, userPlatforms]);
+  }, [userPlatforms]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
   };
 
-  const handleSaveClick = async () => {
+  const clearPSResults = () => {
+    setWidth("30");
+    setHasSearched(false);
+    setPlaystationUserResults([]);
+  };
+
+  const handleSearchClick = async () => {
     if (value.length <= 0) {
       handleRemove();
     }
     if (!userPlatform) {
       await AddUserPlatform();
     } else {
-      const updateRequest: UpdateUserPlatformRequest = {
-        id: userPlatform?.id ?? 0,
-        gamerTag: value ?? "",
-        externalPlatformId: userPlatform.externalPlatformId,
-        isPublic: true,
-      };
-      console.log("Update request: ", updateRequest)
-      console.log("Saving");
-      await updateUserPlatforms(updateRequest);
       await SearchPlaystationUsers();
       setIsVisible(!isVisible);
+    }
+  };
+
+  const handleSave = async () => {
+    if (selectedPSUser == undefined) return;
+    if (!userPlatform) {
+      await AddUserPlatform();
+    } else {
+      const updateRequest: UpdateUserPlatformRequest = {
+        id: userPlatform?.id ?? 0,
+        gamerTag: selectedPSUser.onlineId ?? "",
+        externalPlatformId: String(7),
+        isPublic: true,
+      };
+      await updateUserPlatforms(updateRequest);
+      setWidth("30");
+      setPlaystationUserResults([]);
+      setHasSearched(false);
+      setIsVisible(false);
     }
   };
 
@@ -89,7 +102,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
 
   const AddUserPlatform = async () => {
     const request: AddUserPlatformRequest = {
-      platformId: platform.id,
+      platformId: 7,
       userId: userGuid,
       gamerTag: value ?? "",
       externalPlatformId: "One",
@@ -102,26 +115,28 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
 
   const SearchPlaystationUsers = async () => {
     if (value) {
-      const result: PlaystationUser[] = await searchForPlaystationUser();
-      setPlaystationUserResults(result);
-      console.log("Here ya go", result);
-      console.log("platform!!!", platform);
+      setHasSearched(true);
+      setLoading(true); // Start loading before query
+      try {
+        const result: PlaystationUser[] = await searchForPlaystationUser();
+        setPlaystationUserResults(result);
+      } catch (error) {
+        console.error("Error fetching PlayStation users:", error);
+      } finally {
+        setWidth("110");
+        setLoading(false); // Stop loading when query is done
+      }
     }
   };
 
   return (
-    <>
-      <div className="flex flex-row items-baseline justify-between">
-        {/* Shows the Passed in Icon here */}
-
-        {children}
-
-        {/* <h3 className={`${isVisible ? 'hidden' : ""} ml-4 text-xl font-sans`}>
-                    {userPlatforms?.filter(x => x.platformId == platform.id)?.map((x, key) =>
-                        <p key={key}>{x.gamerTag}</p>
-                    )}
-                </h3> */}
-
+    <div className={`flex flex-row items-start`}>
+      <PSIconCustom width={width} />
+      <div
+        className={`flex flex-row ${
+          isVisible ? "items-start" : "items-baseline"
+        } justify-between ${hasSearched ? "hidden" : ""}`}
+      >
         {!isVisible && userPlatform && (
           <h3 className="ml-4 text-xl font-sans">{userPlatform.gamerTag}</h3>
         )}
@@ -153,18 +168,19 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
           remove
         </p>
 
+        <SyncButton isVisible={isVisible} userPlatform={userPlatform} />
+
         <button
-          onClick={handleSaveClick}
+          onClick={handleSearchClick}
           className={`${
             !isVisible ? "hidden" : ""
-          } bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded mt-2 inline-block ml-4`}
+          } bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded inline-block ml-4`}
         >
-          Save
+          Search
         </button>
 
         {userPlatforms &&
-          userPlatforms.filter((x) => x.platformId == platform.id).length <=
-            0 && (
+          userPlatforms.filter((x) => x.platformId == 7).length <= 0 && (
             <p
               role="button"
               onClick={() => setIsVisible(!isVisible)}
@@ -172,12 +188,27 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
                 isVisible ? "hidden" : ""
               } ${userPlatform ? "hidden" : ""}`}
             >
-              Add a Gamertag for {platform.name}
+              Add a Gamertag for Playstation
             </p>
           )}
       </div>
-    </>
+      <div className={`${loading ? "w-full" : "hidden"}`}>
+        <LoadingDots />
+      </div>
+      <div>
+        {playstationUserResults && (
+          <PlaystationResultList
+            PlaystationUserResults={playstationUserResults.slice(0, 14)}
+            setSearchAgain={() => clearPSResults()}
+            display={playstationUserResults.length > 0}
+            selectedPSUser={selectedPSUser}
+            setSelectedPSUser={setSelectedPSUser}
+            handleSave={handleSave}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
-export default EditGamerTagField;
+export default EditPSNTag;

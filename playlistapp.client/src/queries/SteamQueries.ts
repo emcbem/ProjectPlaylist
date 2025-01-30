@@ -1,13 +1,18 @@
 import { SteamService } from "@/ApiServices/SteamService";
 import keys from "@/QueryKeys/SteamKeys";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const SteamQueries = {
   useGetUserDataForOneGame: (userSteamId: string) => {
-    console.log("User steam id", userSteamId);
-    return useQuery({
-      queryFn: () => SteamService.GetSteamUserActionLog(userSteamId),
-      queryKey: keys.GetSteamUserActionLog,
+    console.log("query: ", userSteamId)
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: () => SteamService.GetSteamUserActionLog(userSteamId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ 
+          queryKey: keys.GetSteamUserActionLog 
+        });
+      },
     });
   },
 };
