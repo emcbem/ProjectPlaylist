@@ -10,10 +10,12 @@ namespace PlaylistApp.Server.Controllers;
 public class PlaystationController : Controller
 {
     private readonly PlaystationAuthenticationService playstationService;
+    private readonly PlaystationGameService playstationGameService;
     private readonly IConfiguration config;
 
-    public PlaystationController(PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration)
+    public PlaystationController(PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration)
     {
+        this.playstationGameService = playstationGameService;
         playstationService = playstationAuthenticationService;
         config = configuration;
     }
@@ -27,6 +29,12 @@ public class PlaystationController : Controller
     [HttpPost("searchplayers")]
     public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers([FromBody] string username)
     {
-        return await playstationService.SearchPlayer(username);
+        return await playstationGameService.SearchPlayer(username);
+    }
+
+    [HttpPost("getusersgamelist")]
+    public async Task<GameList> GetPlaystationUsersGameList([FromBody] string accountId)
+    {
+        return await playstationGameService.GetUserPlaystationGameList(accountId);
     }
 }
