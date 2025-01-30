@@ -2,26 +2,14 @@ import { SteamSummary } from "@/@types/steamSummary";
 import axios from "axios";
 
 export const SteamService = {
-//   getDataFromSingleGame: async (userId: string) => {
-//     try {
-//       console.log("AHHHHHH");
-//       console.log("Steam Id From Steam Service ", userId);
-//       const response = await axios.get<string>("");
-//       console.log("Response data ", response.data);
-//       return response.data;
-//     } catch (error) {
-//       console.error("something went wrong");
-//     }
-//   },
   GetSteamUserActionLog: async (userSteamId: string) => {
+    if (!userSteamId) {
+      console.error("No steam id");
+    }
     try {
-      const response = await axios.get<SteamSummary[]>(
-        `${import.meta.env.VITE_URL}/steam/getuseractionlog`,
-        {
-          params: {
-            username: userSteamId,
-          },
-        }
+      console.log("in service: ", userSteamId)
+      const response = await axios.post<SteamSummary[]>(
+        `${import.meta.env.VITE_URL}/Steam/getuseractionlog/${ userSteamId }`
       );
       return response.data;
     } catch (error) {
