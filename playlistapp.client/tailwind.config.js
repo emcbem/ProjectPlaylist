@@ -22,6 +22,9 @@ export default {
       "9xl": ["128px", "1"],
     },
     extend: {
+      fontFamily: {
+        SST: ["SST", "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
