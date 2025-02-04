@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { SteamQueries } from "@/queries/SteamQueries";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 
 const TestPage = () => {
-  const { user, isAuthenticated } = useAuth0();
+  // const { user, isAuthenticated } = useAuth0();
   const [steamId, setSteamId] = useState(""); // State to hold the Steam ID input
   const { data: games, mutateAsync } =
     SteamQueries.useGetUserDataForOneGame(steamId);

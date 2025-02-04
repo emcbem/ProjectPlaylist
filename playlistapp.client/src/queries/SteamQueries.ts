@@ -1,6 +1,6 @@
 import { SteamService } from "@/ApiServices/SteamService";
 import keys from "@/QueryKeys/SteamKeys";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const SteamQueries = {
   useGetUserDataForOneGame: (userSteamId: string) => {

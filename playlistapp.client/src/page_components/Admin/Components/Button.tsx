@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type ButtonProps = {
   message: string;
-  query: () => void;
+  query?: () => void;
 };
 
 const Button: FC<ButtonProps> = ({ message, query }) => {

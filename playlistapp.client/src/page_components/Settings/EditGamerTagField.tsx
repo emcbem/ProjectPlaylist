@@ -4,11 +4,8 @@ import { UpdateUserPlatformRequest } from "@/@types/Requests/UpdateRequests/Upda
 import { UserPlatform } from "@/@types/userPlatform";
 import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
 import { FC, ReactNode, useEffect, useState } from "react";
-import { SyncButton } from "./Buttons/SyncButton";
 import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import { PlaystationUser } from "@/@types/Playstation/playstationUser";
-import PlaystationResult from "./Components/PlaystationResult";
-import PlaystationResultList from "./Components/PlaystationResultList";
 
 interface EditGamerTagFieldProps {
   children: ReactNode;
@@ -25,8 +22,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
 }) => {
   const [userPlatform, setUserPlatform] = useState<UserPlatform | null>(null);
   const [value, setValue] = useState<string>(""); // initialize to an empty string instead of undefined
-  const [playstationUserResults, setPlaystationUserResults] =
-    useState<PlaystationUser[]>();
+  const [, setPlaystationUserResults] = useState<PlaystationUser[]>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const { mutateAsync: updateUserPlatforms } =
@@ -71,7 +67,7 @@ const EditGamerTagField: FC<EditGamerTagFieldProps> = ({
         externalPlatformId: userPlatform.externalPlatformId,
         isPublic: true,
       };
-      console.log("Update request: ", updateRequest)
+      console.log("Update request: ", updateRequest);
       console.log("Saving");
       await updateUserPlatforms(updateRequest);
       await SearchPlaystationUsers();
