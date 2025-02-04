@@ -33,7 +33,7 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("getusersgamelist")]
-    public async Task<GameList> GetPlaystationUsersGameList([FromBody] string accountId)
+    public async Task<List<PlaystationGameDTO>> GetPlaystationUsersGameList([FromBody] string accountId)
     {
         return await playstationGameService.GetUserPlaystationGameList(accountId);
     }

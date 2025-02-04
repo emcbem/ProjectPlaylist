@@ -94,7 +94,7 @@ public class PlaystationAuthenticationService
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var tokenResponse = JsonSerializer.Deserialize<PlaystationContext>(jsonResponse);
 
-            if (!string.IsNullOrWhiteSpace(tokenResponse?.access_token))
+            if (!string.IsNullOrWhiteSpace(tokenResponse?.AccessToken))
             {
                 return tokenResponse;
             }

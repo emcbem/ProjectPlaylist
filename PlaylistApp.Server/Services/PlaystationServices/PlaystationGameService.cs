@@ -47,20 +47,39 @@ public class PlaystationGameService
         return new List<PlaystationUserDTO>();
     }
 
-    public async Task<GameList> GetUserPlaystationGameList(string accountId, int offset = 0, int limit = 10)
+    public async Task<List<PlaystationGameDTO>> GetUserPlaystationGameList(string accountId)
     {
         PAWN pawn = new(config["npsso"]);
 
         try
         {
-            var response = await pawn.GameListAsync(accountId);
-            return response;
+            var response = await pawn.GameListAsync(accountId, offset: 0, limit: 500);
+
+            List<PlaystationGameDTO> allGames = new();
+
+            foreach (var title in response.titles)
+            {
+                PlaystationGameDTO newDTO = new PlaystationGameDTO()
+                {
+                    FirstPlayedDateTime = title.firstPlayedDateTime,
+                    Id = title.concept.id,
+                    ImageUrl = title.imageUrl,
+                    LastPlayedDateTime = title.lastPlayedDateTime,
+                    Name = title.name,
+                    PlayCount = title.playCount,
+                    PlayDuration = title.playDuration
+                };
+
+                allGames.Add(newDTO);
+            }
+
+            return allGames;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Failed to get users game list. Details: {ex.Message}");
         }
 
-        return new GameList();
+        return new List<PlaystationGameDTO>();
     }
 }

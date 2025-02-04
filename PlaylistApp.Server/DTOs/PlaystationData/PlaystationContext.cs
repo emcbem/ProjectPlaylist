@@ -1,11 +1,19 @@
-﻿namespace PlaylistApp.Server.DTOs.PlaystationData;
+﻿using System.Text.Json.Serialization;
+
+namespace PlaylistApp.Server.DTOs.PlaystationData;
 
 public class PlaystationContext
 {
-    public string? access_token { get; set; }
-    public string? token_type { get; set; }
-    public int expires_in { get; set; }
-    public string? scope { get; set; }
-    public string? id_token { get; set; }
-    public string? refresh_token { get; set; }
+    [JsonPropertyName("access_token")]
+    public string? AccessToken { get; set; }
+    [JsonPropertyName("token_type")]
+    public string? TokenType { get; set; }
+    [JsonPropertyName("expires_in")]
+    public int ExpiresIn { get; set; }
+    [JsonPropertyName("scope")]
+    public string? Scope { get; set; }
+    [JsonPropertyName("id_token")]
+    public string? IdToken { get; set; }
+    [JsonPropertyName("refresh_token")]
+    public string? RefreshToken { get; set; }
 }

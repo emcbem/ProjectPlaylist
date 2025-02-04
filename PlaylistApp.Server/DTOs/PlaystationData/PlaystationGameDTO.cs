@@ -1,12 +1,19 @@
-﻿namespace PlaylistApp.Server.DTOs.PlaystationData;
+﻿using PsnApiWrapperNet.Model;
+
+namespace PlaylistApp.Server.DTOs.PlaystationData;
 
 public class PlaystationGameDTO
 {
-    DateTime firstPlayedDateTime { get; set; }
-    DateTime lastPlayedDateTime { get; set; }
-    int playCount { get; set; }
-    string? playDuration { get; set; }
-    int id { get; set; }
-    string? name { get; set; }
-    string? imageUrl { get; set; }
+    public PlaystationGameDTO()
+    {
+        
+    }
+
+    public DateTime FirstPlayedDateTime { get; set; }
+    public DateTime LastPlayedDateTime { get; set; }
+    public int PlayCount { get; set; }
+    public string? PlayDuration { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public string? ImageUrl { get; set; }
 }
