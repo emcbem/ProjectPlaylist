@@ -28,7 +28,16 @@ public class UserPlatformService : IUserPlatformService
             return false;
         }
 
-        var userPlatform = new UserPlatform()
+        var up = context.UserPlatforms
+            .Where(x => x.UserId == user.Id && x.PlatformId == request.PlatformId)
+            .FirstOrDefault();
+
+		if (up != null)
+		{
+            return false;
+		}
+
+		var userPlatform = new UserPlatform()
         {
             ExternalPlatformId = request.ExternalPlatformId ?? "",
             Gamertag = request.GamerTag ?? "",

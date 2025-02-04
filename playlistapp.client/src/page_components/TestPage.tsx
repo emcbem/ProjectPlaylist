@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { SteamQueries } from "@/queries/SteamQueries";
 // import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
 
 const TestPage = () => {
   // const { user, isAuthenticated } = useAuth0();
+  const { userGuid } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
   const [steamId, setSteamId] = useState(""); // State to hold the Steam ID input
   const { data: games, mutateAsync } =
     SteamQueries.useGetUserDataForOneGame(steamId);
@@ -17,7 +23,11 @@ const TestPage = () => {
   };
 
   const handleAuth = async () => {
-    window.location.href = `${import.meta.env.VITE_URL}/Steam/auth/steam`;
+    if (userGuid != undefined) {
+      window.location.href = `${
+        import.meta.env.VITE_URL
+      }/Steam/auth/${userGuid}`;
+    }
   };
 
   return (

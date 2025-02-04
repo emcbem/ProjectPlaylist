@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
-using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.SteamData;
-using System.Linq;
-using System.Net.Http;
+using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Services.UserPlatformServices;
+using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.SteamServices;
 
@@ -12,15 +12,25 @@ public class SteamService : ISteamService
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
     private readonly HttpClient client;
     private readonly IConfiguration config;
+    private readonly IUserPlatformService userPlatformService;
 
-    public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory, HttpClient client, IConfiguration config)
+    public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory, 
+        HttpClient client, 
+        IConfiguration config, 
+        IUserPlatformService userPlatformService)
     {
         this.dbContextFactory = dbContextFactory;
         this.client = client;
         this.config = config;
+        this.userPlatformService = userPlatformService;
     }
 
-    public async Task<List<DTOs.SteamData.ActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
+	public void ConnectWithSteamUsingUserLogin()
+	{
+		throw new NotImplementedException();
+	}
+
+	public async Task<List<ActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
     {
         var steamKey = config["steamkey"];
         string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
@@ -47,13 +57,7 @@ public class SteamService : ISteamService
             throw new Exception();
         }
     }
-
-    public void ConnectWithSteamUsingUserLogin()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<List<DTOs.SteamData.ActionItem>> ParseSteamSummary(OwnedGamesResponse response)
+    public async Task<List<ActionItem>> ParseSteamSummary(OwnedGamesResponse response)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -79,10 +83,36 @@ public class SteamService : ISteamService
             ImageUrl = platformGame.Game.CoverUrl ?? string.Empty,  // default image?
         }).ToList();
 
-
-
         return userSteamGames;
 
     }
+
+	public string ExtractSteamIdFromUrl(string urlParams)
+	{
+		var match = Regex.Match(urlParams, @"\d{17}");
+		if (match.Success)
+		{
+			return match.Value;
+		}
+		else
+		{
+			return string.Empty;
+		}
+	}
+
+	public void AddSteamUserPlatform(string userId, string steamId)
+	{
+		if (!string.IsNullOrEmpty(steamId))
+		{
+			AddUserPlatformRequest updateUserPlatformRequest = new AddUserPlatformRequest()
+			{
+				UserId = Guid.Parse(userId),
+				ExternalPlatformId = steamId,
+				PlatformId = 163, // platform id for Steam
+			};
+
+			userPlatformService.AddUserPlatform(updateUserPlatformRequest);
+		}
+	}
 
 }

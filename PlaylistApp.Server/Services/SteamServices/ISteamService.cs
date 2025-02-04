@@ -8,4 +8,6 @@ public interface ISteamService
 {
     public void ConnectWithSteamUsingUserLogin();
     public Task<List<DTOs.SteamData.ActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId);
+    public string ExtractSteamIdFromUrl(string urlParams);
+    public void AddSteamUserPlatform(string userId, string steamId);
 }
