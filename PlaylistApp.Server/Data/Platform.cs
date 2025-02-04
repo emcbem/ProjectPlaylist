@@ -12,10 +12,10 @@ public partial class Platform : IChecksum
 
     public string PlatformName { get; set; } = null!;
 
+    public int? IgdbId { get; set; }
     public string? Checksum { get; set; }
 
     public virtual ICollection<PlatformGame> PlatformGames { get; set; } = new List<PlatformGame>();
 
     public virtual ICollection<UserPlatform> UserPlatforms { get; set; } = new List<UserPlatform>();
-    public int? IgdbId { get; set; }
 }

@@ -88,7 +88,9 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
 
                 platform.Id = (int?)igdbPlatform.Id ?? -1;
-                platform.PlatformName = igdbPlatform.Name.Substring(0, Math.Min(igdbPlatform.Name.Length, 40)); ;
+                platform.PlatformName = igdbPlatform.Name.Substring(0, Math.Min(igdbPlatform.Name.Length, 40));
+                platform.Checksum = igdbPlatform.Checksum;
+                platform.IgdbId = (int?)igdbPlatform.Id;
 
                 if (logoDict.TryGetValue((long)igdbPlatform.PlatformLogo.Id!, out logo))
                 {
@@ -111,6 +113,8 @@ namespace PlaylistApp.Server.Services.IGDBServices
             {
                 Id = (int?)x.Id ?? -1,
                 GenreName = x.Name,
+                IgdbId = (int?)x.Id,
+                Checksum = x.Checksum,
             }).ToList();
         }
 
@@ -121,7 +125,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
 
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-            return (List<Data.InvolvedCompany>)igdbInvolvedCompanies.Select(x =>
+            return igdbInvolvedCompanies.Select(x =>
             {
                 if (localGameDict.TryGetValue((int)x.Game.Id!, out gameId))
                 {
@@ -135,7 +139,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     };
                 }
                 return null;
-            }).Where(x => x is not null).ToList();
+            }).Where(x => x is not null).Select(x => x as Data.InvolvedCompany).ToList();
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 

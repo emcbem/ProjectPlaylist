@@ -126,23 +126,18 @@ public class IGDBGeneralController
 
     }
 
-    [HttpGet("Sync Companies")]
+    [HttpGet("SyncCompanies")]
     public async Task UploadCompanies()
     {
         await syncOrchestrator.OrchestrateCompanies();
     }
 
-    [HttpGet("uploadPlatforms")]
+    [HttpGet("SyncPlatforms")]
     [EndpointName("Upload Platforms")]
     [EndpointDescription("A way to upload the platforms from IGDB in a quick and easy way")]
-    public async Task UploadPlatforms()
+    public async Task<DifferencesToCheck> UploadPlatforms()
     {
-        var platformsLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Platforms);
-        var igdbPlatforms = Parser.ParsePlatformCsv(platformsLocalPath);
-        var platformLogoUrl = await downloader.DownloadCSV(IGDBClient.Endpoints.PlatformLogos);
-        var igdbPlatformLogos = Parser.ParsePlatformLogoCsv(platformLogoUrl);
-        var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
-        await uploader.UploadPlatformsToDatabase(localPlatforms);
+        return await syncOrchestrator.OrchestratePlatforms();
     }
 
 
@@ -160,13 +155,10 @@ public class IGDBGeneralController
         await uploader.UploadPlatformGamesToDatabase(localPlatforms);
     }
 
-    [HttpGet("uploadGenres")]
-    public async Task UploadGenres()
+    [HttpGet("SyncGenres")]
+    public async Task<DifferencesToCheck> UploadGenres()
     {
-        var genreLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Genres);
-        var igdbGenre = Parser.ParseGenreCsv(genreLocalPath);
-        var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenre);
-        await uploader.UploadGenresToDatabase(localGenres);
+        return await syncOrchestrator.OrchestrateGenres();
     }
 
     [HttpGet("uploadInvolvedCompany")]

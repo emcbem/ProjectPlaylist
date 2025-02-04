@@ -16,9 +16,9 @@ public partial class Company : IChecksum
 
     public DateTime? StartDate { get; set; }
 
-    public string? Checksum { get; set; }
-
     public string? Slug { get; set; }
+
+    public string? Checksum { get; set; }
 
     public int? IgdbId { get; set; }
 

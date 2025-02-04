@@ -31,4 +31,13 @@ public partial class Game : IChecksum
     public virtual ICollection<ListGame> ListGames { get; set; } = new List<ListGame>();
 
     public virtual ICollection<PlatformGame> PlatformGames { get; set; } = new List<PlatformGame>();
+
+    //IGDB PROPS FOR SYNCING
+
+    public List<int> GenreIds { get; set; } = new();
+
+    public List<int> CompanyIds { get; set; } = new();
+
+    public List<int> PlatformIds { get; set; } = new();
+
 }
