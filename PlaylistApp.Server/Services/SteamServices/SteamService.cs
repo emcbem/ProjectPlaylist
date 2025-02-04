@@ -20,7 +20,7 @@ public class SteamService : ISteamService
         this.config = config;
     }
 
-    public async Task<List<DTOs.SteamData.ActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
+    public async Task<List<DTOs.SteamData.SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
     {
         var steamKey = config["steamkey"];
         string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
@@ -53,7 +53,7 @@ public class SteamService : ISteamService
         throw new NotImplementedException();
     }
 
-    public async Task<List<DTOs.SteamData.ActionItem>> ParseSteamSummary(OwnedGamesResponse response)
+    public async Task<List<DTOs.SteamData.SteamActionItem>> ParseSteamSummary(OwnedGamesResponse response)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -69,11 +69,11 @@ public class SteamService : ISteamService
 
         var uniquePlatformGames = matchingPlatformGames.GroupBy(pg => pg.GameId).Select(pg => pg.First()).ToList();
 
-        var userSteamGames = uniquePlatformGames.Select(platformGame => new ActionItem
+        var userSteamGames = uniquePlatformGames.Select(platformGame => new SteamActionItem
         {
             PlatformGameId = platformGame.Id,
             GameTitle = platformGame.Game.Title ?? string.Empty,
-            SteamPlayTime = playtimeDict.GetValueOrDefault(int.Parse(platformGame.PlatformKey ?? ""), 0),
+            TotalPlayTime = playtimeDict.GetValueOrDefault(int.Parse(platformGame.PlatformKey ?? ""), 0),
             ProblemText = "Problem Text",   // depends on the type of problem. 
             Url = "some URL for something", // url of a special place in our system that we will redirect users to?
             ImageUrl = platformGame.Game.CoverUrl ?? string.Empty,  // default image?

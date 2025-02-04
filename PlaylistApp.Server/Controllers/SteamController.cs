@@ -18,7 +18,7 @@ public class SteamController : Controller
     }
 
 	[HttpPost("getuseractionlog/{userSteamId}")]
-	public async Task<List<DTOs.SteamData.ActionItem>> GetGamesBySteamId(string userSteamId)
+	public async Task<List<DTOs.SteamData.SteamActionItem>> GetGamesBySteamId(string userSteamId)
 	{
 		return await steamService.GetGamesFromUserBasedOffOfSteamId(userSteamId);
 	}

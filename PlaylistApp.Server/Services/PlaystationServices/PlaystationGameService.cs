@@ -53,7 +53,7 @@ public class PlaystationGameService
 
         try
         {
-            var response = await pawn.GameListAsync(accountId, offset: 0, limit: 500);
+            var response = await pawn.GameListAsync(accountId, offset: 0, limit: 200);
 
             List<PlaystationGameDTO> allGames = new();
 
@@ -67,7 +67,8 @@ public class PlaystationGameService
                     LastPlayedDateTime = title.lastPlayedDateTime,
                     Name = title.name,
                     PlayCount = title.playCount,
-                    PlayDuration = title.playDuration
+                    PlayDuration = title.playDuration, 
+                    Category = title.category.Substring(0, 3),
                 };
 
                 allGames.Add(newDTO);

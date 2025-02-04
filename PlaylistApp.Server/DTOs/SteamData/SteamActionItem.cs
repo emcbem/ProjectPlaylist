@@ -1,6 +1,6 @@
 ﻿namespace PlaylistApp.Server.DTOs.SteamData;
 
-public class ActionItem
+public class SteamActionItem
 {
     public int PlatformGameId { get; set; }
     public string GameTitle { get; set; } = string.Empty;

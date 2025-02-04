@@ -42,4 +42,22 @@ public class PlatformGameService : IPlatformGameService
 
         return platformGames.Select(x => x.ToDTO()).ToList();
     }
+
+    public async Task<List<PlatformGameDTO>> GetAllPlatformGamesByExternalKey(string platformKey)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var platformGames = await context.PlatformGames
+            .Where(x => x.PlatformKey == platformKey)
+            .Include(x => x.Game)
+            .Include(x => x.Platform)
+            .ToListAsync();
+
+        if (platformGames is null)
+        {
+            return new List<PlatformGameDTO>();
+        }
+
+        return platformGames.Select(x => x.ToDTO()).ToList();
+    }
 }

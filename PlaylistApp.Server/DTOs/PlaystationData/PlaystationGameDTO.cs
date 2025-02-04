@@ -1,4 +1,5 @@
-﻿using PsnApiWrapperNet.Model;
+﻿using Org.BouncyCastle.Bcpg.OpenPgp;
+using PsnApiWrapperNet.Model;
 
 namespace PlaylistApp.Server.DTOs.PlaystationData;
 
@@ -16,4 +17,5 @@ public class PlaystationGameDTO
     public int Id { get; set; }
     public string? Name { get; set; }
     public string? ImageUrl { get; set; }
+    public string? Category { get; set; }
 }

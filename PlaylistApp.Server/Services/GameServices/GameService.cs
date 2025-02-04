@@ -42,7 +42,7 @@ public class GameService : IGameService
 
 		var games = await context.Games
 			.Take(500)
-			.ToListAsync(); // Use ToListAsync for async execution
+			.ToListAsync();
 
 		return games.Select(x => x.ToDTO()).ToList();
 	}
