@@ -1,54 +1,54 @@
-name: Build and Deploy Docker Images
+# name: Build and Deploy Docker Images
 
-on:
-  push:
-    branches:
-      - main  # Change this to your main branch name
+# on:
+#   push:
+#     branches:
+#       - main  # Change this to your main branch name
 
-jobs:
-  build:
-    runs-on: playlist-runner
+# jobs:
+#   build:
+#     runs-on: playlist-runner
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      # - name: Test
-      #   run: |
-      #       cd ./PlaylistApp.Test/
-      #       dotnet test
+#       # - name: Test
+#       #   run: |
+#       #       cd ./PlaylistApp.Test/
+#       #       dotnet test
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # Set in your repository secrets
-          password: ${{ secrets.DOCKER_PASSWORD }}  # Set in your repository secrets
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}  # Set in your repository secrets
+#           password: ${{ secrets.DOCKER_PASSWORD }}  # Set in your repository secrets
 
-      - name: Push playlist server
-        uses: docker/build-push-action@v2
-        with:
-          context: ./PlaylistApp.Server  # Path to server Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest , ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{github.run_number}}
+#       - name: Push playlist server
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./PlaylistApp.Server  # Path to server Dockerfile
+#           push: true
+#           tags: ${{ secrets.DOCKER_USERNAME }}/playlistserver:latest , ${{ secrets.DOCKER_USERNAME }}/playlistserver:${{github.run_number}}
 
-      - name: Push playlist client
-        uses: docker/build-push-action@v2
-        with:
-          context: ./playlistapp.client  # Path to server Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest , ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{github.run_number}}
+#       - name: Push playlist client
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./playlistapp.client  # Path to server Dockerfile
+#           push: true
+#           tags: ${{ secrets.DOCKER_USERNAME }}/playlistclient:latest , ${{ secrets.DOCKER_USERNAME }}/playlistclient:${{github.run_number}}
 
-      - name: Apply kubernetes
-        run: |
-          export TAG_ID=${{github.run_number}}
-          export DB_USER_ID=${{secrets.DB_USER_ID}}
-          export DB_PASSWORD=${{secrets.DB_PASSWORD}}
-          export DB_SERVER=${{secrets.DB_SERVER}}
-          export DB_DB=${{secrets.DB_DB}}
-          export DUCKDNS_TOKEN=$(echo -n "${{ secrets.DUCKDNS_TOKEN }}" | base64)
+#       - name: Apply kubernetes
+#         run: |
+#           export TAG_ID=${{github.run_number}}
+#           export DB_USER_ID=${{secrets.DB_USER_ID}}
+#           export DB_PASSWORD=${{secrets.DB_PASSWORD}}
+#           export DB_SERVER=${{secrets.DB_SERVER}}
+#           export DB_DB=${{secrets.DB_DB}}
+#           export DUCKDNS_TOKEN=$(echo -n "${{ secrets.DUCKDNS_TOKEN }}" | base64)
 
-          for file in ./kubernetes/*; do 
-            cat $file | envsubst | /home/ethane/.nix-profile/bin/kubectl apply -f -
-          done
+#           for file in ./kubernetes/*; do 
+#             cat $file | envsubst | /home/ethane/.nix-profile/bin/kubectl apply -f -
+#           done
 
     
