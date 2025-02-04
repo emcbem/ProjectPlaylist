@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
-using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.SteamData;
-using System.Linq;
-using System.Net.Http;
+using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Services.UserPlatformServices;
+using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.SteamServices;
 
@@ -12,12 +12,17 @@ public class SteamService : ISteamService
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
     private readonly HttpClient client;
     private readonly IConfiguration config;
+    private readonly IUserPlatformService userPlatformService;
 
-    public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory, HttpClient client, IConfiguration config)
+    public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory, 
+        HttpClient client, 
+        IConfiguration config, 
+        IUserPlatformService userPlatformService)
     {
         this.dbContextFactory = dbContextFactory;
         this.client = client;
         this.config = config;
+        this.userPlatformService = userPlatformService;
     }
 
     public async Task<List<DTOs.SteamData.SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
@@ -37,9 +42,9 @@ public class SteamService : ISteamService
                 throw new Exception("Something went wrong parsing the data from Steam. Is the account private?");
             }
 
-            var userSteamGames = await ParseSteamSummary(jsonResponse);
-            return userSteamGames;
+			var userSteamGames = await ParseSteamSummary(jsonResponse);
 
+            return userSteamGames;
         }
         catch (HttpRequestException e)
         {
@@ -48,9 +53,53 @@ public class SteamService : ISteamService
         }
     }
 
-    public void ConnectWithSteamUsingUserLogin()
+    public async Task<List<PlatformGame>> MatchedPlatformGames(OwnedGamesResponse jsonGames)
     {
-        throw new NotImplementedException();
+		using var context = await dbContextFactory.CreateDbContextAsync();
+
+		List<SteamRawGame> games = jsonGames.Response.Games;
+
+		HashSet<int> appIds = new HashSet<int>(games.Select(g => g.AppId));
+		Dictionary<int, int> playtimeDict = games.ToDictionary(g => g.AppId, g => g.PlaytimeForever);
+
+		var matchingPlatformGames = await context.PlatformGames
+			.Where(pg => appIds.Any(appId => appId.ToString() == pg.PlatformKey))
+			.Include(g => g.Game)
+			.ToListAsync();
+
+        return matchingPlatformGames;
+	}
+
+    public async Task<List<ActionItem>> CalculateDifferenceInGames(List<PlatformGame> games, int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        List<UserGame> usersGames = context.UserGames
+            .Where(x => x.UserId == userId)
+            .Include(g => g.PlatformGame)
+            .ThenInclude(g => g.Game)
+            .ToList();
+        HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
+
+        List<ActionItem> gamesNotOwned = new List<ActionItem>();
+
+
+
+        foreach (var game in games)
+        {
+            if (!userGameIds.Contains(game.Id))
+            {
+                gamesNotOwned.Add(new ActionItem
+                {
+					PlatformGameId = game.Id,
+					GameTitle = game.Game.Title,
+                    SteamPlayTime = 0,
+                    ProblemText = "You have this game in Steam. Would you like to log it in your library?"
+                });
+            }
+        }
+
+        return gamesNotOwned;
     }
 
     public async Task<List<DTOs.SteamData.SteamActionItem>> ParseSteamSummary(OwnedGamesResponse response)
@@ -67,9 +116,7 @@ public class SteamService : ISteamService
             .Include(g => g.Game)
             .ToListAsync();
 
-        var uniquePlatformGames = matchingPlatformGames.GroupBy(pg => pg.GameId).Select(pg => pg.First()).ToList();
-
-        var userSteamGames = uniquePlatformGames.Select(platformGame => new SteamActionItem
+        var userSteamGames = matchingPlatformGames.Select(platformGame => new ActionItem
         {
             PlatformGameId = platformGame.Id,
             GameTitle = platformGame.Game.Title ?? string.Empty,
@@ -79,10 +126,35 @@ public class SteamService : ISteamService
             ImageUrl = platformGame.Game.CoverUrl ?? string.Empty,  // default image?
         }).ToList();
 
-
-
         return userSteamGames;
-
     }
+
+	public string ExtractSteamIdFromUrl(string urlParams)
+	{
+		var match = Regex.Match(urlParams, @"\d{17}");
+		if (match.Success)
+		{
+			return match.Value;
+		}
+		else
+		{
+			return string.Empty;
+		}
+	}
+
+	public void AddSteamUserPlatform(string userId, string steamId)
+	{
+		if (!string.IsNullOrEmpty(steamId))
+		{
+			AddUserPlatformRequest updateUserPlatformRequest = new AddUserPlatformRequest()
+			{
+				UserId = Guid.Parse(userId),
+				ExternalPlatformId = steamId,
+				PlatformId = 163, // platform id for Steam
+			};
+
+			userPlatformService.AddUserPlatform(updateUserPlatformRequest);
+		}
+	}
 
 }
