@@ -1,4 +1,4 @@
-import { SteamSummary } from "@/@types/steamSummary";
+import { ActionItem } from "@/@types/steamSummary";
 import axios from "axios";
 
 export const SteamService = {
@@ -7,14 +7,26 @@ export const SteamService = {
       console.error("No steam id");
     }
     try {
-      console.log("in service: ", userSteamId)
-      const response = await axios.post<SteamSummary[]>(
-        `${import.meta.env.VITE_URL}/Steam/getuseractionlog/${ userSteamId }`
+      const response = await axios.post<ActionItem[]>(
+        `${import.meta.env.VITE_URL}/Steam/getuseractionlog/${userSteamId}`
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to get summary from Steam. Is you're Steam account private? error:", error);
+      console.error(
+        "Failed to get summary from Steam. Is you're Steam account private? error:",
+        error
+      );
       throw error;
     }
   },
+  // AuthenticateWithSteam: async () => {
+  //   console.log("authenticating in service");
+  //   try {
+  //     this.href
+  //     //await axios.get(`${import.meta.env.VITE_URL}/Steam/auth/steam`);
+  //   } catch (error) {
+  //     console.error("Failed to authenticate with Steam: ", error);
+  //     throw error;
+  //   }
+  // },
 };

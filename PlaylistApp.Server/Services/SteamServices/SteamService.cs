@@ -4,7 +4,6 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.SteamData;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json.Serialization;
 
 namespace PlaylistApp.Server.Services.SteamServices;
 
@@ -21,7 +20,7 @@ public class SteamService : ISteamService
         this.config = config;
     }
 
-    public async Task<List<UserSteamGame>> GetGamesFromUserBasedOffOfSteamId(string steamId)
+    public async Task<List<DTOs.SteamData.ActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
     {
         var steamKey = config["steamkey"];
         string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
@@ -54,14 +53,14 @@ public class SteamService : ISteamService
         throw new NotImplementedException();
     }
 
-    public async Task<List<UserSteamGame>> ParseSteamSummary(OwnedGamesResponse response)
+    public async Task<List<DTOs.SteamData.ActionItem>> ParseSteamSummary(OwnedGamesResponse response)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         List<SteamRawGame> games = response.Response.Games;
 
-        HashSet<int> appIds = new HashSet<int>(games.Select(g => g.appid));
-        Dictionary<int, int> playtimeDict = games.ToDictionary(g => g.appid, g => g.playtime_forever);
+        HashSet<int> appIds = new HashSet<int>(games.Select(g => g.AppId));
+        Dictionary<int, int> playtimeDict = games.ToDictionary(g => g.AppId, g => g.PlaytimeForever);
 
         var matchingPlatformGames = await context.PlatformGames
             .Where(pg => appIds.Any(appId => appId.ToString() == pg.PlatformKey))
@@ -70,12 +69,14 @@ public class SteamService : ISteamService
 
         var uniquePlatformGames = matchingPlatformGames.GroupBy(pg => pg.GameId).Select(pg => pg.First()).ToList();
 
-
-        var userSteamGames = uniquePlatformGames.Select(platformGame => new UserSteamGame
+        var userSteamGames = uniquePlatformGames.Select(platformGame => new ActionItem
         {
             PlatformGameId = platformGame.Id,
-            GameTitle = platformGame.Game.Title ?? "Game!",
-            SteamPlayTime = playtimeDict.GetValueOrDefault(int.Parse(platformGame.PlatformKey ?? ""), 0)
+            GameTitle = platformGame.Game.Title ?? string.Empty,
+            SteamPlayTime = playtimeDict.GetValueOrDefault(int.Parse(platformGame.PlatformKey ?? ""), 0),
+            ProblemText = "Problem Text",   // depends on the type of problem. 
+            Url = "some URL for something", // url of a special place in our system that we will redirect users to?
+            ImageUrl = platformGame.Game.CoverUrl ?? string.Empty,  // default image?
         }).ToList();
 
 
@@ -84,51 +85,4 @@ public class SteamService : ISteamService
 
     }
 
-}
-
-
-
-public class OwnedGamesResponse
-{
-    public Response Response { get; set; } = new();
-}
-
-public class Response
-{
-    public int GameCount { get; set; }
-    public List<SteamRawGame> Games { get; set; } = new();
-}
-
-public class SteamRawGame
-{
-    [JsonPropertyName("appid")]
-    public int appid { get; set; }
-
-
-    [JsonPropertyName("playtime_forever")]
-    public int playtime_forever { get; set; }
-
-
-    [JsonPropertyName("playtime_windows_forever")]
-    public int playtime_windows_forever { get; set; }
-
-
-    [JsonPropertyName("playtime_mac_forever")]
-    public int playtime_mac_forever { get; set; }
-
-
-    [JsonPropertyName("playtime_linux_forever")]
-    public int playtime_linux_forever { get; set; }
-
-
-    [JsonPropertyName("playtime_deck_forever")]
-    public int playtime_deck_forever { get; set; }
-
-
-    [JsonPropertyName("rtime_last_played")]
-    public long rtime_last_played { get; set; }
-
-
-    [JsonPropertyName("playtime_disconnected")]
-    public int playtime_disconnected { get; set; }
 }

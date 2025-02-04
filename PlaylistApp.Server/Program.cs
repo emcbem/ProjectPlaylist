@@ -70,9 +70,22 @@ builder.Services.AddCors(options =>
 		});
 });
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAll",
+		policy =>
+		{
+			
+				policy.AllowAnyOrigin()
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+		
+		});
+});
+
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAll");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
