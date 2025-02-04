@@ -25,7 +25,7 @@ public class SteamService : ISteamService
         this.userPlatformService = userPlatformService;
     }
 
-    public async Task<List<DTOs.SteamData.SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
+    public async Task<List<SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId)
     {
         var steamKey = config["steamkey"];
         string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
@@ -70,7 +70,7 @@ public class SteamService : ISteamService
         return matchingPlatformGames;
 	}
 
-    public async Task<List<ActionItem>> CalculateDifferenceInGames(List<PlatformGame> games, int userId)
+    public async Task<List<SteamActionItem>> CalculateDifferenceInGames(List<PlatformGame> games, int userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -81,7 +81,7 @@ public class SteamService : ISteamService
             .ToList();
         HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
 
-        List<ActionItem> gamesNotOwned = new List<ActionItem>();
+        List<SteamActionItem> gamesNotOwned = new List<SteamActionItem>();
 
 
 
@@ -89,11 +89,11 @@ public class SteamService : ISteamService
         {
             if (!userGameIds.Contains(game.Id))
             {
-                gamesNotOwned.Add(new ActionItem
+                gamesNotOwned.Add(new SteamActionItem
                 {
 					PlatformGameId = game.Id,
 					GameTitle = game.Game.Title,
-                    SteamPlayTime = 0,
+                    TotalPlayTime = 0,
                     ProblemText = "You have this game in Steam. Would you like to log it in your library?"
                 });
             }
@@ -102,7 +102,7 @@ public class SteamService : ISteamService
         return gamesNotOwned;
     }
 
-    public async Task<List<DTOs.SteamData.SteamActionItem>> ParseSteamSummary(OwnedGamesResponse response)
+    public async Task<List<SteamActionItem>> ParseSteamSummary(OwnedGamesResponse response)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -116,7 +116,7 @@ public class SteamService : ISteamService
             .Include(g => g.Game)
             .ToListAsync();
 
-        var userSteamGames = matchingPlatformGames.Select(platformGame => new ActionItem
+        var userSteamGames = matchingPlatformGames.Select(platformGame => new SteamActionItem
         {
             PlatformGameId = platformGame.Id,
             GameTitle = platformGame.Game.Title ?? string.Empty,

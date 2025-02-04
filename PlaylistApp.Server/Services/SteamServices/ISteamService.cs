@@ -6,6 +6,5 @@ namespace PlaylistApp.Server.Services.SteamServices;
 
 public interface ISteamService
 {
-    public void ConnectWithSteamUsingUserLogin();
-    public Task<List<DTOs.SteamData.SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId);
+    public Task<List<SteamActionItem>> GetGamesFromUserBasedOffOfSteamId(string steamId);
 }
