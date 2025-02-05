@@ -1,6 +1,4 @@
-﻿using PlaylistApp.Server.Data;
-using PlaylistApp.Server.DTOs;
-using PlaylistApp.Server.DTOs.SteamData;
+﻿using PlaylistApp.Server.DTOs.SteamData;
 
 namespace PlaylistApp.Server.Services.SteamServices;
 
