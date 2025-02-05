@@ -12,14 +12,16 @@ public class PlaystationController : Controller
 {
     private readonly PlaystationAuthenticationService PlaystationAuthService;
     private readonly PlaystationGameService PlaystationGameService;
-    private readonly Services.PlaystationServices.NewPlaystationGamesGathererService PlaystationComparerService;
+    private readonly GatherNewPlaystationGamesService PlaystationComparerService;
+    private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
     private readonly IConfiguration config;
 
-    public PlaystationController(PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration, Services.PlaystationServices.NewPlaystationGamesGathererService playstationComparerService)
+    public PlaystationController(AddNewPlaystationGamesService addNewPlaystationGamesService, PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration, Services.PlaystationServices.GatherNewPlaystationGamesService playstationComparerService)
     {
         PlaystationGameService = playstationGameService;
         PlaystationAuthService = playstationAuthenticationService;
         PlaystationComparerService = playstationComparerService;
+        AddNewPlaystationGamesService = addNewPlaystationGamesService;
         config = configuration;
     }
 
@@ -42,8 +44,14 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("handleaddingplaystationgames")]
-    public async Task<DTOs.PlaystationData.NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
+    public async Task<NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
     {
         return await PlaystationComparerService.HandleBringingInNewPlaystationGames(playstationDTO);
+    }
+
+    [HttpPost("addnewplaystationgames")]
+    public async Task<bool> AddNewPlaystationGames(NewPlaystationGames newPlaystationGames)
+    {
+        return await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
     }
 }

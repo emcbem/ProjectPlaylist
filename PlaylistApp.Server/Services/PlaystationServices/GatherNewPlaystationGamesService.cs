@@ -8,7 +8,7 @@ using PlaylistApp.Server.Services.UserGameServices;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
 
-public class NewPlaystationGamesGathererService
+public class GatherNewPlaystationGamesService
 {
     public List<UserGameDTO> CurrentGames = new List<UserGameDTO>();
     public List<PlaystationGameDTO> FoundGames = new List<PlaystationGameDTO>();
@@ -17,7 +17,7 @@ public class NewPlaystationGamesGathererService
     private readonly IPlatformGameService PlatformGameService;
     private readonly PlaystationGameService PlaystationGameService;
 
-    public NewPlaystationGamesGathererService(PlaystationGameService playstationGameService, IUserGameService userGameService, IPlatformGameService platformGameService)
+    public GatherNewPlaystationGamesService(PlaystationGameService playstationGameService, IUserGameService userGameService, IPlatformGameService platformGameService)
     {
         PlaystationGameService = playstationGameService;
         UserGameService = userGameService;
