@@ -6,4 +6,5 @@ public class AddUserGameRequest
 {
     public Guid UserId { get; set; }
     public int PlatformGameId { get; set; }
+    public int HoursPlayed { get; set; }
 }

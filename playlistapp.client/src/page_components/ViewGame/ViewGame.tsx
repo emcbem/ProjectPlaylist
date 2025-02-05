@@ -30,7 +30,7 @@ const ViewGame = () => {
       <div className="flex w-full dark:text-white text-black justify-center sm:mt-8 pt-10">
         <div className="flex lgmd:flex-row xl:w-1/2 lg:w-5/6 lgmd:w-full">
           <GameCover game={game} />
-          <div className="flex flex-col ml-5">
+          <div className="flex flex-col ml-5 w-full">
             <ViewGameInfo game={game} />
             <div className="flex justify-start w-full">
               <AddButton gameId={gameId} />

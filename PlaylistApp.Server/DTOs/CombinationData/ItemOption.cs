@@ -4,4 +4,5 @@ public class ItemOption
 {
     public string ErrorText { get; set; } = "";
     public string ResolveUrl { get; set; } = "";
+    public string GameTitle { get; set; } = "";
 }

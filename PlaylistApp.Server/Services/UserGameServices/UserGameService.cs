@@ -32,7 +32,7 @@ public class UserGameService : IUserGameService
             DateAdded = DateTime.UtcNow,
             PlatformGameId = request.PlatformGameId,
             UserId = User.Id,
-            TimePlayed = 0,
+            TimePlayed = request.HoursPlayed,
         };
 
         if (newUserGame is null)

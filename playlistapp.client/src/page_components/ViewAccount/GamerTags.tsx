@@ -19,7 +19,7 @@ const GamerTags = ({userGuid} : {userGuid:string}) => {
             <div className="flex flex-row items-center mb-4">
               <GamerTag
                 platform={{
-                  id: 1,
+                  id: 3,
                   name: "Epic Games",
                   logoURL: "https://example.com/logoC.png",
                 }}

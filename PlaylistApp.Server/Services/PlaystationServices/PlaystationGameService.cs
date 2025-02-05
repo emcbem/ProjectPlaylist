@@ -1,6 +1,7 @@
 ﻿using PlaylistApp.Server.DTOs.PlaystationData;
 using PsnApiWrapperNet;
 using PsnApiWrapperNet.Model;
+using System.Xml;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
 
@@ -67,7 +68,7 @@ public class PlaystationGameService
                     LastPlayedDateTime = title.lastPlayedDateTime,
                     Name = title.name,
                     PlayCount = title.playCount,
-                    PlayDuration = title.playDuration, 
+                    PlayDuration = FormatPlaystationTimePlayed(title.playDuration), 
                     Category = title.category.Substring(0, 3),
                 };
 
@@ -82,5 +83,14 @@ public class PlaystationGameService
         }
 
         return new List<PlaystationGameDTO>();
+    }
+
+    public int FormatPlaystationTimePlayed(string playDuration)
+    {
+        TimeSpan timeSpan = XmlConvert.ToTimeSpan(playDuration);
+
+        int totalMinutes = (int)timeSpan.TotalMinutes;
+
+        return totalMinutes;
     }
 }
