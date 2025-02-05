@@ -9,7 +9,9 @@ const PlaystationResult: FC<{
   const isSelected = selectedPSUser?.accountId === PlaystationUser.accountId;
   return (
     <div
-      className={`rounded-full w-fit dark:text-white text-black flex flex-row items-center border border-white hover:bg-[#00439c] transition-all cursor-pointer m-2 ${isSelected ? "bg-[#00439c]" : ""}`}
+      className={`rounded-full w-fit dark:text-white text-black flex flex-row items-center border dark:border-white border-[#00439c] hover:bg-[#00439c] hover:text-white transition-all cursor-pointer m-2 ${
+        isSelected ? "bg-[#00439c] text-white" : ""
+      }`}
       onClick={() => setSelectedPSUser(PlaystationUser)}
     >
       <img
