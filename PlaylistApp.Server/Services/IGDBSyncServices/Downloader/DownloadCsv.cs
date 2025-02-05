@@ -1,8 +1,8 @@
 ﻿using IGDB;
 
-namespace PlaylistApp.Server.Services.IGDBServices
+namespace PlaylistApp.Server.Services.IGDBSyncServices.Downloader
 {
-    public class DownloadCsv
+    public class DownloadCsv : IDownloader
     {
         private readonly IGDBClient igdbClient;
 
@@ -10,7 +10,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
         {
             this.igdbClient = igdbClient;
         }
-        public async Task<string> DownloadCSV(string Endpoint)
+        public async Task<string> DownloadAsync(string Endpoint)
         {
             var result = await igdbClient.GetDataDumpEndpointAsync(Endpoint);
             var LocalPath = Path.Combine(Directory.GetCurrentDirectory(), "CSVs");

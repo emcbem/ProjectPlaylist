@@ -5,19 +5,19 @@ namespace PlaylistApp.Server.Services.IGDBServices;
 
 
 
-public class DifferenceFinder
+public static class DifferenceFinder
 {
     public static DifferencesToCheck FindItemsThatNeedAttention(List<IChecksum> personalDatabase, Dictionary<int, string> igdbChecksums)
     {
         var difference = new DifferencesToCheck();
 
-        var ids = personalDatabase.Select(x => x?.IgdbId ?? 0).ToList();
-        var igdbIds = igdbChecksums.Keys.ToList();
-        difference.IgdbIdsNeededToBeAdded = igdbIds.Except(ids).ToList();
+        var ids = personalDatabase.Select(x => x?.IgdbId ?? 0).ToHashSet();
+        var igdbIds = igdbChecksums.Keys.ToHashSet();
+        difference.IgdbIdsNeededToBeAdded = igdbIds.Except(ids).ToHashSet();
         
 
-        difference.PersonalItemsThatAreNoLongerInIgdb = new List<IChecksum>();
-        difference.ChecksumsThatChanged = new List<IChecksum>();
+        difference.PersonalItemsThatAreNoLongerInIgdb = new HashSet<IChecksum>();
+        difference.ChecksumsThatChanged = new HashSet<IChecksum>();
 
         personalDatabase.ForEach(personal =>
         {
@@ -36,14 +36,12 @@ public class DifferenceFinder
 
         return difference;
     }
-
-
 }
 
 public class DifferencesToCheck
 {
-    public List<IChecksum>? ChecksumsThatChanged { get; set; }
-    public List<IChecksum>? PersonalItemsThatAreNoLongerInIgdb { get; set; }
-    public List<int>? IgdbIdsNeededToBeAdded { get; set; }
+    public HashSet<IChecksum>? ChecksumsThatChanged { get; set; }
+    public HashSet<IChecksum>? PersonalItemsThatAreNoLongerInIgdb { get; set; }
+    public HashSet<int>? IgdbIdsNeededToBeAdded { get; set; }
 }
 

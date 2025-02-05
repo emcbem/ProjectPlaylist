@@ -9,6 +9,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.IGDBSyncServices;
+using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
 using System;
 using System.Formats.Asn1;
 using System.Globalization;
@@ -144,11 +145,11 @@ public class IGDBGeneralController
     [HttpGet("uploadPlatformsGames")]
     public async Task UploadPlatformGames()
     {
-        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        var gameLocalPath = await downloader.DownloadAsync(IGDBClient.Endpoints.Games);
         var igdbGames = Parser.ParseGameCsv(gameLocalPath);
-        var externalLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.ExternalGames);
+        var externalLocalPath = await downloader.DownloadAsync(IGDBClient.Endpoints.ExternalGames);
         var igdbExternalGames = Parser.ParseExternalGameCsv(externalLocalPath);
-        var websiteLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Websites);
+        var websiteLocalPath = await downloader.DownloadAsync(IGDBClient.Endpoints.Websites);
         var igdbWebsites = Parser.ParseWebsiteCsv(websiteLocalPath);
         var localGames = await uploader.GetAllGames();
         var localPlatforms = Translator.TranslateIGDBGamesIntoPersonalPlatformGameManyToMany(localGames, igdbGames, igdbExternalGames, igdbWebsites);
@@ -161,10 +162,20 @@ public class IGDBGeneralController
         return await syncOrchestrator.OrchestrateGenres();
     }
 
+    [HttpGet("SyncGames")]
+    public async Task<DifferencesToCheck> SyncGames()
+    {
+        var differences =  await syncOrchestrator.OrchestrateGamesAndManyToManys();
+
+
+
+        return differences;
+    }
+
     [HttpGet("uploadInvolvedCompany")]
     public async Task UploadInvolvedCompany()
     {
-        var involvedCompanyPath = await downloader.DownloadCSV(IGDBClient.Endpoints.InvolvedCompanies);
+        var involvedCompanyPath = await downloader.DownloadAsync(IGDBClient.Endpoints.InvolvedCompanies);
         var igdbInvolvedCompany = Parser.ParseInvolvedCompanyCsv(involvedCompanyPath);
         var localGames = await uploader.GetAllGames();
         var localInvolvedCompanies = Translator.TranslateIGDBInvolvedCompaniesIntoLocalInvolvedCompanies(igdbInvolvedCompany, localGames);
@@ -174,7 +185,7 @@ public class IGDBGeneralController
     [HttpGet("uploadGameGenres")]
     public async Task UploadGameGenres()
     {
-        var gameLocalPath = await downloader.DownloadCSV(IGDBClient.Endpoints.Games);
+        var gameLocalPath = await downloader.DownloadAsync(IGDBClient.Endpoints.Games);
         var igdbGames = Parser.ParseGameCsv(gameLocalPath);
         var localGames = await uploader.GetAllGames();
         var localGameGenres = Translator.TranslateIGDBGamesIntoLocalGameGenres(igdbGames, localGames);

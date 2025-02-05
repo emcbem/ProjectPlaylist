@@ -7,43 +7,56 @@ namespace PlaylistApp.Server.Services.IGDBServices
 {
     public static class Translator
     {
+        public static Dictionary<int, ExternalCategory> PlatformToExternalCategory { get; set; } = new Dictionary<int, ExternalCategory>()
+                {
+                    {1, ExternalCategory.Steam
+                    }, { 3, ExternalCategory.Steam}, { 6, ExternalCategory.Steam}, { 14, ExternalCategory.Steam}, { 163, ExternalCategory.Steam},
+                    { 162, ExternalCategory.Oculus}, { 384, ExternalCategory.Oculus}, { 385, ExternalCategory.Oculus}, { 387, ExternalCategory.Oculus},
+                    { 7, ExternalCategory.PlaystationStoreUS}, { 8, ExternalCategory.PlaystationStoreUS}, { 9, ExternalCategory.PlaystationStoreUS},
+                    { 46, ExternalCategory.PlaystationStoreUS}, { 48, ExternalCategory.PlaystationStoreUS}, { 165, ExternalCategory.PlaystationStoreUS}, { 167, ExternalCategory.PlaystationStoreUS},
+                    // {11, ExternalCategory.XBox}, {12, ExternalCategory.Xbox}, {49, ExternalCategory.Xbox}, {169, ExternalCategory.Xbox},
+                };
+
         public static List<Data.Game> TranslateIGDBGamesIntoPersonalData(List<IGDB.Models.Game> igdbGames, List<Cover> covers, List<AgeRating> ratings)
         {
             var coversDict = covers.Where(p => p.Id != null).ToDictionary(p => (long)p!.Id!, p => p);
             var ratingsDict = ratings.Where(p => p.Category == AgeRatingCategory.ESRB).ToDictionary(p => p?.Id ?? 0, p => p);
 
             Cover? cover = null;
-			AgeRating? rating = null;
+            AgeRating? rating = null;
 
 
 
-			return igdbGames.Select(igdbGame => 
+            return igdbGames.Select(igdbGame =>
             {
                 var game = new Data.Game();
 
                 game.IgdbId = (int?)igdbGame.Id;
                 game.Description = igdbGame.Summary;
 
-                if(coversDict.TryGetValue(igdbGame.Cover.Id ?? 0, out cover))
+                if (coversDict.TryGetValue(igdbGame.Cover.Id ?? 0, out cover))
                 {
                     game.CoverUrl = cover.Url;
                 }
                 else
                 {
-					game.CoverUrl = null;
-				}
+                    game.CoverUrl = null;
+                }
 
-                if(igdbGame.AgeRatings.Ids is not null && igdbGame.AgeRatings.Ids.Count() > 0 && igdbGame.AgeRatings.Ids.Any(i => ratingsDict.TryGetValue(i, out rating)))
+                if (igdbGame.AgeRatings.Ids is not null && igdbGame.AgeRatings.Ids.Count() > 0 && igdbGame.AgeRatings.Ids.Any(i => ratingsDict.TryGetValue(i, out rating)))
                 {
                     game.AgeRating = rating!.ToString();
                 }
                 else
                 {
-					game.AgeRating = null;
-				}
+                    game.AgeRating = null;
+                }
 
-				game.PublishDate = igdbGame.FirstReleaseDate?.DateTime.ToUniversalTime() ?? (new DateTime()).ToUniversalTime();
+                game.PublishDate = igdbGame.FirstReleaseDate?.DateTime.ToUniversalTime() ?? (new DateTime()).ToUniversalTime();
                 game.Title = igdbGame.Name;
+                game.PlatformIds = igdbGame.Platforms.Ids.Select(x => (int)x).ToList();
+                game.GenreIds = igdbGame.Genres.Ids.Select(x => (int)x).ToList();
+                game.CompanyIds = igdbGame.InvolvedCompanies.Ids.Select(x => (int)x).ToList();
 
                 return game;
             }).Where(p => p is not null).ToList()!;
@@ -159,7 +172,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                             GameId = gameId,
                             GenreId = (int)y
                         };
-                    }).ToList(); 
+                    }).ToList();
                 }
                 return null;
             }).Where(x => x is not null).ToList().SelectMany(x => x!).ToList();
@@ -171,122 +184,52 @@ namespace PlaylistApp.Server.Services.IGDBServices
             var externalDict = igdbExternalGames.ToDictionary(x => x?.Id ?? 0);
             var localGameDict = localGames.ToDictionary(x => (int)x.IgdbId!, x => x.Id);
 
-            //Sorry for doubting myself
-            var PlatformToExternalPlatformCategory = new Dictionary<int, ExternalCategory>()
+            var platformToExternalCategory = new Dictionary<int, ExternalCategory>
             {
-                {1, ExternalCategory.Steam},
-                {3, ExternalCategory.Steam},
-                {6, ExternalCategory.Steam},
-                {14, ExternalCategory.Steam},
-                {163, ExternalCategory.Steam},
-
-                {162, ExternalCategory.Oculus},
-                {384, ExternalCategory.Oculus},
-                {385, ExternalCategory.Oculus},
-                {387, ExternalCategory.Oculus},
-
-                {7, ExternalCategory.PlaystationStoreUS},
-                {8, ExternalCategory.PlaystationStoreUS},
-                {9, ExternalCategory.PlaystationStoreUS},
-                {46, ExternalCategory.PlaystationStoreUS},
-                {48, ExternalCategory.PlaystationStoreUS},
-                {165, ExternalCategory.PlaystationStoreUS},
-                {167, ExternalCategory.PlaystationStoreUS},
-
-
-                //{11, ExternalCategory.XBox},
-                //{12, ExternalCategory.Xbox},
-                //{49, ExternalCategory.Xbox},
-                //{169, ExternalCategory.Xbox},
-                //Figure out what the heck the different categories of xbox there are IF we figure out the xbox api
-
+                {1, ExternalCategory.Steam}, {3, ExternalCategory.Steam}, {6, ExternalCategory.Steam}, {14, ExternalCategory.Steam}, {163, ExternalCategory.Steam},
+                {162, ExternalCategory.Oculus}, {384, ExternalCategory.Oculus}, {385, ExternalCategory.Oculus}, {387, ExternalCategory.Oculus},
+                {7, ExternalCategory.PlaystationStoreUS}, {8, ExternalCategory.PlaystationStoreUS}, {9, ExternalCategory.PlaystationStoreUS},
+                {46, ExternalCategory.PlaystationStoreUS}, {48, ExternalCategory.PlaystationStoreUS}, {165, ExternalCategory.PlaystationStoreUS}, {167, ExternalCategory.PlaystationStoreUS},
+                // {11, ExternalCategory.XBox}, {12, ExternalCategory.Xbox}, {49, ExternalCategory.Xbox}, {169, ExternalCategory.Xbox},
             };
 
-            Website? website = null;
-            ExternalGame? externalGame = null;
-            ExternalCategory externalCategory = ExternalCategory.Steam;
-
-            List<PlatformGame> platformGames = new();
-            PlatformGame platformGame;
-            int gameId;
-            int i = 3;
+            var platformGames = new List<PlatformGame>();
 
             foreach (var igdbGame in igdbGames)
             {
+                if (!localGameDict.TryGetValue((int)igdbGame.Id!, out int gameId))
+                {
+                    continue;
+                }
+
                 foreach (var platformId in igdbGame.Platforms.Ids)
                 {
-                    platformGame = new Data.PlatformGame();
-                    if (localGameDict.TryGetValue((int)igdbGame!.Id!, out gameId))
+                    var platformGame = new PlatformGame
                     {
-                        platformGame.GameId = gameId;
-                    }
-                    else
+                        GameId = gameId,
+                        PlatformId = (int)platformId,
+                    };
+
+                    platformGame.PlatformUrl = igdbGame.Websites.Ids
+                        .Select(id => websiteDict.GetValueOrDefault(id))
+                        .FirstOrDefault(w => w?.Category == WebsiteCategory.Official)?.Url;
+
+                    if (platformToExternalCategory.TryGetValue((int)platformId, out var externalCategory))
                     {
-                        continue;
-                    }
-
-                    platformGame.PlatformId = (int)platformId;
-                    platformGame.Id = i;
-                    Website? igdbWebsite = igdbGame
-                       .Websites
-                       .Ids
-                       .Select(id =>
-                       {
-                           if (websiteDict.TryGetValue(id, out website))
-                           {
-                               return website;
-                           }
-                           else
-                           {
-                               throw new Exception("There was no website?");
-                           }
-                       })
-                       .FirstOrDefault(website => website.Category == WebsiteCategory.Official);
-
-                    if (website is not null)
-                    {
-                        platformGame.PlatformUrl = igdbWebsite?.Url;
-                    }
-
-                    if (PlatformToExternalPlatformCategory.TryGetValue((int)platformId, out externalCategory))
-                    {
-
-                        ExternalGame? foundExternalGame = igdbGame
-                            .ExternalGames
-                            .Ids
-                            .Select(id =>
-                            {
-                                if (externalDict.TryGetValue(id, out externalGame))
-                                {
-                                    return externalGame;
-                                }
-                                return null;
-                            })
-                            .FirstOrDefault(externalGame =>
-                            {
-                                if (externalGame is null)
-                                {
-                                    return false;
-                                }
-                                return externalGame.Category == externalCategory;
-                            });
-
-                        if (foundExternalGame != null)
-                        {
-                            platformGame.PlatformKey = foundExternalGame.Uid;
-                        }
+                        platformGame.PlatformKey = igdbGame.ExternalGames.Ids
+                            .Select(id => externalDict.GetValueOrDefault(id))
+                            .FirstOrDefault(e => e?.Category == externalCategory)?.Uid;
                     }
 
                     platformGames.Add(platformGame);
-
-                    i++;
-
                 }
             }
 
             return platformGames;
         }
 
+        
 
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using PlaylistApp.Server.Interfaces;
 
 namespace PlaylistApp.Server.Data;
@@ -34,10 +35,13 @@ public partial class Game : IChecksum
 
     //IGDB PROPS FOR SYNCING
 
+    [NotMapped]
     public List<int> GenreIds { get; set; } = new();
 
+    [NotMapped]
     public List<int> CompanyIds { get; set; } = new();
 
+    [NotMapped]
     public List<int> PlatformIds { get; set; } = new();
 
 }

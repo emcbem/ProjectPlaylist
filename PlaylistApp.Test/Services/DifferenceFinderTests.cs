@@ -25,8 +25,6 @@ namespace PlaylistApp.Test.Services
         [Fact]
         public void GivenADifferenceFinderWhenAskedToFindTheDifferenceBetweenTwoListsItIsCorrect()
         {
-            var differenceFinder = new DifferenceFinder();
-
             var origialIds = new List<IChecksum>() { new TestChecksum("checksumChange", 10), new TestChecksum("missing", -10)};
             var igdbIdToChecksumDict = new Dictionary<int, string>() {
                 { 10,"newChecksum" },
@@ -35,14 +33,14 @@ namespace PlaylistApp.Test.Services
 
             var Differences = DifferenceFinder.FindItemsThatNeedAttention(origialIds, igdbIdToChecksumDict);
 
-            Differences.ChecksumsThatChanged.Count().Should().Be(1);
-            Differences.ChecksumsThatChanged[0].Checksum.Should().Be("checksumChange");
+            Differences.ChecksumsThatChanged!.Count().Should().Be(1);
+            Differences.ChecksumsThatChanged!.FirstOrDefault(x => x.Checksum == "checksumChange").Should().NotBeNull();
 
-            Differences.IgdbIdsNeededToBeAdded.Count().Should().Be(1);
-            Differences.IgdbIdsNeededToBeAdded[0].Should().Be(7);
+            Differences.IgdbIdsNeededToBeAdded!.Count().Should().Be(1);
+            Differences.IgdbIdsNeededToBeAdded.Should().Contain(7);
 
-            Differences.PersonalItemsThatAreNoLongerInIgdb.Count().Should().Be(1);
-            Differences.PersonalItemsThatAreNoLongerInIgdb[0].Checksum.Should().Be("missing");
+            Differences.PersonalItemsThatAreNoLongerInIgdb!.Count().Should().Be(1);
+            Differences.PersonalItemsThatAreNoLongerInIgdb!.FirstOrDefault(x => x.Checksum == "missing").Should().NotBeNull();
         }
 
     }
