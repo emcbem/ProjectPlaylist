@@ -14,14 +14,21 @@ public class PlaystationController : Controller
     private readonly PlaystationGameService PlaystationGameService;
     private readonly GatherNewPlaystationGamesService PlaystationComparerService;
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
+    private readonly PlaystationOrchestrator PlaystationOrchestrator;
     private readonly IConfiguration config;
 
-    public PlaystationController(AddNewPlaystationGamesService addNewPlaystationGamesService, PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration, Services.PlaystationServices.GatherNewPlaystationGamesService playstationComparerService)
+    public PlaystationController(PlaystationOrchestrator playstationOrchestrator,
+                                 AddNewPlaystationGamesService addNewPlaystationGamesService,
+                                 PlaystationGameService playstationGameService,
+                                 PlaystationAuthenticationService playstationAuthenticationService,
+                                 IConfiguration configuration,
+                                 GatherNewPlaystationGamesService playstationComparerService)
     {
         PlaystationGameService = playstationGameService;
         PlaystationAuthService = playstationAuthenticationService;
         PlaystationComparerService = playstationComparerService;
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
+        PlaystationOrchestrator = playstationOrchestrator;
         config = configuration;
     }
 
@@ -35,6 +42,12 @@ public class PlaystationController : Controller
     public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers([FromBody] string username)
     {
         return await PlaystationGameService.SearchPlayer(username);
+    }
+
+    [HttpPost("orchestrator")]
+    public async Task<bool> SyncPlaystationData(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationOrchestrator.OrchestratePlaystationSync(playstationDTO);
     }
 
     [HttpPost("getusersgamelist")]

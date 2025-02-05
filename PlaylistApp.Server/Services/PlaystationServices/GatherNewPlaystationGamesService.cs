@@ -1,7 +1,6 @@
 ﻿using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
-using PlaylistApp.Server.DTOs.SteamData;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameServices;
@@ -24,11 +23,11 @@ public class GatherNewPlaystationGamesService
         PlatformGameService = platformGameService;
     }
 
-    public async Task<DTOs.PlaystationData.NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
+    public async Task<NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId == null)
         {
-            return new DTOs.PlaystationData.NewPlaystationGames();
+            return new NewPlaystationGames();
         }
 
         CurrentGames = await UserGameService.GetUserGameByUser(playstationDTO.UserId);
@@ -36,7 +35,7 @@ public class GatherNewPlaystationGamesService
 
         if (FoundGames is null)
         {
-            return new DTOs.PlaystationData.NewPlaystationGames();
+            return new NewPlaystationGames();
         }
 
         ItemAction itemAction = new ItemAction();
@@ -103,6 +102,7 @@ public class GatherNewPlaystationGamesService
                         {
                             PlatformGameId = platformGame[0].id,
                             UserId = playstationDTO.UserId,
+                            HoursPlayed = game.PlayDuration
                         };
 
                         addUserGameRequests.Add(request);
@@ -111,7 +111,7 @@ public class GatherNewPlaystationGamesService
             }
         }
 
-        DTOs.PlaystationData.NewPlaystationGames newPlaystationGames = new()
+        NewPlaystationGames newPlaystationGames = new()
         {
             AddUserGameRequests = addUserGameRequests,
             ItemAction = itemAction
