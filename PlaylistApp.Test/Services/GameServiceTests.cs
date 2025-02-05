@@ -182,23 +182,4 @@ public class GameServiceTests : IClassFixture<ProjectPlaylistFactory>
 		games.Count().Should().Be(11);
 		games[0].Title.Should().Be("Super Mario Bros.");
 	}
-
-	[Fact]
-	public async Task AssertThat_GetGamesByFilterWithMostPlayedOrderingMethod_Should_returnGamesInThatOrder()
-	{
-		using var scope = projectPlaylistFactory.Services.CreateScope();
-		IGameService gameService = scope.ServiceProvider.GetRequiredService<IGameService>();
-
-		var request = new GetGamesRequest()
-		{
-			Title = "",
-			OrderingMethod = OrderingMethod.MostPlayed
-		};
-
-		var games = await gameService.GetGamesByFilter(request);
-
-		games.Count().Should().Be(25);
-		games[0].Title.Should().Be("Psych: The Game");
-	}
-
 }

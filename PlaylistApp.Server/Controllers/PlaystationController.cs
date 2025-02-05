@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Services.PlaystationServices;
 using PsnApiWrapperNet.Model;
@@ -9,32 +10,40 @@ namespace PlaylistApp.Server.Controllers;
 [Route("[controller]")]
 public class PlaystationController : Controller
 {
-    private readonly PlaystationAuthenticationService playstationService;
-    private readonly PlaystationGameService playstationGameService;
+    private readonly PlaystationAuthenticationService PlaystationAuthService;
+    private readonly PlaystationGameService PlaystationGameService;
+    private readonly Services.PlaystationServices.NewPlaystationGamesGathererService PlaystationComparerService;
     private readonly IConfiguration config;
 
-    public PlaystationController(PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration)
+    public PlaystationController(PlaystationGameService playstationGameService, PlaystationAuthenticationService playstationAuthenticationService, IConfiguration configuration, Services.PlaystationServices.NewPlaystationGamesGathererService playstationComparerService)
     {
-        this.playstationGameService = playstationGameService;
-        playstationService = playstationAuthenticationService;
+        PlaystationGameService = playstationGameService;
+        PlaystationAuthService = playstationAuthenticationService;
+        PlaystationComparerService = playstationComparerService;
         config = configuration;
     }
 
     [HttpPost("gettoken")]
     public async Task<PlaystationContext> GetPlaystationAuthenticationToken()
     {
-        return await playstationService.GetPlaystationAuthenticationToken();
+        return await PlaystationAuthService.GetPlaystationAuthenticationToken();
     }
 
     [HttpPost("searchplayers")]
     public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers([FromBody] string username)
     {
-        return await playstationGameService.SearchPlayer(username);
+        return await PlaystationGameService.SearchPlayer(username);
     }
 
     [HttpPost("getusersgamelist")]
     public async Task<List<PlaystationGameDTO>> GetPlaystationUsersGameList([FromBody] string accountId)
     {
-        return await playstationGameService.GetUserPlaystationGameList(accountId);
+        return await PlaystationGameService.GetUserPlaystationGameList(accountId);
+    }
+
+    [HttpPost("handleaddingplaystationgames")]
+    public async Task<DTOs.PlaystationData.NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationComparerService.HandleBringingInNewPlaystationGames(playstationDTO);
     }
 }
