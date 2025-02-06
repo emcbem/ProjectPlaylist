@@ -54,5 +54,6 @@ public static class Mapper
 		builder.Services.AddSingleton<GatherNewPlaystationGamesService>();
 		builder.Services.AddSingleton<AddNewPlaystationGamesService>();
 		builder.Services.AddSingleton<PlaystationOrchestrator>();
+		builder.Services.AddSingleton<HandlePlaystationPlatformErrorService>();
     }
 }
