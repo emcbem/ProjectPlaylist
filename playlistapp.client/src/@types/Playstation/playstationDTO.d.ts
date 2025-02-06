@@ -1,4 +1,4 @@
 export interface PlaystationDTO {
-    UserId : string;
-    AccountId: string;
+  userId: string;
+  accountId: string;
 }

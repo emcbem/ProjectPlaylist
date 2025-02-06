@@ -27,22 +27,20 @@ const UpdateButton = ({
   >();
   const [loading, setLoading] = useState(false);
 
-
   const { mutateAsync: updateUserPlatforms } =
     UserPlatformQueries.UpdateUserPlatform();
   const { mutateAsync: searchForPlaystationUser } =
     PlaystationQueries.useGetPlaystationUsersBasedOffUsername(value);
-
-
 
   async function handleSave() {
     if (userPlatform) {
       const updateRequest: UpdateUserPlatformRequest = {
         id: userPlatform.id,
         gamerTag: selectedPSUser ? selectedPSUser.onlineId : value,
-        externalPlatformId: userPlatform?.externalPlatformId,
+        externalPlatformId: selectedPSUser?.accountId ?? "",
         isPublic: true,
       };
+      console.log(updateRequest, "cool");
       await updateUserPlatforms(updateRequest);
       setPlaystationUserResults([]);
       if (userPlatform.platformId == 7) {
@@ -82,7 +80,6 @@ const UpdateButton = ({
 
   return (
     <>
-
       <button
         onClick={userPlatform?.platformId == 7 ? handleSearchClick : handleSave}
         className={`${
