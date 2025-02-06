@@ -1,11 +1,5 @@
-﻿using IGDB;
-using Microsoft.EntityFrameworkCore;
-using PlaylistApp.Server.Data;
-using PlaylistApp.Server.Interfaces;
-using PlaylistApp.Server.Services.Game;
-using PlaylistApp.Server.Services.IGDBServices;
+﻿using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
-using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices;
 
@@ -51,6 +45,8 @@ public class SyncOrchestrator
         var igdbRatings = await dataGetter.GetRatings();    
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
         var gameDifference =  await differenceHandler.HandleGameDifferences(localGames);
+
+        await OrchestratePlatformGames(gameDifference, localGames);
 
         return gameDifference;
     }

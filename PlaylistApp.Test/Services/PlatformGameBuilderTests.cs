@@ -1,4 +1,6 @@
-﻿using IGDB;
+﻿using FluentAssertions;
+using IGDB;
+using IGDB.Models;
 using NSubstitute;
 using PlaylistApp.Server.Services.IGDBSyncServices.Builders;
 using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
@@ -24,6 +26,8 @@ public class PlatformGameBuilderTests
     public async Task WhenAPlatformGameBuilderStartsThenItCallsTheWebsiteCSVEndpoint()
     {
         var dataGetter = Substitute.For<IDataGetter>();
+        dataGetter.GetWebsites().Returns(new List<Website>() { new Website() { Id = 2, Url = "wow" } });
+        dataGetter.GetExternalGames().Returns(new List<ExternalGame>() { new ExternalGame() { Id = 2, Url = "wow2" } });
         var pgbuilder = new PlatformGameBuilder(dataGetter);
 
         await pgbuilder.Setup();
@@ -34,7 +38,40 @@ public class PlatformGameBuilderTests
     [Fact]
     public async Task WhenAPlatformGameBuilderStartsWhenItRecievesWebsiteDataItParsesItIntoADictionaryAndThenStoresTheData()
     {
+        var dataGetter = Substitute.For<IDataGetter>();
+        dataGetter.GetWebsites().Returns(new List<Website>() { new Website() { Id = 2, Url = "wow" } });
+        dataGetter.GetExternalGames().Returns(new List<ExternalGame>() { new ExternalGame() { Id = 2, Url = "wow2" } });
+        var pgbuilder = new PlatformGameBuilder(dataGetter);
 
+        await pgbuilder.Setup();
+
+        pgbuilder.WebsiteIdToWebsite[2].Url.Should().Be("wow");
+    }
+
+    [Fact]
+    public async Task WhenPlatformBuilderStartsThenItGetsTheExternalGamesData()
+    {
+        var dataGetter = Substitute.For<IDataGetter>();
+        dataGetter.GetWebsites().Returns(new List<Website>() { new Website() { Id = 2, Url = "wow" } });
+        dataGetter.GetExternalGames().Returns(new List<ExternalGame>() { new ExternalGame() { Id = 2, Url = "wow2" } });
+        var pgbuilder = new PlatformGameBuilder(dataGetter);
+
+        await pgbuilder.Setup();
+
+        await dataGetter.Received().GetExternalGames();
+    }
+
+    [Fact]
+    public async Task WehnAPlatformBuilderStartsThenTheDictionarySHouldGetMadeForExternalGames()
+    {
+        var dataGetter = Substitute.For<IDataGetter>();
+        dataGetter.GetWebsites().Returns(new List<Website>() { new Website() { Id = 2, Url = "wow" } });
+        dataGetter.GetExternalGames().Returns(new List<ExternalGame>() { new ExternalGame() { Id = 2, Url = "wow2" } });
+        var pgbuilder = new PlatformGameBuilder(dataGetter);
+
+        await pgbuilder.Setup();
+
+        pgbuilder.ExternalIdToExternalGame[2].Url.Should().Be("wow2");
     }
 
 }

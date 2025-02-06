@@ -4,15 +4,18 @@ using MimeKit.Encodings;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Interfaces;
 using PlaylistApp.Server.Services.IGDBServices;
+using PlaylistApp.Server.Services.IGDBSyncServices.Builders;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices
 {
     public class DifferenceHandler
     {
         public IDbContextFactory<PlaylistDbContext> dbContextFactory { get; set; }
-        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+        public PlatformGameBuilder platformGameBuilder { get; set; }
+        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory, PlatformGameBuilder platformGameBuilder)
         {
             this.dbContextFactory = dbContextFactory;
+            this.platformGameBuilder = platformGameBuilder;
         }
 
         public async Task HandleCompanyDifferences(List<Company> localCompanies)
@@ -143,32 +146,33 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
             var itemsToRemove = allGames.Where(g => gamesToRemoveSet.Contains(g)).ToList();
 
 
-            //context.RemoveRange(itemsToRemove);
-            //context.AddRange(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
+            context.RemoveRange(itemsToRemove);
+            context.AddRange(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
 
-            //var igdbIdTowatchedGames = allGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
-            //foreach (var checksumChange in differences.ChecksumsThatChanged ?? [])
-            //{
-            //    var correctRow = igdbIdToLocal[checksumChange?.IgdbId ?? throw new Exception()];
-            //    var changedGame = igdbIdTowatchedGames[checksumChange.IgdbId ?? 0];
+            var igdbIdTowatchedGames = allGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            foreach (var checksumChange in differences.ChecksumsThatChanged ?? [])
+            {
+                var correctRow = igdbIdToLocal[checksumChange?.IgdbId ?? throw new Exception()];
+                var changedGame = igdbIdTowatchedGames[checksumChange.IgdbId ?? 0];
 
-            //    if (changedGame != null)
-            //    {
-            //        changedGame.Checksum = correctRow.Checksum;
-            //        changedGame.PublishDate = correctRow.PublishDate;
-            //        changedGame.AgeRating = correctRow.AgeRating;
-            //        changedGame.Description = correctRow.Description;
-            //        changedGame.CoverUrl = correctRow.CoverUrl;
-            //        changedGame.PublishDate = correctRow.PublishDate;
-            //        changedGame.Title = correctRow.Title;
+                if (changedGame != null)
+                {
+                    changedGame.Checksum = correctRow.Checksum;
+                    changedGame.PublishDate = correctRow.PublishDate;
+                    changedGame.AgeRating = correctRow.AgeRating;
+                    changedGame.Description = correctRow.Description;
+                    changedGame.CoverUrl = correctRow.CoverUrl;
+                    changedGame.PublishDate = correctRow.PublishDate;
+                    changedGame.Title = correctRow.Title;
 
-            //        context.Update(changedGame);
-            //    }
-            //}
+                    context.Update(changedGame);
+                }
+            }
 
-            //await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return differences;
         }
+
 
         internal async Task HandlePlatformGameDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
         {
@@ -180,9 +184,6 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                 .Where(x => x.IgdbId != null) 
                 .ToDictionaryAsync(x => x.IgdbId!.Value, x => x);
 
-
-
-            
 
             //Handle possible platform game differences
             foreach (var idDif in gameDifferences.ChecksumsThatChanged ?? [])
