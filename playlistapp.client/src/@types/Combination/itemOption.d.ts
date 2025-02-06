@@ -1,5 +1,6 @@
 export interface ItemOption {
-    ErrorText: string;
-    ResolveUrl: string;
-    GameTitle: string;
+  errorText: string;
+  resolveUrl: string;
+  gameTitle: string;
+  hours: number;
 }

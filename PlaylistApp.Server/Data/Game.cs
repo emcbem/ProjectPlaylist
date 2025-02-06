@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using PlaylistApp.Server.Interfaces;
 
 namespace PlaylistApp.Server.Data;
 
-public partial class Game
+public partial class Game : IChecksum
 {
     public int Id { get; set; }
 
@@ -17,7 +19,7 @@ public partial class Game
 
     public string? AgeRating { get; set; }
 
-    public int? IdgbId { get; set; }
+    public int? IgdbId { get; set; }
 
     public string? Checksum { get; set; }
 
@@ -30,4 +32,16 @@ public partial class Game
     public virtual ICollection<ListGame> ListGames { get; set; } = new List<ListGame>();
 
     public virtual ICollection<PlatformGame> PlatformGames { get; set; } = new List<PlatformGame>();
+
+    //IGDB PROPS FOR SYNCING
+
+    [NotMapped]
+    public List<int> GenreIds { get; set; } = new();
+
+    [NotMapped]
+    public List<int> CompanyIds { get; set; } = new();
+
+    [NotMapped]
+    public List<int> PlatformIds { get; set; } = new();
+
 }

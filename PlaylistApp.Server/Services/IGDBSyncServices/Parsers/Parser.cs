@@ -5,11 +5,11 @@ using IGDB;
 using System.Globalization;
 using PlaylistApp.Server.Data;
 
-namespace PlaylistApp.Server.Services.IGDBServices
+namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
 {
-    public static class Parser
+    public class Parser : IIGDBParser
     {
-        public static List<IGDB.Models.Company> ParseCompanyCsv(string companyLocalPath)
+        public List<IGDB.Models.Company> ParseCompanyCsv(string companyLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var companies = new List<IGDB.Models.Company>();
@@ -27,7 +27,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     company.Id = csv.GetField<long?>("id");
                     company.Url = csv.GetField("url");
                     var companyLogoId = csv.GetField<long?>("logo");
-                    company.Logo = companyLogoId.HasValue ? new IdentityOrValue<IGDB.Models.CompanyLogo>(companyLogoId.Value) : new IdentityOrValue<IGDB.Models.CompanyLogo>(-1);
+                    company.Logo = companyLogoId.HasValue ? new IdentityOrValue<CompanyLogo>(companyLogoId.Value) : new IdentityOrValue<CompanyLogo>(-1);
                     company.Slug = csv.GetField("slug");
                     company.Published = new IdentitiesOrValues<IGDB.Models.Game>(ParseLongArray(csv.GetField<string?>("published")!));
                     company.Name = csv.GetField("name");
@@ -42,7 +42,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return companies;
         }
 
-        public static List<PlatformLogo> ParsePlatformLogoCsv(string platformsLogoLocalPath)
+        public List<PlatformLogo> ParsePlatformLogoCsv(string platformsLogoLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var platformLogos = new List<PlatformLogo>();
@@ -66,7 +66,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return platformLogos;
         }
 
-        public static List<IGDB.Models.Platform> ParsePlatformCsv(string platformsLocalPath)
+        public List<IGDB.Models.Platform> ParsePlatformCsv(string platformsLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var platforms = new List<IGDB.Models.Platform>();
@@ -84,7 +84,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     platform.Id = csv.GetField<long?>("id");
                     platform.Name = csv.GetField("name");
                     var platformLogoId = csv.GetField<long?>("platform_logo");
-                    platform.Checksum = csv.GetField < string > ("checksum");
+                    platform.Checksum = csv.GetField<string>("checksum");
 
                     platform.PlatformLogo = platformLogoId.HasValue ? new IdentityOrValue<PlatformLogo>(platformLogoId.Value) : new IdentityOrValue<PlatformLogo>(-1);
 
@@ -94,9 +94,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             }
         }
 
-
-
-        public static List<CompanyLogo> ParseCompanyLogoCsv(string companyLogoPath)
+        public List<CompanyLogo> ParseCompanyLogoCsv(string companyLogoPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var companyLogos = new List<CompanyLogo>();
@@ -121,7 +119,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return companyLogos;
         }
 
-        public static List<AgeRating> ParseRatingCsv(string ratingLocalPath)
+        public List<AgeRating> ParseRatingCsv(string ratingLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var ratings = new List<AgeRating>();
@@ -146,8 +144,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return ratings;
         }
 
-
-        public static List<Cover> ParseCoverCsv(string coverLocalPath)
+        public List<Cover> ParseCoverCsv(string coverLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var covers = new List<Cover>();
@@ -171,10 +168,10 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return covers;
         }
 
-        public static List<ExternalGame> ParseExternalGameCsv(string externalGamePath)
+        public List<ExternalGame> ParseExternalGameCsv(string externalGamePath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-            var externalGames = new List<IGDB.Models.ExternalGame>();
+            var externalGames = new List<ExternalGame>();
 
             using (var reader = new StreamReader(externalGamePath))
             using (var csv = new CsvReader(reader, config))
@@ -183,7 +180,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 csv.ReadHeader();
                 while (csv.Read())
                 {
-                    var externalGame = new IGDB.Models.ExternalGame();
+                    var externalGame = new ExternalGame();
 
                     externalGame.Category = (ExternalCategory)csv.GetField<long?>("category")!;
 
@@ -198,10 +195,10 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return externalGames;
         }
 
-        public static List<Website> ParseWebsiteCsv(string websiteLocalPath)
+        public List<Website> ParseWebsiteCsv(string websiteLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-            var websites = new List<IGDB.Models.Website>();
+            var websites = new List<Website>();
 
             using (var reader = new StreamReader(websiteLocalPath))
             using (var csv = new CsvReader(reader, config))
@@ -210,7 +207,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 csv.ReadHeader();
                 while (csv.Read())
                 {
-                    var website = new IGDB.Models.Website();
+                    var website = new Website();
 
                     website.Url = csv.GetField<string>("url");
                     website.Id = csv.GetField<long?>("id");
@@ -222,7 +219,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return websites;
         }
 
-        public static List<IGDB.Models.Genre> ParseGenreCsv(string genreLocalPath)
+        public List<IGDB.Models.Genre> ParseGenreCsv(string genreLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var genres = new List<IGDB.Models.Genre>();
@@ -244,7 +241,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
             return genres ?? [];
         }
-        public static List<IGDB.Models.InvolvedCompany> ParseInvolvedCompanyCsv(string involvedCompanyPath)
+        public List<IGDB.Models.InvolvedCompany> ParseInvolvedCompanyCsv(string involvedCompanyPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var involvedCompanies = new List<IGDB.Models.InvolvedCompany>();
@@ -261,7 +258,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     involvedCompany.Publisher = csv.GetField<string?>("publisher") == "t";
                     var companyId = csv.GetField<long?>("company");
 
-                    involvedCompany.Company = companyId.HasValue ?  new IdentityOrValue<IGDB.Models.Company>(companyId.Value) : new IdentityOrValue<IGDB.Models.Company>(-1);
+                    involvedCompany.Company = companyId.HasValue ? new IdentityOrValue<IGDB.Models.Company>(companyId.Value) : new IdentityOrValue<IGDB.Models.Company>(-1);
                     var gameId = csv.GetField<long?>("game");
                     involvedCompany.Game = gameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(gameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
 
@@ -271,7 +268,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
             return involvedCompanies;
         }
 
-        public static List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
+        public List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             var games = new List<IGDB.Models.Game>();
@@ -287,7 +284,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.Id = csv.GetField<long?>("id");
                     game.Name = csv.GetField<string>("name");
                     game.Summary = csv.GetField<string>("summary");
-                    game.Category = (Category)(csv.GetField<long>("category"));
+                    game.Category = (Category)csv.GetField<long>("category");
                     game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")!));
                     game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")!));
                     game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")!));
@@ -300,8 +297,8 @@ namespace PlaylistApp.Server.Services.IGDBServices
                     game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")!));
                     game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")!));
                     game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
-					var parentGameId = csv.GetField<long?>("parent_game");
-                    game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1); 
+                    var parentGameId = csv.GetField<long?>("parent_game");
+                    game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
                     game.Checksum = csv.GetField<string>("checksum");
                     // Example null check
                     if (string.IsNullOrWhiteSpace(game.Name))

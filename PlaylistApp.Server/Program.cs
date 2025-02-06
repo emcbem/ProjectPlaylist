@@ -5,6 +5,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services;
 using PlaylistApp.Server.Services.GameReviewService;
 using PlaylistApp.Server.Services.IGDBServices;
+using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
 using PlaylistApp.Server.Services.SyncServices;
 using PlaylistApp.Server.Services.UserGenreService;
 using System.Text.Json.Serialization;
@@ -34,6 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 });
 
 builder.MapProjectPlaylistCoreServices();
+builder.MapIGDBSyncingServices();
 
 //These ones don't want to be in the mapper for some reason.
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();

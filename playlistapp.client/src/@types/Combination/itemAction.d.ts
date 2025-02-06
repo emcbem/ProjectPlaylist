@@ -1,6 +1,6 @@
 import { ItemOption } from "./itemOption";
 
 export interface ItemAction {
-    ItemOptions : ItemOption[];
-    ErrorType : string;
+  itemOptions: ItemOption[];
+  errorType: string;
 }

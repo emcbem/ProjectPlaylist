@@ -56,6 +56,11 @@ public class PlaystationGameService
         {
             var response = await pawn.GameListAsync(accountId, offset: 0, limit: 200);
 
+            if (response.titles.Count == 0)
+            {
+                return new List<PlaystationGameDTO>();
+            }
+
             List<PlaystationGameDTO> allGames = new();
 
             foreach (var title in response.titles)
