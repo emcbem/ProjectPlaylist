@@ -55,6 +55,8 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<PlaystationAuthenticationService>();
 		builder.Services.AddSingleton<PlaystationContext>();
+		builder.Services.AddSingleton<SyncOrchestrator>();
+		builder.Services.AddSingleton<DifferenceHandler>();
 		builder.Services.AddSingleton<PlaystationGameService>();
 		builder.Services.AddSingleton<GatherNewPlaystationGamesService>();
 		builder.Services.AddSingleton<AddNewPlaystationGamesService>();
