@@ -61,11 +61,13 @@ const Input: FC<{
         <RemoveButton userPlatform={userPlatform} isVisible={isVisible} />
       )}
 
-      {platform.id == 7 && (
+      {platform.id == 7 && userPlatform && (
         <SyncButton
           userPlatform={userPlatform}
           searched={searched}
           isVisible={isVisible}
+          userId={userGuid}
+          accountId={userPlatform.externalPlatformId}
         />
       )}
 
@@ -80,6 +82,7 @@ const Input: FC<{
       ) : (
         <AddButton
           platform={platform}
+          userPlatform={userPlatform}
           userGuid={userGuid}
           value={value}
           isVisible={isVisible}

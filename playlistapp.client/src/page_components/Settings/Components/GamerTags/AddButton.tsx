@@ -6,9 +6,11 @@ import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import { useState } from "react";
 import PlaystationResultList from "./PlaystationResultList";
 import LoadingDots from "../SVGs/LoadingDots";
+import { UserPlatform } from "@/@types/userPlatform";
 
 const AddButton = ({
   platform,
+  userPlatform,
   userGuid,
   value,
   isVisible,
@@ -16,6 +18,7 @@ const AddButton = ({
   setSearched,
 }: {
   platform: Platform | null;
+  userPlatform: UserPlatform | null;
   userGuid: string;
   value: string;
   isVisible: boolean;
@@ -40,7 +43,7 @@ const AddButton = ({
         platformId: platform.id,
         userId: userGuid,
         gamerTag: selectedPSUser ? selectedPSUser.onlineId : value,
-        externalPlatformId: "One",
+        externalPlatformId: selectedPSUser?.accountId ?? "",
         isPublic: true,
       };
       console.log(request, "hm");
@@ -80,6 +83,8 @@ const AddButton = ({
     setSearched();
     setIsVisible(!isVisible);
   };
+
+  console.log(userPlatform);
 
   return (
     <>
