@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
+using PlaylistApp.Server.DTOs.CombinationData;
+using PlaylistApp.Server.Services.SteamServices;
+using PlaylistApp.Server.Services.UserPlatformServices;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -6,99 +11,46 @@ namespace PlaylistApp.Server.Controllers;
 [Route("[controller]")]
 public class SteamController : Controller
 {
-	//private static readonly OpenIdRelyingParty RelyingParty = new OpenIdRelyingParty();
-	//internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
+	private readonly ISteamService steamService;
+	private readonly ISteamOrchestrator steamOrchestrator;
+	private readonly IConfiguration config;
+    public SteamController(ISteamService steamService, ISteamOrchestrator steamOrchestrator, IConfiguration config)
+    {
+        this.steamService = steamService;
+		this.steamOrchestrator = steamOrchestrator;
+		this.config = config;
+    }
 
-	//private readonly string steamOpenIdUrl = "https://steamcommunity.com/openid";
-	//private readonly string verifyUrl = "http://localhost:3001/verify"; // Change this as necessary
+	[HttpPost("getuseractionlog/{userSteamId}")]
+	public async Task<List<ItemAction>> GetGamesBySteamId(string userSteamId)
+	{
+		return await steamOrchestrator.CallAllTheMethods(userSteamId, 5); // TODO change id
+	}
 
-	//[HttpGet("steam")]
-	//public async Task<IActionResult> AuthSteam()
-	//{
-	//	HttpClient client = new HttpClient();
-	//	var result = await client.SendAsync( new HttpRequestMessage(HttpMethod.Get, steamOpenIdUrl),
-	//		HttpCompletionOption.ResponseHeadersRead);
+	[HttpGet("auth/{userId}")]
+	public IActionResult AuthSteam(string userId)
+	{
+		string steamRedirectUrl = config["SteamRedirectBaseUrl"] ?? "https://localhost:7041";
+		var redirectUrl = $"https://steamcommunity.com/openid/login?" +
+					 "openid.mode=checkid_setup" +
+					 "&openid.ns=http://specs.openid.net/auth/2.0" +
+					 "&openid.identity=http://specs.openid.net/auth/2.0/identifier_select" +
+					 "&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select" +
+					 $"&openid.return_to={steamRedirectUrl}/Steam/verify/{userId}"; 
 
-	//	return View();
-	//}
+		return Redirect(redirectUrl);
+	}
 
-	//[HttpGet("verify")]
-	//public async Task<IActionResult> Verify()
-	//{
-	//	//var relyingParty = new RelyingParty(verifyUrl);
-	//	//var response = RelyingParty.GetResponseAsync(null, null);
-	//	//var request = await OpenIdProvider.GetRequestAsync(this.Request, this.Response.ClientDisconnectedToken);
-	//	////var response = RelyingParty.ProcessResponse(Request.Query);
+	[HttpGet("verify/{userId}")]
+	public IActionResult Verify(string userId)
+	{
+		string urlParams = Request.GetDisplayUrl();
 
-	//	//if (response.Status != AuthenticationStatus.Authenticated)
-	//	//{
-	//	//	return StatusCode(500, "Authentication failed: " + response.Status);
-	//	//}
+		string steamId = steamService.ExtractSteamIdFromUrl(urlParams);
 
-	//	//// Extract Steam ID
-	//	//var steamId = response.ClaimedIdentifier.ToString().Replace("https://steamcommunity.com/openid/id/", "");
+		steamService.AddSteamKeyToUser(userId, steamId);
 
-	//	//// Store Steam ID in session
-	//	//HttpContext.Session.SetString("SteamId", steamId);
-
-	//	//return Redirect($"http://localhost:5173/?steamid={steamId}"); // Redirect to the React app
-	//}
-
-	//[HttpGet("user")]
-	//public IActionResult GetUser()
-	//{
-	//	var steamId = HttpContext.Session.GetString("SteamId");
-
-	//	if (steamId == null)
-	//	{
-	//		return Unauthorized(new { authenticated = false });
-	//	}
-
-	//	return Ok(new { authenticated = true, steamId });
-	//}
-
-	//internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
-
-	//// Start User Login
-	//[HttpGet("/steam/startuserlogin")]
-	//public async Task<ActionResult> StartUserLogin()
-	//{
-	//	IRequest request = await OpenIdProvider.GetRequestAsync(Request, this.Response.ClientDisconnectedToken)
-	//	//using (OpenIdRelyingParty openid = new OpenIdRelyingParty())
-	//	//{
-	//	//	IAuthenticationRequest request = openid.CreateRequestAsync()
-	//	//}
-	//	//var rp = new OpenIdRelyingParty();
-	//	////DotNetOpenAuth.OpenId.Identifier usi = "https://steamcommunity.com/openid";
-	//	//var response = await rp.CreateRequestAsync("https://steamcommunity.com/openid", Realm.AutoDetect, new Uri("https://localhost:7041"));
-
-
-	//}
-
-	//private static readonly OpenIdRelyingParty RelyingParty = new OpenIdRelyingParty();
-
-	//[HttpGet("steam/startUserLogin")]
-	//public async Task<IActionResult> SteamLogin()
-	//{
-	//	try
-	//	{
-	//		// Start the OpenID authentication process
-	//		//var request = RelyingParty.CreateRequest("https://steamcommunity.com/openid");
-	//		var request = RelyingParty.CreateRequest("https://steamcommunity.com/openid");
-
-	//		// Redirect to the authentication URL
-	//		return Redirect(await request.RedirectToProviderAsync());
-	//	}
-	//	catch (Exception ex)
-	//	{
-	//		// Handle any errors that occurred during the authentication process
-	//		return new HttpStatusCodeResult(500, "Authentication error: " + ex.Message);
-	//	}
-	//}
-
-	// Verify Steam Login
-
-	// Get User Session Info
-
-	// Start the server
+		string frontendBaseUrl = config["FrontendBaseUrl"] ?? "http://localhost:5173";
+		return Redirect($"{frontendBaseUrl}?steamid={steamId}");
+	}
 }

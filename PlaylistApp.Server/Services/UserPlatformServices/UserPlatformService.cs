@@ -19,11 +19,6 @@ public class UserPlatformService : IUserPlatformService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        if (request.ExternalPlatformId == null)
-        {
-            return false;
-        }
-
         var user = await context.UserAccounts
             .Where(x => x.Guid == request.UserId)
             .FirstOrDefaultAsync();
@@ -33,9 +28,18 @@ public class UserPlatformService : IUserPlatformService
             return false;
         }
 
-        var userPlatform = new UserPlatform()
+        var up = context.UserPlatforms
+            .Where(x => x.UserId == user.Id && x.PlatformId == request.PlatformId)
+            .FirstOrDefault();
+
+		if (up != null)
+		{
+            return false;
+		}
+
+		var userPlatform = new UserPlatform()
         {
-            ExternalPlatformId = request.ExternalPlatformId,
+            ExternalPlatformId = request.ExternalPlatformId ?? "",
             Gamertag = request.GamerTag ?? "",
             IsPublic = request.IsPublic,
             PlatformId = request.PlatformId,

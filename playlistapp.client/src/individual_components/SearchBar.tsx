@@ -32,8 +32,8 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="flex-grow sm:mx-8 mx-6 flex relative justify-center z-20">
-      <div className=" w-full relative flex items-center">
+    <div className="flex-grow sm:mx-8 mx-6 flex relative justify-center z-20 dark:bg-black bg-white">
+      <div className="w-full relative flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -48,7 +48,7 @@ const SearchBar: React.FC = () => {
         </svg>
 
         <input
-          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border border-r-0 border-black dark:border-white rounded-l-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-8 focus:ring-transparent focus:border-black dark:focus:border-white dark:text-white"
+          className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-xl border-2 border-r-0 border-black dark:border-clay-950 rounded-l-lg pl-10 pr-3 py-2 ring-0 sm:h-fit h-11 focus:ring-transparent focus:border-black dark:focus:border-clay-950 dark:text-white"
           placeholder=""
           onKeyDown={handleKeyPress}
           onChange={(e) => searchBarContext.setSearchQuery(e.target.value)}
@@ -56,7 +56,7 @@ const SearchBar: React.FC = () => {
         />
 
         <select
-          className="bg-transparent border  border-black dark:border-white rounded-r-lg text-sm sm:text-lg ring-0 focus:ring-transparent focus:border-black dark:focus:border-white border-l-0 dark:text-clay-950 sm:h-fit h-8"
+          className="bg-transparent border-2  border-black dark:border-clay-950 rounded-r-lg text-sm sm:text-lg ring-0 focus:ring-transparent focus:border-black dark:focus:border-clay-950 border-l-0 dark:text-clay-950 sm:h-fit h-11"
           value={selectedOption}
           onChange={handleSelectChange}
         >

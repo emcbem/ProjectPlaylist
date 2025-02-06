@@ -27,4 +27,10 @@ public class PlatformGameController : Controller
     {
         return await platformGameService.GetAllPlatformGamesByGame(gameId);
     }
+
+    [HttpGet("getallplatformgamesbyexternalkey")]
+    public async Task<List<PlatformGameDTO>> GetAllPlatformGAmesByExternalKey(string platformkey)
+    {
+        return await platformGameService.GetAllPlatformGamesByExternalKey(platformkey);
+    }
 }

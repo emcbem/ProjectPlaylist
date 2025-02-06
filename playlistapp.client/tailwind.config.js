@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "media",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontSize: {
@@ -21,6 +22,9 @@ export default {
       "9xl": ["128px", "1"],
     },
     extend: {
+      fontFamily: {
+        SST: ["SST", "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -28,6 +32,14 @@ export default {
       },
       screens: {
         lgmd: "820px",
+        mobile: "500px",
+        sm: "640px",
+        md: "768px",
+        avg: "800px",
+        lg: "1024px",
+        desk: "1200px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
       colors: {
         pppurple: {
@@ -60,6 +72,7 @@ export default {
         gradientOrange: "rgba(242, 112, 78, 0.41780462184873945)",
 
         black: "#0E191C",
+        hazypurple: "#602B53",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -130,6 +143,7 @@ export default {
         grid: "grid 15s linear infinite",
         marquee: "marquee var(--duration) infinite linear",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+        bounce: "bounce 0.8s infinite",
       },
       keyframes: {
         shine: {
@@ -142,6 +156,10 @@ export default {
           to: {
             "background-position": "0% 0%",
           },
+        },
+        bounce: {
+          "0%, 100%": { transform: "translateY(-6px)" },
+          "50%": { transform: "translateY(0)" },
         },
         rainbow: {
           "0%": {
