@@ -141,7 +141,6 @@ public class SteamService : ISteamService
 			.ToList();
 		HashSet<int> idsWithSamePlatformKeys = new HashSet<int>(gamesWithSamePlatformKeys.Select(x => x.Id));
 
-
 		List<PlatformGame> gamesThatTheUserDoesntAlreadyHave = new List<PlatformGame>();
 		foreach (PlatformGame pg in platformGamesFromSteam)
 		{
@@ -166,12 +165,21 @@ public class SteamService : ISteamService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task<List<SteamActionItem>> FixTimeDifferences(OwnedGamesResponse response, int userId)
+	public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId)
 	{
-		// Not implemented yet...
+		var duplicatePlatformKeys = matchingPlatformGames
+			.GroupBy(pg => pg.PlatformKey)
+			.Where(g => g.Count() > 1)
+			.Select(g => g.Key)
+			.ToList();
+
+		List<PlatformGame> gamesWithSamePlatformKeys = matchingPlatformGames
+			.Where(pg => duplicatePlatformKeys.Contains(pg.PlatformKey))
+			.ToList();
+
+		matchingPlatformGames = matchingPlatformGames.Where(x => !gamesWithSamePlatformKeys.Contains(x)).ToList();
+
 		using var context = await dbContextFactory.CreateDbContextAsync();
-		List<SteamRawGame> steamGames = response.Response.Games;
-		List<PlatformGame> matchingPlatformGames = await ConvertSteamToPlatformGames(response);
 
 		List<UserGame> usersGames = context.UserGames
 			.Where(x => x.UserId == userId)
@@ -181,34 +189,33 @@ public class SteamService : ISteamService
 
 		HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
 
-		List<SteamActionItem> actionsToTake = new List<SteamActionItem>();
+		List<ItemAction> actionList = new List<ItemAction>();
 
-		// Get the games that the user has, but have different times
-		List<PlatformGame> nonMatchingTimeGames = new List<PlatformGame>();
 		foreach (PlatformGame pg in matchingPlatformGames)
 		{
-			UserGame ug = context.UserGames.Where(x => x.PlatformGameId == pg.Id && x.UserId == userId).FirstOrDefault() ?? new UserGame();
-			SteamRawGame steamGame = steamGames.Where(x => x.AppId == pg.GameId).FirstOrDefault() ?? new SteamRawGame();
-			if (ug.TimePlayed != steamGame.PlaytimeForever)
+			UserGame? ug = usersGames.Where(x => x.PlatformGameId == pg.Id && x.UserId == userId).FirstOrDefault();
+			SteamRawGame? steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
+
+
+			
+			if (ug.TimePlayed != steamGame?.PlaytimeForever)
 			{
-				nonMatchingTimeGames.Add(pg);
-
-				var steamItem = new SteamActionItem();
-				steamItem.GameTitle = pg.Game.Title ?? "No Title";
-				steamItem.PlatformGameId = pg.Id;
-				steamItem.ProblemText = $"Which platform do you play this game on? {pg.Platform.PlatformName}" ?? "unknown platform";
-				steamItem.Url = $@"/action/platforms?PersonalMinutes={ug.TimePlayed}"
-							+ $"&SteamMinutes={steamGame.PlaytimeForever}"  // doing playtime forever
-							+ $"&platformgameid={pg.Id}";
-
-				actionsToTake.Add(steamItem);
+				actionList.Add(new ItemAction()
+				{
+					ErrorType = "Time Difference Found",
+					ItemOptions = new List<ItemOption>() {
+						new ItemOption() {
+							ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
+							GameTitle = ug.PlatformGame.Game.Title,
+							ResolveUrl = $"/action/hours/?PersonalMinutes={ug.TimePlayed}&SteamMinutes={steamGame?.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userId}"
+						}
+					}
+				});
 			}
 		}
 
-		return actionsToTake;
+		return actionList;
 	}
-
-
 
 	public string ExtractSteamIdFromUrl(string urlParams)
 	{

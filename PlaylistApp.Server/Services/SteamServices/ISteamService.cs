@@ -12,6 +12,7 @@ public interface ISteamService
 	public Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId);
 
 	public Task AddMissingGamesToUserGames(OwnedGamesResponse response, int userId);
+	public Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId);
 	public string ExtractSteamIdFromUrl(string urlParams);
     public void AddSteamKeyToUser(string userId, string steamId);
 }
