@@ -5,6 +5,7 @@ import { useHandleTyping } from "../../Hooks/useHandleTyping";
 import UpdateButton from "./UpdateButton";
 import AddButton from "./AddButton";
 import RemoveButton from "./RemoveButton";
+import SyncButton from "./SyncButton";
 
 const Input: FC<{
   platform: Platform;
@@ -58,6 +59,14 @@ const Input: FC<{
 
       {!searched && (
         <RemoveButton userPlatform={userPlatform} isVisible={isVisible} />
+      )}
+
+      {platform.id == 7 && (
+        <SyncButton
+          userPlatform={userPlatform}
+          searched={searched}
+          isVisible={isVisible}
+        />
       )}
 
       {userPlatform ? (

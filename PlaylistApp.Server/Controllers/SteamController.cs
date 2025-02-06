@@ -12,17 +12,19 @@ namespace PlaylistApp.Server.Controllers;
 public class SteamController : Controller
 {
 	private readonly ISteamService steamService;
+	private readonly ISteamOrchestrator steamOrchestrator;
 	private readonly IConfiguration config;
-    public SteamController(ISteamService steamService, IConfiguration config)
+    public SteamController(ISteamService steamService, ISteamOrchestrator steamOrchestrator, IConfiguration config)
     {
         this.steamService = steamService;
+		this.steamOrchestrator = steamOrchestrator;
 		this.config = config;
     }
 
 	[HttpPost("getuseractionlog/{userSteamId}")]
 	public async Task<List<ItemAction>> GetGamesBySteamId(string userSteamId)
 	{
-		return await steamService.GetGamesFromUserBasedOffOfSteamId(userSteamId);
+		return await steamOrchestrator.CallAllTheMethods(userSteamId, 5); // TODO change id
 	}
 
 	[HttpGet("auth/{userId}")]
@@ -46,7 +48,7 @@ public class SteamController : Controller
 
 		string steamId = steamService.ExtractSteamIdFromUrl(urlParams);
 
-		steamService.AddSteamUserPlatform(userId, steamId);
+		steamService.AddSteamKeyToUser(userId, steamId);
 
 		string frontendBaseUrl = config["FrontendBaseUrl"] ?? "http://localhost:5173";
 		return Redirect($"{frontendBaseUrl}?steamid={steamId}");

@@ -6,7 +6,6 @@ import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
 import { useState } from "react";
 import LoadingDots from "../SVGs/LoadingDots";
 import PlaystationResultList from "./PlaystationResultList";
-import WarningModal from "./WarningModal";
 
 const UpdateButton = ({
   userPlatform,
@@ -27,15 +26,16 @@ const UpdateButton = ({
     PlaystationUser | undefined
   >();
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const { mutateAsync: updateUserPlatforms } =
     UserPlatformQueries.UpdateUserPlatform();
   const { mutateAsync: searchForPlaystationUser } =
     PlaystationQueries.useGetPlaystationUsersBasedOffUsername(value);
 
+
+
   async function handleSave() {
-    setIsModalOpen(true);
     if (userPlatform) {
       const updateRequest: UpdateUserPlatformRequest = {
         id: userPlatform.id,
@@ -82,7 +82,7 @@ const UpdateButton = ({
 
   return (
     <>
-      <WarningModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+
       <button
         onClick={userPlatform?.platformId == 7 ? handleSearchClick : handleSave}
         className={`${
