@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PlaylistApp.Server.Data;
 
@@ -62,7 +60,9 @@ public partial class PlaylistDbContext : DbContext
 	public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		=> optionsBuilder.UseNpgsql("Name=ppdb");
+		=> optionsBuilder.EnableSensitiveDataLogging();
+
+
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -119,7 +119,12 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.Slug).HasColumnName("slug");
 			entity.Property(e => e.StartDate).HasColumnName("start_date");
 			entity.Property(e => e.Checksum).HasColumnName("checksum");
-		});
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
+
+            entity.Property(e => e.Id)
+					.UseIdentityAlwaysColumn();
+
+        });
 
 		modelBuilder.Entity<Friend>(entity =>
 		{
@@ -160,7 +165,7 @@ public partial class PlaylistDbContext : DbContext
 				.HasColumnName("age_rating");
 			entity.Property(e => e.CoverUrl).HasColumnName("cover_url");
 			entity.Property(e => e.Description).HasColumnName("description");
-			entity.Property(e => e.IdgbId).HasColumnName("idgb_id");
+			entity.Property(e => (int?)e.IgdbId).HasColumnName("idgb_id");
 			entity.Property(e => e.PublishDate).HasColumnName("publish_date");
 			entity.Property(e => e.Title)
 				.HasMaxLength(350)
@@ -223,6 +228,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.GenreName).HasColumnName("genre_name");
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
             entity.Property(e => e.Checksum).HasColumnName("checksum");
         });
 
@@ -367,6 +373,7 @@ public partial class PlaylistDbContext : DbContext
 				.HasMaxLength(40)
 				.HasColumnName("platform_name");
             entity.Property(e => e.Checksum).HasColumnName("checksum");
+            entity.Property(e => e.IgdbId).HasColumnName("igdb_id");
         });
 
 		modelBuilder.Entity<PlatformGame>(entity =>
