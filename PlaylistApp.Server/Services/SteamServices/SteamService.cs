@@ -31,7 +31,7 @@ public class SteamService : ISteamService
 
 	public List<ItemAction> SteamActions { get; set; } = new();
 
-	public async Task<List<ItemAction>> GetGamesFromUserBasedOffOfSteamId(string steamId)
+	public async Task<OwnedGamesResponse> GetGamesFromUserBasedOffOfSteamId(string steamId)
 	{
 		var steamKey = config["steamkey"];
 		string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
@@ -41,29 +41,27 @@ public class SteamService : ISteamService
 			HttpResponseMessage response = await client.GetAsync(url);
 			response.EnsureSuccessStatusCode();
 
-			OwnedGamesResponse jsonResponse = await response.Content.ReadFromJsonAsync<OwnedGamesResponse>();
+			OwnedGamesResponse jsonResponse = await response.Content.ReadFromJsonAsync<OwnedGamesResponse>() ?? new OwnedGamesResponse();
 
 			if (jsonResponse == null)
 			{
 				throw new Exception("Something went wrong parsing the data from Steam. Is the account private?");
 			}
 
-			await AddMissingGamesToUserGames(jsonResponse, 5);
-
-			return SteamActions;
+			return jsonResponse;
 		}
 		catch (HttpRequestException e)
 		{
-			Console.WriteLine("Request error: " + e.Message);
+			Console.WriteLine("An Error occured when fetching games from Steam: " + e.Message);
 			throw new Exception();
 		}
 	}
 
-	public async Task<List<PlatformGame>> ConvertSteamDataToPlatformGames(OwnedGamesResponse jsonGames, int userId)
+	public async Task<List<PlatformGame>> ConvertSteamToPlatformGames(OwnedGamesResponse jsonResponse)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
-		List<SteamRawGame> steamGames = jsonGames.Response.Games;
+		List<SteamRawGame> steamGames = jsonResponse.Response.Games;
 
 		HashSet<int> appIds = new HashSet<int>(steamGames.Select(g => g.AppId));
 		Dictionary<int, int> playtimeDict = steamGames.ToDictionary(g => g.AppId, g => g.PlaytimeForever);
@@ -75,6 +73,13 @@ public class SteamService : ISteamService
 			.Include(p => p.Platform)
 			.ToListAsync();
 
+		return matchingPlatformGames;
+	}
+
+	public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId)
+	{
+		List<ItemAction> actionList = new();
+		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var duplicatePlatformKeys = matchingPlatformGames
 			.GroupBy(pg => pg.PlatformKey)
@@ -91,7 +96,7 @@ public class SteamService : ISteamService
 			var steamGame = steamGames.Where(x => x.AppId.ToString() == p.PlatformKey).FirstOrDefault();
 			if(steamGame != null)
 			{
-				SteamActions.Add(new ItemAction()
+				actionList.Add(new ItemAction()
 				{
 					ErrorType = "Multiple Platforms",
 					ItemOptions = new List<ItemOption>() { 
@@ -105,43 +110,8 @@ public class SteamService : ISteamService
 			}
 		}
 
-		matchingPlatformGames = matchingPlatformGames.Where(x => !duplicatePlatformKeys.Contains(x.PlatformKey)).ToList();
-
-
-		return matchingPlatformGames;
+		return actionList;
 	}
-
-
-	public async Task<List<SteamActionItem>> CalculateDifferenceInGames(List<PlatformGame> games, int userId)
-	{
-		using var context = await dbContextFactory.CreateDbContextAsync();
-
-		List<UserGame> usersGames = context.UserGames
-			.Where(x => x.UserId == userId)
-			.Include(g => g.PlatformGame)
-			.ThenInclude(g => g.Game)
-			.ToList();
-		HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
-
-		List<SteamActionItem> gamesNotInPlaylistDb = new List<SteamActionItem>();
-
-		foreach (var game in games)
-		{
-			if (!userGameIds.Contains(game.Id))
-			{
-				gamesNotInPlaylistDb.Add(new SteamActionItem
-				{
-					PlatformGameId = game.Id,
-					GameTitle = game.Game.Title,
-					TotalPlayTime = 0,
-					ProblemText = "You have this game in Steam. Would you like to log it in your library?"
-				});
-			}
-		}
-
-		return gamesNotInPlaylistDb;
-	}
-
 
 	public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, int userId)
 	{
@@ -151,7 +121,7 @@ public class SteamService : ISteamService
 
 		steamGames = steamGames.GroupBy(x => x.AppId).SelectMany(g => g).ToList();
 
-		List<PlatformGame> platformGamesFromSteam = await ConvertSteamDataToPlatformGames(response, userId);
+		List<PlatformGame> platformGamesFromSteam = await ConvertSteamToPlatformGames(response);
 
 		List<UserGame> usersGames = context.UserGames
 			.Where(x => x.UserId == userId)
@@ -159,6 +129,18 @@ public class SteamService : ISteamService
 			.ThenInclude(g => g.Game)
 			.ToList();
 		HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
+
+		var duplicatePlatformKeys = platformGamesFromSteam
+			.GroupBy(pg => pg.PlatformKey)
+			.Where(g => g.Count() > 1)
+			.Select(g => g.Key)
+			.ToList();
+
+		var gamesWithSamePlatformKeys = platformGamesFromSteam
+			.Where(pg => duplicatePlatformKeys.Contains(pg.PlatformKey))
+			.ToList();
+		HashSet<int> idsWithSamePlatformKeys = new HashSet<int>(gamesWithSamePlatformKeys.Select(x => x.Id));
+
 
 		List<PlatformGame> gamesThatTheUserDoesntAlreadyHave = new List<PlatformGame>();
 		foreach (PlatformGame pg in platformGamesFromSteam)
@@ -168,7 +150,7 @@ public class SteamService : ISteamService
 				gamesThatTheUserDoesntAlreadyHave.Add(pg);
 				SteamRawGame? steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
 
-				if (steamGame is not null)
+				if (steamGame is not null && !idsWithSamePlatformKeys.Contains(pg.Id))
 				{
 					UserGame ug = new UserGame()
 					{
@@ -186,9 +168,10 @@ public class SteamService : ISteamService
 
 	public async Task<List<SteamActionItem>> FixTimeDifferences(OwnedGamesResponse response, int userId)
 	{
+		// Not implemented yet...
 		using var context = await dbContextFactory.CreateDbContextAsync();
 		List<SteamRawGame> steamGames = response.Response.Games;
-		List<PlatformGame> matchingPlatformGames = await ConvertSteamDataToPlatformGames(response, userId);
+		List<PlatformGame> matchingPlatformGames = await ConvertSteamToPlatformGames(response);
 
 		List<UserGame> usersGames = context.UserGames
 			.Where(x => x.UserId == userId)
@@ -240,7 +223,7 @@ public class SteamService : ISteamService
 		}
 	}
 
-	public void AddSteamUserPlatform(string userId, string steamId)
+	public void AddSteamKeyToUser(string userId, string steamId)
 	{
 		if (!string.IsNullOrEmpty(steamId))
 		{

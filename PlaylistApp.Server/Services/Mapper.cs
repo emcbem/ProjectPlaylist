@@ -43,6 +43,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IPlatformService, PlatformService>();
 		builder.Services.AddSingleton<IReviewLikeService, ReviewLikeService>();
 		builder.Services.AddSingleton<ISteamService, SteamService>();
+		builder.Services.AddSingleton<ISteamOrchestrator, SteamOrchestrator>();
 		builder.Services.AddSingleton<IUserAchievementLikeService, UserAchievementLikeService>();
 		builder.Services.AddSingleton<IUserAchievementService, UserAchievementService>();
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();
