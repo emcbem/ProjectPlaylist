@@ -1,13 +1,17 @@
-import React from "react";
+import LoadingDots from "@/individual_components/NavbarProfileSection";
+import React, { useState } from "react";
 import { useRef } from "react";
 
 const WarningModal = ({
   isModalOpen,
   setIsModalOpen,
-}: {
+}: // saveMethod,
+{
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
+  // saveMethod: () => void;
 }) => {
+  const [loading, setLoading] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const closeModal = () => {
@@ -16,13 +20,19 @@ const WarningModal = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(false);
     closeModal();
   };
 
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       closeModal();
+      setLoading(false);
     }
+  };
+
+  const handleConfirmation = () => {
+    setLoading(true);
   };
 
   return (
@@ -45,29 +55,36 @@ const WarningModal = ({
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5 items-center"
           >
-            <h1 className="text-2xl text-red-500">Warning</h1>
-            <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-lg text-white">
-                By linking your PSN account, it will import your PSN library's
-                data which includes library and playtime. By doing so, there
-                might be unintended side effects from your library. Want to
-                proceed?
-              </label>
-            </div>
-            <div className="p-6 pb-0 px-0 flex flex-row w-full">
-              <button
-                className="w-full rounded-md bg-red-500 py-2 px-4 text-sm m-2 text-white"
-                type="submit"
-              >
-                No thank you.
-              </button>
-              <button
-                className="w-full rounded-md bg-green-500 py-2 px-4 text-sm m-2 text-white"
-                type="submit"
-              >
-                Yes!
-              </button>
-            </div>
+            {loading && <LoadingDots />}
+            {!loading && (
+              <>
+                <h1 className="text-2xl text-red-500">Warning</h1>
+                <div className="w-full max-w-sm min-w-[200px]">
+                  <label className="block mb-2 text-lg text-white">
+                    By syncing your PSN data, it will import your PSN library's
+                    data which includes game library and playtime. By doing so,
+                    there might be collisions you will have to manually resolve.
+                    Are you okay with this?
+                  </label>
+                </div>
+                <div className="p-6 pb-0 px-0 flex flex-row w-full">
+                  <button
+                    onClick={handleSubmit}
+                    className="w-full rounded-md bg-red-500 py-2 px-4 text-sm m-2 text-white"
+                    type="submit"
+                  >
+                    No thank you.
+                  </button>
+                  <button
+                    onClick={handleConfirmation}
+                    className="w-full rounded-md bg-green-500 py-2 px-4 text-sm m-2 text-white"
+                    type="submit"
+                  >
+                    Yes!
+                  </button>
+                </div>
+              </>
+            )}
           </form>
         </div>
       </div>

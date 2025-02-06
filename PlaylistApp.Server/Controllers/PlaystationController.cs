@@ -2,7 +2,6 @@
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Services.PlaystationServices;
-using PsnApiWrapperNet.Model;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -15,6 +14,7 @@ public class PlaystationController : Controller
     private readonly GatherNewPlaystationGamesService PlaystationComparerService;
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
     private readonly PlaystationOrchestrator PlaystationOrchestrator;
+    private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformErrorService;
     private readonly IConfiguration config;
 
     public PlaystationController(PlaystationOrchestrator playstationOrchestrator,
@@ -22,13 +22,15 @@ public class PlaystationController : Controller
                                  PlaystationGameService playstationGameService,
                                  PlaystationAuthenticationService playstationAuthenticationService,
                                  IConfiguration configuration,
-                                 GatherNewPlaystationGamesService playstationComparerService)
+                                 GatherNewPlaystationGamesService playstationComparerService,
+                                 HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService)
     {
         PlaystationGameService = playstationGameService;
         PlaystationAuthService = playstationAuthenticationService;
         PlaystationComparerService = playstationComparerService;
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
         PlaystationOrchestrator = playstationOrchestrator;
+        HandlePlaystationPlatformErrorService = handlePlaystationPlatformErrorService;
         config = configuration;
     }
 
@@ -45,9 +47,9 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("orchestrator")]
-    public async Task<bool> SyncPlaystationData(PlaystationDTO playstationDTO)
+    public async Task<ItemAction> SyncPlaystationData(PlaystationDTO playstationDTO)
     {
-        return await PlaystationOrchestrator.OrchestratePlaystationSync(playstationDTO);
+        return await PlaystationOrchestrator.OrchestrateInitialAccountAdd(playstationDTO);
     }
 
     [HttpPost("getusersgamelist")]
@@ -66,5 +68,11 @@ public class PlaystationController : Controller
     public async Task<bool> AddNewPlaystationGames(NewPlaystationGames newPlaystationGames)
     {
         return await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
+    }
+
+    [HttpPost("playstationplatformerror")]
+    public async Task<ItemAction> SendPlaystationPlatformErrorsToUser(NewPlaystationGames newPlaystationGames)
+    {
+        return await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
     }
 }
