@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.Services.SteamServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 
@@ -19,7 +20,7 @@ public class SteamController : Controller
     }
 
 	[HttpPost("getuseractionlog/{userSteamId}")]
-	public async Task<List<DTOs.SteamData.SteamActionItem>> GetGamesBySteamId(string userSteamId)
+	public async Task<List<ItemAction>> GetGamesBySteamId(string userSteamId)
 	{
 		return await steamService.GetGamesFromUserBasedOffOfSteamId(userSteamId);
 	}
