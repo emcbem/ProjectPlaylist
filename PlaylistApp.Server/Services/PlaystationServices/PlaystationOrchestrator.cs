@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+﻿using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
@@ -8,26 +8,31 @@ public class PlaystationOrchestrator
     private readonly PlaystationGameService PlaystationGameService;
     private readonly GatherNewPlaystationGamesService GatherNewPlaystationGamesService;
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
+    private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformErrorService;
     public PlaystationOrchestrator(PlaystationGameService playstationGameService,
                                    GatherNewPlaystationGamesService gatherNewPlaystationGamesService,
-                                   AddNewPlaystationGamesService addNewPlaystationGamesService)
+                                   AddNewPlaystationGamesService addNewPlaystationGamesService,
+                                   HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService)
     {
         PlaystationGameService = playstationGameService;
         GatherNewPlaystationGamesService = gatherNewPlaystationGamesService;
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
+        HandlePlaystationPlatformErrorService = handlePlaystationPlatformErrorService;
     }
 
-    public async Task<bool> OrchestratePlaystationSync(PlaystationDTO playstationDTO)
+    public async Task<ItemAction> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId is null)
         {
-            return false;
+            return new ItemAction();
         }
 
         var gameList = await PlaystationGameService.GetUserPlaystationGameList(playstationDTO.AccountId);
 
         var newPlaystationGames = await GatherNewPlaystationGamesService.HandleBringingInNewPlaystationGames(playstationDTO);
 
-        return await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
+        var newGamesSent =  await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
+
+        return  await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
     }
 }
