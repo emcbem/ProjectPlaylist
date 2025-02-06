@@ -87,12 +87,13 @@ public class GatherNewPlaystationGamesService
                                 ErrorText = $"{x.Platform.Name}",
                                 ResolveUrl = $"/action/platforms/?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
                                 GameTitle = platformGame[0].Game.Title,
+                                Hours = game.PlayDuration,
                             };
                         });
 
                         foreach (var option in options)
                         {
-                            itemAction.ErrorType = $"Multiple platforms found these games";
+                            itemAction.ErrorType = $"Action needed, multiple platforms found for the following games:";
                             itemAction.ItemOptions.Add(option);
                         }
                     }
