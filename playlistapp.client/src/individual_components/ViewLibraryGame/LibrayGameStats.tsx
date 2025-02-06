@@ -68,7 +68,10 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
               </div>
               <div className="text-5xl">
                 {userGame && userGame.timePlayed > 0 ? (
-                  <NumberTicker value={userGame.timePlayed} />
+                  <NumberTicker
+                    value={parseFloat((userGame.timePlayed / 60).toFixed(2))}
+                    decimalPlaces={1}
+                  />
                 ) : (
                   <p className="text-5xl">0</p>
                 )}
