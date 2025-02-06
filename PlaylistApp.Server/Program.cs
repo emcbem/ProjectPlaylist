@@ -35,6 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 });
 
 builder.MapProjectPlaylistCoreServices();
+builder.MapIGDBSyncingServices();
 
 //These ones don't want to be in the mapper for some reason.
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();

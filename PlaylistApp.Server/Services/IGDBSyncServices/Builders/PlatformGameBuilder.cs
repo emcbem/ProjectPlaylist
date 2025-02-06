@@ -1,5 +1,6 @@
 ﻿using IGDB;
 using IGDB.Models;
+using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
 using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices.Builders;
@@ -10,15 +11,15 @@ public class PlatformGameBuilder
     private Dictionary<int, Website> WebsiteIdToWebsite { get; set; } = new();
     //private List<>
 
-    private IDownloader _downloader;
+    private IDataGetter _dataGetter;
 
-    public PlatformGameBuilder(IDownloader downloader)
+    public PlatformGameBuilder(IDataGetter dataGetter)
     {
-        _downloader = downloader;
+        _dataGetter = dataGetter;
     }
 
     public async Task Setup()
     {
-        await _downloader.DownloadAsync(IGDBClient.Endpoints.Websites);
+        var websites = await _dataGetter.GetWebsites();
     }
 }
