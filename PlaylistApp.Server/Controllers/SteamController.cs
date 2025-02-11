@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData;
 using PlaylistApp.Server.Services.SteamServices;
-using PlaylistApp.Server.Services.UserPlatformServices;
+using PlaylistApp.Server.Services.SteamServices.SteamGameService;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -25,7 +24,7 @@ public class SteamController : Controller
 	[HttpPost("getuseractionlog")]
 	public async Task<List<ItemAction>> GetGamesBySteamId([FromBody] SteamActionLogRequest steamActionLogRequest)
 	{
-		return await steamOrchestrator.CallAllTheMethods(steamActionLogRequest);
+		return await steamOrchestrator.CollectActionItemsFromSteam(steamActionLogRequest);
 	}
 
 	[HttpGet("auth/{userId}")]
