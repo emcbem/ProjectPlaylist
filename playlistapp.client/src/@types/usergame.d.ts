@@ -6,5 +6,5 @@ export interface UserGame {
     platformGame: PlatformGame,
     timePlayed: number,
     user: UserAccount,
-    datAdded: Date,
+    dateAdded: Date,
 }
