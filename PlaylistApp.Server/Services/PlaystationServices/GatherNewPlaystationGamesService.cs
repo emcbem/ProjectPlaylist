@@ -23,6 +23,14 @@ public class GatherNewPlaystationGamesService
         PlatformGameService = platformGameService;
     }
 
+    //public Dictionary<string, int> CategoryStringsToPlatformIds { get; set; } = new Dictionary<string, int>()
+    //{
+    //    {"ps3", 9 },
+    //    {"ps4", 48 },
+    //    {"ps5", 167}
+    //};
+
+
     public async Task<NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId == null)
@@ -41,7 +49,9 @@ public class GatherNewPlaystationGamesService
         ItemAction itemAction = new ItemAction();
         List<AddUserGameRequest> addUserGameRequests = new List<AddUserGameRequest>();
 
-        if (CurrentGames is not null && FoundGames is not null)
+        var platformKeyToUserGames = CurrentGames.GroupBy(x => x.PlatformGame?.PlatformKey).ToDictionary(x => x.Key, x => x.ToList());
+
+        if (CurrentGames is not null)
         {
             var alreadyExistsGames = CurrentGames
                 .Where(x =>
@@ -49,7 +59,16 @@ public class GatherNewPlaystationGamesService
                     if (!string.IsNullOrEmpty(x.PlatformGame.PlatformKey) &&
                         int.TryParse(x.PlatformGame.PlatformKey, out int key))
                     {
-                        return FoundGames.Any(y => y.Id == key);
+                        //if(platformKeyToUserGames.ContainsKey(x.PlatformGame.PlatformKey))
+                        //{
+                        //    var gamesInDatabase = platformKeyToUserGames[x.PlatformGame.PlatformKey];
+                        //    return FoundGames.Any(y => y.Id == key && gamesInDatabase.Any(z => z.PlatformGame.Platform.Id == CategoryStringsToPlatformIds[y.Category]));
+                        //}
+                        //else
+                        //{
+                            return FoundGames.Any(y => y.Id == key);
+
+                        
                     }
                     return false;
                 })

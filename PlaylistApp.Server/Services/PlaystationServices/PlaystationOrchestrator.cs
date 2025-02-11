@@ -31,8 +31,8 @@ public class PlaystationOrchestrator
 
         var newPlaystationGames = await GatherNewPlaystationGamesService.HandleBringingInNewPlaystationGames(playstationDTO);
 
-        var newGamesSent =  await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
+        var newGamesSent = await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
 
-        return  await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+        return await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
     }
 }
