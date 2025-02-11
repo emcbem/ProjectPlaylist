@@ -1,7 +1,9 @@
 ﻿using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData;
-using PlaylistApp.Server.Services.UserPlatformServices;
+using PlaylistApp.Server.DTOs.SteamData.SteamGames;
+using PlaylistApp.Server.Services.SteamServices.SteamAchievementService.SteamAchievementService;
+using PlaylistApp.Server.Services.SteamServices.SteamGameService;
 
 namespace PlaylistApp.Server.Services.SteamServices;
 
@@ -9,15 +11,17 @@ public class SteamOrchestrator : ISteamOrchestrator
 {
 
 	private readonly ISteamService steamService;
-	public SteamOrchestrator(ISteamService steamService)
+	private readonly ISteamAchievementService steamAchievementService;
+	public SteamOrchestrator(ISteamService steamService, ISteamAchievementService steamAchievementService)
 	{
 		this.steamService = steamService;
+		this.steamAchievementService = steamAchievementService;
 	}
 
-	public async Task<List<ItemAction>> CallAllTheMethods(string steamId, int userId)
+	public async Task<List<ItemAction>> CollectActionItemsFromSteam(SteamActionLogRequest steamActionLogRequest)
 	{
 		// step 1: get all games from steam (SteamRawGames)
-		OwnedGamesResponse steamApiResponse = await steamService.GetGamesFromUserBasedOffOfSteamId(steamId);
+		OwnedGamesResponse steamApiResponse = await steamService.GetGamesFromUserBasedOffOfSteamId(steamActionLogRequest.UserSteamId);
 
 		// extract the games from the response
 		List<SteamRawGame> steamGames = steamApiResponse.Response.Games;
@@ -26,15 +30,17 @@ public class SteamOrchestrator : ISteamOrchestrator
 		List<PlatformGame> platformGamesFromSteam = await steamService.ConvertSteamToPlatformGames(steamApiResponse);
 
 		// step 3: Check for game inconsistencies (games that the user doesn't have in their library but they show multiple platforms)
-		List<ItemAction> itemActions = await steamService.FindGameInconsistenciesWithUserAccount(platformGamesFromSteam, steamGames, userId); // Todo change this
+		List<ItemAction> itemActions = await steamService.FindGameInconsistenciesWithUserAccount(platformGamesFromSteam, steamGames, steamActionLogRequest.UserId); 
 
 		// step 4: Add games that don't have any problems to the user
-		await steamService.AddMissingGamesToUserGames(steamApiResponse, 5); // TODO change this
+		await steamService.AddMissingGamesToUserGames(steamApiResponse, steamActionLogRequest.UserId); 
 
 		// step 5: Find games user has but with different hours. 
+		itemActions.AddRange( await steamService.FixTimeDifferences(steamApiResponse, platformGamesFromSteam, steamGames, steamActionLogRequest.UserId));
 
+		// step 6: of synced games, auto add achievements user hasn't added to playlist yet (under development)
+		//await steamAchievementService.GetSteamAchievementsFromSteam(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
 
-		// return action log!
 		return itemActions;
 	}
 }

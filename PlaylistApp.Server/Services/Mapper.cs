@@ -19,10 +19,12 @@ using PlaylistApp.Server.Services.PlatformServices;
 using PlaylistApp.Server.Services.PlaystationServices;
 using PlaylistApp.Server.Services.ReviewLikeServices;
 using PlaylistApp.Server.Services.SteamServices;
+using PlaylistApp.Server.Services.SteamServices.SteamAchievementService;
+using PlaylistApp.Server.Services.SteamServices.SteamAchievementService.SteamAchievementService;
+using PlaylistApp.Server.Services.SteamServices.SteamGameService;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 using PlaylistApp.Server.Services.UserAchievementServices;
 using PlaylistApp.Server.Services.UserGameServices;
-using PlaylistApp.Server.Services.UserGenreService;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using PlaylistApp.Server.Services.UserServices;
 
@@ -47,7 +49,8 @@ public static class Mapper
 		builder.Services.AddSingleton<IPlatformService, PlatformService>();
 		builder.Services.AddSingleton<IReviewLikeService, ReviewLikeService>();
 		builder.Services.AddSingleton<ISteamService, SteamService>();
-		builder.Services.AddSingleton<ISteamOrchestrator, SteamOrchestrator>();
+        builder.Services.AddSingleton<ISteamAchievementService, SteamAchievementService2>();
+        builder.Services.AddSingleton<ISteamOrchestrator, SteamOrchestrator>();
 		builder.Services.AddSingleton<IUserAchievementLikeService, UserAchievementLikeService>();
 		builder.Services.AddSingleton<IUserAchievementService, UserAchievementService>();
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();

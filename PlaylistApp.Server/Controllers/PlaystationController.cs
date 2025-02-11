@@ -15,7 +15,6 @@ public class PlaystationController : Controller
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
     private readonly PlaystationOrchestrator PlaystationOrchestrator;
     private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformErrorService;
-    private readonly IConfiguration config;
 
     public PlaystationController(PlaystationOrchestrator playstationOrchestrator,
                                  AddNewPlaystationGamesService addNewPlaystationGamesService,
@@ -31,7 +30,6 @@ public class PlaystationController : Controller
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
         PlaystationOrchestrator = playstationOrchestrator;
         HandlePlaystationPlatformErrorService = handlePlaystationPlatformErrorService;
-        config = configuration;
     }
 
     [HttpPost("gettoken")]

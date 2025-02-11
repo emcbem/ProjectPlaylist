@@ -47,7 +47,7 @@ const UserLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
                 <td className="px-6 py-4">
                   {new Date(g.platformGame.game.publishDate).toDateString()}
                 </td>
-                <td className="px-6 py-4">{String(g.datAdded)}</td>
+                <td className="px-6 py-4">{String(g.dateAdded)}</td>
               </tr>
             ))}
           </tbody>
