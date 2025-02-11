@@ -18,7 +18,7 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
         >
           <div className="relative group">
             <div className="absolute bottom-2 left-2">
-              <div className="hidden group-hover:block">
+              <div className="xs:hidden group-hover:block sm:hidden">
                 <RemoveFromLibButton ugid={ug.userGameId} />
               </div>
             </div>
