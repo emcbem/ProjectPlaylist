@@ -15,7 +15,7 @@ public class ItemActionController : Controller
         UserGameService = userGameService;
     }
 
-    [HttpPatch("action/platforms")]
+    [HttpGet("/action/platforms")]
     public async Task<IActionResult> ResolvePlatformCollision([FromQuery] int hours, [FromQuery] int pgid, [FromQuery] string user)
     {
         if (!Guid.TryParse(user, out Guid userId))

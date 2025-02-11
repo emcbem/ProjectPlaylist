@@ -15,7 +15,7 @@ import Badge from "@mui/material/Badge";
 import LoginButton from "./login";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
 
-const Profile: React.FC = () => {
+const Profile = () => {
   const { isAuthenticated } = useAuth0();
 
   const { usr, isLoading } = React.useContext(

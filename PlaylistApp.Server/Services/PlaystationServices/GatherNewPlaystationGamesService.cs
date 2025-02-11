@@ -85,7 +85,7 @@ public class GatherNewPlaystationGamesService
                             return new ItemOption()
                             {
                                 ErrorText = $"{x.Platform.Name}",
-                                ResolveUrl = $"/action/platforms/?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
+                                ResolveUrl = $"/action/platforms?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
                                 GameTitle = platformGame[0].Game.Title,
                                 Hours = game.PlayDuration,
                             };
@@ -93,7 +93,7 @@ public class GatherNewPlaystationGamesService
 
                         foreach (var option in options)
                         {
-                            itemAction.ErrorType = $"Action needed, multiple platforms found for the following games:";
+                            itemAction.ErrorType = $"Action needed, select which data to keep: ";
                             itemAction.ItemOptions.Add(option);
                         }
                     }
