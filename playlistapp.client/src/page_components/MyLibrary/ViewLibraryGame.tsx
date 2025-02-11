@@ -6,7 +6,6 @@ import MyLibraryDescription from "./Components/MyLibraryDescription";
 import { useState } from "react";
 import GoalModalAdd from "../Goals/Components/Modal/GoalModalAdd";
 import GameCover from "../ViewGame/GameCover";
-import GameImageBackground from "@/individual_components/GameImageBackground";
 
 const ViewLibraryGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
