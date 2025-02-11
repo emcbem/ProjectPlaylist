@@ -384,7 +384,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.HasIndex(e => e.PlatformId, "idx_platform_game_platform_id");
 
-			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Id).HasColumnName("id").UseIdentityColumn();
 			entity.Property(e => e.GameId).HasColumnName("game_id");
 			entity.Property(e => e.PlatformId).HasColumnName("platform_id");
 			entity.Property(e => e.PlatformKey).HasColumnName("platform_key");

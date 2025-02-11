@@ -45,7 +45,7 @@ public class PlatformGameBuilderTests
 
         await pgbuilder.Setup();
 
-        pgbuilder.WebsiteIdToWebsite[2].Url.Should().Be("wow");
+        pgbuilder.WebsiteIdToWebsites[2][0].Url.Should().Be("wow");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class PlatformGameBuilderTests
 
         await pgbuilder.Setup();
 
-        pgbuilder.ExternalIdToExternalGame[2].Url.Should().Be("wow2");
+        pgbuilder.ExternalIdToExternalGames[2][0].Url.Should().Be("wow2");
     }
 
 }
