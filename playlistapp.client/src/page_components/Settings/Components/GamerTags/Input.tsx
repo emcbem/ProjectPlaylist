@@ -6,6 +6,7 @@ import UpdateButton from "./UpdateButton";
 import AddButton from "./AddButton";
 import RemoveButton from "./RemoveButton";
 import SyncButton from "./SyncButton";
+import { SteamSyncButton } from "../../Buttons/SteamSyncButton";
 
 const Input: FC<{
   platform: Platform;
@@ -31,6 +32,8 @@ const Input: FC<{
       }
     }
   }, [platform.id, userPlatforms]);
+
+  console.log("platform id", platform.id);
 
   return (
     <>
@@ -68,6 +71,16 @@ const Input: FC<{
           isVisible={isVisible}
           userId={userGuid}
           accountId={userPlatform.externalPlatformId}
+        />
+      )}
+
+      {platform.id == 163 && userPlatform && (
+        <SteamSyncButton
+          userPlatform={userPlatform}
+          //searched={searched}
+          isVisible={isVisible}
+          userId={userGuid}
+          //accountId={userPlatform.externalPlatformId}
         />
       )}
 
