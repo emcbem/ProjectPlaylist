@@ -38,10 +38,9 @@ public class SteamOrchestrator : ISteamOrchestrator
 		// step 5: Find games user has but with different hours. 
 		itemActions.AddRange( await steamService.FixTimeDifferences(steamApiResponse, platformGamesFromSteam, steamGames, steamActionLogRequest.UserId));
 
-		// step 6: of synced games, auto add achievements user hasn't added to playlist yet
-		await steamAchievementService.GetSteamAchievementsFromSteam(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
+		// step 6: of synced games, auto add achievements user hasn't added to playlist yet (under development)
+		//await steamAchievementService.GetSteamAchievementsFromSteam(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
 
-		// return action log!
 		return itemActions;
 	}
 }

@@ -2,6 +2,6 @@
 
 public class SteamActionLogRequest
 {
-	public int UserId { get; set; }
+	public Guid UserId { get; set; }
 	public string UserSteamId { get; set; } = string.Empty;
 }

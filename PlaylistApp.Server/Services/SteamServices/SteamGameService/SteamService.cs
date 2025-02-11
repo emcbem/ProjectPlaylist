@@ -77,7 +77,7 @@ public class SteamService : ISteamService
         return matchingPlatformGames;
     }
 
-    public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId)
+    public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
     {
         List<ItemAction> actionList = new();
         using var context = await dbContextFactory.CreateDbContextAsync();
@@ -92,9 +92,9 @@ public class SteamService : ISteamService
             .Where(pg => duplicatePlatformKeys.Contains(pg.PlatformKey))
             .ToList();
 
-        foreach (PlatformGame p in gamesWithSamePlatformKeys)
+        foreach (PlatformGame pg in gamesWithSamePlatformKeys)
         {
-            var steamGame = steamGames.Where(x => x.AppId.ToString() == p.PlatformKey).FirstOrDefault();
+            var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
             if (steamGame != null)
             {
                 actionList.Add(new ItemAction()
@@ -103,8 +103,8 @@ public class SteamService : ISteamService
                     ItemOptions = new List<ItemOption>() {
                         new ItemOption() {
                             ErrorText = "Multiple Platforms Found",
-                            GameTitle = p.Game.Title,
-                            ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={p.Id}&user={userId}"
+                            GameTitle = pg.Game.Title,
+                            ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
                         }
                     }
                 });
@@ -114,7 +114,7 @@ public class SteamService : ISteamService
         return actionList;
     }
 
-    public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, int userId)
+    public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -123,6 +123,8 @@ public class SteamService : ISteamService
         steamGames = steamGames.GroupBy(x => x.AppId).SelectMany(g => g).ToList();
 
         List<PlatformGame> platformGamesFromSteam = await ConvertSteamToPlatformGames(response);
+
+        int userId = await context.UserAccounts.Where(x => x.Guid == userGuid).Select(x => x.Id).FirstOrDefaultAsync();
 
         List<UserGame> usersGames = context.UserGames
             .Where(x => x.UserId == userId)
@@ -166,7 +168,7 @@ public class SteamService : ISteamService
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, int userId)
+    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
     {
         var duplicatePlatformKeys = matchingPlatformGames
             .GroupBy(pg => pg.PlatformKey)
@@ -182,6 +184,7 @@ public class SteamService : ISteamService
 
         using var context = await dbContextFactory.CreateDbContextAsync();
 
+        int userId = await context.UserAccounts.Where(x => x.Guid == userGuid).Select(x => x.Id).FirstOrDefaultAsync();
         List<UserGame> usersGames = context.UserGames
             .Where(x => x.UserId == userId)
             .Include(g => g.PlatformGame)
@@ -208,7 +211,7 @@ public class SteamService : ISteamService
                         new ItemOption() {
                             ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
                             GameTitle = ug.PlatformGame.Game.Title,
-                            ResolveUrl = $"/action/hours/?PersonalMinutes={ug.TimePlayed}&SteamMinutes={steamGame?.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userId}"
+                            ResolveUrl = $"/action/hours/?PersonalMinutes={ug.TimePlayed}&SteamMinutes={steamGame?.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}"
                         }
                     }
                 });
