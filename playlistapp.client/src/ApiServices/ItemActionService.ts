@@ -7,7 +7,8 @@ export const ItemActionService = {
       throw new Error("Platform collision url was undefined or empty");
     }
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_URL}`, url);
+      console.log("Full API URL:", `${import.meta.env.VITE_URL}${url}`);
+      const response = await axios.get(`${import.meta.env.VITE_URL}${url}`);
       return response.data;
     } catch (error) {
       console.error("Failed to handle platform collisions");
