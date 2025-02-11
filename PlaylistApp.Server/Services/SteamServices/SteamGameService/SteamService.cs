@@ -211,7 +211,7 @@ public class SteamService : ISteamService
                         new ItemOption() {
                             ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
                             GameTitle = ug.PlatformGame.Game.Title,
-                            ResolveUrl = $"/action/hours/?PersonalMinutes={ug.TimePlayed}&SteamMinutes={steamGame?.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}"
+                            ResolveUrl = $"/action/platforms/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
                         }
                     }
                 });
