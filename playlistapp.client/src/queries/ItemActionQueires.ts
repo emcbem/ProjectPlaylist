@@ -10,7 +10,7 @@ export const ItemActionQueries = {
       mutationFn: () => ItemActionService.handlePlatformCollisions(url),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: keys.HandlePlatformCollisoins(url),
+          queryKey: keys.HandlePlatformCollisions(url),
         });
       },
     });

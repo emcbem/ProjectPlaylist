@@ -39,7 +39,7 @@ public partial class Game : IChecksum
     public List<int> GenreIds { get; set; } = new();
 
     [NotMapped]
-    public List<int> CompanyIds { get; set; } = new();
+    public List<int> InvolvedCompanyIds { get; set; } = new();
 
     [NotMapped]
     public List<int> PlatformIds { get; set; } = new();

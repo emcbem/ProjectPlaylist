@@ -5,6 +5,7 @@ import AchievementsPage from "../Achievements/Achievements";
 import MyLibraryDescription from "./Components/MyLibraryDescription";
 import { useState } from "react";
 import GoalModalAdd from "../Goals/Components/Modal/GoalModalAdd";
+import GameCover from "../ViewGame/GameCover";
 
 const ViewLibraryGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
@@ -29,16 +30,7 @@ const ViewLibraryGame = () => {
       <div>
         <div className="flex w-full dark:text-white text-black justify-center sm:mt-28 mt-14">
           <div className="flex flex-row items-start space-x-4 xl:w-1/2 lg:w-5/6 w-full">
-            <div className="flex-shrink-0">
-              <img
-                src={userGame?.platformGame.game.coverUrl.replace(
-                  /t_cover_big/g,
-                  "t_1080p"
-                )}
-                className="lgmd:w-60 lgmd:h-96 sm:h-60 sm:w-36 w-28 h-44 object-cover rounded-lg shadow-xl sticky top-10"
-                alt={`${userGame?.platformGame.game?.title} cover`}
-              />
-            </div>
+            <GameCover game={userGame?.platformGame.game} />
 
             <div className="flex-grow">
               <MyLibraryDescription

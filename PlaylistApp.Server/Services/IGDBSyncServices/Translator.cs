@@ -7,15 +7,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 {
     public static class Translator
     {
-        public static Dictionary<int, ExternalCategory> PlatformToExternalCategory { get; set; } = new Dictionary<int, ExternalCategory>()
-                {
-                    {1, ExternalCategory.Steam
-                    }, { 3, ExternalCategory.Steam}, { 6, ExternalCategory.Steam}, { 14, ExternalCategory.Steam}, { 163, ExternalCategory.Steam},
-                    { 162, ExternalCategory.Oculus}, { 384, ExternalCategory.Oculus}, { 385, ExternalCategory.Oculus}, { 387, ExternalCategory.Oculus},
-                    { 7, ExternalCategory.PlaystationStoreUS}, { 8, ExternalCategory.PlaystationStoreUS}, { 9, ExternalCategory.PlaystationStoreUS},
-                    { 46, ExternalCategory.PlaystationStoreUS}, { 48, ExternalCategory.PlaystationStoreUS}, { 165, ExternalCategory.PlaystationStoreUS}, { 167, ExternalCategory.PlaystationStoreUS},
-                    // {11, ExternalCategory.XBox}, {12, ExternalCategory.Xbox}, {49, ExternalCategory.Xbox}, {169, ExternalCategory.Xbox},
-                };
+    
 
         public static List<Data.Game> TranslateIGDBGamesIntoPersonalData(List<IGDB.Models.Game> igdbGames, List<Cover> covers, List<AgeRating> ratings)
         {
@@ -56,7 +48,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 game.Title = igdbGame.Name;
                 game.PlatformIds = igdbGame.Platforms.Ids.Select(x => (int)x).ToList();
                 game.GenreIds = igdbGame.Genres.Ids.Select(x => (int)x).ToList();
-                game.CompanyIds = igdbGame.InvolvedCompanies.Ids.Select(x => (int)x).ToList();
+                game.InvolvedCompanyIds = igdbGame.InvolvedCompanies.Ids.Select(x => (int)x).ToList();
 
                 return game;
             }).Where(p => p is not null).ToList()!;

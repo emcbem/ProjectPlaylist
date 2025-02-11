@@ -183,11 +183,15 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
                     var externalGame = new ExternalGame();
 
                     externalGame.Category = (ExternalCategory)csv.GetField<long?>("category")!;
-
                     externalGame.Id
                         = csv.GetField<long?>("id");
-
                     externalGame.Uid = csv.GetField("uid");
+
+                    var gameId = csv.GetField<long?>("game");
+                    externalGame.Game = gameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(gameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
+
+                    var platformId = csv.GetField<long?>("platform");
+                    externalGame.Platform = platformId.HasValue ? new IdentityOrValue<IGDB.Models.Platform>(platformId.Value) : new IdentityOrValue<IGDB.Models.Platform>(-1);
 
                     externalGames.Add(externalGame);
                 }
@@ -212,6 +216,10 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
                     website.Url = csv.GetField<string>("url");
                     website.Id = csv.GetField<long?>("id");
                     website.Category = (WebsiteCategory)csv.GetField<long?>("category")!;
+
+                    var gameId = csv.GetField<long?>("game");
+
+                    website.Game = gameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(gameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
 
                     websites.Add(website);
                 }

@@ -5,6 +5,7 @@ using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Interfaces;
 using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.IGDBSyncServices.Builders;
+using PlaylistApp.Server.Services.IGDBSyncServices.DatabaseProcessors;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices
 {
@@ -12,10 +13,12 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
     {
         public IDbContextFactory<PlaylistDbContext> dbContextFactory { get; set; }
         public PlatformGameBuilder platformGameBuilder { get; set; }
-        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory, PlatformGameBuilder platformGameBuilder)
+        public IDatabaseProcessor databaseProcessor { get; set; }
+        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory, PlatformGameBuilder platformGameBuilder, IDatabaseProcessor databaseProcessor)
         {
             this.dbContextFactory = dbContextFactory;
             this.platformGameBuilder = platformGameBuilder;
+            this.databaseProcessor = databaseProcessor;
         }
 
         public async Task HandleCompanyDifferences(List<Company> localCompanies)
@@ -145,15 +148,15 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
 
             var itemsToRemove = allGames.Where(g => gamesToRemoveSet.Contains(g)).ToList();
 
+            await databaseProcessor.DeleteRangeAsync(itemsToRemove);
+            await databaseProcessor.AddRangeAsync(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
 
-            context.RemoveRange(itemsToRemove);
-            context.AddRange(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
-
-            var igdbIdTowatchedGames = allGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            var igdbIdToTrackedGames = allGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            List<PlaylistApp.Server.Data.Game> updatedGames = new();
             foreach (var checksumChange in differences.ChecksumsThatChanged ?? [])
             {
                 var correctRow = igdbIdToLocal[checksumChange?.IgdbId ?? throw new Exception()];
-                var changedGame = igdbIdTowatchedGames[checksumChange.IgdbId ?? 0];
+                var changedGame = igdbIdToTrackedGames[checksumChange.IgdbId ?? 0];
 
                 if (changedGame != null)
                 {
@@ -165,33 +168,40 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                     changedGame.PublishDate = correctRow.PublishDate;
                     changedGame.Title = correctRow.Title;
 
-                    context.Update(changedGame);
+                    updatedGames.Add(changedGame);
                 }
             }
 
-            await context.SaveChangesAsync();
+            await databaseProcessor.UpdateRangeAsync(updatedGames);
             return differences;
         }
 
 
         internal async Task HandlePlatformGameDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
         {
-            var igdbIdToLocalGame = localGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
-            
             var context = await dbContextFactory.CreateDbContextAsync();
             var allGames = await context.Games
                 .Include(x => x.PlatformGames)
                 .Where(x => x.IgdbId != null) 
-                .ToDictionaryAsync(x => x.IgdbId!.Value, x => x);
+                .ToListAsync();
 
+            var IgdbIdToLocalGame = localGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            var IgdbIdToActualGame = allGames.ToDictionary(x => x.IgdbId!.Value, x => x);
+
+            await platformGameBuilder.Setup(IgdbIdToLocalGame, IgdbIdToActualGame);
 
             //Handle possible platform game differences
             foreach (var idDif in gameDifferences.ChecksumsThatChanged ?? [])
             {
-                var localGameInQuestion = igdbIdToLocalGame[idDif.IgdbId ?? 0].PlatformIds;
-                var actualGameInQuestion = allGames[idDif.IgdbId ?? 0];
-                var actualGamesPlatformGameIDs = actualGameInQuestion.PlatformGames.Select(x => x.PlatformId);
+                if(!IgdbIdToActualGame.ContainsKey(idDif.IgdbId ?? 0))
+                {
+                    continue;
+                }
 
+                var localGameInQuestion = IgdbIdToLocalGame[idDif.IgdbId ?? 0].PlatformIds;
+                var actualGameInQuestion = IgdbIdToActualGame[idDif.IgdbId ?? 0];
+
+                var actualGamesPlatformGameIDs = actualGameInQuestion.PlatformGames.Select(x => x.PlatformId).Where(x => !Strainer.FlaggedPlatforms.Contains(x));
                 var onlyInLocal = localGameInQuestion.Except(actualGamesPlatformGameIDs).ToList();
                 var onlyInActual = actualGamesPlatformGameIDs.Except(localGameInQuestion).ToList();
 
@@ -199,18 +209,32 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                 {
                     foreach (var platform in onlyInActual)
                     {
-                        context.Remove(actualGameInQuestion.PlatformGames.First(x => x.PlatformId == platform));
+                        context.PlatformGames.Remove(actualGameInQuestion.PlatformGames.First(x => x.PlatformId == platform));
                     }
                 }
-
                 if (onlyInLocal is not null)
                 {
-
+                    foreach (var platformId in onlyInLocal)
+                    {
+                        var possiblePlatform = platformGameBuilder.MakePlatformGame(idDif.IgdbId ?? 0, platformId); 
+                        if (possiblePlatform is not null)
+                        {
+                            context.PlatformGames.Add(possiblePlatform);
+                        }
+                    }
                 }
-
             }
 
+            foreach (var id in gameDifferences.IgdbIdsNeededToBeAdded ?? [])
+            {
+                var platformGames = platformGameBuilder.MakePlatfromGames(id);
+                if(platformGames is not null)
+                {
+                    context.PlatformGames.AddRange(platformGames);
+                }
+            }
 
+            await context.SaveChangesAsync();
 
             //Add all the new platform games.
         }

@@ -14,11 +14,11 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
         <Link
           key={key}
           to={`/user-library-game/${ug.userGameId}`}
-          className="m-2 w-36"
+          className="m-2 w-24 sm:w-36"
         >
           <div className="relative group">
             <div className="absolute bottom-2 left-2">
-              <div className="hidden group-hover:block">
+              <div className="xs:hidden group-hover:block sm:hidden">
                 <RemoveFromLibButton ugid={ug.userGameId} />
               </div>
             </div>
