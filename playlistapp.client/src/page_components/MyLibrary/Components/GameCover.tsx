@@ -24,7 +24,7 @@ const GameCover = ({ ug }: { ug: UserGame }) => {
       </div>
 
       <div
-        className="absolute bottom-0 right-0 w-24 h-12 bg-white clip-corner rounded-br-xl fill-[#efefef] opacity-90 backdrop-blur-md"
+        className="absolute bottom-0 right-0 w-24 h-12 dark:bg-white bg-black clip-corner rounded-br-xl  opacity-90 backdrop-blur-md"
         style={{
           clipPath: "polygon(100% 0, 0% 100%, 100% 100%)",
         }}
