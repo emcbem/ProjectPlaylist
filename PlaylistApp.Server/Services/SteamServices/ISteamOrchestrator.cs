@@ -5,6 +5,6 @@ namespace PlaylistApp.Server.Services.SteamServices
 {
     public interface ISteamOrchestrator
     {
-        Task<List<ItemAction>> CollectActionItemsFromSteam(SteamActionLogRequest steamActionLogRequest);
+        Task<ItemAction> CollectActionItemsFromSteam(SteamActionLogRequest steamActionLogRequest);
     }
 }

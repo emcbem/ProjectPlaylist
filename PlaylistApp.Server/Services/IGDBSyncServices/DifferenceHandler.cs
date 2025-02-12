@@ -148,8 +148,9 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
 
             var itemsToRemove = allGames.Where(g => gamesToRemoveSet.Contains(g)).ToList();
 
-            await databaseProcessor.DeleteRangeAsync(itemsToRemove);
-            await databaseProcessor.AddRangeAsync(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
+
+            await databaseProcessor.DeleteRangeAsync<Data.Game>(itemsToRemove);
+            await databaseProcessor.AddRangeAsync<Data.Game>(localGames?.Where(x => differences.IgdbIdsNeededToBeAdded?.Contains(x?.IgdbId ?? throw new Exception()) ?? throw new Exception()) ?? []);
 
             var igdbIdToTrackedGames = allGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
             List<PlaylistApp.Server.Data.Game> updatedGames = new();
@@ -172,7 +173,7 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                 }
             }
 
-            await databaseProcessor.UpdateRangeAsync(updatedGames);
+            await databaseProcessor.UpdateRangeAsync<Data.Game>(updatedGames);
             return differences;
         }
 
