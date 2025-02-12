@@ -50,6 +50,12 @@ public class PlaystationController : Controller
         return await PlaystationOrchestrator.OrchestrateInitialAccountAdd(playstationDTO);
     }
 
+    [HttpPost("sync")]
+    public async Task<ItemAction> SyncPlaystationHours(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationOrchestrator.OrchestrateSyncPlaystationGames(playstationDTO);
+    }
+
     [HttpPost("getusersgamelist")]
     public async Task<List<PlaystationGameDTO>> GetPlaystationUsersGameList([FromBody] string accountId)
     {
