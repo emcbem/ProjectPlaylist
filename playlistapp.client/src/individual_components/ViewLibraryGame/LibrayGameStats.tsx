@@ -34,7 +34,7 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
     );
 
   return userEarnedAchievement && userGame ? (
-    <div className="h-fit min-w-fit dark:shadow-[0px_0px_35px_8px_rgba(77,35,66,1)] shadow-[0px_0px_35px_8px_rgba(245,159,137,1)] lg:w-fit rounded-xl flex flex-col items-start py-3 md:mx-8 mx-2 lg:sticky top-[7.5rem] p-2">
+    <div className="h-fit min-w-fit dark:shadow-[0px_0px_35px_8px_rgba(77,35,66,1)] shadow-[0px_0px_35px_8px_rgba(245,159,137,1)] border-2 dark:border-pppurple-600 border-pporange-300 lg:w-fit rounded-xl flex flex-col items-start py-3 md:mx-8 mx-2 lg:sticky top-[7.5rem] p-2">
       {userGame.platformGame.achievements.length > 0 && (
         <>
           <div className="flex md:flex-col flex-row items-center justify-between lg:p-4 p-0 w-full">

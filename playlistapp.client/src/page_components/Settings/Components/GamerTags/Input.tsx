@@ -85,10 +85,10 @@ const Input: FC<{
       {platform.id == 163 && userPlatform && (
         <SteamSyncButton
           userPlatform={userPlatform}
-          //searched={searched}
+          searched={searched}
           isVisible={isVisible}
           userId={userGuid}
-          //accountId={userPlatform.externalPlatformId}
+          accountId={userPlatform.externalPlatformId}
         />
       )}
 

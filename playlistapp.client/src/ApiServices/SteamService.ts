@@ -1,14 +1,23 @@
-import { ActionItem } from "@/@types/steamSummary";
+import { ItemAction } from "@/@types/Combination/itemAction";
+import { SteamActionLogRequest } from "@/@types/Requests/GetRequests/getSteamActionLogRequest";
 import axios from "axios";
 
 export const SteamService = {
-  GetSteamUserActionLog: async (userSteamId: string) => {
-    if (!userSteamId) {
-      console.error("No steam id");
+  GetSteamUserActionLog: async (
+    steamActionLogRequest: SteamActionLogRequest
+  ) => {
+    if (!steamActionLogRequest) {
+      console.error("No Steam Action Log Request provided.");
     }
     try {
-      const response = await axios.post<ActionItem[]>(
-        `${import.meta.env.VITE_URL}/Steam/getuseractionlog/${userSteamId}`
+      const response = await axios.post<ItemAction>(
+        `${import.meta.env.VITE_URL}/Steam/getuseractionlog`,
+        steamActionLogRequest,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -19,14 +28,4 @@ export const SteamService = {
       throw error;
     }
   },
-  // AuthenticateWithSteam: async () => {
-  //   console.log("authenticating in service");
-  //   try {
-  //     this.href
-  //     //await axios.get(`${import.meta.env.VITE_URL}/Steam/auth/steam`);
-  //   } catch (error) {
-  //     console.error("Failed to authenticate with Steam: ", error);
-  //     throw error;
-  //   }
-  // },
 };
