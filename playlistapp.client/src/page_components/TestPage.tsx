@@ -1,26 +1,24 @@
-import { useState } from "react";
-import { SteamQueries } from "@/queries/SteamQueries";
+// import { useState } from "react";
+// import { SteamQueries } from "@/queries/SteamQueries";
 // import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 
 const TestPage = () => {
-  // const { user, isAuthenticated } = useAuth0();
   const { userGuid } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
-  const [steamId, setSteamId] = useState(""); // State to hold the Steam ID input
-  const { data: games, mutateAsync } =
-    SteamQueries.useGetUserDataForOneGame(steamId);
+  // const { data: games, mutateAsync } =
+  //   SteamQueries.useGetSteamActionLog();
 
-  const handleGetGames = async () => {
-    if (steamId) {
-      await mutateAsync(); // Pass the steamId when mutating
-    } else {
-      console.error("Please enter a Steam ID.");
-    }
-  };
+  // const handleGetGames = async () => {
+  //   if (steamId) {
+  //     await mutateAsync(); // Pass the steamId when mutating
+  //   } else {
+  //     console.error("Please enter a Steam ID.");
+  //   }
+  // };
 
   const handleAuth = async () => {
     if (userGuid != undefined) {
@@ -32,7 +30,7 @@ const TestPage = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <h1 className="text-6xl">Test Page</h1>
+      {/* <h1 className="text-6xl">Test Page</h1>
       <input
         type="text"
         placeholder="Enter Steam ID"
@@ -55,7 +53,7 @@ const TestPage = () => {
             </p>
           </div>
         ))}
-      </div>
+      </div> */}
       <button onClick={handleAuth}>Steam Auth</button>
     </div>
   );

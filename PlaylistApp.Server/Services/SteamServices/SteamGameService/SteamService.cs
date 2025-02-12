@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using NSubstitute;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
@@ -80,9 +81,9 @@ public class SteamService : ISteamService
         return matchingPlatformGames;
     }
 
-    public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
+    public async Task<ItemAction> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
     {
-        List<ItemAction> actionList = new();
+        ItemAction action = new();
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var duplicatePlatformKeys = matchingPlatformGames
@@ -100,21 +101,16 @@ public class SteamService : ISteamService
             var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
             if (steamGame != null)
             {
-                actionList.Add(new ItemAction()
+                action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorType = "Multiple Platforms",
-                    ItemOptions = new List<ItemOption>() {
-                        new ItemOption() {
-                            ErrorText = "Multiple Platforms Found",
-                            GameTitle = pg.Game.Title,
-                            ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
-                        }
-                    }
+                    ErrorText = "Multiple Platforms Found",
+                    GameTitle = pg.Game.Title,
+                    ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
                 });
             }
         }
 
-        return actionList;
+        return action;
     }
 
     public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid)
@@ -171,8 +167,10 @@ public class SteamService : ISteamService
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
+    public async Task<ItemAction> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
     {
+        ItemAction action = new ItemAction();
+
         var duplicatePlatformKeys = matchingPlatformGames
             .GroupBy(pg => pg.PlatformKey)
             .Where(g => g.Count() > 1)
@@ -196,7 +194,6 @@ public class SteamService : ISteamService
 
         HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
 
-        List<ItemAction> actionList = new List<ItemAction>();
 
         foreach (PlatformGame pg in matchingPlatformGames)
         {
@@ -207,21 +204,17 @@ public class SteamService : ISteamService
 
             if (ug.TimePlayed != steamGame?.PlaytimeForever)
             {
-                actionList.Add(new ItemAction()
+                action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorType = "Time Difference Found",
-                    ItemOptions = new List<ItemOption>() {
-                        new ItemOption() {
-                            ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
-                            GameTitle = ug.PlatformGame.Game.Title,
-                            ResolveUrl = $"/action/platforms/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
-                        }
-                    }
+                    ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
+                    GameTitle = ug.PlatformGame.Game.Title,
+                    ResolveUrl = $"/action/hours/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
                 });
             }
         }
 
-        return actionList;
+        action.ErrorType = "Time Difference Found";
+        return action;
     }
 
     public string ExtractSteamIdFromUrl(string urlParams)
