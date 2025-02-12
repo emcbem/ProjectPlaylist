@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.DTOs;
+﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Requests.AddRequests;
@@ -81,7 +82,8 @@ public class SyncPlaystationService
 
                 if (userGame.PlatformGame.PlatformKey == playstationGame.Id.ToString() &&
                     CategoryToPlatform.ContainsKey(playstationGame.Category) &&
-                    CategoryToPlatform[playstationGame.Category] == userGame.PlatformGame.Platform.Id)
+                    CategoryToPlatform[playstationGame.Category] == userGame.PlatformGame.Platform.Id &&
+                    KnownGames.All(x => x.TimePlayed != playstationGame.PlayDuration))
                 {
                     if (userGame.TimePlayed != playstationGame.PlayDuration)
                     {
