@@ -130,7 +130,6 @@ namespace PlaylistApp.Server.Services.IGDBServices
             int gameId;
 
 
-#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return igdbInvolvedCompanies.Select(x =>
             {
                 if (localGameDict.TryGetValue((int)x.Game.Id!, out gameId))
@@ -141,12 +140,12 @@ namespace PlaylistApp.Server.Services.IGDBServices
                         CompanyId = (int)x.Company.Id!,
                         IsDeveloper = x.Developer,
                         IsPublisher = x.Publisher,
-                        GameId = gameId
+                        GameId = gameId,
+                        Id = (int?)x.Id ?? 0
                     };
                 }
                 return null;
-            }).Where(x => x is not null).Select(x => x as Data.InvolvedCompany).ToList();
-#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+            }).Where(x => x is not null).Cast<Data.InvolvedCompany>().ToList();
         }
 
         public static List<Data.GameGenre> TranslateIGDBGamesIntoLocalGameGenres(List<IGDB.Models.Game> igdbGames, List<Data.Game> localGames)

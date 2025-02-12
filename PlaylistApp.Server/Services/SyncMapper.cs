@@ -15,6 +15,7 @@ namespace PlaylistApp.Server.Services
             builder.Services.AddSingleton<IDownloader, DownloadCsv>();
             builder.Services.AddSingleton<IDataGetter, IGDBDataGetter>();
             builder.Services.AddSingleton<PlatformGameBuilder>();
+            builder.Services.AddSingleton<InvolvedCompanyBuilder>();
             builder.Services.AddSingleton<IDatabaseProcessor, DatabaseProcessor>();
         }
     }

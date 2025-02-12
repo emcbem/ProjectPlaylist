@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.Services.IGDBServices;
+﻿using PlaylistApp.Server.Interfaces;
+using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices;
@@ -45,10 +46,23 @@ public class SyncOrchestrator
         var igdbRatings = await dataGetter.GetRatings();    
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
         var gameDifference =  await differenceHandler.HandleGameDifferences(localGames);
-
-        await OrchestratePlatformGames(gameDifference, localGames);
+        gameDifference.ChecksumsThatChanged = igdbGames.Cast<IChecksum>().ToHashSet();
+        
+        //await OrchestratePlatformGames(gameDifference, localGames);
+        //await OrchestrateGameGenres(gameDifference, localGames);
+        await OrchestrateInvolvedCompanies(gameDifference, localGames);
 
         return gameDifference;
+    }
+
+    private async Task OrchestrateInvolvedCompanies(DifferencesToCheck gameDifference, List<Data.Game> localGames)
+    {
+        await differenceHandler.HandleInvolvedCompanyDifferences(gameDifference, localGames);
+    }
+
+    private async Task OrchestrateGameGenres(DifferencesToCheck gameDifference, List<Data.Game> localGames)
+    {
+        await differenceHandler.HandleGameGenreDifferences(gameDifference, localGames);
     }
 
     public async Task OrchestratePlatformGames(DifferencesToCheck gameDifferences, List<Data.Game> localGames)

@@ -13,12 +13,14 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
     {
         public IDbContextFactory<PlaylistDbContext> dbContextFactory { get; set; }
         public PlatformGameBuilder platformGameBuilder { get; set; }
+        public InvolvedCompanyBuilder involvedCompanyBuilder { get; set; }
         public IDatabaseProcessor databaseProcessor { get; set; }
-        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory, PlatformGameBuilder platformGameBuilder, IDatabaseProcessor databaseProcessor)
+        public DifferenceHandler(IDbContextFactory<PlaylistDbContext> dbContextFactory, PlatformGameBuilder platformGameBuilder, IDatabaseProcessor databaseProcessor, InvolvedCompanyBuilder involvedCompanyBuilder)
         {
             this.dbContextFactory = dbContextFactory;
             this.platformGameBuilder = platformGameBuilder;
             this.databaseProcessor = databaseProcessor;
+            this.involvedCompanyBuilder = involvedCompanyBuilder;
         }
 
         public async Task HandleCompanyDifferences(List<Company> localCompanies)
@@ -226,6 +228,7 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                 }
             }
 
+            //Add all the new platform games.
             foreach (var id in gameDifferences.IgdbIdsNeededToBeAdded ?? [])
             {
                 var platformGames = platformGameBuilder.MakePlatfromGames(id);
@@ -236,8 +239,72 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
             }
 
             await context.SaveChangesAsync();
+        }
+
+        internal async Task HandleGameGenreDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
+        {
+            var context = await dbContextFactory.CreateDbContextAsync();
+            var allGames = await context.Games
+                .Include(x => x.GameGenres)
+                .Where(x => x.IgdbId != null)
+                .ToListAsync();
+
+            var IgdbIdToLocalGame = localGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            var IgdbIdToActualGame = allGames.ToDictionary(x => x.IgdbId!.Value, x => x);
+
+            var gameGenreBuilder = new GameGenreBuilder(IgdbIdToLocalGame, IgdbIdToActualGame);
+
+            //Handle possible platform game differences
+            foreach (var idDif in gameDifferences.ChecksumsThatChanged ?? [])
+            {
+                if (!IgdbIdToActualGame.ContainsKey(idDif.IgdbId ?? 0))
+                {
+                    continue;
+                }
+
+                var localGameInQuestion = IgdbIdToLocalGame[idDif.IgdbId ?? 0].GenreIds;
+                var actualGameInQuestion = IgdbIdToActualGame[idDif.IgdbId ?? 0];
+
+                var actualGameGenreIDs = actualGameInQuestion.GameGenres.Select(x => x.GenreId);
+                var onlyInLocal = localGameInQuestion.Except(actualGameGenreIDs).ToList();
+                var onlyInActual = actualGameGenreIDs.Except(localGameInQuestion).ToList();
+
+                if (onlyInActual is not null)
+                {
+                    foreach (var genre in onlyInActual)
+                    {
+                        context.GameGenres.Remove(actualGameInQuestion.GameGenres.First(x => x.GenreId == genre));
+                    }
+                }
+                if (onlyInLocal is not null)
+                {
+                    foreach (var genreId in onlyInLocal)
+                    {
+                        var possibleGenre = gameGenreBuilder.MakeGameGenre(idDif.IgdbId ?? 0, genreId);
+                        if (possibleGenre is not null)
+                        {
+                            context.GameGenres.Add(possibleGenre);
+                        }
+                    }
+                }
+            }
 
             //Add all the new platform games.
+            foreach (var id in gameDifferences.IgdbIdsNeededToBeAdded ?? [])
+            {
+                var gameGenres = gameGenreBuilder.MakeGameGenres(id);
+                if (gameGenres is not null)
+                {
+                    context.GameGenres.AddRange(gameGenres);
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        internal async Task HandleInvolvedCompanyDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
+        {
+            await Task.CompletedTask;
         }
     }
 }
