@@ -270,6 +270,8 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
                     var gameId = csv.GetField<long?>("game");
                     involvedCompany.Game = gameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(gameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
 
+                    involvedCompany.Id = csv.GetField<int>("id");
+
                     involvedCompanies.Add(involvedCompany);
                 }
             }

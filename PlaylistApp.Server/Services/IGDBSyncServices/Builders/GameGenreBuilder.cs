@@ -7,9 +7,8 @@ public class GameGenreBuilder
     private Dictionary<int, Data.Game> IgdbIdToLocalGames { get; set; } = new();
     private Dictionary<int, Data.Game> IgdbIdToActualGames { get; set; } = new();
 
-    public async Task Setup(Dictionary<int, PlaylistApp.Server.Data.Game> localGames, Dictionary<int, PlaylistApp.Server.Data.Game> allGames)
+    public GameGenreBuilder(Dictionary<int, PlaylistApp.Server.Data.Game> localGames, Dictionary<int, PlaylistApp.Server.Data.Game> allGames)
     {
-        await Task.CompletedTask;
         IgdbIdToLocalGames = localGames;
         IgdbIdToActualGames = allGames;
     }
