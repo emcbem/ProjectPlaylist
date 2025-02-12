@@ -41,14 +41,16 @@ public class SteamController : Controller
 		return Redirect(redirectUrl);
 	}
 
-	[HttpGet("verify/{userId}")]
-	public IActionResult Verify(string userId)
+	[HttpGet("verify/{userGuid}")]
+	public IActionResult Verify(string userGuid)
 	{
 		string urlParams = Request.GetDisplayUrl();
 
 		string steamId = steamService.ExtractSteamIdFromUrl(urlParams);
 
-		steamService.AddSteamKeyToUser(userId, steamId);
+		steamService.AddSteamKeyToUser(userGuid, steamId);
+
+		steamService.AddSteamUsernameToUser(userGuid, steamId);
 
 		string frontendBaseUrl = config["FrontendBaseUrl"] ?? "http://localhost:5173";
 		return Redirect($"{frontendBaseUrl}?steamid={steamId}");
