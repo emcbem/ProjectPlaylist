@@ -1,30 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PsnApiWrapperNet.Model;
 using System;
 
 namespace PlaylistApp.Server.Services.UserServices;
 
 internal static class UserIncluder
 {
-	public static IQueryable<Data.UserAccount> IncludeUser(this DbSet<Data.UserAccount> user)
-	{
-		return user.Include(x => x.UserGenres)
-			.Include(x => x.UserPlatforms)
-			.Include(x => x.Lists)
-			.Include(x => x.Notifications)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Game)
-						.ThenInclude(x => x.InvolvedCompanies)
-							.ThenInclude(x => x.Company)
-			.Include(x => x.UserGames)
-				.ThenInclude(x => x.PlatformGame)
-					.ThenInclude(x => x.Platform)
-			.Include(x => x.UserImage);
-	}
+    public static IQueryable<Data.UserAccount> IncludeDumbUser(this DbSet<Data.UserAccount> user)
+    {
+        return user
+            .Include(x => x.UserImage);
+    }
 }
 
 public class UserService : IUserService
@@ -36,7 +27,45 @@ public class UserService : IUserService
 		this.dbContextFactory = dbContextFactory;
 	}
 
-	public async Task<bool> DeleteUserById(Guid userId)
+    public async Task<Data.UserAccount> GetUser(System.Linq.Expressions.Expression<Func<UserAccount, bool>>? predicate)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var user = context.UserAccounts
+        .Include(x => x.UserImage)
+        .FirstOrDefault(predicate);
+
+        if (user != null)
+        {
+            user.UserGenres = context.UserGenres
+                .Where(g => g.UserId == user.Id)
+                .ToList();
+
+            user.UserPlatforms = context.UserPlatforms
+                .Where(p => p.UserId == user.Id)
+                .ToList();
+
+            user.Lists = context.Lists
+                .Where(l => l.UserId == user.Id)
+                .ToList();
+
+            user.Notifications = context.Notifications
+                .Where(n => n.UserId == user.Id)
+                .OrderByDescending(n => n.DateNotified)
+                .ToList();
+
+            user.UserGames = context.UserGames
+                .Where(ug => ug.UserId == user.Id)
+                .OrderByDescending(ug => ug.DateAdded)
+                .Include(ug => ug.PlatformGame)
+                    .ThenInclude(pg => pg.Game)
+                .ToList();
+        }
+
+		return user;
+    }
+
+    public async Task<bool> DeleteUserById(Guid userId)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -63,13 +92,7 @@ public class UserService : IUserService
 
 	public async Task<UserDTO> GetUserByAuthId(string authId)
 	{
-		using var context = await dbContextFactory.CreateDbContextAsync();
-
-		var user = await context.UserAccounts
-			.IncludeUser()
-			.Where(x => x.AuthId == authId)
-			.FirstOrDefaultAsync();
-
+		var user = await GetUser(x => x.AuthId == authId);
 		if (user is null)
 		{
 			return new UserDTO();
@@ -80,12 +103,7 @@ public class UserService : IUserService
 
 	public async Task<UserDTO> GetUserById(Guid guid)
 	{
-		using var context = await dbContextFactory.CreateDbContextAsync();
-
-		var user = await context.UserAccounts
-			.IncludeUser()
-			.Where(x => x.Guid == guid)
-			.FirstOrDefaultAsync();
+		var user = await GetUser(x => x.Guid == guid);
 
 		if (user == null)
 		{
@@ -97,12 +115,7 @@ public class UserService : IUserService
 
 	public async Task<UserDTO> GetUsersByName(string username)
 	{
-		using var context = await dbContextFactory.CreateDbContextAsync();
-
-		var user = await context.UserAccounts
-			.IncludeUser()
-			.Where(x => x.Username.Contains(username))
-			.FirstOrDefaultAsync();
+		var user = await GetUser(x => x.Username.Contains(username));
 
 		if (user is null)
 		{
@@ -117,7 +130,7 @@ public class UserService : IUserService
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var user = await context.UserAccounts
-            .IncludeUser()
+            .IncludeDumbUser()
             .Where(x => x.Username.ToLower().Contains(searchQuery.ToLower()) || (x.Bio != null && x.Bio.ToLower().Contains(searchQuery.ToLower())))
             .ToListAsync();
 
@@ -133,10 +146,7 @@ public class UserService : IUserService
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
-		var userUnderChange = await context.UserAccounts
-			.IncludeUser()
-			.Where(x => x.Guid == updateUserRequest.Guid)
-			.FirstOrDefaultAsync();
+		var userUnderChange = await GetUser(x => x.Guid == updateUserRequest.Guid);
 
 		if (userUnderChange is null)
 		{
@@ -196,10 +206,7 @@ public class UserService : IUserService
 
 		Guid g = new Guid(guid);
 
-        var user = await context.UserAccounts
-                .IncludeUser()
-                .Where(x => x.Guid == g)
-                .FirstOrDefaultAsync();
+		var user = await GetUser(x => x.Guid == g);
 
         if (user == null)
 		{

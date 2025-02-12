@@ -37,7 +37,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
 
                 if (igdbGame.AgeRatings.Ids is not null && igdbGame.AgeRatings.Ids.Count() > 0 && igdbGame.AgeRatings.Ids.Any(i => ratingsDict.TryGetValue(i, out rating)))
                 {
-                    game.AgeRating = rating!.ToString();
+                    game.AgeRating = rating!.Rating.ToString();
                 }
                 else
                 {
@@ -49,6 +49,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 game.PlatformIds = igdbGame.Platforms.Ids.Select(x => (int)x).ToList();
                 game.GenreIds = igdbGame.Genres.Ids.Select(x => (int)x).ToList();
                 game.InvolvedCompanyIds = igdbGame.InvolvedCompanies.Ids.Select(x => (int)x).ToList();
+                game.Checksum = igdbGame?.Checksum?.ToString();
 
                 return game;
             }).Where(p => p is not null).ToList()!;

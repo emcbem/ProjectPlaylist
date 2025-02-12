@@ -35,6 +35,14 @@ const Input: FC<{
 
   console.log("platform id", platform.id);
 
+  const handleSteamAuth = async () => {
+    if (userGuid != undefined) {
+      window.location.href = `${
+        import.meta.env.VITE_URL
+      }/Steam/auth/${userGuid}`;
+    }
+  };
+
   return (
     <>
       {isVisible == false && searched == false && userPlatform && (
@@ -77,10 +85,10 @@ const Input: FC<{
       {platform.id == 163 && userPlatform && (
         <SteamSyncButton
           userPlatform={userPlatform}
-          //searched={searched}
+          searched={searched}
           isVisible={isVisible}
           userId={userGuid}
-          //accountId={userPlatform.externalPlatformId}
+          accountId={userPlatform.externalPlatformId}
         />
       )}
 
@@ -105,8 +113,8 @@ const Input: FC<{
       )}
 
       {userPlatforms &&
-        userPlatforms.filter((x) => x.platformId == platform.id).length <=
-          0 && (
+        userPlatforms.filter((x) => x.platformId == platform.id).length <= 0 &&
+        (platform.id != 163 ? (
           <p
             role="button"
             onClick={() => setIsVisible(!isVisible)}
@@ -114,9 +122,19 @@ const Input: FC<{
               isVisible ? "hidden" : ""
             } ${userPlatform || searched ? "hidden" : ""} mt-2`}
           >
-            Add a Gamertag for {platform.name}
+            Add a Gamertag for{platform.name}
           </p>
-        )}
+        ) : (
+          <p
+            role="button"
+            onClick={handleSteamAuth}
+            className={`ml-4 text-teal-400 underline underline-offset-2 ${
+              isVisible ? "hidden" : ""
+            } ${userPlatform || searched ? "hidden" : ""} mt-2`}
+          >
+            Authenticate with {platform.name}
+          </p>
+        ))}
     </>
   );
 };

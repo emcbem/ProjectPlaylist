@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using NSubstitute;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using RestEase;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.SteamServices.SteamGameService;
@@ -17,6 +20,7 @@ public class SteamService : ISteamService
     private readonly HttpClient client;
     private readonly IConfiguration config;
     private readonly IUserPlatformService userPlatformService;
+    private readonly string steamKey;
 
     public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory,
         HttpClient client,
@@ -27,13 +31,13 @@ public class SteamService : ISteamService
         this.client = client;
         this.config = config;
         this.userPlatformService = userPlatformService;
+        this.steamKey = config["steamkey"] ?? throw new Exception("No Steam Key provided in configuration.");
     }
 
     public List<ItemAction> SteamActions { get; set; } = new();
 
     public async Task<OwnedGamesResponse> GetGamesFromUserBasedOffOfSteamId(string steamId)
     {
-        var steamKey = config["steamkey"];
         string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steamKey}&steamid={steamId}&format=json";
 
         try
@@ -77,9 +81,9 @@ public class SteamService : ISteamService
         return matchingPlatformGames;
     }
 
-    public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
+    public async Task<ItemAction> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
     {
-        List<ItemAction> actionList = new();
+        ItemAction action = new();
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var duplicatePlatformKeys = matchingPlatformGames
@@ -97,21 +101,16 @@ public class SteamService : ISteamService
             var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
             if (steamGame != null)
             {
-                actionList.Add(new ItemAction()
+                action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorType = "Multiple Platforms",
-                    ItemOptions = new List<ItemOption>() {
-                        new ItemOption() {
-                            ErrorText = "Multiple Platforms Found",
-                            GameTitle = pg.Game.Title,
-                            ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
-                        }
-                    }
+                    ErrorText = "Multiple Platforms Found",
+                    GameTitle = pg.Game.Title,
+                    ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
                 });
             }
         }
 
-        return actionList;
+        return action;
     }
 
     public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid)
@@ -168,8 +167,10 @@ public class SteamService : ISteamService
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
+    public async Task<ItemAction> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
     {
+        ItemAction action = new ItemAction();
+
         var duplicatePlatformKeys = matchingPlatformGames
             .GroupBy(pg => pg.PlatformKey)
             .Where(g => g.Count() > 1)
@@ -193,7 +194,6 @@ public class SteamService : ISteamService
 
         HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
 
-        List<ItemAction> actionList = new List<ItemAction>();
 
         foreach (PlatformGame pg in matchingPlatformGames)
         {
@@ -204,21 +204,17 @@ public class SteamService : ISteamService
 
             if (ug.TimePlayed != steamGame?.PlaytimeForever)
             {
-                actionList.Add(new ItemAction()
+                action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorType = "Time Difference Found",
-                    ItemOptions = new List<ItemOption>() {
-                        new ItemOption() {
-                            ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
-                            GameTitle = ug.PlatformGame.Game.Title,
-                            ResolveUrl = $"/action/platforms/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
-                        }
-                    }
+                    ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
+                    GameTitle = ug.PlatformGame.Game.Title,
+                    ResolveUrl = $"/action/hours/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
                 });
             }
         }
 
-        return actionList;
+        action.ErrorType = "Time Difference Found";
+        return action;
     }
 
     public string ExtractSteamIdFromUrl(string urlParams)
@@ -234,13 +230,13 @@ public class SteamService : ISteamService
         }
     }
 
-    public void AddSteamKeyToUser(string userId, string steamId)
+    public void AddSteamKeyToUser(string userGuid, string steamId)
     {
         if (!string.IsNullOrEmpty(steamId))
         {
             AddUserPlatformRequest updateUserPlatformRequest = new AddUserPlatformRequest()
             {
-                UserId = Guid.Parse(userId),
+                UserId = Guid.Parse(userGuid),
                 ExternalPlatformId = steamId,
                 PlatformId = 163, // platform id for Steam
             };
@@ -249,4 +245,40 @@ public class SteamService : ISteamService
         }
     }
 
+    public async Task AddSteamUsernameToUser(string userGuid, string steamId)
+    {
+        using var context = dbContextFactory.CreateDbContext();
+        ArgumentNullException.ThrowIfNull(steamId);
+
+        string username = String.Empty;
+
+        var playerSummaryResponse = await client.GetStringAsync($"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={steamKey}&steamids={steamId}");
+
+        using (JsonDocument doc = JsonDocument.Parse(playerSummaryResponse))
+        {
+            username = doc.RootElement
+                            .GetProperty("response")
+                            .GetProperty("players")[0]
+                            .GetProperty("personaname")
+                            .GetString() ?? throw new Exception("Error fetching Steam Persona Name");
+        }
+
+        var usr = context.UserAccounts.Where(x => x.Guid == new Guid(userGuid)).FirstOrDefault();
+
+        var usrPlatform = context.UserPlatforms.Where(x => x.UserId == usr.Id && x.ExternalPlatformId == steamId).FirstOrDefault();
+
+        if (usrPlatform is null)
+        {
+            throw new Exception("Could not find user platform to update");
+        }
+
+        UpdateUserPlatformRequest updateUserPlatformRequest = new UpdateUserPlatformRequest()
+        {
+            Id = usrPlatform.Id,
+            ExternalPlatformId = steamId,
+            GamerTag = username,
+        };
+
+        await userPlatformService.UpdateUserPlatform(updateUserPlatformRequest);
+    }
 }
