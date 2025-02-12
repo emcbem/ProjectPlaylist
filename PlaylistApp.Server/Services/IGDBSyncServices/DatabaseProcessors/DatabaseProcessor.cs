@@ -22,7 +22,7 @@ public class DatabaseProcessor : IDatabaseProcessor
 
         await using var context = await dbContextFactory.CreateDbContextAsync();
 
-        foreach (var batch in items.Chunk(500))
+        foreach (var batch in items.Chunk(BatchSize))
         {
             await dbAction(context, batch);
         }
@@ -32,7 +32,7 @@ public class DatabaseProcessor : IDatabaseProcessor
     {
         await ProcessBatchAsync(itemsToAdd, async (context, batch) =>
         {
-            context.AddRange(batch);
+            
             await context.SaveChangesAsync();
         });
     }
@@ -41,7 +41,13 @@ public class DatabaseProcessor : IDatabaseProcessor
     {
         await ProcessBatchAsync(itemsToRemove, async (context, batch) =>
         {
-            context.RemoveRange(batch);
+            if (batch is not null)
+            {
+                foreach (var item in batch)
+                {
+                    context.Remove(item!);
+                }
+            }
             await context.SaveChangesAsync();
         });
     }
@@ -50,7 +56,13 @@ public class DatabaseProcessor : IDatabaseProcessor
     {
         await ProcessBatchAsync(itemsToUpdate, async (context, batch) =>
         {
-            context.UpdateRange(batch);
+            if (batch is not null)
+            {
+                foreach (var item in batch)
+                {
+                    context.Update(item!);
+                }
+            }
             await context.SaveChangesAsync();
 
         });
