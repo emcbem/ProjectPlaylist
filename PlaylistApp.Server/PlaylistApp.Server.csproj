@@ -9,13 +9,9 @@
 
   <ItemGroup>
     <Compile Remove="CSVs\**" />
-    <Compile Remove="Services\NewFolder\**" />
     <Content Remove="CSVs\**" />
-    <Content Remove="Services\NewFolder\**" />
     <EmbeddedResource Remove="CSVs\**" />
-    <EmbeddedResource Remove="Services\NewFolder\**" />
     <None Remove="CSVs\**" />
-    <None Remove="Services\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>

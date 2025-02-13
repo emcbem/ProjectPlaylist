@@ -15,7 +15,7 @@ public class SyncPlaystationService
 
     public Dictionary<string, int> CategoryToPlatform = new Dictionary<string, int>()
     {
-        {"unk", 48},
+        {"unk", 24},
         {"ps1", 7},
         {"ps2", 8},
         {"ps3", 9},
@@ -66,6 +66,61 @@ public class SyncPlaystationService
     {
         var options = new List<ItemOption>();
         int counter = 0;
+
+        //var orderedGames = foundGames.OrderBy(x => x.Name);
+
+        //var mergedGames = foundGames.GroupBy(x => new { x.Name, x.Category}).Select(x =>
+        //{
+        //    var multiGames = x.ToList();
+        //    return multiGames.Aggregate((x, y) =>
+        //    {
+        //        return new PlaystationGameDTO()
+        //        {
+        //            Category = x.Category,
+        //            FirstPlayedDateTime = (x.FirstPlayedDateTime < y.FirstPlayedDateTime ? x.FirstPlayedDateTime : y.FirstPlayedDateTime),
+        //            LastPlayedDateTime = (x.LastPlayedDateTime > y.LastPlayedDateTime ? x.LastPlayedDateTime : y.LastPlayedDateTime),
+        //            Id = x.Id,
+        //            ImageUrl = x.ImageUrl,
+        //            Name = x.Name,
+        //            PlayCount = x.PlayCount + y.PlayCount,
+        //            PlayDuration = x.PlayDuration + y.PlayDuration
+        //        };
+        //    });
+        //}
+
+        //);
+        //var prevGameName = "";
+        //var prevCategory = "";
+        //PlaystationGameDTO prevGame = new();
+
+        //foreach (var game in orderedGames)
+        //{
+        //    if (game.Name == prevGameName && game.Category == prevCategory)
+        //    {
+        //        var newGame = new PlaystationGameDTO
+        //        {
+        //            Category = game.Category,
+        //            FirstPlayedDateTime = (game.FirstPlayedDateTime < prevGame.FirstPlayedDateTime ? game.FirstPlayedDateTime : prevGame.FirstPlayedDateTime),
+        //            LastPlayedDateTime = (game.LastPlayedDateTime > prevGame.LastPlayedDateTime ? game.LastPlayedDateTime : prevGame.LastPlayedDateTime),
+        //            Id = game.Id,
+        //            ImageUrl = game.ImageUrl,
+        //            Name = game.Name,
+        //            PlayCount = game.PlayCount + prevGame.PlayCount,
+        //            PlayDuration = game.PlayDuration + prevGame.PlayDuration
+        //        };
+
+        //        FoundGames.Remove(game);
+        //        FoundGames.Remove(prevGame);
+        //        FoundGames.Add(newGame);
+        //    }
+        //    else
+        //    {
+        //        prevGameName = game.Name;
+        //        prevCategory = game.Category;
+        //        prevGame = game;
+        //    }
+        //}
+
 
         foreach (var userGame in knownGames)
         {
