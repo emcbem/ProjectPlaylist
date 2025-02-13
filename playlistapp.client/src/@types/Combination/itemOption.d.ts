@@ -3,5 +3,5 @@ export interface ItemOption {
   resolveUrl: string;
   gameTitle: string;
   hours: number;
-  uniqueId: number;
+  uniqueId: string;
 }
