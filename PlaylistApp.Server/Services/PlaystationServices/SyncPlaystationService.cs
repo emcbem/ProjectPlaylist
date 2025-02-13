@@ -95,7 +95,7 @@ public class SyncPlaystationService
                             ResolveUrl = $"/action/hours?hours={userGame.TimePlayed}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
                             GameTitle = $"{userGame.PlatformGame.Game.Title}",
                             Hours = (int)userGame.TimePlayed,
-                            UniqueId = counter
+                            UniqueId = $"Hour{counter}"
                         };
 
                         var option2 = new ItemOption
@@ -104,7 +104,7 @@ public class SyncPlaystationService
                             ResolveUrl = $"/action/hours?hours={playstationGame.PlayDuration}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
                             GameTitle = $"{userGame.PlatformGame.Game.Title}", 
                             Hours = playstationGame.PlayDuration,
-                            UniqueId= counter
+                            UniqueId= $"Hour{counter}"
                         };
 
                         options.Add(option1);

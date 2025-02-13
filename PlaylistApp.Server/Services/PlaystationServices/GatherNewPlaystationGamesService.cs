@@ -106,7 +106,7 @@ public class GatherNewPlaystationGamesService
                                 ResolveUrl = $"/action/platforms?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
                                 GameTitle = platformGame[0].Game.Title,
                                 Hours = game.PlayDuration,
-                                UniqueId = counter
+                                UniqueId = $"Platform{counter}"
                             };
                         });
 
