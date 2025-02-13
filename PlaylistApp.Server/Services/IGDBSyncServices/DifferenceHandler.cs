@@ -176,6 +176,9 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
             }
 
             await databaseProcessor.UpdateRangeAsync<Data.Game>(updatedGames);
+
+            differences.ChecksumsThatChanged = allGames.Cast<IChecksum>().ToHashSet();
+
             return differences;
         }
 
@@ -304,7 +307,63 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
 
         internal async Task HandleInvolvedCompanyDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
         {
-            await Task.CompletedTask;
+            var context = await dbContextFactory.CreateDbContextAsync();
+            var allGames = await context.Games
+                .Include(x => x.InvolvedCompanies)
+                .Where(x => x.IgdbId != null)
+                .ToListAsync();
+
+            var IgdbIdToLocalGame = localGames.ToDictionary(x => x.IgdbId ?? 0, x => x);
+            var IgdbIdToActualGame = allGames.ToDictionary(x => x.IgdbId!.Value, x => x);
+
+            await involvedCompanyBuilder.Setup(IgdbIdToLocalGame, IgdbIdToActualGame);
+
+            //Handle possible platform game differences
+            foreach (var idDif in gameDifferences.ChecksumsThatChanged ?? [])
+            {
+                if (!IgdbIdToActualGame.ContainsKey(idDif.IgdbId ?? 0))
+                {
+                    continue;
+                }
+
+                var localGameInQuestion = IgdbIdToLocalGame[idDif.IgdbId ?? 0].InvolvedCompanyIds;
+                var actualGameInQuestion = IgdbIdToActualGame[idDif.IgdbId ?? 0];
+
+                var actualGameGenreIDs = actualGameInQuestion.InvolvedCompanies.Select(x => x.Id);
+                var onlyInLocal = localGameInQuestion.Except(actualGameGenreIDs).ToList();
+                var onlyInActual = actualGameGenreIDs.Except(localGameInQuestion).ToList();
+
+                if (onlyInActual is not null)
+                {
+                    foreach (var involvedCompany in onlyInActual)
+                    {
+                        context.InvolvedCompanies.Remove(actualGameInQuestion.InvolvedCompanies.First(x => x.Id == involvedCompany));
+                    }
+                }
+                if (onlyInLocal is not null)
+                {
+                    foreach (var involvedCompanyId in onlyInLocal)
+                    {
+                        var possibleCompany = involvedCompanyBuilder.MakeInvolvedCompany(idDif.IgdbId ?? 0, involvedCompanyId);
+                        if (possibleCompany is not null)
+                        {
+                            context.InvolvedCompanies.Add(possibleCompany);
+                        }
+                    }
+                }
+            }
+
+            //Add all the new platform games.
+            foreach (var id in gameDifferences.IgdbIdsNeededToBeAdded ?? [])
+            {
+                var involvedCompanies = involvedCompanyBuilder.MakeInvolvedCompanies(id);
+                if (involvedCompanies is not null)
+                {
+                    context.InvolvedCompanies.AddRange(involvedCompanies);
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }
