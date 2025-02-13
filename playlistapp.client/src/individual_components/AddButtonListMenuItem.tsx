@@ -30,7 +30,6 @@ const AddButtonListMenuItem: React.FC<props> = ({
         gamesToRemove: [],
         newGames: [{ ...game, platforms: [], reviews: [] }],
       };
-      console.log(updateListRequest);
       await updateListMutation(updateListRequest);
     }
   };

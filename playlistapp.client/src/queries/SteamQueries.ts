@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const SteamQueries = {
   useGetSteamActionLog: (steamActionLogRequest: SteamActionLogRequest) => {
-    console.log("IN STEAM QUERY YAY");
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: () =>

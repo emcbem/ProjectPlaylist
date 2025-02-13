@@ -9,6 +9,7 @@ using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using RestEase;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -95,20 +96,30 @@ public class SteamService : ISteamService
         var gamesWithSamePlatformKeys = matchingPlatformGames
             .Where(pg => duplicatePlatformKeys.Contains(pg.PlatformKey))
             .ToList();
-
+        int counter = 0;
+        string previousGame = "";
         foreach (PlatformGame pg in gamesWithSamePlatformKeys)
         {
             var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
             if (steamGame != null)
             {
+                if (pg.Game.Title != previousGame)
+                {
+                    counter++;
+                }
+                previousGame = pg.Game.Title;
+
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = "Multiple Platforms Found",
+                    ErrorText = pg.Platform.PlatformName,
+                    ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}",
                     GameTitle = pg.Game.Title,
-                    ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}"
+                    Hours=steamGame.PlaytimeForever,
+                    UniqueId = $"Platform{counter}"
                 });
             }
         }
+        action.ErrorType = "Platform Mismatch! >=(";
 
         return action;
     }
@@ -193,7 +204,7 @@ public class SteamService : ISteamService
             .ToList();
 
         HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
-
+        int counter = 0;
 
         foreach (PlatformGame pg in matchingPlatformGames)
         {
@@ -202,13 +213,25 @@ public class SteamService : ISteamService
 
 
 
-            if (ug.TimePlayed != steamGame?.PlaytimeForever)
+            if (ug!.TimePlayed != steamGame?.PlaytimeForever)
             {
+                counter++;
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = $"We found {ug.TimePlayed} minutes in Playlist but {steamGame?.PlaytimeForever} minutes in Steam...",
+                    ErrorText = $"Hour Mismatch!",
+                    ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
-                    ResolveUrl = $"/action/hours/?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}"
+                    Hours = steamGame!.PlaytimeForever,
+                    UniqueId = $"Hour{counter}",
+                });
+
+                action.ItemOptions.Add(new ItemOption()
+                {
+                    ErrorText = $"Playlist Hours {ug.TimePlayed}",
+                    ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
+                    GameTitle = ug.PlatformGame.Game.Title,
+                    Hours = (int)ug.TimePlayed!,
+                    UniqueId = $"Hour{counter}",
                 });
             }
         }

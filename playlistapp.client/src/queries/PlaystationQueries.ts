@@ -1,5 +1,5 @@
 import { PlaystationService } from "@/ApiServices/PlaystationService";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/PlaystationKeys";
 import { PlaystationDTO } from "@/@types/Playstation/playstationDTO";
 
@@ -33,12 +33,18 @@ export const PlaystationQueries = {
   useOrchestrateInitialPlaystationAccountSync: (
     playstationDTO: PlaystationDTO
   ) => {
-    return useQuery({
-      queryKey: keys.OrchestrateInitialPlaystationAccountSync,
-      queryFn: () =>
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: () =>
         PlaystationService.orchestrateInitialPlaystationAccountSync(
           playstationDTO
         ),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: keys.OrchestrateInitialPlaystationAccountSync,
+        });
+      },
     });
   },
 };

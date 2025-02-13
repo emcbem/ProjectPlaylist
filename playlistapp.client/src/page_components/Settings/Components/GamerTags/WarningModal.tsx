@@ -1,7 +1,5 @@
 import { ItemAction } from "@/@types/Combination/itemAction";
-import { PlaystationDTO } from "@/@types/Playstation/playstationDTO";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
-import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import Collisions from "../Syncing/Collisions";
@@ -10,24 +8,21 @@ import Confirmation from "../Syncing/Confirmation";
 import Success from "../Syncing/Success";
 
 const WarningModal = ({
-  userId,
-  accountId,
   isModalOpen,
   setIsModalOpen,
+  actionLog,
+  actionLogPending,
+  platformId,
 }: {
   userId: string;
   accountId: string;
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
+  actionLog: ItemAction | undefined;
+  actionLogPending: boolean;
+  platformId: number;
 }) => {
   const [syncData, setSyncData] = useState<ItemAction | undefined>(undefined);
-
-  const user: PlaystationDTO = {
-    userId: userId,
-    accountId: accountId,
-  };
-  const { data: orchestrateAccountSync } =
-    PlaystationQueries.useOrchestrateInitialPlaystationAccountSync(user);
 
   const [conflicts, setConflicts] = useState<ItemAction[]>();
 
@@ -60,12 +55,10 @@ const WarningModal = ({
   };
 
   const handleConfirmation = () => {
-    if (orchestrateAccountSync) {
-      setSyncData(orchestrateAccountSync);
+    if (actionLog) {
+      setSyncData(actionLog);
     }
   };
-
-  console.log(conflicts, "yeah");
 
   return (
     <>
@@ -83,22 +76,30 @@ const WarningModal = ({
             isModalOpen ? "scale-100" : "scale-95"
           }`}
         >
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-4 p-6 mx-5 items-center"
-          >
-            {loading && <LoadingDots />}
-            {!loading && !syncData && (
-              <Confirmation
-                handleSubmit={() => handleSubmit}
-                handleConfirmation={handleConfirmation}
-              />
-            )}
-            {syncData && syncData.itemOptions.length != 0 && (
-              <Collisions syncData={syncData} conflicts={conflicts} />
-            )}
-            {!loading && syncData?.itemOptions.length == 0 && <Success />}
-          </form>
+          {actionLogPending ? (
+            <>
+              <p>Loading sync</p>
+              <LoadingDots />
+            </>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4 p-6 mx-5 items-center"
+            >
+              {loading && <LoadingDots />}
+              {!loading && !syncData && (
+                <Confirmation
+                  handleSubmit={() => handleSubmit}
+                  handleConfirmation={handleConfirmation}
+                  platformName={platformId === 7 ? "PlayStation" : "Steam"}
+                />
+              )}
+              {syncData && syncData.itemOptions.length != 0 && (
+                <Collisions syncData={syncData} conflicts={conflicts} />
+              )}
+              {!loading && syncData?.itemOptions.length == 0 && <Success />}
+            </form>
+          )}
         </div>
       </div>
     </>

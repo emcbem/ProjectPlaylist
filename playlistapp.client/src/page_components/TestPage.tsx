@@ -1,6 +1,3 @@
-// import { useState } from "react";
-// import { SteamQueries } from "@/queries/SteamQueries";
-// import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
@@ -16,19 +13,20 @@ const TestPage = () => {
     userId: "f776d4d8-a6f5-44db-9960-6165a1b1535b",
     userSteamId: "76561198989710406",
   };
-  const { data: steamActionLog, mutateAsync } =
-    SteamQueries.useGetSteamActionLog(steamActionLogRequest);
+  const { data: steamActionLog } = SteamQueries.useGetSteamActionLog(
+    steamActionLogRequest
+  );
 
   // const { data: games, mutateAsync } =
   //   SteamQueries.useGetSteamActionLog();
 
-  const handleGetGames = async () => {
-    if (steamActionLogRequest) {
-      await mutateAsync(); // Pass the steamId when mutating
-    } else {
-      console.error("Please enter a Steam ID.");
-    }
-  };
+  // const handleGetGames = async () => {
+  //   if (steamActionLogRequest) {
+  //     await mutateAsync(); // Pass the steamId when mutating
+  //   } else {
+  //     console.error("Please enter a Steam ID.");
+  //   }
+  // };
 
   const handleAuth = async () => {
     if (userGuid != undefined) {
@@ -38,18 +36,16 @@ const TestPage = () => {
     }
   };
 
-  console.log(steamActionLog);
-
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <h1 className="text-6xl">Test Page</h1>
 
-      <button
+      {/* <button
         onClick={handleGetGames}
         className="bg-blue-500 text-white p-2 rounded"
       >
         Click
-      </button>
+      </button> */}
       {steamActionLog?.itemOptions.map((x) => (
         <p>{x.errorText}</p>
       ))}

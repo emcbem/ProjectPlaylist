@@ -40,7 +40,6 @@ const UpdateButton = ({
         externalPlatformId: selectedPSUser?.accountId ?? "",
         isPublic: true,
       };
-      console.log(updateRequest, "cool");
       await updateUserPlatforms(updateRequest);
       setPlaystationUserResults([]);
       if (userPlatform.platformId == 7) {

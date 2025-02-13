@@ -22,7 +22,6 @@ const AddUserStrike: React.FC<AddUserStrikeProp> = ({ userGuid, userName}) => {
     UserAccountQueries.useAddUserStrike();
 
   const StrikeUser = async () => {
-    console.log("User guid: ", userGuid)
     addUserStrikeAsync(userGuid);
   };
 

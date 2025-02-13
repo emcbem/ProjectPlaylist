@@ -32,6 +32,8 @@ const AddButton = ({
   >();
   const [loading, setLoading] = useState(false);
 
+  console.log(userPlatform);
+
   const { mutateAsync: addUserPlatform } =
     UserPlatformQueries.AddUserPlatform();
   const { mutateAsync: searchForPlaystationUser } =
@@ -46,7 +48,6 @@ const AddButton = ({
         externalPlatformId: selectedPSUser?.accountId ?? "",
         isPublic: true,
       };
-      console.log(request, "hm");
       await addUserPlatform(request);
       setPlaystationUserResults([]);
       if (platform.id == 7) {
@@ -83,8 +84,6 @@ const AddButton = ({
     setSearched();
     setIsVisible(!isVisible);
   };
-
-  console.log(userPlatform);
 
   return (
     <>

@@ -28,8 +28,6 @@ const Collisions = ({
     }
   };
 
-  console.log("Coflicts: ", conflicts);
-
   return (
     <>
       <h1 className="text-2xl text-red-500">{syncData.errorType}</h1>
