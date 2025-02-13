@@ -1,6 +1,5 @@
 import { ItemAction } from "@/@types/Combination/itemAction";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
-import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import Collisions from "../Syncing/Collisions";
@@ -27,7 +26,7 @@ const WarningModal = ({
     userId: userId,
     userSteamId: accountId,
   };
-  const { data: orchestrateAccountSync } = SteamQueries.useGetSteamActionLog(
+  const { data: orchestrateAccountSync, mutateAsync } = SteamQueries.useGetSteamActionLog(
     steamActionLogRequest
   );
 
@@ -62,12 +61,14 @@ const WarningModal = ({
   };
 
   const handleConfirmation = () => {
+    mutateAsync()
     if (orchestrateAccountSync) {
       setSyncData(orchestrateAccountSync);
     }
+    console.log("SYNC DATA", syncData);
   };
 
-  console.log(conflicts, "yeah");
+  console.log("STEAM CONFLICTS ", conflicts);
 
   return (
     <>
@@ -85,6 +86,7 @@ const WarningModal = ({
             isModalOpen ? "scale-100" : "scale-95"
           }`}
         >
+          <h1>STEAM STEAM STEAM</h1>
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5 items-center"

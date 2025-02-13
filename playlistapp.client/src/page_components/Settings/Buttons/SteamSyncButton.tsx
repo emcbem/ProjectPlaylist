@@ -1,8 +1,6 @@
-import { SteamActionLogRequest } from "@/@types/Requests/GetRequests/getSteamActionLogRequest";
 import { UserPlatform } from "@/@types/userPlatform";
-import { SteamQueries } from "@/queries/SteamQueries";
-import { FC, useEffect, useState } from "react";
-import WarningModal from "../Components/GamerTags/WarningModal";
+import { useState } from "react";
+import WarningModalSteam from "../Components/GamerTags/WarningModalSteam";
 
 export const SteamSyncButton = ({
   userId,
@@ -18,6 +16,7 @@ export const SteamSyncButton = ({
   isVisible: boolean;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log(searched);
 
   // const handleAuth = async () => {
   //   if (userId != undefined) {
@@ -31,7 +30,7 @@ export const SteamSyncButton = ({
 
   return (
     <>
-      <WarningModal
+      <WarningModalSteam
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         userId={userId}
