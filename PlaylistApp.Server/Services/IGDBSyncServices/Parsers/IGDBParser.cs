@@ -7,7 +7,7 @@ using PlaylistApp.Server.Data;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
 {
-    public class Parser : IIGDBParser
+    public class IGDBParser : IIGDBParser
     {
         public List<IGDB.Models.Company> ParseCompanyCsv(string companyLocalPath)
         {
@@ -279,49 +279,53 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
 
         public List<IGDB.Models.Game> ParseGameCsv(string gameLocalPath)
         {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-            var games = new List<IGDB.Models.Game>();
+            return ParseCsv<IGDB.Models.Game>(gameLocalPath, csv =>
+            {
+                var game = new IGDB.Models.Game();
+                game.Id = csv.GetField<long?>("id");
+                game.Name = csv.GetField<string>("name");
+                game.Summary = csv.GetField<string>("summary");
+                game.Category = (Category)csv.GetField<long>("category");
+                game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")!));
+                game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")!));
+                game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")!));
+                game.FirstReleaseDate = csv.GetField<DateTimeOffset?>("first_release_date");
+                game.Platforms = new IdentitiesOrValues<IGDB.Models.Platform>(ParseLongArray(csv.GetField<string>("platforms")!));
+                var coverId = csv.GetField<long?>("cover");
+                game.Cover = coverId.HasValue ? new IdentityOrValue<Cover>(coverId.Value) : new IdentityOrValue<Cover>(-1);
+                game.MultiplayerModes = new IdentitiesOrValues<MultiplayerMode>(ParseLongArray(csv.GetField<string>("multiplayer_modes")!));
+                game.InvolvedCompanies = new IdentitiesOrValues<IGDB.Models.InvolvedCompany>(ParseLongArray(csv.GetField<string>("involved_companies")!));
+                game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")!));
+                game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")!));
+                game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
+                var parentGameId = csv.GetField<long?>("parent_game");
+                game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
+                game.Checksum = csv.GetField<string>("checksum");
+                return game;
+            });
 
-            using (var reader = new StreamReader(gameLocalPath))
+            
+        }
+
+        private List<T> ParseCsv<T>(string filePath, Func<CsvReader, T> mapFunc)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            var result = new List<T>();
+
+            using (var reader = new StreamReader(filePath))
             using (var csv = new CsvReader(reader, config))
             {
                 csv.Read();
                 csv.ReadHeader();
                 while (csv.Read())
                 {
-                    var game = new IGDB.Models.Game();
-                    game.Id = csv.GetField<long?>("id");
-                    game.Name = csv.GetField<string>("name");
-                    game.Summary = csv.GetField<string>("summary");
-                    game.Category = (Category)csv.GetField<long>("category");
-                    game.GameModes = new IdentitiesOrValues<GameMode>(ParseLongArray(csv.GetField<string>("game_modes")!));
-                    game.Themes = new IdentitiesOrValues<Theme>(ParseLongArray(csv.GetField<string>("themes")!));
-                    game.Genres = new IdentitiesOrValues<IGDB.Models.Genre>(ParseLongArray(csv.GetField<string>("genres")!));
-                    game.FirstReleaseDate = csv.GetField<DateTimeOffset?>("first_release_date");
-                    game.Platforms = new IdentitiesOrValues<IGDB.Models.Platform>(ParseLongArray(csv.GetField<string>("platforms")!));
-                    var coverId = csv.GetField<long?>("cover");
-                    game.Cover = coverId.HasValue ? new IdentityOrValue<Cover>(coverId.Value) : new IdentityOrValue<Cover>(-1);
-                    game.MultiplayerModes = new IdentitiesOrValues<MultiplayerMode>(ParseLongArray(csv.GetField<string>("multiplayer_modes")!));
-                    game.InvolvedCompanies = new IdentitiesOrValues<IGDB.Models.InvolvedCompany>(ParseLongArray(csv.GetField<string>("involved_companies")!));
-                    game.AgeRatings = new IdentitiesOrValues<AgeRating>(ParseLongArray(csv.GetField<string>("age_ratings")!));
-                    game.ExternalGames = new IdentitiesOrValues<ExternalGame>(ParseLongArray(csv.GetField("external_games")!));
-                    game.Websites = new IdentitiesOrValues<Website>(ParseLongArray(csv.GetField("websites")!));
-                    var parentGameId = csv.GetField<long?>("parent_game");
-                    game.ParentGame = parentGameId.HasValue ? new IdentityOrValue<IGDB.Models.Game>(parentGameId.Value) : new IdentityOrValue<IGDB.Models.Game>(-1);
-                    game.Checksum = csv.GetField<string>("checksum");
-                    // Example null check
-                    if (string.IsNullOrWhiteSpace(game.Name))
-                    {
-                        // Log or handle the null case
-                        Console.WriteLine("Warning: Game name is missing.");
-                        continue; // Skip this entry
-                    }
-
-                    games.Add(game);
+                    result.Add(mapFunc(csv));
                 }
             }
-            return games;
+            return result;
         }
+
+
 
         public static long[] ParseLongArray(string input)
         {
