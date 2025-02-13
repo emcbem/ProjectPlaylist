@@ -2,8 +2,10 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   max: number;
-  value: number;
   min: number;
+  valuePercent: number;
+  valueEarned: number;
+  valueTotal: number;
   gaugePrimaryColor: string;
   gaugeSecondaryColor: string;
   className?: string;
@@ -12,14 +14,16 @@ interface Props {
 export default function AnimatedCircularProgressBar({
   max = 100,
   min = 0,
-  value = 0,
+  valuePercent = 0,
+  valueEarned = 0,
+  valueTotal = 0,
   gaugePrimaryColor,
   gaugeSecondaryColor,
   className,
 }: Props) {
   const circumference = 2 * Math.PI * 45;
   const percentPx = circumference / 100;
-  const currentPercent = Math.round(((value - min) / (max - min)) * 100);
+  const currentPercent = Math.round(((valuePercent - min) / (max - min)) * 100);
 
   return (
     <div
@@ -101,7 +105,7 @@ export default function AnimatedCircularProgressBar({
         data-current-value={currentPercent}
         className="duration-[var(--transition-length)] delay-[var(--delay)] absolute inset-0 m-auto size-fit ease-linear animate-in fade-in"
       >
-        {currentPercent}%
+        {valueEarned} / {valueTotal}
       </span>
     </div>
   );

@@ -9,12 +9,15 @@ const ViewGameInfo = ({ game }: { game: Game }) => {
         {game?.title}
       </h1>
       <p className="text-clay-950 dark:text-clay-900">
-        {game?.companies.length > 0 && game?.companies[0].name  || "No Companies"} -&nbsp;Released&nbsp;
+        {(game?.companies.length > 0 && game?.companies[0].name) ||
+          "No Companies"}{" "}
+        -&nbsp;Released&nbsp;
         {game?.publishDate
           ? formatDate(new Date(game.publishDate))
           : "No publish date"}
       </p>
       <div className="flex flex-row text-clay-950 dark:text-clay-900">
+        Genre(s):{" "}
         {game?.genres.map((genre, i) =>
           i < game.genres.length - 1 ? `${genre.name}, ` : genre.name
         )}
