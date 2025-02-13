@@ -34,11 +34,11 @@ public class SyncPlaystationService
         PlatformGameService = platformGameService;
     }
 
-    public async Task<ItemAction> CompareGames(PlaystationDTO playstationDTO)
+    public async Task<List<ItemOption>> CompareGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId == null)
         {
-            return new ItemAction();
+            return new List<ItemOption>();
         }
 
         KnownGames = await UserGameService.GetUserGameByUser(playstationDTO.UserId);
@@ -46,7 +46,7 @@ public class SyncPlaystationService
 
         if (FoundGames is null)
         {
-            return new ItemAction();
+            return new List<ItemOption>();
         }
 
         ItemAction itemAction = new ItemAction();
@@ -59,12 +59,13 @@ public class SyncPlaystationService
             itemAction.ItemOptions.Add(option);
         }
 
-        return itemAction;
+        return itemAction.ItemOptions;
     }
 
     public List<ItemOption> CompareGamesHours(List<UserGameDTO> knownGames, List<PlaystationGameDTO> foundGames)
     {
         var options = new List<ItemOption>();
+        int counter = 0;
 
         foreach (var userGame in knownGames)
         {
@@ -87,20 +88,23 @@ public class SyncPlaystationService
                 {
                     if (userGame.TimePlayed != playstationGame.PlayDuration)
                     {
+                        counter++;
                         var option1 = new ItemOption
                         {
                             ErrorText = $"Hour mismatch!",
                             ResolveUrl = $"/action/hours?hours={userGame.TimePlayed}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
-                            GameTitle = $"{playstationGame.Name} + {userGame.PlatformGame.Platform.Name}",
-                            Hours = (int)userGame.TimePlayed
+                            GameTitle = $"{userGame.PlatformGame.Game.Title}",
+                            Hours = (int)userGame.TimePlayed,
+                            UniqueId = counter
                         };
 
                         var option2 = new ItemOption
                         {
                             ErrorText = $"Hour mismatch!",
                             ResolveUrl = $"/action/hours?hours={playstationGame.PlayDuration}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
-                            GameTitle = $"{playstationGame.Name} + {CategoryToPlatform[playstationGame.Category]}", 
-                            Hours = playstationGame.PlayDuration  
+                            GameTitle = $"{userGame.PlatformGame.Game.Title}", 
+                            Hours = playstationGame.PlayDuration,
+                            UniqueId= counter
                         };
 
                         options.Add(option1);

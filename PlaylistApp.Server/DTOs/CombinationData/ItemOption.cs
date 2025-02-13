@@ -6,4 +6,5 @@ public class ItemOption
     public string ResolveUrl { get; set; } = "";
     public string GameTitle { get; set; } = "";
     public int Hours { get; set; }
+    public int UniqueId { get; set; }
 }
