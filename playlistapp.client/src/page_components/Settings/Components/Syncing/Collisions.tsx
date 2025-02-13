@@ -14,7 +14,7 @@ const Collisions = ({
   const [selected, setSelected] = useState<ItemOption>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { mutate: platformCollison } =
+  const { mutate: handleCollision } =
     ItemActionQueries.useHandlePlatformCollisions(
       selected ? selected.resolveUrl : ""
     );
@@ -24,9 +24,11 @@ const Collisions = ({
       if (conflicts && currentIndex < Object.entries(conflicts).length - 1) {
         setCurrentIndex((prevIndex) => prevIndex + 1);
       }
-      platformCollison();
+      handleCollision();
     }
   };
+
+  console.log("Coflicts: ", conflicts);
 
   return (
     <>

@@ -69,6 +69,7 @@ namespace PlaylistApp.Server.Services.IGDBServices
                 company.CompanyName = igdbCompany.Name.Substring(0, Math.Min(igdbCompany.Name.Length, 64));
                 company.IgdbId = (int?)igdbCompany.Id;
                 company.Checksum = igdbCompany.Checksum;
+                company.Id = (int?)igdbCompany.Id ?? 0;
 
 
                 if (logoDict.TryGetValue((int)igdbCompany!.Logo!.Id!, out logo))

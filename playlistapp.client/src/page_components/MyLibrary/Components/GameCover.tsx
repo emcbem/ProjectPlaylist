@@ -1,7 +1,7 @@
 import { UserGame } from "@/@types/usergame";
 import RemoveFromLibButton from "./Buttons/RemoveButton";
 import { LogoDictonary } from "./LogoDictonary";
-import { useTheme } from "@/hooks/useDarkMode";
+// import { useTheme } from "@/hooks/useDarkMode";
 
 const GameCover = ({ ug }: { ug: UserGame }) => {
   const Logo =
@@ -12,7 +12,8 @@ const GameCover = ({ ug }: { ug: UserGame }) => {
     ug.platformGame.game.title,
     "hmmmmmm"
   );
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
+
   //   const backgroundImage = theme === "dark" ? `url(${CW})` : `url(${CB})`;
 
   return (

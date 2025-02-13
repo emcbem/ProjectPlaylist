@@ -46,7 +46,6 @@ public class SyncOrchestrator
         var igdbRatings = await dataGetter.GetRatings();    
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
         var gameDifference =  await differenceHandler.HandleGameDifferences(localGames);
-        gameDifference.ChecksumsThatChanged = igdbGames.Cast<IChecksum>().ToHashSet();
         
         //await OrchestratePlatformGames(gameDifference, localGames);
         //await OrchestrateGameGenres(gameDifference, localGames);

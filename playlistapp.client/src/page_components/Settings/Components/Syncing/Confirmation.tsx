@@ -14,8 +14,8 @@ const Confirmation: FC<IConfirmation> = ({
       <h1 className="text-2xl text-red-500">Warning</h1>
       <div className="w-full max-w-sm min-w-[200px]">
         <label className="block mb-2 text-lg text-white">
-          By syncing your PSN data, it will import your PSN library's data which
-          includes game library and playtime. By doing so, there might be
+          By syncing your Steam data, it will import your Steam library's data
+          which includes game library and playtime. By doing so, there might be
           collisions you will have to manually resolve. Are you okay with this?
         </label>
       </div>

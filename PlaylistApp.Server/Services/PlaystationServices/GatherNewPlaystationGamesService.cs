@@ -79,6 +79,9 @@ public class GatherNewPlaystationGamesService
                 })
                 .ToList();
 
+            string previousGameName = "";
+            int previousHours = -1;
+            int counter = 0;
 
             foreach (var game in newGames)
             {
@@ -90,12 +93,20 @@ public class GatherNewPlaystationGamesService
                     {
                         var options = platformGame.Select(x =>
                         {
+                            if (previousGameName != x.Game.Title || previousHours != game.PlayDuration)
+                            {
+                                previousGameName = x.Game.Title;
+                                previousHours = game.PlayDuration;
+                                counter++;
+                            }
+
                             return new ItemOption()
                             {
                                 ErrorText = $"{x.Platform.Name}",
                                 ResolveUrl = $"/action/platforms?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
                                 GameTitle = platformGame[0].Game.Title,
                                 Hours = game.PlayDuration,
+                                UniqueId = $"Platform{counter}"
                             };
                         });
 
