@@ -3,14 +3,14 @@ import { ItemOption } from "@/@types/Combination/itemOption";
 export const FormatCollisions = (items: ItemOption[]) => {
   const groupedByGame = Array.from(
     items.reduce((map, item) => {
-      if (!map.has(`${item.gameTitle} - ${item.hours}`)) {
-        map.set(`${item.gameTitle} - ${item.hours}`, []);
-        map.get(`${item.gameTitle} - ${item.hours}`)!.push(item);
+      if (!map.has(`${item.gameTitle} - ${item.uniqueId}`)) {
+        map.set(`${item.gameTitle} - ${item.uniqueId}`, []);
+        map.get(`${item.gameTitle} - ${item.uniqueId}`)!.push(item);
       } else {
-        const existingItems = map.get(`${item.gameTitle} - ${item.hours}`)!;
+        const existingItems = map.get(`${item.gameTitle} - ${item.uniqueId}`)!;
         if (
           existingItems.some(
-            (existingItem) => existingItem.hours === item.hours
+            (existingItem) => existingItem.uniqueId === item.uniqueId
           )
         ) {
           existingItems.push(item);

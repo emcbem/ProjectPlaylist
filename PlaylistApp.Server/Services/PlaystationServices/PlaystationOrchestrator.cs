@@ -25,6 +25,8 @@ public class PlaystationOrchestrator
 
     public async Task<ItemAction> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
     {
+        var ItemAction = new ItemAction();
+
         if (playstationDTO.AccountId is null)
         {
             return new ItemAction();
@@ -36,14 +38,23 @@ public class PlaystationOrchestrator
 
         var newGamesSent = await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
 
-        return await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+        ItemAction =  await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+
+        var hoursAction = await OrchestrateSyncPlaystationGames(playstationDTO);
+
+        foreach (var option in hoursAction)
+        {
+            ItemAction.ItemOptions.Add(option);
+        }
+
+        return ItemAction;
     }
 
-    public async Task<ItemAction> OrchestrateSyncPlaystationGames(PlaystationDTO playstationDTO)
+    public async Task<List<ItemOption>> OrchestrateSyncPlaystationGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId is null)
         {
-            return new ItemAction();
+            return new List<ItemOption>();
         }
 
         return await SyncPlaystationService.CompareGames(playstationDTO);
