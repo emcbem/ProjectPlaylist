@@ -2,6 +2,7 @@
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.UserGameServices;
@@ -71,6 +72,22 @@ public class UserGameService : IUserGameService
             .Include(x => x.User)
                 .ThenInclude(x => x.UserImage)
             .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (userGame == null)
+        {
+            return new UserGameDTO();
+        }
+        return userGame.ToDTO();
+    }
+
+    public async Task<UserGameDTO> GetUserGameByPlatformGameAndUser(GetUserGameRequest request)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var userGame = await context.UserGames
+            .Where(x => x.User.Guid == request.UserId)
+            .Where(x => x.PlatformGameId == request.PlatformGameId)
             .FirstOrDefaultAsync();
 
         if (userGame == null)
