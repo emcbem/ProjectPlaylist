@@ -1,27 +1,33 @@
 ﻿using IGDB;
+using IGDB.Models;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices.Downloader
 {
-    public class DownloadCsv : IDownloader
+    public class CsvDownloader : IDownloader
     {
         private readonly IGDBClient igdbClient;
 
-        public DownloadCsv(IGDBClient igdbClient)
+        public CsvDownloader(IGDBClient igdbClient)
         {
             this.igdbClient = igdbClient;
         }
         public async Task<string> DownloadAsync(string Endpoint)
         {
             var result = await igdbClient.GetDataDumpEndpointAsync(Endpoint);
-            var LocalPath = Path.Combine(Directory.GetCurrentDirectory(), "CSVs");
-            Directory.CreateDirectory(LocalPath);
-            LocalPath = Path.Combine(LocalPath, result.FileName);
+            string LocalPath = GenerateLocalPath(result.FileName);
             await DownloadCSVFile(result.S3Url, LocalPath);
             return LocalPath;
         }
 
+        private static string GenerateLocalPath(string DataDumpUrl)
+        {
+            var LocalPath = Path.Combine(Directory.GetCurrentDirectory(), "CSVs");
+            Directory.CreateDirectory(LocalPath);
+            LocalPath = Path.Combine(LocalPath, DataDumpUrl);
+            return LocalPath;
+        }
 
-        public async Task DownloadCSVFile(string FileUrl, string LocalPath)
+        private async Task DownloadCSVFile(string FileUrl, string LocalPath)
         {
             if (File.Exists(LocalPath))
             {

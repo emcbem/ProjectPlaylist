@@ -212,7 +212,6 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Parsers
                 while (csv.Read())
                 {
                     var website = new Website();
-
                     website.Url = csv.GetField<string>("url");
                     website.Id = csv.GetField<long?>("id");
                     website.Category = (WebsiteCategory)csv.GetField<long?>("category")!;

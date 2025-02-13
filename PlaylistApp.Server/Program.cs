@@ -42,7 +42,7 @@ builder.Services.AddSingleton<IUserGenreService, UserGenreService>();
 builder.Services.AddSingleton<IGameReviewService, GameReviewService>();
 
 builder.Services.AddSingleton<SyncService>();
-builder.Services.AddSingleton<DownloadCsv>();
+builder.Services.AddSingleton<CsvDownloader>();
 builder.Services.AddSingleton<UploadData>();
 
 var igdb_client_id = builder.Configuration.GetValue<string>("Client_ID", "");
