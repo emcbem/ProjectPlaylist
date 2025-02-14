@@ -6,7 +6,7 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { Link } from "react-router-dom";
 import MyLibraryGridView from "./Components/MyLibraryGridView";
-import LoadingDots from "../../individual_components/LoadingPage";
+import LoadingPage from "../../individual_components/LoadingPage";
 
 const MyLibrary = () => {
   const [isListView, setIsListView] = useState<boolean>(true);
@@ -24,19 +24,16 @@ const MyLibrary = () => {
   if (isLoading || isAccountLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
-        <LoadingDots />
-        {/* <img
-          className="lg:h-14 md:h-12 sm:h-10 h-6 lg:block dark:hidden hidden"
-          src={PPDiamond}
-          alt="PP Logo"
-        /> */}
+        <LoadingPage />
       </div>
     );
   }
 
+  
   return (
     isSuccess && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
+
         <div className="grid justify-items-center ">
           <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
             <div className="text-lg mt-6">

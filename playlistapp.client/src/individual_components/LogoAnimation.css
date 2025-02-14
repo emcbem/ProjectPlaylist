@@ -1,0 +1,33 @@
+@keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .square-1, .square-2, .square-3, .square-4 {
+    animation: fadeInOut 1s ease-in-out infinite;
+  }
+  
+  /* Add delay to each square */
+  .square-1 {
+    animation-delay: 0s;
+  }
+  
+  .square-2 {
+    animation-delay: 0.1s;
+  }
+  
+  .square-3 {
+    animation-delay: 0.2s;
+  }
+  
+  .square-4 {
+    animation-delay: 0.3s;
+  }
+  
