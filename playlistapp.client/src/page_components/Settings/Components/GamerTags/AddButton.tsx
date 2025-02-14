@@ -10,7 +10,6 @@ import { UserPlatform } from "@/@types/userPlatform";
 
 const AddButton = ({
   platform,
-  userPlatform,
   userGuid,
   value,
   isVisible,
@@ -32,7 +31,6 @@ const AddButton = ({
   >();
   const [loading, setLoading] = useState(false);
 
-  console.log(userPlatform);
 
   const { mutateAsync: addUserPlatform } =
     UserPlatformQueries.AddUserPlatform();

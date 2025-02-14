@@ -1,13 +1,13 @@
 import { FC } from "react";
 
 interface IConfirmation {
-  handleSubmit: (event: React.FormEvent) => void;
+  handleRejectSync: (event: React.FormEvent) => void;
   handleConfirmation: () => void;
   platformName: string;
 }
 
 const Confirmation: FC<IConfirmation> = ({
-  handleSubmit,
+  handleRejectSync,
   handleConfirmation,
   platformName,
 }) => {
@@ -24,7 +24,7 @@ const Confirmation: FC<IConfirmation> = ({
       </div>
       <div className={`p-6 pb-0 px-0 flex flex-row w-full`}>
         <button
-          onClick={handleSubmit}
+          onClick={handleRejectSync}
           className="w-full rounded-md bg-red-500 py-2 px-4 text-sm m-2 text-white"
           type="submit"
         >

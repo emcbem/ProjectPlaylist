@@ -19,7 +19,7 @@ export const SteamService = {
           },
         }
       );
-      console.log(response.data.itemOptions);
+      //console.log(Date.now().toString(), response.data.itemOptions);
       return response.data;
     } catch (error) {
       console.error(

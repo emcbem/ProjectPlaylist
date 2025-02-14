@@ -56,12 +56,12 @@ const Profile = () => {
               />
             </MenuHandler>
             <MenuList>
-              <Link to="/account" reloadDocument>
+              <Link to="/account">
                 <MenuItem className="font-bold">Account</MenuItem>
               </Link>
 
               <hr className="my-3" />
-              <Link to="/library" reloadDocument>
+              <Link to="/library">
                 <MenuItem className="font-bold">My Library</MenuItem>
               </Link>
 

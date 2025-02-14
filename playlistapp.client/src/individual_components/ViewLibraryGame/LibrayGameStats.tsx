@@ -49,7 +49,7 @@ const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
 
   return userEarnedAchievement && userGame ? (
     <ShineBorder
-      className="aspect-[3/4] min-h-96 my-8 border shadow-xl dark:shadow-[#182225] dark:border-[#182225] lg:w-fit rounded-lg flex flex-col items-start"
+      className="aspect-[3/4] min-h-96 my-8 border shadow-xl dark:shadow-[#182225] dark:border-[#182225] lg:w-fit rounded-xl flex flex-col items-start"
       color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
       borderWidth={6}
     >

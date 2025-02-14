@@ -10,6 +10,7 @@ using PlaylistApp.Server.Services.UserPlatformServices;
 using RestEase;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -93,15 +94,26 @@ public class SteamService : ISteamService
             .Select(g => g.Key)
             .ToList();
 
-        var gamesWithSamePlatformKeys = matchingPlatformGames
+        var gamesWithDuplicatePlatformKeys = matchingPlatformGames
             .Where(pg => duplicatePlatformKeys.Contains(pg.PlatformKey))
             .ToList();
+
+        List<UserGame> usersGames = context.UserGames
+           .Where(x => x.User.Guid == userId)
+           .Include(g => g.PlatformGame)
+           .ThenInclude(g => g.Game)
+           .Include(g => g.User)
+           .ToList();
+        HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
+
+
         int counter = 0;
         string previousGame = "";
-        foreach (PlatformGame pg in gamesWithSamePlatformKeys)
+        foreach (PlatformGame pg in gamesWithDuplicatePlatformKeys)
         {
             var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
-            if (steamGame != null)
+            var userGameFromPlatform = usersGames.Where(x => x.PlatformGame.GameId == pg.GameId).ToList();
+            if (steamGame != null && !userGameFromPlatform.Any()) // if the user doesn't already have this game
             {
                 if (pg.Game.Title != previousGame)
                 {
@@ -218,8 +230,8 @@ public class SteamService : ISteamService
                 counter++;
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = $"Hour Mismatch!",
-                    ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
+                    ErrorText = $"Steam record: ",
+                    ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
                     Hours = steamGame!.PlaytimeForever,
                     UniqueId = $"Hour{counter}",
@@ -227,10 +239,10 @@ public class SteamService : ISteamService
 
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = $"Playlist Hours {ug.TimePlayed}",
+                    ErrorText = $"Playlist record: ",
                     ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
-                    Hours = (int)ug.TimePlayed!,
+                    Hours = (int)(ug.TimePlayed! / 60),
                     UniqueId = $"Hour{counter}",
                 });
             }
