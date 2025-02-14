@@ -1,10 +1,10 @@
 import { UserGame } from "@/@types/usergame";
 import RemoveFromLibButton from "./Buttons/RemoveButton";
-import { LogoDictonary } from "./LogoDictonary";
+import { GridLogoDictonary } from "./GridLogoDictonary";
 
 const GameCover = ({ ug }: { ug: UserGame }) => {
   const Logo =
-    LogoDictonary[ug.platformGame.platform.id] || (() => <div></div>);
+    GridLogoDictonary[ug.platformGame.platform.id] || (() => <div></div>);
 
   //   const backgroundImage = theme === "dark" ? `url(${CW})` : `url(${CB})`;
 

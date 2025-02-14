@@ -3,13 +3,12 @@ import { UserGameQueries } from "@/queries/UserGameQueries";
 import LibraryGameStats from "@/individual_components/ViewLibraryGame/LibrayGameStats";
 import AchievementsPage from "../Achievements/Achievements";
 import MyLibraryDescription from "./Components/MyLibraryDescription";
-import GameCover from "../ViewGame/GameCover";
+import LibraryGameCover from "./LibraryGameCover";
 
 const ViewLibraryGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const { data: userGame, isLoading } =
     UserGameQueries.useGetUserGameByUserGameId(Number(gameId));
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -20,7 +19,10 @@ const ViewLibraryGame = () => {
         <div className="flex w-full dark:text-white text-black justify-center sm:mt-8 pt-10">
           <div className="flex flex-row items-start space-x-4 xl:w-1/2 lg:w-5/6 w-full">
             <div className="flex flex-col lg:sticky top-[7.5rem]">
-              <GameCover game={userGame?.platformGame.game} />
+              <LibraryGameCover
+                game={userGame?.platformGame.game}
+                platformId={userGame?.platformGame.platform.id}
+              />
               <LibraryGameStats userGame={userGame!} />
             </div>
 

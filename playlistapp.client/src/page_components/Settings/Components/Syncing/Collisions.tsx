@@ -14,10 +14,9 @@ const Collisions = ({
   const [selected, setSelected] = useState<ItemOption>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { mutate: handleCollision } =
-    ItemActionQueries.useHandlePlatformCollisions(
-      selected ? selected.resolveUrl : ""
-    );
+  const { mutate: handleCollision } = ItemActionQueries.useHandleCollisions(
+    selected ? selected.resolveUrl : ""
+  );
 
   const handleConfirmation = () => {
     if (selected && conflicts && conflicts?.length > 0) {

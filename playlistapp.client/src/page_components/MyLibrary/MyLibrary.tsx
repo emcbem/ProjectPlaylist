@@ -6,7 +6,7 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { Link } from "react-router-dom";
 import MyLibraryGridView from "./Components/MyLibraryGridView";
-import LoadingDots from "./Components/SVGs/LoadingDots";
+import LoadingDots from "../../individual_components/LoadingPage";
 
 const MyLibrary = () => {
   const [isListView, setIsListView] = useState<boolean>(true);
@@ -25,6 +25,11 @@ const MyLibrary = () => {
     return (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
         <LoadingDots />
+        {/* <img
+          className="lg:h-14 md:h-12 sm:h-10 h-6 lg:block dark:hidden hidden"
+          src={PPDiamond}
+          alt="PP Logo"
+        /> */}
       </div>
     );
   }
