@@ -177,14 +177,13 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
 
             await databaseProcessor.UpdateRangeAsync<Data.Game>(updatedGames);
 
-            differences.ChecksumsThatChanged = allGames.Cast<IChecksum>().ToHashSet();
-
             return differences;
         }
 
 
-        internal async Task HandlePlatformGameDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
+        internal async Task<List<PlatformGame>> HandlePlatformGameDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
         {
+            List<PlatformGame> platformGamesToUpdate = new List<PlatformGame>();
             var context = await dbContextFactory.CreateDbContextAsync();
             var allGames = await context.Games
                 .Include(x => x.PlatformGames)
@@ -225,6 +224,7 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                         var possiblePlatform = platformGameBuilder.MakePlatformGame(idDif.IgdbId ?? 0, platformId); 
                         if (possiblePlatform is not null)
                         {
+                            platformGamesToUpdate.Add(possiblePlatform);
                             context.PlatformGames.Add(possiblePlatform);
                         }
                     }
@@ -237,11 +237,14 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
                 var platformGames = platformGameBuilder.MakePlatfromGames(id);
                 if(platformGames is not null)
                 {
+                    platformGamesToUpdate.AddRange(platformGames);
                     context.PlatformGames.AddRange(platformGames);
                 }
             }
 
             await context.SaveChangesAsync();
+
+            return platformGamesToUpdate;
         }
 
         internal async Task HandleGameGenreDifferences(DifferencesToCheck gameDifferences, List<Data.Game> localGames)

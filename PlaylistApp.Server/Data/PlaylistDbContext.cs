@@ -77,6 +77,7 @@ public partial class PlaylistDbContext : DbContext
 			entity.Property(e => e.AchievementName).HasColumnName("achievement_name");
 			entity.Property(e => e.ImageUrl).HasColumnName("image_url");
 			entity.Property(e => e.PlatformGameId).HasColumnName("platform_game_id");
+			entity.Property(e => e.ExternalId).HasColumnName("external_id");
 
 			entity.HasOne(d => d.PlatformGame).WithMany(p => p.Achievements)
 				.HasForeignKey(d => d.PlatformGameId)

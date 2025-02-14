@@ -17,6 +17,8 @@ public partial class Achievement
 
     public string? AchievementDesc { get; set; }
 
+    public string? ExternalId { get; set; }
+
     public virtual ICollection<Goal> Goals { get; set; } = new List<Goal>();
 
     public virtual PlatformGame PlatformGame { get; set; } = null!;

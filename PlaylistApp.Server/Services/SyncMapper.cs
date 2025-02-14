@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.Services.IGDBSyncServices.Builders;
+﻿using PlaylistApp.Server.Services.IGDBSyncServices.AchievementGetter;
+using PlaylistApp.Server.Services.IGDBSyncServices.Builders;
 using PlaylistApp.Server.Services.IGDBSyncServices.DatabaseProcessors;
 using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
 using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
@@ -17,6 +18,7 @@ namespace PlaylistApp.Server.Services
             builder.Services.AddSingleton<PlatformGameBuilder>();
             builder.Services.AddSingleton<InvolvedCompanyBuilder>();
             builder.Services.AddSingleton<IDatabaseProcessor, DatabaseProcessor>();
+            builder.Services.AddSingleton<IAchievementUpdater, AchievementUpdater>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PlaylistApp.Server.Interfaces;
 using PlaylistApp.Server.Services.IGDBServices;
+using PlaylistApp.Server.Services.IGDBSyncServices.AchievementGetter;
 using PlaylistApp.Server.Services.IGDBSyncServices.DataGetters;
 
 namespace PlaylistApp.Server.Services.IGDBSyncServices;
@@ -8,11 +9,13 @@ public class SyncOrchestrator
 {
     private readonly DifferenceHandler differenceHandler;
     private readonly IDataGetter dataGetter;
+    private readonly IAchievementUpdater achievementUpdater;
 
-    public SyncOrchestrator(DifferenceHandler differenceHandler, IDataGetter dataGetter)
+    public SyncOrchestrator(DifferenceHandler differenceHandler, IDataGetter dataGetter, IAchievementUpdater achievementUpdater)
     {
         this.differenceHandler = differenceHandler;
         this.dataGetter = dataGetter;
+        this.achievementUpdater = achievementUpdater;
     }
     public async Task OrchestrateCompanies()
     {
@@ -47,8 +50,8 @@ public class SyncOrchestrator
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
         var gameDifference =  await differenceHandler.HandleGameDifferences(localGames);
         
-        //await OrchestratePlatformGames(gameDifference, localGames);
-        //await OrchestrateGameGenres(gameDifference, localGames);
+        await OrchestratePlatformGamesAndAchievements(gameDifference, localGames);
+        await OrchestrateGameGenres(gameDifference, localGames);
         await OrchestrateInvolvedCompanies(gameDifference, localGames);
 
         return gameDifference;
@@ -64,8 +67,12 @@ public class SyncOrchestrator
         await differenceHandler.HandleGameGenreDifferences(gameDifference, localGames);
     }
 
-    public async Task OrchestratePlatformGames(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
+    public async Task OrchestratePlatformGamesAndAchievements(DifferencesToCheck gameDifferences, List<Data.Game> localGames)
     {
-        await differenceHandler.HandlePlatformGameDifferences(gameDifferences, localGames);
+        var platformGamesAdded = await differenceHandler.HandlePlatformGameDifferences(gameDifferences, localGames);
+
+        await achievementUpdater.UpdatePlatformGames(platformGamesAdded);
     }
+
+    
 }
