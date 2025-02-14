@@ -8,7 +8,7 @@ public class PlaystationOrchestrator
     private readonly PlaystationGameService PlaystationGameService;
     private readonly GatherNewPlaystationGamesService GatherNewPlaystationGamesService;
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
-    private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformErrorService;
+    private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformCollisionService;
     private readonly SyncPlaystationService SyncPlaystationService;
     public PlaystationOrchestrator(PlaystationGameService playstationGameService,
                                    GatherNewPlaystationGamesService gatherNewPlaystationGamesService,
@@ -19,7 +19,7 @@ public class PlaystationOrchestrator
         PlaystationGameService = playstationGameService;
         GatherNewPlaystationGamesService = gatherNewPlaystationGamesService;
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
-        HandlePlaystationPlatformErrorService = handlePlaystationPlatformErrorService;
+        HandlePlaystationPlatformCollisionService = handlePlaystationPlatformErrorService;
         SyncPlaystationService = syncPlaystationService;
     }
 
@@ -38,9 +38,9 @@ public class PlaystationOrchestrator
 
         var newGamesSent = await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
 
-        ItemAction =  await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+        ItemAction =  await HandlePlaystationPlatformCollisionService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
 
-        var hoursAction = await OrchestrateSyncPlaystationGames(playstationDTO);
+        var hoursAction = await OrchestratePlaystationHoursSyncing(playstationDTO);
 
         foreach (var option in hoursAction)
         {
@@ -50,7 +50,7 @@ public class PlaystationOrchestrator
         return ItemAction;
     }
 
-    public async Task<List<ItemOption>> OrchestrateSyncPlaystationGames(PlaystationDTO playstationDTO)
+    public async Task<List<ItemOption>> OrchestratePlaystationHoursSyncing(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId is null)
         {
