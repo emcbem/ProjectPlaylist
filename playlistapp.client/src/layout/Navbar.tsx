@@ -8,6 +8,7 @@ import Abstract from "./maze.svg";
 import LightAbstract from "./mazelight.svg";
 import { useTheme } from "@/hooks/useDarkMode";
 import Profile from "@/Auth0/profile";
+import { Link } from "react-router-dom";
 const Navbar: React.FC = () => {
   const { theme } = useTheme();
 
@@ -27,7 +28,7 @@ const Navbar: React.FC = () => {
       >
         <nav className="flex max-w-[1264px] desk:w-[1264px] avg:w-[800px] w-[500px] justify-center items-center px-4 pt-8 h-20 mb-2 z-20">
           <div className="flex-shrink-0 z-20">
-            <a href="/">
+            <Link to="/">
               <img
                 className="lg:h-14 md:h-12 sm:h-10 h-6 lg:block dark:hidden hidden"
                 src={PPLogoLight}
@@ -43,7 +44,7 @@ const Navbar: React.FC = () => {
                 src={PPDiamond}
                 alt="PP Diamond"
               />
-            </a>
+            </Link>
           </div>
 
           <SearchBar />
