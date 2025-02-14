@@ -1,5 +1,5 @@
 import { UserPlatform } from "@/@types/userPlatform";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WarningModal from "./WarningModal";
 import { PlaystationQueries } from "@/queries/PlaystationQueries";
 import { PlaystationDTO } from "@/@types/Playstation/playstationDTO";
@@ -27,18 +27,7 @@ const SyncButton = ({
     ItemAction | undefined
   >();
 
-  async function startSync() {
-    setIsModalOpen(true);
-
-    if (platformId === 7) {
-      setActionsToShowUser(actionsFromPlaystation);
-      await getPlaystationLog();
-    } else if (platformId === 163) {
-      setActionsToShowUser(actionsFromSteam);
-      await steamMutate();
-    }
-  }
-
+  // PlayStation
   const user: PlaystationDTO = {
     userId: userId,
     accountId: accountId,
@@ -50,6 +39,7 @@ const SyncButton = ({
     isPending,
   } = PlaystationQueries.useOrchestrateInitialPlaystationAccountSync(user);
 
+  // Steam
   const steamActionLogRequest: SteamActionLogRequest = {
     userId: userId,
     userSteamId: accountId,
@@ -60,6 +50,25 @@ const SyncButton = ({
     mutateAsync: steamMutate,
     isPending: steamIsPending,
   } = SteamQueries.useGetSteamActionLog(steamActionLogRequest);
+
+  async function startSync() {
+    setIsModalOpen(true);
+    if (platformId === 7) {
+      setActionsToShowUser(actionsFromPlaystation);
+      await getPlaystationLog();
+    } else if (platformId === 163) {
+      setActionsToShowUser(actionsFromSteam);
+      await steamMutate();
+    }
+  }
+
+  useEffect(() => {
+    if (platformId === 7 && actionsFromPlaystation) {
+      setActionsToShowUser(actionsFromPlaystation);
+    } else if (platformId === 163 && actionsFromSteam) {
+      setActionsToShowUser(actionsFromSteam);
+    }
+  }, [actionsFromPlaystation, actionsFromSteam, platformId]);
 
   return (
     <>

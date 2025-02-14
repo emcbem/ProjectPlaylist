@@ -41,7 +41,7 @@ const WarningModal = ({
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleRejectSync = (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(false);
     closeModal();
@@ -55,6 +55,7 @@ const WarningModal = ({
   };
 
   const handleConfirmation = () => {
+    console.log("Action log: ", actionLog);
     if (actionLog) {
       setSyncData(actionLog);
     }
@@ -77,19 +78,16 @@ const WarningModal = ({
           }`}
         >
           {actionLogPending ? (
-            <>
-              <p>Loading sync</p>
-              <LoadingDots />
-            </>
+            <LoadingDots />
           ) : (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleRejectSync}
               className="flex flex-col gap-4 p-6 mx-5 items-center"
             >
               {loading && <LoadingDots />}
               {!loading && !syncData && (
                 <Confirmation
-                  handleSubmit={() => handleSubmit}
+                  handleRejectSync={() => handleRejectSync}
                   handleConfirmation={handleConfirmation}
                   platformName={platformId === 7 ? "PlayStation" : "Steam"}
                 />
