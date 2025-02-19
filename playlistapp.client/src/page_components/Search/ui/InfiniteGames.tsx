@@ -4,7 +4,6 @@ import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
 import CardGamesList from "@/individual_components/CardGamesList";
 import { SearchRequestController } from "@/@types/ComponentControllers/InfiniteGameController";
-import { LoaderIcon } from "react-hot-toast";
 import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon";
 import LoadingPage from "@/individual_components/LoadingPage";
 
