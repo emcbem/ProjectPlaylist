@@ -55,15 +55,17 @@ const Input: FC<{
         } rounded ml-4 text-black`}
       />
 
-      <p
+      {platform.id != 163 &&
+        <p
         role="button"
         className={`text-teal-400 underline underline-offset-2 ms-5 ${
           isVisible || searched ? "hidden" : ""
-        }  ${!userPlatform ? "hidden" : ""} mt-1`}
-        onClick={() => setIsVisible(!isVisible)}
-      >
-        edit
-      </p>
+          }  ${!userPlatform ? "hidden" : ""} mt-1`}
+          onClick={() => setIsVisible(!isVisible)}
+          >
+          edit
+        </p>
+      }
 
       {!searched && (
         <RemoveButton userPlatform={userPlatform} isVisible={isVisible} />
