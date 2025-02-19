@@ -4,7 +4,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import PlaylistLists from "./PlaylistLists";
-import LibraryLoading from "./LibraryViewsComponents/LibraryLoading";
 import LibraryList from "./LibraryViewsComponents/LibraryList";
 import LibraryListNoGames from "./LibraryViewsComponents/LibraryListNoGames";
 import { UserGameQueries } from "@/queries/UserGameQueries";
@@ -15,33 +14,53 @@ import { Goal } from "@/@types/goal";
 import ViewAllGoalsButton from "../Goals/Components/Buttons/ViewAllGoalsButton";
 import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
+import LoadingPage from "@/individual_components/LoadingPage";
+import { UserGenreQueries } from "@/queries/UserGenreQueries";
 
 const Account = () => {
-    const { isAuthenticated } = useAuth0();
-    const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+  const { isAuthenticated } = useAuth0();
+  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
 
-    const { usr, userGuid } = React.useContext(
-        UserAccountContext
-    ) as UserAccountContextInterface;
+  const {
+    usr,
+    userGuid,
+    isLoading: isUserLoading,
+  } = React.useContext(UserAccountContext) as UserAccountContextInterface;
 
-    const {
-        data: userGamesFromUser,
-        isLoading,
-        isSuccess,
-    } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+  const {
+    data: userGamesFromUser,
+    isLoading,
+    isSuccess,
+  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
-    const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
-        GoalQueries.useGetGoalsByUser(userGuid ?? "");
+  const {
+    data: allUserGoals,
+    isSuccess: isGettingGoalsSuccess,
+    isLoading: goalLoading,
+  } = GoalQueries.useGetGoalsByUser(userGuid ?? "");
 
-    useEffect(() => {
-        const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
-        setCurrentGoal(foundCurrentGoal);
-    }, [allUserGoals]);
+  const { data: userGenres, isLoading: loadingGenres } =
+    UserGenreQueries.useGetAllByUser(userGuid ?? "");
+
+  useEffect(() => {
+    const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
+    setCurrentGoal(foundCurrentGoal);
+  }, [allUserGoals]);
+
+  if (isLoading || isUserLoading || goalLoading || loadingGenres) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black dark:text-white">
+        <LoadingPage />
+      </div>
+    );
+  }
+
   return (
     isAuthenticated &&
     usr?.profileURL &&
     isSuccess &&
-    isGettingGoalsSuccess && (
+    isGettingGoalsSuccess &&
+    userGenres && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
           <div className="flex flex-wrap">
@@ -51,9 +70,14 @@ const Account = () => {
             />
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
-              <p className="md:text-2xl text-lg ms-8">
-                {usr?.xp == 0 ? 0 : usr?.xp} Xp
-              </p>
+              <div className="flex flex-row">
+                <p className="md:text-2xl text-lg ms-8">
+                  {usr?.xp == 0 ? 0 : usr?.xp} Xp
+                </p>
+                <p className="md:text-2xl text-lg ms-8">
+                  {usr.totalTrophies ?? 0} Trophies
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex md:flex-row flex-col my-6">
@@ -63,7 +87,7 @@ const Account = () => {
             <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
               <ExpandableBio bio={usr.bio} />
               <hr className="md:hidden my-5" />
-              <UserGenresList userGuid={userGuid} />
+              <UserGenresList userGenres={userGenres} />
               <hr className="md:hidden my-5" />
             </div>
             <div className="md:w-1/4 w-full md:order-3 order-3">
@@ -73,7 +97,6 @@ const Account = () => {
           </div>
 
           <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
-          {isLoading && <LibraryLoading />}
           {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
             <LibraryList userGamesFromUser={userGamesFromUser} />
           )}
@@ -84,8 +107,8 @@ const Account = () => {
           <PlaylistLists />
         </div>
       </div>
-        )
-    );
+    )
+  );
 };
 
 export default Account;

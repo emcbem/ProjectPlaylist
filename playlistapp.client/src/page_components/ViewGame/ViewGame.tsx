@@ -4,6 +4,7 @@ import AddButton from "@/individual_components/AddButton";
 import { GameQueries } from "@/queries/GameQueries";
 import GameCover from "./GameCover";
 import ViewGameInfo from "./ViewGameInfo";
+import LoadingPage from "@/individual_components/LoadingPage";
 
 const ViewGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
@@ -11,8 +12,8 @@ const ViewGame = () => {
 
   if (isLoading) {
     return (
-      <div className="flex w-full dark:text-white text-black justify-center sm:mt-8 pt-10">
-        Loading...
+      <div className="min-h-screen bg-white dark:bg-black dark:text-white">
+        <LoadingPage />
       </div>
     );
   }

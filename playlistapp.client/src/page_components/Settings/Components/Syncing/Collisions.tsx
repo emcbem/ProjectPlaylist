@@ -7,9 +7,11 @@ import { useState } from "react";
 const Collisions = ({
   syncData,
   conflicts,
+  hasCompleted,
 }: {
   syncData: ItemAction;
   conflicts: ItemAction[] | undefined;
+  hasCompleted: () => void;
 }) => {
   const [selected, setSelected] = useState<ItemOption>();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,6 +24,8 @@ const Collisions = ({
     if (selected && conflicts && conflicts?.length > 0) {
       if (conflicts && currentIndex < Object.entries(conflicts).length - 1) {
         setCurrentIndex((prevIndex) => prevIndex + 1);
+      } else if (currentIndex == Object.entries(conflicts).length - 1) {
+        hasCompleted();
       }
       handleCollision();
     }
