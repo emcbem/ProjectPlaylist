@@ -21,7 +21,7 @@ const ViewLibraryGame = () => {
             <div className="flex flex-col lg:sticky top-[7.5rem]">
               <LibraryGameCover
                 game={userGame?.platformGame.game}
-                platformId={userGame?.platformGame.platform.id}
+                platform={userGame?.platformGame.platform}
               />
               <LibraryGameStats userGame={userGame!} />
             </div>

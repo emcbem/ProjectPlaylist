@@ -23,8 +23,8 @@ const WarningModal = ({
   platformId: number;
 }) => {
   const [syncData, setSyncData] = useState<ItemAction | undefined>(undefined);
-
   const [conflicts, setConflicts] = useState<ItemAction[]>();
+  const [hasCompleted, setHasCompleted] = useState<boolean>(false);
 
   useEffect(() => {
     if (syncData) {
@@ -60,7 +60,6 @@ const WarningModal = ({
       setSyncData(actionLog);
     }
   };
-
   return (
     <>
       <div
@@ -92,10 +91,17 @@ const WarningModal = ({
                   platformName={platformId === 7 ? "PlayStation" : "Steam"}
                 />
               )}
-              {syncData && syncData.itemOptions.length != 0 && (
-                <Collisions syncData={syncData} conflicts={conflicts} />
-              )}
+              {syncData &&
+                syncData.itemOptions.length != 0 &&
+                hasCompleted != true && (
+                  <Collisions
+                    syncData={syncData}
+                    conflicts={conflicts}
+                    hasCompleted={() => setHasCompleted(true)}
+                  />
+                )}
               {!loading && syncData?.itemOptions.length == 0 && <Success />}
+              {!loading && hasCompleted == true && <Success />}
             </form>
           )}
         </div>

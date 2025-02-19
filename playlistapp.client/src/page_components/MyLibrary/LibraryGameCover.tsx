@@ -1,14 +1,16 @@
 import { Game } from "@/@types/game";
+
+import { Platform } from "@/@types/platform";
 import { ViewLogoDictonary } from "./Components/ViewLogoDictonary";
 
 const LibraryGameCover = ({
   game,
-  platformId,
+  platform,
 }: {
   game: Game;
-  platformId: number;
+  platform: Platform;
 }) => {
-  const Logo = ViewLogoDictonary[platformId] || (() => <div></div>);
+  const Logo = ViewLogoDictonary[platform.id];
 
   return (
     <div className="relative">
