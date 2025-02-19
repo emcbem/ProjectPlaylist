@@ -72,7 +72,7 @@ public partial class PlaylistDbContext : DbContext
 
 			entity.ToTable("achievement", "playlistdb");
 
-			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
 			entity.Property(e => e.AchievementDesc).HasColumnName("achievement_desc");
 			entity.Property(e => e.AchievementName).HasColumnName("achievement_name");
 			entity.Property(e => e.ImageUrl).HasColumnName("image_url");

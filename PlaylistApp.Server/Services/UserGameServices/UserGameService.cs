@@ -63,6 +63,10 @@ public class UserGameService : IUserGameService
         var userGame = await context.UserGames
             .Include(x => x.PlatformGame)
                 .ThenInclude(x => x.Game)
+                    .ThenInclude(x => x.GameGenres)
+                        .ThenInclude(x => x.Genre)
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
                     .ThenInclude(x => x.InvolvedCompanies)
                         .ThenInclude(x => x.Company)
             .Include(x => x.PlatformGame)

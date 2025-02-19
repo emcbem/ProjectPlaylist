@@ -81,29 +81,38 @@ public class AchievementUpdater : IAchievementUpdater
     {
         var context = await dbContextFactory.CreateDbContextAsync();
 
-        //TODO REMOVE THIS LINE
-        platformGames = context.PlatformGames.ToList();
-        //END
-
-
         var gamesGroupedByPlatform = platformGames.GroupBy(x => x.PlatformId).ToList();
-
         var steamGames = gamesGroupedByPlatform
-                        .Where(g => g.Key == 6)
-                        .SelectMany(g => g)
-                        .ToList();
+                         .Where(g => g.Key == 6)
+                         .SelectMany(g => g)
+                         .ToList();
 
+        var semaphore = new SemaphoreSlim(20);
+        var tasks = new List<Task>();
 
-        foreach (var game in steamGames)
+        await Parallel.ForEachAsync(steamGames, async (game, token) =>
         {
-            if(game.PlatformKey is not null && game.PlatformKey != string.Empty)
+            await semaphore.WaitAsync(token);
+            try
             {
-                var achievementsFound = await GetSteamAchievementsForGame(game.PlatformKey, game.Id);
-                if(achievementsFound != null)
+                if (!string.IsNullOrEmpty(game.PlatformKey))
                 {
-                    context.Achievements.AddRange(achievementsFound);
+                    var achievementsFound = await GetSteamAchievementsForGame(game.PlatformKey, game.Id);
+                    if (achievementsFound != null)
+                    {
+                        lock (context)
+                        {
+                            context.Achievements.AddRange(achievementsFound);
+                        }
+                    }
                 }
             }
-        }
+            finally
+            {
+                semaphore.Release();
+            }
+        });
+
+        await context.SaveChangesAsync();
     }
 }
