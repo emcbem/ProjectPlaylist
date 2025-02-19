@@ -1,6 +1,7 @@
 ﻿using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData;
+using PlaylistApp.Server.DTOs.SteamData.SteamAchievements;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Services.SteamServices.SteamAchievementService.SteamAchievementService;
 using PlaylistApp.Server.Services.SteamServices.SteamGameService;
@@ -38,8 +39,9 @@ public class SteamOrchestrator : ISteamOrchestrator
         // step 5: Find games user has but with different hours. 
         ItemAction itemActions2 = await steamService.FixTimeDifferences(steamApiResponse, platformGamesFromSteam, steamGames, steamActionLogRequest.UserId);
 
-		// step 6: of synced games, auto add achievements user hasn't added to playlist yet (under development)
-		//await steamAchievementService.GetSteamAchievementsFromSteam(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
+        // step 6: of synced games, auto add achievements user hasn't added to playlist yet (under development)
+        List<SteamAchievement> response = await steamAchievementService.GetEarnedAchievementsFromSteamFromUserId(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
+		await steamAchievementService.AddSteamAchievementsToUser(response, steamActionLogRequest.UserId, platformGamesFromSteam);
 
 		itemActions.ItemOptions.AddRange(itemActions2.ItemOptions);
 
