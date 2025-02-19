@@ -2,12 +2,21 @@ import React from "react";
 import MasonryCards from "../individual_components/MasonryCards";
 import { GameQueries } from "@/queries/GameQueries";
 import MainLayout from "@/layout/MainLayout";
+import LoadingPage from "@/individual_components/LoadingPage";
 
 const HomePageLoggedIn: React.FC = () => {
-  const { data: games } = GameQueries.useGetAllGames();
+  const { data: games, isLoading } = GameQueries.useGetAllGames();
 
   const slicedArray = games?.filter((item) => !!item.coverUrl).slice(0, 48);
   const slicedArray2 = games?.filter((item) => !!item.coverUrl).slice(49, 97);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black dark:text-white">
+        <LoadingPage />
+      </div>
+    );
+  }
 
   return (
     games && (

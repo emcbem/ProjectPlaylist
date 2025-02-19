@@ -4,8 +4,8 @@ import { Page } from "@/@types/Page";
 import { GameService } from "@/ApiServices/GameService";
 import CardGamesList from "@/individual_components/CardGamesList";
 import { SearchRequestController } from "@/@types/ComponentControllers/InfiniteGameController";
-import { LoaderIcon } from "react-hot-toast";
 import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon";
+import LoadingPage from "@/individual_components/LoadingPage";
 
 export const InfiniteGames: FC<SearchRequestController> = (controller) => {
   const observer = useRef<IntersectionObserver | null>();
@@ -29,9 +29,7 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
     },
   });
 
-  const [fetchedOnGames, setFetchedOnGames] = useState<
-    Element[]
-  >([]);
+  const [fetchedOnGames, setFetchedOnGames] = useState<Element[]>([]);
 
   useEffect(() => {
     setFetchedOnGames([]);
@@ -82,8 +80,8 @@ export const InfiniteGames: FC<SearchRequestController> = (controller) => {
         </div>
       )}
       {isFetching && (
-        <div className="flex justify-center">
-          <LoaderIcon className="w-[50px] h-[50px]"></LoaderIcon>
+        <div className="min-h-screen bg-white dark:bg-black dark:text-white w-full">
+          <LoadingPage />
         </div>
       )}
       {!isFetching &&
