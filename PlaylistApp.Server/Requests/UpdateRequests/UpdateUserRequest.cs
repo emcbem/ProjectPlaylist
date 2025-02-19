@@ -17,4 +17,5 @@ public class UpdateUserRequest
     public bool? NotifyOnAchievementDisliked { get; set; }
     public bool? NotifyOnFriendRequestRecieved { get; set; }
     public bool? NotifyOnFriendRequestAccepted { get; set; }
+    public int TotalTrophies { get; set; }
 }

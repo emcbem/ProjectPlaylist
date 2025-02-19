@@ -67,6 +67,8 @@ public partial class UserAccount
 
 	public bool? NotifyOnFriendRequestAccepted { get; set; }
 
+	public int TotalTrophies { get; set; }
+
 	public virtual ICollection<AchievementLike> AchievementLikes { get; set; } = new List<AchievementLike>();
 
 	public virtual ICollection<Friend> FriendBases { get; set; } = new List<Friend>();
