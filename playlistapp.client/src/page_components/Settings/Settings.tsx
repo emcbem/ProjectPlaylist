@@ -8,7 +8,6 @@ import EditGamerTags from "./Components/GamerTags/EditGamerTags";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import EditNotifications from "./EditNotifications";
 import LoadingPage from "@/individual_components/LoadingPage";
-import { UserGenreQueries } from "@/queries/UserGenreQueries";
 
 const Settings = () => {
   const { usr, isLoading } = React.useContext(

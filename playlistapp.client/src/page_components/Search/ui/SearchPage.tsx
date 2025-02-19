@@ -17,7 +17,7 @@ const SearchPage = () => {
 
   return (
     <MainLayout>
-      <div className="relative">
+      <div className="relative w-full">
         <MobileFilter
           filterController={filterController}
           dropdownController={{ open, setOpen }}
