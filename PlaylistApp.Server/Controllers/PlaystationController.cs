@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.PlaystationServices;
 
 namespace PlaylistApp.Server.Controllers;
@@ -15,6 +16,7 @@ public class PlaystationController : Controller
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
     private readonly PlaystationOrchestrator PlaystationOrchestrator;
     private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformErrorService;
+    private readonly PlaystationTrophyService PlaystationTrophyService;
 
     public PlaystationController(PlaystationOrchestrator playstationOrchestrator,
                                  AddNewPlaystationGamesService addNewPlaystationGamesService,
@@ -22,7 +24,8 @@ public class PlaystationController : Controller
                                  PlaystationAuthenticationService playstationAuthenticationService,
                                  IConfiguration configuration,
                                  GatherNewPlaystationGamesService playstationComparerService,
-                                 HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService)
+                                 HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService,
+                                 PlaystationTrophyService playstationTrophyService)
     {
         PlaystationGameService = playstationGameService;
         PlaystationAuthService = playstationAuthenticationService;
@@ -30,6 +33,7 @@ public class PlaystationController : Controller
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
         PlaystationOrchestrator = playstationOrchestrator;
         HandlePlaystationPlatformErrorService = handlePlaystationPlatformErrorService;
+        PlaystationTrophyService = playstationTrophyService;
     }
 
     [HttpPost("gettoken")]
@@ -78,5 +82,11 @@ public class PlaystationController : Controller
     public async Task<ItemAction> SendPlaystationPlatformErrorsToUser(NewPlaystationGames newPlaystationGames)
     {
         return await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+    }
+
+    [HttpPost("playersummary")]
+    public async Task<int> GetUserTotalEarnedPlaystationTrophies(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationTrophyService.GetUserTotalEarnedPlaystationTrophies(playstationDTO);
     }
 }
