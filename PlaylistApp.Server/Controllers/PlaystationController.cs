@@ -3,6 +3,7 @@ using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.PlaystationServices;
+using PsnApiWrapperNet.Model;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -88,5 +89,23 @@ public class PlaystationController : Controller
     public async Task<int> GetUserTotalEarnedPlaystationTrophies(PlaystationDTO playstationDTO)
     {
         return await PlaystationTrophyService.GetUserTotalEarnedPlaystationTrophies(playstationDTO);
+    }
+
+    [HttpGet("trophysummary")]
+    public async Task<Trophies> FindTrophiesForPlaystationTitle()
+    {
+        return await PlaystationTrophyService.FindTrophiesForPlaystationTitle();
+    }
+
+    [HttpPost("trophytitles")]
+    public async Task<TrophyTitles> RetrieveTrophyTitlesForUser(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationTrophyService.RetrieveTrophyTitlesForUser(playstationDTO);
+    }
+
+    [HttpPost("earnedtitles")]
+    public async Task<Trophies> RetrieveTrophiesEarnedForTitle(PlaystationDTO playstationDTO)
+    {
+        return await PlaystationTrophyService.RetrieveTrophiesEarnedForTitle(playstationDTO);
     }
 }

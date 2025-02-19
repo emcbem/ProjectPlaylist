@@ -45,4 +45,31 @@ public class PlaystationTrophyService
         var success = await UserService.UpdateUser(updateUserRequest);
         return success;
     }
+
+    public async Task<TrophyTitles> RetrieveTrophyTitlesForUser(PlaystationDTO playstationDTO)
+    {
+        PAWN pawn = new(config["npsso"]);
+
+        var result = await pawn.PlayerTrophyTitlesAsync(playstationDTO.AccountId, 0, 800);
+
+        return result;
+    }
+    public async Task<Trophies> RetrieveTrophiesEarnedForTitle(PlaystationDTO playstationDTO)
+    {
+        PAWN pawn = new(config["npsso"]);
+
+        var result = await pawn.PlayerTrophiesAsync(playstationDTO.AccountId, "NPWR28289_00", "all", "trophy2");
+
+        return result;
+    }
+
+    public async Task<Trophies> FindTrophiesForPlaystationTitle()
+    {
+        PAWN pawn = new(config["npsso"]);
+
+        var result = await pawn.TitleTrophiesAsync("NPWR28289_00", "all", "trophy2");
+
+        return result;
+    }
+
 }
