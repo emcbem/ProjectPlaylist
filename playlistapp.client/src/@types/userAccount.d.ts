@@ -39,7 +39,7 @@ export interface UserAccount {
   gameLists: ListGame[];
   platforms: Platform[];
   notifications: UserNotification[];
-  totalTrohpies: number;
+  totalTrophies: number;
 }
 
 export interface UserAccountContextInterface {

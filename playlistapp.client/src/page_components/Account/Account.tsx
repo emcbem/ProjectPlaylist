@@ -17,26 +17,26 @@ import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
 
 const Account = () => {
-    const { isAuthenticated } = useAuth0();
-    const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+  const { isAuthenticated } = useAuth0();
+  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
 
-    const { usr, userGuid } = React.useContext(
-        UserAccountContext
-    ) as UserAccountContextInterface;
+  const { usr, userGuid } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
 
-    const {
-        data: userGamesFromUser,
-        isLoading,
-        isSuccess,
-    } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+  const {
+    data: userGamesFromUser,
+    isLoading,
+    isSuccess,
+  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
 
-    const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
-        GoalQueries.useGetGoalsByUser(userGuid ?? "");
+  const { data: allUserGoals, isSuccess: isGettingGoalsSuccess } =
+    GoalQueries.useGetGoalsByUser(userGuid ?? "");
 
-    useEffect(() => {
-        const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
-        setCurrentGoal(foundCurrentGoal);
-    }, [allUserGoals]);
+  useEffect(() => {
+    const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
+    setCurrentGoal(foundCurrentGoal);
+  }, [allUserGoals]);
   return (
     isAuthenticated &&
     usr?.profileURL &&
@@ -51,9 +51,14 @@ const Account = () => {
             />
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
-              <p className="md:text-2xl text-lg ms-8">
-                {usr?.xp == 0 ? 0 : usr?.xp} Xp
-              </p>
+              <div className="flex flex-row">
+                <p className="md:text-2xl text-lg ms-8">
+                  {usr?.xp == 0 ? 0 : usr?.xp} Xp
+                </p>
+                <p className="md:text-2xl text-lg ms-8">
+                  {usr.totalTrophies ?? 0} Trophies
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex md:flex-row flex-col my-6">
@@ -84,8 +89,8 @@ const Account = () => {
           <PlaylistLists />
         </div>
       </div>
-        )
-    );
+    )
+  );
 };
 
 export default Account;
