@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import EditGamerTags from "./Components/GamerTags/EditGamerTags";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import EditNotifications from "./EditNotifications";
+import LoadingPage from "@/individual_components/LoadingPage";
+import { UserGenreQueries } from "@/queries/UserGenreQueries";
 
 const Settings = () => {
   const { usr, isLoading } = React.useContext(
@@ -33,10 +35,8 @@ const Settings = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-black dark:text-white ">
-        <div className="m-8 w-99 flex justify-center">
-          <h1 className="text-2xl">Loading ...</h1>
-        </div>
+      <div className="min-h-screen bg-white dark:bg-black dark:text-white">
+        <LoadingPage />
       </div>
     );
   }
