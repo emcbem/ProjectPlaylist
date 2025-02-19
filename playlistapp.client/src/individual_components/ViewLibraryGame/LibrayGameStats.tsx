@@ -1,16 +1,14 @@
-import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccount } from "@/@types/userAccount";
 import NumberTicker from "@/components/ui/number-ticker";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 import Gauge from "../Gauge";
 import { UserGame } from "@/@types/usergame";
 import AddGoalButton from "@/page_components/Goals/Components/Buttons/AddGoalButton";
 import GoalModalAdd from "@/page_components/Goals/Components/Modal/GoalModalAdd";
 import ShineBorder from "@/components/ui/shine-border";
 
-const LibraryGameStats: FC<{ userGame: UserGame }> = ({ userGame }) => {
-  const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
+const LibraryGameStats: FC<{ usr: UserAccount, userGame: UserGame }> = ({ usr, userGame }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const HandleAddModal = () => {

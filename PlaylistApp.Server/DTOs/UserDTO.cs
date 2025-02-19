@@ -36,6 +36,7 @@ public class UserDTO
 	public bool? NotifyOnAchievementDisliked { get; set; }
 	public bool? NotifyOnFriendRequestRecieved { get; set; }
 	public bool? NotifyOnFriendRequestAccepted { get; set; }
+	public int TotalTrophies { get; set; }
 	public List<UserGameDTO>? UserGames {get;set;}
     public List<ListDTO>? GameLists {get;set;}
     public List<PlatformDTO>? Platforms { get; set; }
@@ -88,7 +89,8 @@ public static class UserConverter
 			PlaytimePrivate = user.PlaytimePrivate,
 			ReviewsPrivate = user.ReviewsPrivate,
 			UsernamePrivate = user.UsernamePrivate,
-			XpPrivate = user.XpPrivate
+			XpPrivate = user.XpPrivate,
+			TotalTrophies = user.TotalTrophies
 		};
 	}
 
@@ -132,7 +134,8 @@ public static class UserConverter
 			PlaytimePrivate = user.PlaytimePrivate,
 			ReviewsPrivate = user.ReviewsPrivate,
 			UsernamePrivate = user.UsernamePrivate,
-			XpPrivate = user.XpPrivate
+			XpPrivate = user.XpPrivate,
+			TotalTrophies = user.TotalTrophies
 		};
 	}
 }

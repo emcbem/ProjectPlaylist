@@ -27,7 +27,7 @@ public class UserService : IUserService
 		this.dbContextFactory = dbContextFactory;
 	}
 
-    public async Task<Data.UserAccount> GetUser(System.Linq.Expressions.Expression<Func<UserAccount, bool>>? predicate)
+    public async Task<UserAccount> GetUser(System.Linq.Expressions.Expression<Func<UserAccount, bool>>? predicate)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -158,6 +158,7 @@ public class UserService : IUserService
 		userUnderChange.Bio = updateUserRequest.Bio;
 		userUnderChange.Strike = updateUserRequest.Strikes;
 		userUnderChange.UserImageId = updateUserRequest.UserImageID;
+		userUnderChange.TotalTrophies = updateUserRequest.TotalTrophies;
 
 		userUnderChange.NotifyOnReviewLiked = updateUserRequest.NotifyOnReviewLiked;
         userUnderChange.NotifyOnReviewDisliked = updateUserRequest.NotifyOnReviewDisliked;

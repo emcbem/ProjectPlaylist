@@ -10,17 +10,20 @@ public class PlaystationOrchestrator
     private readonly AddNewPlaystationGamesService AddNewPlaystationGamesService;
     private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformCollisionService;
     private readonly SyncPlaystationService SyncPlaystationService;
+    private readonly PlaystationTrophyService PlaystationTrophyService;
     public PlaystationOrchestrator(PlaystationGameService playstationGameService,
                                    GatherNewPlaystationGamesService gatherNewPlaystationGamesService,
                                    AddNewPlaystationGamesService addNewPlaystationGamesService,
                                    HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService,
-                                   SyncPlaystationService syncPlaystationService)
+                                   SyncPlaystationService syncPlaystationService,
+                                   PlaystationTrophyService playstationTrophyService)
     {
         PlaystationGameService = playstationGameService;
         GatherNewPlaystationGamesService = gatherNewPlaystationGamesService;
         AddNewPlaystationGamesService = addNewPlaystationGamesService;
         HandlePlaystationPlatformCollisionService = handlePlaystationPlatformErrorService;
         SyncPlaystationService = syncPlaystationService;
+        PlaystationTrophyService = playstationTrophyService;
     }
 
     public async Task<ItemAction> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
@@ -41,6 +44,8 @@ public class PlaystationOrchestrator
         ItemAction =  await HandlePlaystationPlatformCollisionService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
 
         var hoursAction = await OrchestratePlaystationHoursSyncing(playstationDTO);
+
+        await PlaystationTrophyService.GetUserTotalEarnedPlaystationTrophies(playstationDTO);
 
         foreach (var option in hoursAction)
         {

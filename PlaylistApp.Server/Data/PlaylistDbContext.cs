@@ -499,6 +499,7 @@ public partial class PlaylistDbContext : DbContext
 				.HasDefaultValue(false)
 				.HasColumnName("xp_private");
 			entity.Property(e => e.Email).HasColumnName("email");
+			entity.Property(e => e.TotalTrophies).HasColumnName("total_trophies");
 
 			entity.HasOne(d => d.UserImage).WithMany(p => p.UserAccounts)
 				.HasForeignKey(d => d.UserImageId)
