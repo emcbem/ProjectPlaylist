@@ -41,7 +41,9 @@ public class GameService : IGameService
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
 		var games = await context.Games
-			.Take(500)
+			.Include(game => game.GameReviews)
+            .OrderByDescending(game => game.GameReviews.Sum(gr => gr.Rating)).ThenBy(x => x.Id)
+            .Take(500)
 			.ToListAsync();
 
 		return games.Select(x => x.ToDTO()).ToList();

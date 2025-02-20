@@ -28,7 +28,7 @@ public class SyncService
 				  ON p.id = a.platform_game_id
 				JOIN playlistdb.platform_game AS p0
 				  ON g.id = p0.game_id
-				  AND p0.platform_id IN (48, 167, 8, 9, 168, 11, 12, 38, 49, 165, 169)";
+				  AND p0.platform_id IN (48, 167, 8, 9, 11, 12, 38, 49, 165, 169)";
 
 		using (var command = context.Database.GetDbConnection().CreateCommand())
 		{
@@ -41,23 +41,21 @@ public class SyncService
 				{
 					var achievement = new Data.Achievement()
 					{
-						PlatformGameId = result.GetInt32(1), // Assuming platform_game_id is the second column
-						ImageUrl = result.GetString(2), // Image URL
-						AchievementName = result.GetString(3), // Achievement name
-						AchievementDesc = result.GetString(4) // Achievement description
-					};
+						PlatformGameId = result.GetInt32(1), 
+						ImageUrl = result.GetString(2), 
+						AchievementName = result.GetString(3),
+                        AchievementDesc = result.IsDBNull(4) ? null : result.GetString(4),
+						ExternalId = "THISISSYNCEDFROMSTEAMDONOTUSETHISHOE"
+                    };
 					achievements.Add(achievement);
 				}
 			}
 		}
 
-		var sorted = achievements.Take(10000).OrderBy(x => x.PlatformGameId).ToList();
 
 
-		foreach (var achievement in achievements)
-		{
-			await context.Achievements.AddAsync(achievement);
-		}
+		context.Achievements.AddRange(achievements);
+		
 		await context.SaveChangesAsync();
 	}
 
