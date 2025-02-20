@@ -10,15 +10,17 @@ interface MyLibraryGridViewProps {
 const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
   return (
     <div className="flex flex-wrap">
-      {games.map((ug, key) => (
-        <Link
-          key={key}
-          to={`/user-library-game/${ug.userGameId}`}
-          className="m-2 w-24 sm:w-40"
-        >
-          <GameCover ug={ug} />
-        </Link>
-      ))}
+      {games
+        .sort((a, b) => (a.platformGame.id < b.platformGame.id ? -1 : 1))
+        .map((ug, key) => (
+          <Link
+            key={key}
+            to={`/user-library-game/${ug.userGameId}`}
+            className="m-2 w-24 sm:w-40"
+          >
+            <GameCover ug={ug} />
+          </Link>
+        ))}
     </div>
   );
 };

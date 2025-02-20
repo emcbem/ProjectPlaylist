@@ -35,7 +35,7 @@ const Collisions = ({
     <>
       <h1 className="text-2xl text-red-500">{syncData.errorType}</h1>
       {conflicts && conflicts.length > 0 && (
-        <h1 className="text-2xl">
+        <h1 className="text-2xl text-white">
           {FormatTitle(conflicts[currentIndex].errorType)}
         </h1>
       )}
