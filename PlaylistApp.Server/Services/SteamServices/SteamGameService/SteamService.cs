@@ -131,7 +131,7 @@ public class SteamService : ISteamService
                 });
             }
         }
-        action.ErrorType = "Platform Mismatch! >=(";
+        action.ErrorType = "Platform Mismatch";
 
         return action;
     }
