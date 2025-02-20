@@ -7,6 +7,7 @@ using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.NotificationServices;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace PlaylistApp.Server.Services.UserAchievementServices;
 
@@ -72,6 +73,7 @@ public class UserAchievementService : IUserAchievementService
 
         var requestAchievementIds = addRequest.UserAchievementRequests.Select(r => r.AchievementId).ToList();
         var achievementsFromDb = await context.Achievements.Where(r => requestAchievementIds.Contains(r.Id)).ToListAsync();
+        var userAchievements = await context.UserAchievements.Where(x => x.UserId == user.Id).Include(a => a.Achievement).ToListAsync();
 
         List<UserAchievement> achievementsToAdd = new();
 
@@ -83,15 +85,18 @@ public class UserAchievementService : IUserAchievementService
                 throw new Exception("Cannot get achievement that doesn't exist");
             }
 
-            UserAchievement newAchievement = new UserAchievement()
+            if (!userAchievements.Select(x => x.UserId).Contains(user.Id) && !userAchievements.Select(x => x.AchievementId).Contains(request.AchievementId))
             {
-                AchievementId = request.AchievementId,
-                UserId = user.Id,
-                IsSelfSubmitted = request.IsSelfSubmitted,
-                DateAchieved = request.DateAchieved.ToUniversalTime(),
-            };
+                UserAchievement newUserAchievement = new UserAchievement()
+                {
+                    AchievementId = request.AchievementId,
+                    UserId = user.Id,
+                    IsSelfSubmitted = request.IsSelfSubmitted,
+                    DateAchieved = request.DateAchieved.ToUniversalTime(),
+                };
 
-            achievementsToAdd.Add(newAchievement);
+                achievementsToAdd.Add(newUserAchievement);
+            }
         }
 
         await context.AddRangeAsync(achievementsToAdd);
