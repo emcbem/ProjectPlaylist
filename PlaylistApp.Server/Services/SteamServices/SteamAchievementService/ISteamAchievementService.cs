@@ -5,8 +5,6 @@ namespace PlaylistApp.Server.Services.SteamServices.SteamAchievementService.Stea
 {
     public interface ISteamAchievementService
     {
-        Task<List<SteamAchievement>> GetEarnedAchievementsFromSteamFromUserId(Guid userId, string steamId, List<PlatformGame> platformGamesFromSteam);
-
-        Task AddSteamAchievementsToUser(List<SteamAchievement> listOfAchievementsFound, Guid userId, List<PlatformGame> platformGamesFromSteam);
+        Task AddMissingAchievementsToUser(Guid userId, string steamId);
     }
 }

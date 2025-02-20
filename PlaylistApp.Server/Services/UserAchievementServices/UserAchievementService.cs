@@ -57,7 +57,49 @@ public class UserAchievementService : IUserAchievementService
         return newAchievement.Id;
     }
 
-	private async Task SendFriendsNotification(UserAccount user, Data.Achievement newAchievement)
+    public async Task AddMultipleUserAchievement(AddMultipleUserAchievementRequest addRequest)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var user = await context.UserAccounts
+            .Where(x => x.Guid == addRequest.UserGuid)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new Exception("The user associated with this User Achievement was not found.");
+        }
+
+        var requestAchievementIds = addRequest.UserAchievementRequests.Select(r => r.AchievementId).ToList();
+        var achievementsFromDb = await context.Achievements.Where(r => requestAchievementIds.Contains(r.Id)).ToListAsync();
+
+        List<UserAchievement> achievementsToAdd = new();
+
+        foreach (var request in addRequest.UserAchievementRequests)
+        {
+            var achievement = achievementsFromDb.Where(x => x.Id == request.AchievementId).FirstOrDefault();
+            if (achievement == null)
+            {
+                throw new Exception("Cannot get achievement that doesn't exist");
+            }
+
+            UserAchievement newAchievement = new UserAchievement()
+            {
+                AchievementId = request.AchievementId,
+                UserId = user.Id,
+                IsSelfSubmitted = request.IsSelfSubmitted,
+                DateAchieved = request.DateAchieved.ToUniversalTime(),
+            };
+
+            achievementsToAdd.Add(newAchievement);
+        }
+
+        await context.AddRangeAsync(achievementsToAdd);
+        await context.SaveChangesAsync();
+    }
+
+
+    private async Task SendFriendsNotification(UserAccount user, Data.Achievement newAchievement)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
