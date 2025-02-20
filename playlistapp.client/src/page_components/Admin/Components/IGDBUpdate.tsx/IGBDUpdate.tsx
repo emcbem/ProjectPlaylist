@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../Button";
 import { IGDBSyncQueries } from "@/queries/IGDBSyncQueries";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import "./ProgressBar.css";
 import { SuccessPage } from "./SuccessPage";
 import { ConfirmationPage } from "./ConfirmationPage";
