@@ -40,8 +40,7 @@ public class SteamOrchestrator : ISteamOrchestrator
         ItemAction itemActions2 = await steamService.FixTimeDifferences(steamApiResponse, platformGamesFromSteam, steamGames, steamActionLogRequest.UserId);
 
         // step 6: of synced games, auto add achievements user hasn't added to playlist yet (under development)
-        List<SteamAchievement> response = await steamAchievementService.GetEarnedAchievementsFromSteamFromUserId(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId, platformGamesFromSteam);
-		await steamAchievementService.AddSteamAchievementsToUser(response, steamActionLogRequest.UserId, platformGamesFromSteam);
+        await steamAchievementService.AddMissingAchievementsToUser(steamActionLogRequest.UserId, steamActionLogRequest.UserSteamId);
 
 		itemActions.ItemOptions.AddRange(itemActions2.ItemOptions);
 

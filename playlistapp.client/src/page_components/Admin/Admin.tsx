@@ -1,4 +1,4 @@
-import IGBDUpdate from "./Components/IGBDUpdate";
+import IGBDUpdate from "./Components/IGDBUpdate.tsx/IGBDUpdate";
 import PSNUpdate from "./Components/PSNUpdate";
 
 const AdminPage = () => {
