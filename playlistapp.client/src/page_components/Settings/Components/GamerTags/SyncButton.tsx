@@ -26,6 +26,8 @@ const SyncButton = ({
   const [actionsToShowUser, setActionsToShowUser] = useState<
     ItemAction | undefined
   >();
+  const [playstationSync, setPlaystationSync] = useState(false);
+  const [steamSync, setSteamSync] = useState(false);
 
   // PlayStation
   const user: PlaystationDTO = {
@@ -33,11 +35,11 @@ const SyncButton = ({
     accountId: accountId,
   };
 
-  const {
-    data: actionsFromPlaystation,
-    mutateAsync: getPlaystationLog,
-    isPending,
-  } = PlaystationQueries.useOrchestrateInitialPlaystationAccountSync(user);
+  const { data: actionsFromPlaystation, isPending } =
+    PlaystationQueries.useOrchestrateInitialPlaystationAccountSync(
+      user,
+      playstationSync
+    );
 
   // Steam
   const steamActionLogRequest: SteamActionLogRequest = {
@@ -45,20 +47,16 @@ const SyncButton = ({
     userSteamId: accountId,
   };
 
-  const {
-    data: actionsFromSteam,
-    mutateAsync: steamMutate,
-    isPending: steamIsPending,
-  } = SteamQueries.useGetSteamActionLog(steamActionLogRequest);
+  const { data: actionsFromSteam, isPending: steamIsPending } =
+    SteamQueries.useGetSteamActionLog(steamActionLogRequest, steamSync);
 
   async function startSync() {
-    setIsModalOpen(true);
     if (platformId === 7) {
       setActionsToShowUser(actionsFromPlaystation);
-      await getPlaystationLog();
+      setPlaystationSync(true);
     } else if (platformId === 163) {
       setActionsToShowUser(actionsFromSteam);
-      await steamMutate();
+      setSteamSync(true);
     }
   }
 
@@ -69,6 +67,8 @@ const SyncButton = ({
       setActionsToShowUser(actionsFromSteam);
     }
   }, [actionsFromPlaystation, actionsFromSteam, platformId]);
+  console.log(isPending);
+  console.log(steamIsPending);
 
   return (
     <>
@@ -78,15 +78,18 @@ const SyncButton = ({
         userId={userId}
         accountId={accountId}
         actionLog={actionsToShowUser}
-        actionLogPending={isPending || steamIsPending}
+        actionLogPending={
+          (steamSync && steamIsPending) || (playstationSync && isPending)
+        }
         platformId={platformId}
+        startSync={startSync}
       />
       <p
         role="button"
         className={`text-teal-400 underline underline-offset-2 ms-5 ${
           isVisible || searched ? "hidden" : ""
         }  ${!userPlatform ? "hidden" : ""} mt-1`}
-        onClick={startSync}
+        onClick={() => setIsModalOpen(true)}
       >
         sync
       </p>

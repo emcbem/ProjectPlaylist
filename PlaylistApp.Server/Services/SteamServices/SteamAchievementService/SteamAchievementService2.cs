@@ -40,10 +40,14 @@ public class SteamAchievementService2 : ISteamAchievementService
         }
 
         var userPlatformGames = await context.UserGames.Where(x => x.UserId == user.Id).Include(x => x.PlatformGame).ToListAsync();
+        var userPlatformGameIds = userPlatformGames.Select(x => x.Id).ToHashSet();
         var userAchievements = await context.UserAchievements.Where(x => x.UserId == user.Id).Include(a => a.Achievement).ThenInclude(pg => pg.PlatformGame).ToListAsync();
 
         AddMultipleUserAchievementRequest AddAchievementsRequest = new();
         AddAchievementsRequest.UserGuid = userId;
+
+        var possibleAchievements = await context.Achievements.Where(x => userPlatformGameIds.Contains(x.PlatformGameId)).ToListAsync();
+        var possibleAchievementDict = possibleAchievements.ToDictionary(x => (x.ExternalId, x.PlatformGameId), x => x.Id);
 
         try
         {
@@ -58,21 +62,21 @@ public class SteamAchievementService2 : ISteamAchievementService
 
                     foreach (var ach in jsonResponse.PlayerStats.Achievements)
                     {
-                        var matchingAch = userAchievements.Where(x => x.Achievement.ExternalId == ach.Apiname).Where(x => x.Achievement.PlatformGame.Id == pg.Id).FirstOrDefault();
-                        if (ach.Achieved == 1 && matchingAch is null)
+                        if(ach.Achieved == 0)
                         {
-                            var projectPlaylistAchievement = await context.Achievements.Where(x => x.PlatformGameId == pg.PlatformGameId && x.ExternalId == ach.Apiname).FirstOrDefaultAsync();
-                            if (projectPlaylistAchievement is not null)
-                            {
+                            continue;
+                        }
+                        if (possibleAchievementDict.ContainsKey((ach.Apiname, pg.Id)))
+                        {
+                            var matchingAch = possibleAchievementDict[(ach.Apiname, pg.Id)];
                                 AddUserAchievementRequest request = new()
                                 {
                                     UserGuid = userId,
                                     IsSelfSubmitted = false,
                                     DateAchieved = Conversions.UnixTimeToDateTime(ach.UnlockTime),
-                                    AchievementId = projectPlaylistAchievement.Id,
+                                    AchievementId = matchingAch
                                 };
                                 AddAchievementsRequest.UserAchievementRequests.Add(request);
-                            }
                         }
                     }
                 }

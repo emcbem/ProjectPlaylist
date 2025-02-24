@@ -13,6 +13,7 @@ const WarningModal = ({
   actionLog,
   actionLogPending,
   platformId,
+  startSync,
 }: {
   userId: string;
   accountId: string;
@@ -21,19 +22,11 @@ const WarningModal = ({
   actionLog: ItemAction | undefined;
   actionLogPending: boolean;
   platformId: number;
+  startSync: () => void;
 }) => {
   const [syncData, setSyncData] = useState<ItemAction | undefined>(undefined);
   const [conflicts, setConflicts] = useState<ItemAction[]>();
   const [hasCompleted, setHasCompleted] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (syncData) {
-      const reduceList = FormatCollisions(syncData.itemOptions);
-      setConflicts(reduceList);
-    }
-  }, [syncData]);
-
-  const [loading, setLoading] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -41,24 +34,28 @@ const WarningModal = ({
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    if (actionLog) {
+      const reduceList = FormatCollisions(actionLog.itemOptions);
+      setSyncData(actionLog);
+      setConflicts(reduceList)
+    }
+  }, [actionLog]);
+
   const handleRejectSync = (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(false);
     closeModal();
   };
 
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       closeModal();
-      setLoading(false);
     }
   };
 
   const handleConfirmation = () => {
+    startSync();
     console.log("Action log: ", actionLog);
-    if (actionLog) {
-      setSyncData(actionLog);
-    }
   };
   return (
     <>
@@ -83,8 +80,7 @@ const WarningModal = ({
               onSubmit={handleRejectSync}
               className="flex flex-col gap-4 p-6 mx-5 items-center"
             >
-              {loading && <LoadingDots />}
-              {!loading && !syncData && (
+              {!syncData && (
                 <Confirmation
                   handleRejectSync={() => handleRejectSync}
                   handleConfirmation={handleConfirmation}
@@ -100,8 +96,8 @@ const WarningModal = ({
                     hasCompleted={() => setHasCompleted(true)}
                   />
                 )}
-              {!loading && syncData?.itemOptions.length == 0 && <Success />}
-              {!loading && hasCompleted == true && <Success />}
+              {syncData?.itemOptions.length == 0 && <Success />}
+              {hasCompleted == true && <Success />}
             </form>
           )}
         </div>
