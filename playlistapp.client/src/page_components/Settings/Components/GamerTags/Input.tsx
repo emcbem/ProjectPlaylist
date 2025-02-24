@@ -113,7 +113,7 @@ const Input: FC<{
               isVisible ? "hidden" : ""
             } ${userPlatform || searched ? "hidden" : ""} mt-2`}
           >
-            Add a Gamertag for{platform.name}
+            Add a Gamertag for {platform.name}
           </p>
         ) : (
           <p
