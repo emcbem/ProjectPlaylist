@@ -52,7 +52,7 @@ public class SteamController : Controller
 
 		steamService.AddSteamUsernameToUser(userGuid, steamId);
 
-		string frontendBaseUrl = config["FrontendBaseUrl"] ?? "http://localhost:5173";
-		return Redirect($"{frontendBaseUrl}?steamid={steamId}");
+		string frontendBaseUrl = config["FrontendBaseUrl"] ?? "http://localhost:5173/settings";
+		return Redirect($"{frontendBaseUrl}/settings");
 	}
 }
