@@ -242,12 +242,11 @@ public class SteamService : ISteamService
                     ErrorText = $"Playlist record: ",
                     ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
-                    Hours = (int)(ug.TimePlayed! / 60),
+                    Hours = (int)(ug.TimePlayed!),
                     UniqueId = $"Hour{counter}",
                 });
             }
         }
-
         action.ErrorType = "Time Difference Found";
         return action;
     }
