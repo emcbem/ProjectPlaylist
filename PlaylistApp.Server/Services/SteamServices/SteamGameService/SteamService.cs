@@ -131,7 +131,7 @@ public class SteamService : ISteamService
                 });
             }
         }
-        action.ErrorType = "Platform Mismatch";
+        action.ErrorType = "Data mismatch. Select which data is correct.";
 
         return action;
     }
@@ -230,7 +230,7 @@ public class SteamService : ISteamService
                 counter++;
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = $"Steam record: ",
+                    ErrorText = $"Steam record ",
                     ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
                     Hours = steamGame!.PlaytimeForever,
@@ -239,7 +239,7 @@ public class SteamService : ISteamService
 
                 action.ItemOptions.Add(new ItemOption()
                 {
-                    ErrorText = $"Playlist record: ",
+                    ErrorText = $"Playlist record ",
                     ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
                     Hours = (int)(ug.TimePlayed!),
@@ -247,7 +247,7 @@ public class SteamService : ISteamService
                 });
             }
         }
-        action.ErrorType = "Time Difference Found";
+        action.ErrorType = "Data mismatch. Select which data is correct.";
         return action;
     }
 
