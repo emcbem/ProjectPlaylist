@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using PlaylistApp.Server.DTOs;
+﻿using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
-using PlaylistApp.Server.Requests.AddRequests;
-using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameServices;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
@@ -24,21 +21,19 @@ public class SyncPlaystationService
     };
 
     private readonly IUserGameService UserGameService;
-    private readonly IPlatformGameService PlatformGameService;
     private readonly PlaystationGameService PlaystationGameService;
 
-    public SyncPlaystationService(PlaystationGameService playstationGameService, IUserGameService userGameService, IPlatformGameService platformGameService)
+    public SyncPlaystationService(PlaystationGameService playstationGameService, IUserGameService userGameService)
     {
         PlaystationGameService = playstationGameService;
         UserGameService = userGameService;
-        PlatformGameService = platformGameService;
     }
 
-    public async Task<List<ItemOption>> CompareGames(PlaystationDTO playstationDTO)
+    public async Task<List<ItemAction>> CompareGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId == null)
         {
-            return new List<ItemOption>();
+            return new List<ItemAction>();
         }
 
         KnownGames = await UserGameService.GetUserGameByUser(playstationDTO.UserId);
@@ -46,25 +41,18 @@ public class SyncPlaystationService
 
         if (FoundGames is null)
         {
-            return new List<ItemOption>();
+            return new List<ItemAction>();
         }
 
-        ItemAction itemAction = new ItemAction();
+        var newItemActions = CompareGamesHours(KnownGames, FoundGames);
 
-        var options = CompareGamesHours(KnownGames, FoundGames);
-
-        foreach (var option in options)
-        {
-            itemAction.ErrorType = "Hour Mismatch Error";
-            itemAction.ItemOptions.Add(option);
-        }
-
-        return itemAction.ItemOptions;
+        return newItemActions;
     }
 
-    public List<ItemOption> CompareGamesHours(List<UserGameDTO> knownGames, List<PlaystationGameDTO> foundGames)
+    public List<ItemAction> CompareGamesHours(List<UserGameDTO> knownGames, List<PlaystationGameDTO> foundGames)
     {
-        var options = new List<ItemOption>();
+        List<ItemAction> newItemActions = new List<ItemAction>();
+
         int counter = 0;
 
         var orderedGames = foundGames.OrderBy(x => x.Name);
@@ -97,7 +85,7 @@ public class SyncPlaystationService
 
             foreach (var playstationGame in mergedGames)
             {
-                if (playstationGame.Category is null || playstationGame.Name is null || playstationGame.PlayDuration == null)
+                if (playstationGame.Category is null || playstationGame.Name is null || playstationGame.PlayDuration < 0)
                 {
                     continue; 
                 }
@@ -109,14 +97,14 @@ public class SyncPlaystationService
                 {
                     if (userGame.TimePlayed != playstationGame.PlayDuration)
                     {
-                        counter++;
+                        var options = new List<ItemOption>();
+
                         var option1 = new ItemOption
                         {
                             ErrorText = $"Playlist record: ",
                             ResolveUrl = $"/action/hours?hours={userGame.TimePlayed}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
                             GameTitle = $"{userGame.PlatformGame.Game.Title}",
                             Hours = (int)userGame.TimePlayed,
-                            UniqueId = $"Hour{counter}"
                         };
 
                         var option2 = new ItemOption
@@ -125,11 +113,17 @@ public class SyncPlaystationService
                             ResolveUrl = $"/action/hours?hours={playstationGame.PlayDuration}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
                             GameTitle = $"{userGame.PlatformGame.Game.Title}", 
                             Hours = playstationGame.PlayDuration,
-                            UniqueId= $"Hour{counter}"
                         };
 
-                        options.Add(option1);
-                        options.Add(option2);
+                        options.AddRange([option1, option2]);
+
+                        var newItemAction = new ItemAction
+                        {
+                            ErrorType = "Hours Mismatch",
+                            ItemOptions = options
+                        };
+
+                        newItemActions.Add(newItemAction);
                     }
 
                     break;
@@ -137,9 +131,6 @@ public class SyncPlaystationService
             }
         }
 
-        return options;
+        return newItemActions;
     }
-
-
-
 }

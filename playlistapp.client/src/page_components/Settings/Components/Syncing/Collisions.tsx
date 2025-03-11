@@ -1,16 +1,15 @@
 import { ItemAction } from "@/@types/Combination/itemAction";
 import { ItemOption } from "@/@types/Combination/itemOption";
-import { FormatTitle } from "@/hooks/useFormatCollisions";
 import { ItemActionQueries } from "@/queries/ItemActionQueires";
 import { useState } from "react";
 
 const Collisions = ({
-  syncData,
   conflicts,
+  setConflicts,
   hasCompleted,
 }: {
-  syncData: ItemAction;
   conflicts: ItemAction[] | undefined;
+  setConflicts: React.Dispatch<React.SetStateAction<ItemAction[] | undefined>>;
   hasCompleted: () => void;
 }) => {
   const [selected, setSelected] = useState<ItemOption>();
@@ -19,6 +18,7 @@ const Collisions = ({
   const { mutate: handleCollision } = ItemActionQueries.useHandleCollisions(
     selected ? selected.resolveUrl : ""
   );
+  const currentAction: ItemAction = conflicts?.at(0) ?? ({} as ItemAction);
 
   const handleConfirmation = () => {
     if (selected && conflicts && conflicts?.length > 0) {
@@ -28,29 +28,30 @@ const Collisions = ({
         hasCompleted();
       }
       handleCollision();
+      setConflicts(conflicts.filter((x) => x !== currentAction));
     }
   };
 
   return (
     <>
-      <h1 className="text-2xl text-red-500">{syncData.errorType}</h1>
+      <h1 className="text-2xl text-red-500">{currentAction.errorType}</h1>
       {conflicts && conflicts.length > 0 && (
         <h1 className="text-2xl text-white">
-          {FormatTitle(conflicts[currentIndex].errorType)}
+          {currentAction.itemOptions.at(0)?.gameTitle}
         </h1>
       )}
       <div className="w-full max-w-sm min-w-[200px]">
         <div className="mb-2 text-lg text-white flex flex-col justify-center">
           {conflicts &&
             conflicts.length > 0 &&
-            conflicts[currentIndex].itemOptions.map((itemOption) => {
+            currentAction.itemOptions.map((itemOption) => {
               return (
                 <button
                   key={itemOption.resolveUrl}
                   onClick={(e) => {
                     e.preventDefault();
                     setSelected(
-                      conflicts[currentIndex].itemOptions.find(
+                      currentAction.itemOptions.find(
                         (item) => item.resolveUrl == itemOption.resolveUrl
                       )
                     );
@@ -62,7 +63,7 @@ const Collisions = ({
                   }`}
                 >
                   {itemOption.errorText} -{" "}
-                  {parseFloat((itemOption.hours / 60).toFixed(0))} hours
+                  {parseFloat((itemOption.hours / 60).toFixed(2))} hours
                 </button>
               );
             })}

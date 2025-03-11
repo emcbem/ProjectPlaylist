@@ -1,6 +1,5 @@
 ﻿using PlaylistApp.Server.DTOs.PlaystationData;
 using PsnApiWrapperNet;
-using PsnApiWrapperNet.Model;
 using System.Xml;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;

@@ -1,9 +1,8 @@
 import { ItemAction } from "@/@types/Combination/itemAction";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
 import Collisions from "../Syncing/Collisions";
-import { FormatCollisions } from "@/hooks/useFormatCollisions";
 import Confirmation from "../Syncing/Confirmation";
 import Success from "../Syncing/Success";
 
@@ -14,18 +13,18 @@ const WarningModal = ({
   actionLogPending,
   platformId,
   startSync,
+  setConflicts,
 }: {
   userId: string;
   accountId: string;
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
-  actionLog: ItemAction | undefined;
+  actionLog: ItemAction[] | undefined;
   actionLogPending: boolean;
   platformId: number;
   startSync: () => void;
+  setConflicts: React.Dispatch<React.SetStateAction<ItemAction[] | undefined>>;
 }) => {
-  const [syncData, setSyncData] = useState<ItemAction | undefined>(undefined);
-  const [conflicts, setConflicts] = useState<ItemAction[]>();
   const [hasCompleted, setHasCompleted] = useState<boolean>(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -33,14 +32,6 @@ const WarningModal = ({
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  useEffect(() => {
-    if (actionLog) {
-      const reduceList = FormatCollisions(actionLog.itemOptions);
-      setSyncData(actionLog);
-      setConflicts(reduceList)
-    }
-  }, [actionLog]);
 
   const handleRejectSync = (event: React.FormEvent) => {
     event.preventDefault();
@@ -80,23 +71,21 @@ const WarningModal = ({
               onSubmit={handleRejectSync}
               className="flex flex-col gap-4 p-6 mx-5 items-center"
             >
-              {!syncData && (
+              {!actionLog && (
                 <Confirmation
                   handleRejectSync={() => handleRejectSync}
                   handleConfirmation={handleConfirmation}
                   platformName={platformId === 7 ? "PlayStation" : "Steam"}
                 />
               )}
-              {syncData &&
-                syncData.itemOptions.length != 0 &&
-                hasCompleted != true && (
-                  <Collisions
-                    syncData={syncData}
-                    conflicts={conflicts}
-                    hasCompleted={() => setHasCompleted(true)}
-                  />
-                )}
-              {syncData?.itemOptions.length == 0 && <Success />}
+              {actionLog && actionLog.length != 0 && hasCompleted != true && (
+                <Collisions
+                  conflicts={actionLog}
+                  setConflicts={setConflicts}
+                  hasCompleted={() => setHasCompleted(true)}
+                />
+              )}
+              {actionLog?.length == 0 && <Success />}
               {hasCompleted == true && <Success />}
             </form>
           )}

@@ -47,7 +47,7 @@ export const PlaystationService = {
       throw new Error("Playstation DTO was undefined or empty");
     }
     try {
-      const response = await axios.post<ItemAction>(
+      const response = await axios.post<ItemAction[]>(
         `${import.meta.env.VITE_URL}/Playstation/orchestrator`,
         playstationDTO,
         {
