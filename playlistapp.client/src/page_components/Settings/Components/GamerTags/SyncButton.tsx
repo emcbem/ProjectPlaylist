@@ -24,7 +24,7 @@ const SyncButton = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionsToShowUser, setActionsToShowUser] = useState<
-    ItemAction | undefined
+    ItemAction[] | undefined
   >();
   const [playstationSync, setPlaystationSync] = useState(false);
   const [steamSync, setSteamSync] = useState(false);
@@ -55,7 +55,8 @@ const SyncButton = ({
       setActionsToShowUser(actionsFromPlaystation);
       setPlaystationSync(true);
     } else if (platformId === 163) {
-      setActionsToShowUser(actionsFromSteam);
+      // TODO: DUSTY FIX
+      // setActionsToShowUser(actionsFromSteam);
       setSteamSync(true);
     }
   }
@@ -64,7 +65,8 @@ const SyncButton = ({
     if (platformId === 7 && actionsFromPlaystation) {
       setActionsToShowUser(actionsFromPlaystation);
     } else if (platformId === 163 && actionsFromSteam) {
-      setActionsToShowUser(actionsFromSteam);
+      // TODO: DUSTY FIX
+      // setActionsToShowUser(actionsFromSteam);
     }
   }, [actionsFromPlaystation, actionsFromSteam, platformId]);
   console.log(isPending);
@@ -83,6 +85,7 @@ const SyncButton = ({
         }
         platformId={platformId}
         startSync={startSync}
+        setConflicts={setActionsToShowUser}
       />
       <p
         role="button"
