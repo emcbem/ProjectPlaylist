@@ -72,7 +72,7 @@ const Settings = () => {
                   <h2 className="text-2xl">Profile Info</h2>
                   <p className="font-sans">{usr.username}</p>
                   <p className="text-teal-500 underline underline-offset-1 mt-3">
-                    edit username
+                    
                   </p>
                 </section>
                 <section className="mb-16 ml-8" id="bio" ref={bioRef}>
