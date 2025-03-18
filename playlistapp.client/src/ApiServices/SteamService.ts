@@ -10,7 +10,7 @@ export const SteamService = {
       console.error("No Steam Action Log Request provided.");
     }
     try {
-      const response = await axios.post<ItemAction>(
+      const response = await axios.post<ItemAction[]>(
         `${import.meta.env.VITE_URL}/Steam/getuseractionlog`,
         steamActionLogRequest,
         {

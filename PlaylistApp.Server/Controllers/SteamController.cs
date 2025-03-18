@@ -22,7 +22,7 @@ public class SteamController : Controller
     }
 
 	[HttpPost("getuseractionlog")]
-	public async Task<ItemAction> GetGamesBySteamId([FromBody] SteamActionLogRequest steamActionLogRequest)
+	public async Task<List<ItemAction>> GetGamesBySteamId([FromBody] SteamActionLogRequest steamActionLogRequest)
 	{
 		return await steamOrchestrator.CollectActionItemsFromSteam(steamActionLogRequest);
 	}

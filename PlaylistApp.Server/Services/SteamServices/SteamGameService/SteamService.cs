@@ -83,9 +83,8 @@ public class SteamService : ISteamService
         return matchingPlatformGames;
     }
 
-    public async Task<ItemAction> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
+    public async Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userId)
     {
-        ItemAction action = new();
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var duplicatePlatformKeys = matchingPlatformGames
@@ -104,35 +103,52 @@ public class SteamService : ISteamService
            .ThenInclude(g => g.Game)
            .Include(g => g.User)
            .ToList();
-        HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
+        HashSet<int> userGameIds = new(usersGames.Select(x => x.PlatformGameId));
 
+
+        List<ItemAction> actionsToSend = new();
 
         int counter = 0;
         string previousGame = "";
-        foreach (PlatformGame pg in gamesWithDuplicatePlatformKeys)
+
+        List<List<PlatformGame>> pgsGroupedByGame = gamesWithDuplicatePlatformKeys
+            .GroupBy(x => x.GameId)  
+            .Select(group => group.ToList()) 
+            .ToList();
+
+        foreach (List<PlatformGame> pgGroup in pgsGroupedByGame)
         {
-            var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
-            var userGameFromPlatform = usersGames.Where(x => x.PlatformGame.GameId == pg.GameId).ToList();
-            if (steamGame != null && !userGameFromPlatform.Any()) // if the user doesn't already have this game
+            ItemAction actionToAdd = new();
+            actionToAdd.ErrorType = $"We found multiple platforms for {pgGroup.First().Game.Title}";
+
+            foreach (var pg in pgGroup)
             {
-                if (pg.Game.Title != previousGame)
+                var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
+                var userGameFromPlatform = usersGames.Where(x => x.PlatformGame.GameId == pg.GameId).ToList();
+
+                if (steamGame != null && !userGameFromPlatform.Any()) // if the user doesn't already have this game
                 {
-                    counter++;
+
+                    if (pg.Game.Title != previousGame)
+                    {
+                        counter++;
+                    }
+                    previousGame = pg.Game.Title;
+
+                    actionToAdd.ItemOptions.Add(new ItemOption()
+                    {
+                        ErrorText = pg.Platform.PlatformName,
+                        ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}",
+                        GameTitle = pg.Game.Title,
+                        Hours = steamGame.PlaytimeForever,
+                    });
+
                 }
-                previousGame = pg.Game.Title;
-
-                action.ItemOptions.Add(new ItemOption()
-                {
-                    ErrorText = pg.Platform.PlatformName,
-                    ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}",
-                    GameTitle = pg.Game.Title,
-                    Hours=steamGame.PlaytimeForever,
-                });
             }
+            actionsToSend.Add(actionToAdd);
         }
-        action.ErrorType = "Data mismatch. Select which data is correct.";
 
-        return action;
+        return actionsToSend;
     }
 
     public async Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid)
@@ -189,9 +205,8 @@ public class SteamService : ISteamService
         await context.SaveChangesAsync();
     }
 
-    public async Task<ItemAction> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
+    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
     {
-        ItemAction action = new ItemAction();
 
         var duplicatePlatformKeys = matchingPlatformGames
             .GroupBy(pg => pg.PlatformKey)
@@ -217,35 +232,43 @@ public class SteamService : ISteamService
         HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
         int counter = 0;
 
+        List<ItemAction> actionsToSend = new();
+
         foreach (PlatformGame pg in matchingPlatformGames)
         {
             UserGame? ug = usersGames.Where(x => x.PlatformGameId == pg.Id && x.UserId == userId).FirstOrDefault();
             SteamRawGame? steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
 
-
-
             if (ug!.TimePlayed != steamGame?.PlaytimeForever)
             {
                 counter++;
-                action.ItemOptions.Add(new ItemOption()
-                {
-                    ErrorText = $"Steam record ",
-                    ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
-                    GameTitle = ug.PlatformGame.Game.Title,
-                    Hours = steamGame!.PlaytimeForever,
-                });
 
-                action.ItemOptions.Add(new ItemOption()
+                ItemAction action = new ItemAction()
                 {
-                    ErrorText = $"Playlist record ",
-                    ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
-                    GameTitle = ug.PlatformGame.Game.Title,
-                    Hours = (int)(ug.TimePlayed!),
-                });
+                    ErrorType = "We found a difference in hours. Which hours are correct?",
+                    ItemOptions = new List<ItemOption>
+                    {
+                        new ItemOption()
+                        {
+                            ErrorText = $"Steam record ",
+                            ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
+                            GameTitle = ug.PlatformGame.Game.Title,
+                            Hours = steamGame!.PlaytimeForever,
+                        },
+                        new ItemOption()
+                        {
+                            ErrorText = $"Playlist record ",
+                            ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
+                            GameTitle = ug.PlatformGame.Game.Title,
+                            Hours = (int)(ug.TimePlayed!),
+                        }
+                    },
+                };
+
+                actionsToSend.Add(action);
             }
         }
-        action.ErrorType = "Data mismatch. Select which data is correct.";
-        return action;
+        return actionsToSend;
     }
 
     public string ExtractSteamIdFromUrl(string urlParams)
