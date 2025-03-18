@@ -25,6 +25,8 @@ public class GatherNewPlaystationGamesService
 
     public async Task<NewPlaystationGames> HandleBringingInNewPlaystationGames(PlaystationDTO playstationDTO)
     {
+        List<ItemAction> newItemActions = new List<ItemAction>();
+
         if (playstationDTO.AccountId == null)
         {
             return new NewPlaystationGames();
@@ -38,7 +40,6 @@ public class GatherNewPlaystationGamesService
             return new NewPlaystationGames();
         }
 
-        ItemAction itemAction = new ItemAction();
         List<AddUserGameRequest> addUserGameRequests = new List<AddUserGameRequest>();
 
         if (CurrentGames is not null)
@@ -46,7 +47,7 @@ public class GatherNewPlaystationGamesService
             var alreadyExistsGames = CurrentGames
                 .Where(x =>
                 {
-                    if (!string.IsNullOrEmpty(x.PlatformGame.PlatformKey) &&
+                    if (!string.IsNullOrEmpty(x.PlatformGame!.PlatformKey) &&
                         int.TryParse(x.PlatformGame.PlatformKey, out int key))
                     {
                         var matchingGame = FoundGames.FirstOrDefault(y => y.Id == key);
@@ -69,7 +70,7 @@ public class GatherNewPlaystationGamesService
                 {
                     return !alreadyExistsGames.Any(y =>
                     {
-                        if (!string.IsNullOrEmpty(y.PlatformGame.PlatformKey) &&
+                        if (!string.IsNullOrEmpty(y.PlatformGame!.PlatformKey) &&
                             int.TryParse(y.PlatformGame.PlatformKey, out int key))
                         {
                             return key == x.Id;
@@ -81,11 +82,11 @@ public class GatherNewPlaystationGamesService
 
             string previousGameName = "";
             int previousHours = -1;
-            int counter = 0;
 
             foreach (var game in newGames)
             {
                 var platformGame = await PlatformGameService.GetAllPlatformGamesByExternalKey(game.Id.ToString());
+                ItemAction itemAction = new ItemAction();
 
                 if (platformGame.Count > 0)
                 {
@@ -97,7 +98,6 @@ public class GatherNewPlaystationGamesService
                             {
                                 previousGameName = x.Game.Title;
                                 previousHours = game.PlayDuration;
-                                counter++;
                             }
 
                             return new ItemOption()
@@ -106,15 +106,16 @@ public class GatherNewPlaystationGamesService
                                 ResolveUrl = $"/action/platforms?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
                                 GameTitle = platformGame[0].Game.Title,
                                 Hours = game.PlayDuration,
-                                UniqueId = $"Platform{counter}"
                             };
                         });
 
                         foreach (var option in options)
                         {
-                            itemAction.ErrorType = $"Action needed, select which data to keep: ";
+                            itemAction.ErrorType = $"Platform Mismatch!";
                             itemAction.ItemOptions.Add(option);
                         }
+
+                        newItemActions.Add(itemAction);
                     }
                     else
                     {
@@ -134,7 +135,7 @@ public class GatherNewPlaystationGamesService
         NewPlaystationGames newPlaystationGames = new()
         {
             AddUserGameRequests = addUserGameRequests,
-            ItemAction = itemAction
+            ItemAction = newItemActions
         };
 
         return newPlaystationGames;
