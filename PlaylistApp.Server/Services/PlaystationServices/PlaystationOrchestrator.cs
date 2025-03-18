@@ -26,13 +26,13 @@ public class PlaystationOrchestrator
         PlaystationTrophyService = playstationTrophyService;
     }
 
-    public async Task<ItemAction> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
+    public async Task<List<ItemAction>> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
     {
-        var ItemAction = new ItemAction();
+        var ItemActions = new List<ItemAction>();
 
         if (playstationDTO.AccountId is null)
         {
-            return new ItemAction();
+            return new List<ItemAction>();
         }
 
         var gameList = await PlaystationGameService.GetUserPlaystationGameList(playstationDTO.AccountId);
@@ -41,25 +41,25 @@ public class PlaystationOrchestrator
 
         var newGamesSent = await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
 
-        ItemAction =  await HandlePlaystationPlatformCollisionService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
+        ItemActions =  await HandlePlaystationPlatformCollisionService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
 
-        var hoursAction = await OrchestratePlaystationHoursSyncing(playstationDTO);
+        var hoursActions = await OrchestratePlaystationHoursSyncing(playstationDTO);
+
+        foreach (var action in hoursActions)
+        {
+            ItemActions.Add(action);
+        }
 
         await PlaystationTrophyService.GetUserTotalEarnedPlaystationTrophies(playstationDTO);
 
-        foreach (var option in hoursAction)
-        {
-            ItemAction.ItemOptions.Add(option);
-        }
-
-        return ItemAction;
+        return ItemActions;
     }
 
-    public async Task<List<ItemOption>> OrchestratePlaystationHoursSyncing(PlaystationDTO playstationDTO)
+    public async Task<List<ItemAction>> OrchestratePlaystationHoursSyncing(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId is null)
         {
-            return new List<ItemOption>();
+            return new List<ItemAction>();
         }
 
         return await SyncPlaystationService.CompareGames(playstationDTO);

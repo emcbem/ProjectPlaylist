@@ -50,13 +50,13 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("orchestrator")]
-    public async Task<ItemAction> SyncPlaystationData(PlaystationDTO playstationDTO)
+    public async Task<List<ItemAction>> SyncPlaystationData(PlaystationDTO playstationDTO)
     {
         return await PlaystationOrchestrator.OrchestrateInitialAccountAdd(playstationDTO);
     }
 
     [HttpPost("sync")]
-    public async Task<List<ItemOption>> SyncPlaystationHours(PlaystationDTO playstationDTO)
+    public async Task<List<ItemAction>> SyncPlaystationHours(PlaystationDTO playstationDTO)
     {
         return await PlaystationOrchestrator.OrchestratePlaystationHoursSyncing(playstationDTO);
     }
@@ -80,7 +80,7 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("playstationplatformerror")]
-    public async Task<ItemAction> SendPlaystationPlatformErrorsToUser(NewPlaystationGames newPlaystationGames)
+    public async Task<List<ItemAction>> SendPlaystationPlatformErrorsToUser(NewPlaystationGames newPlaystationGames)
     {
         return await HandlePlaystationPlatformErrorService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
     }

@@ -127,7 +127,6 @@ public class SteamService : ISteamService
                     ResolveUrl = $"/action/platforms/?hours={steamGame.PlaytimeForever}&pgid={pg.Id}&user={userId}",
                     GameTitle = pg.Game.Title,
                     Hours=steamGame.PlaytimeForever,
-                    UniqueId = $"Platform{counter}"
                 });
             }
         }
@@ -234,7 +233,6 @@ public class SteamService : ISteamService
                     ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
                     Hours = steamGame!.PlaytimeForever,
-                    UniqueId = $"Hour{counter}",
                 });
 
                 action.ItemOptions.Add(new ItemOption()
@@ -243,7 +241,6 @@ public class SteamService : ISteamService
                     ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
                     GameTitle = ug.PlatformGame.Game.Title,
                     Hours = (int)(ug.TimePlayed!),
-                    UniqueId = $"Hour{counter}",
                 });
             }
         }

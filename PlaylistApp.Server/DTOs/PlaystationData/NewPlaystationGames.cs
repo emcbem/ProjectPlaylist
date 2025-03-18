@@ -5,6 +5,6 @@ namespace PlaylistApp.Server.DTOs.PlaystationData;
 
 public class NewPlaystationGames
 {
-    public ItemAction ItemAction { get; set; } = new();
+    public List<ItemAction> ItemAction { get; set; } = new();
     public List<AddUserGameRequest> AddUserGameRequests { get; set; } = new();
 }
