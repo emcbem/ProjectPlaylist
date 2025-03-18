@@ -18,8 +18,9 @@ const Confirmation: FC<IConfirmation> = ({
         <label className="block mb-2 text-lg text-white">
           By syncing your {platformName} data, it will import your{" "}
           {platformName} library's data which includes game library and
-          playtime. By doing so, there might be collisions you will have to
-          manually resolve. Are you okay with this?
+          playtime. This can only be done if your game data in your account is
+          public to be viewed by anyone. By doing so, there might be collisions
+          you will have to manually resolve. Are you okay with this?
         </label>
       </div>
       <div className={`p-6 pb-0 px-0 flex flex-row w-full`}>
