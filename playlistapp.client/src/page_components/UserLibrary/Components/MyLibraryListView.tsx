@@ -19,6 +19,10 @@ const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
         <table className="w-full text-sm text-left rtl:text-right text-clay-900 dark:text-clay-950">
           <thead className="text-xs text-clay-950 uppercase bg-clay-400 dark:text-clay-950">
             <tr>
+              <th
+                scope="col"
+                className="px-6 py-3  xl:block lg:block md:block sm:hidden xs:hidden hidden"
+              ></th>
               <th scope="col" className="px-6 py-3">
                 Title
               </th>
@@ -40,6 +44,16 @@ const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
                 key={key}
                 onClick={() => handleRowClick(g.userGameId)}
               >
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white  xl:block lg:block md:block sm:hidden xs:hidden hidden "
+                >
+                  <img
+                    src={g.platformGame.game.coverUrl}
+                    width={70}
+                    className="hover:scale-105 rounded-lg"
+                  />
+                </th>
                 <td className="px-6 py-4">{g.platformGame.game.title}</td>
                 <td className="px-6 py-4">{g.platformGame.platform.name}</td>
                 <td className="px-6 py-4">

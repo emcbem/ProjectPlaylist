@@ -11,7 +11,7 @@ import AchievementsPage from "./page_components/Achievements/Achievements";
 import TestPage from "./page_components/TestPage";
 import ViewGame from "./page_components/ViewGame/ViewGame";
 import { Toaster } from "react-hot-toast";
-import MyLibrary from "./page_components/MyLibrary/MyLibrary";
+import UserLibrary from "./page_components/UserLibrary/UserLibrary";
 import Playlist from "./page_components/List/Playlist";
 import { SearchBarProvider } from "./contexts/SearchBarContext";
 import { ThemeProvider } from "@material-tailwind/react";
@@ -19,10 +19,9 @@ import { materialTheme } from "./lib/theme";
 import Settings from "./page_components/Settings/Settings";
 import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
-import ViewLibraryGame from "./page_components/MyLibrary/ViewLibraryGame";
+import ViewLibraryGame from "./page_components/UserLibrary/ViewLibraryGame";
 import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 import ViewAccount from "./page_components/ViewAccount/ViewAccount";
-import UserLibrary from "./page_components/ViewAccount/UserLibrary/UserLibrary";
 import ViewPlaylist from "./page_components/ViewAccount/Playlists/ViewPlaylist";
 import NotificationPage from "./page_components/Notifications/Notifications";
 import AdminPage from "./page_components/Admin/Admin";
@@ -67,7 +66,7 @@ function App() {
                       />
                       <Route path="/admin" element={<AdminPage />} />
                       <Route path="/account" element={<Account />} />
-                      <Route path="/library" element={<MyLibrary />} />
+                      <Route path="/library" element={<UserLibrary />} />
                       <Route path="/list/:listId" element={<Playlist />} />
                       <Route
                         path="/achievements/:gameId"

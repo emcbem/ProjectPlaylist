@@ -59,7 +59,7 @@ const ViewAccount = () => {
             </div>
           </div>
 
-          <p className="md:text-4xl mt-8 text-2xl">Your Library</p>
+          <p className="md:text-4xl mt-8 text-2xl">{usr.username}'s Library</p>
           {isLoading && <LibraryLoading />}
           {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
             <LibraryList userGamesFromUser={userGamesFromUser} />
