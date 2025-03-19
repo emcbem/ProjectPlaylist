@@ -5,11 +5,16 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GoalQueries } from "@/queries/GoalQueries";
 import { Goal } from "@/@types/goal";
 import GoalModalParent from "./Components/Modal/GoalModalParent";
+import LoadingPage from "@/individual_components/LoadingPage";
+import { useNavigate } from "react-router-dom";
+import BlackButton from "@/components/ui/BlackButton";
 
 const ViewAllGoals = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal>();
+
+  const navigate = useNavigate();
 
   const { usr } = React.useContext(
     UserAccountContext
@@ -42,9 +47,34 @@ const ViewAllGoals = () => {
     setIsDeleteModalOpen(false);
   };
 
+  if (!usr || !filteredGoals || !userGoals) {
+    return <LoadingPage />;
+  }
+
+  if (filteredGoals.length === 0) {
+    return (
+      <div className="flex flex-col items-center content-center mt-8">
+        <div className="text-center max-w-lg">
+          <h6 className="text-center text-black font-bold text-xl">
+            No goals found for your account
+          </h6>
+          <p className="text-center text-black">
+            Add a goal to one of your games from your library!
+          </p>
+          <div className="flex justify-center mt-2">
+            <BlackButton onClick={() => navigate("/library")}>
+              Go to Library
+            </BlackButton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     usr &&
-    filteredGoals && (
+    filteredGoals &&
+    userGoals && (
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="w-full" style={{ maxWidth: "1200px" }}>
           {filteredGoals.map((goal) => (
