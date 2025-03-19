@@ -62,10 +62,9 @@ const ViewAllGoals = () => {
             Add a goal to one of your games from your library!
           </p>
           <div className="flex justify-center mt-2">
-            <BlackButton
-              text={"Go To Library"}
-              onClick={() => navigate("/library")}
-            />
+            <BlackButton onClick={() => navigate("/library")}>
+              Go to Library
+            </BlackButton>
           </div>
         </div>
       </div>
