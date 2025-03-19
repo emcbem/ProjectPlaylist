@@ -21,8 +21,6 @@ import ChooseProfileImg from "./page_components/Account/ChooseProfileImg";
 import ViewAllGoals from "./page_components/Goals/ViewAllGoals";
 import ViewLibraryGame from "./page_components/UserLibrary/ViewLibraryGame";
 import SearchUsers from "./page_components/SearchUsers/SearchUsers";
-import ViewAccount from "./page_components/ViewAccount/ViewAccount";
-import ViewPlaylist from "./page_components/ViewAccount/Playlists/ViewPlaylist";
 import NotificationPage from "./page_components/Notifications/Notifications";
 import AdminPage from "./page_components/Admin/Admin";
 import { ColorModeProvider } from "./hooks/useDarkMode";
@@ -79,15 +77,15 @@ function App() {
                         element={<ChooseProfileImg />}
                       />
                       <Route path="viewallgoals" element={<ViewAllGoals />} />
-                      <Route path="user/:id" element={<ViewAccount />} />
+                      <Route path="user/:id" element={<Account />} />
                       <Route
                         path="user/:id/library"
                         element={<UserLibrary />}
                       />
-                      <Route
+                      {/* <Route
                         path="user/:id/list/:listId"
                         element={<ViewPlaylist />}
-                      />
+                      /> */}
                     </Routes>
                   </div>
                 </div>

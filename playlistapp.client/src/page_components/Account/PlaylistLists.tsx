@@ -1,16 +1,12 @@
-import { UserAccountContextInterface } from "@/@types/userAccount";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { UserAccount } from "@/@types/userAccount";
 import { ListQueries } from "@/queries/ListQueries";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AddListBtn from "./AddListBtn";
 import { Game } from "@/@types/game";
 
-const PlaylistLists = () => {
-  const { usr, userGuid } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
-  const { data: lists } = ListQueries.useGetListsByUserId(userGuid ?? "");
+const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
+  const { id } = useParams<{ id: string }>();
+  const { data: lists } = ListQueries.useGetListsByUserId(usr.guid ?? "");
   const fillGame: Game = {
     id: 0,
     idgb_id: 0,
@@ -24,16 +20,24 @@ const PlaylistLists = () => {
     hoursPlayed: 0,
     platforms: [],
     reviews: [],
-    totalOwned: 0
+    totalOwned: 0,
   } as Game;
 
   return (
     <>
       <div className="flex flex-row md:justify-normal justify-between mb-8 mt-6">
-        <p className="md:mt-8 md:text-5xl text-3xl mt-16">Your Playlists</p>
-        <div className="mt-auto mb-3 ms-6 md:me-0 me-5">
-          <AddListBtn usr={usr} />
-        </div>
+        {id ? (
+          <p className="md:text-4xl mt-8 text-3xl">
+            {usr.username}'s Playlists
+          </p>
+        ) : (
+          <>
+            <p className="md:text-4xl mt-8 text-3xl">Your Playlists</p>
+            <div className="mt-auto mb-3 ms-6 md:me-0 me-5">
+              <AddListBtn usr={usr} />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex flex-row overflow-x-auto flex-wrap">
