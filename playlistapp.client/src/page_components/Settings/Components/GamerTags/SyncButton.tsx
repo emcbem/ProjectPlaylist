@@ -56,7 +56,7 @@ const SyncButton = ({
       setPlaystationSync(true);
     } else if (platformId === 163) {
       // TODO: DUSTY FIX
-      // setActionsToShowUser(actionsFromSteam);
+      setActionsToShowUser(actionsFromSteam);
       setSteamSync(true);
     }
   }
@@ -66,11 +66,9 @@ const SyncButton = ({
       setActionsToShowUser(actionsFromPlaystation);
     } else if (platformId === 163 && actionsFromSteam) {
       // TODO: DUSTY FIX
-      // setActionsToShowUser(actionsFromSteam);
+      setActionsToShowUser(actionsFromSteam);
     }
   }, [actionsFromPlaystation, actionsFromSteam, platformId]);
-  console.log(isPending);
-  console.log(steamIsPending);
 
   return (
     <>
