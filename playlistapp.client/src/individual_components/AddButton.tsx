@@ -235,10 +235,7 @@ const AddButton: React.FC<props> = ({ gameId }) => {
           }
         />
       ) : (
-        <BlackButton
-          text={"Log in to Add"}
-          onClick={loginWithRedirect}
-        ></BlackButton>
+        <BlackButton onClick={loginWithRedirect}>Log in to Add</BlackButton>
       )}
     </>
   );
