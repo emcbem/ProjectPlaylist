@@ -8,7 +8,10 @@ import AddGoalButton from "@/page_components/Goals/Components/Buttons/AddGoalBut
 import GoalModalAdd from "@/page_components/Goals/Components/Modal/GoalModalAdd";
 import ShineBorder from "@/components/ui/shine-border";
 
-const LibraryGameStats: FC<{ usr: UserAccount, userGame: UserGame }> = ({ usr, userGame }) => {
+const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
+  usr,
+  userGame,
+}) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const HandleAddModal = () => {
@@ -46,55 +49,57 @@ const LibraryGameStats: FC<{ usr: UserAccount, userGame: UserGame }> = ({ usr, u
   //dark:shadow-[0px_0px_35px_8px_rgba(77,35,66,1)] shadow-[0px_0px_35px_8px_rgba(245,159,137,1)]
 
   return userEarnedAchievement && userGame ? (
-    <ShineBorder
-      className="aspect-[3/4] min-h-96 my-8 border shadow-xl dark:shadow-[#182225] dark:border-[#182225] lg:w-fit rounded-xl flex flex-col items-start"
-      color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-      borderWidth={6}
-    >
-      <>
-        <div className="flex md:flex-col flex-row items-center justify-between lg:p-4 p-0 w-full">
-          <div className="md:flex-shrink-0 mb-4 md:mb-0 md:p-4 p-0 flex-col flex items-center">
-            <div className="text-lg font-bold dark:text-white text-black">
-              Achievements
-            </div>
-            {userGame.platformGame.achievements.length > 0 ? (
-              <Gauge
-                totalAchievments={
-                  userGame?.platformGame?.achievements?.length ?? 0
-                }
-                earnedAchievements={earned?.length ?? 0}
-              />
-            ) : (
-              <div className="text-base my-4 font-bold dark:text-white text-black">
-                No achievements found for this title
+    <div>
+      <ShineBorder
+        className="aspect-[3/4] min-h-96 my-8 border shadow-xl dark:shadow-[#182225] dark:border-[#182225] lg:w-fit rounded-xl flex flex-col items-start"
+        color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+        borderWidth={6}
+      >
+        <>
+          <div className="flex md:flex-col flex-row items-center justify-between lg:p-4 p-0 w-full">
+            <div className="md:flex-shrink-0 mb-4 md:mb-0 md:p-4 p-0 flex-col flex items-center">
+              <div className="text-lg font-bold dark:text-white text-black">
+                Achievements
               </div>
-            )}
-          </div>
-
-          <div className="flex flex-col items-center">
-            <div className="text-lg font-bold dark:text-white text-black">
-              Total Hours Played
-            </div>
-            <div className="text-5xl">
-              {userGame && userGame.timePlayed > 0 ? (
-                <NumberTicker
-                  value={parseFloat((userGame.timePlayed / 60).toFixed(2))}
-                  decimalPlaces={1}
+              {userGame.platformGame.achievements.length > 0 ? (
+                <Gauge
+                  totalAchievments={
+                    userGame?.platformGame?.achievements?.length ?? 0
+                  }
+                  earnedAchievements={earned?.length ?? 0}
                 />
               ) : (
-                <p className="text-5xl">0</p>
+                <div className="text-base my-4 font-bold dark:text-white text-black">
+                  No achievements found for this title
+                </div>
               )}
             </div>
-            <AddGoalButton onAddClick={HandleAddModal} />
+
+            <div className="flex flex-col items-center">
+              <div className="text-lg font-bold dark:text-white text-black">
+                Total Hours Played
+              </div>
+              <div className="text-5xl">
+                {userGame && userGame.timePlayed > 0 ? (
+                  <NumberTicker
+                    value={parseFloat((userGame.timePlayed / 60).toFixed(2))}
+                    decimalPlaces={1}
+                  />
+                ) : (
+                  <p className="text-5xl">0</p>
+                )}
+              </div>
+              <AddGoalButton onAddClick={HandleAddModal} />
+            </div>
           </div>
-        </div>
-        <div>
-          {isAddModalOpen && (
-            <GoalModalAdd onClose={CloseModal} userGame={userGame} />
-          )}
-        </div>
-      </>
-    </ShineBorder>
+        </>
+      </ShineBorder>
+      <div>
+        {isAddModalOpen && (
+          <GoalModalAdd onClose={CloseModal} userGame={userGame} />
+        )}
+      </div>
+    </div>
   ) : (
     <p>No data available.</p>
   );
