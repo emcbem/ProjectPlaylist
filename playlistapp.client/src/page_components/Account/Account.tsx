@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Account.modules.scss";
-import { useAuth0 } from "@auth0/auth0-react";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import PlaylistLists from "./PlaylistLists";
