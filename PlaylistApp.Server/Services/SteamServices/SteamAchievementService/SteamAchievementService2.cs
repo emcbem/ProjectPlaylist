@@ -40,6 +40,11 @@ public class SteamAchievementService2 : ISteamAchievementService
         }
 
         var userPlatformGames = await context.UserGames.Where(x => x.UserId == user.Id).Include(x => x.PlatformGame).ToListAsync();
+        HashSet<int> userPlatformGameIds = new(userPlatformGames.Select(x => x.PlatformGameId));
+        List<string> userPgsPlatformKeys = new(userPlatformGames.Select(x => x.PlatformGame.PlatformKey ?? string.Empty));
+
+        List<PlayerStatsResponse> playerStatsResponse = await GetAllSteamAchievements(userPgsPlatformKeys, steamId);
+
         var userAchievements = await context.UserAchievements.Where(x => x.UserId == user.Id).Include(a => a.Achievement).ThenInclude(pg => pg.PlatformGame).ToListAsync();
 
         AddMultipleUserAchievementRequest AddAchievementsRequest = new();
@@ -47,31 +52,36 @@ public class SteamAchievementService2 : ISteamAchievementService
 
         try
         {
+            var allPlatformGameAchievements = await context.Achievements
+                    .Where(a => userPlatformGameIds.Contains(a.PlatformGameId))
+                    .ToListAsync();
             foreach (var pg in userPlatformGames)
             {
                 if (pg.PlatformGame.PlatformKey is not null)
                 {
-                    string url = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={pg.PlatformGame.PlatformKey}&key={steamKey}&steamid={steamId}";
-                    HttpResponseMessage response = await client.GetAsync(url);
-
-                    PlayerStatsResponse jsonResponse = await response.Content.ReadFromJsonAsync<PlayerStatsResponse>() ?? new PlayerStatsResponse();
-
-                    foreach (var ach in jsonResponse.PlayerStats.Achievements)
+                    foreach (var jsonResponse in playerStatsResponse)
                     {
-                        var matchingAch = userAchievements.Where(x => x.Achievement.ExternalId == ach.Apiname).Where(x => x.Achievement.PlatformGame.Id == pg.Id).FirstOrDefault();
-                        if (ach.Achieved == 1 && matchingAch is null)
+                        foreach (var ach in jsonResponse.PlayerStats.Achievements)
                         {
-                            var projectPlaylistAchievement = await context.Achievements.Where(x => x.PlatformGameId == pg.PlatformGameId && x.ExternalId == ach.Apiname).FirstOrDefaultAsync();
-                            if (projectPlaylistAchievement is not null)
+                            var matchingAch = userAchievements.Where(x => x.Achievement.ExternalId == ach.Apiname).Where(x => x.Achievement.PlatformGame.Id == pg.Id).FirstOrDefault();
+                            if (ach.Achieved == 1 && matchingAch is null)
                             {
-                                AddUserAchievementRequest request = new()
+                                //var projectPlaylistAchievement = await context.Achievements.Where(x => x.PlatformGameId == pg.PlatformGameId && x.ExternalId == ach.Apiname).FirstOrDefaultAsync(); // Make this line faster and maybe not use the context every time
+
+                                var projectPlaylistAchievement = allPlatformGameAchievements
+                                    .FirstOrDefault(x => x.PlatformGameId == pg.PlatformGameId && x.ExternalId == ach.Apiname);
+
+                                if (projectPlaylistAchievement is not null)
                                 {
-                                    UserGuid = userId,
-                                    IsSelfSubmitted = false,
-                                    DateAchieved = Conversions.UnixTimeToDateTime(ach.UnlockTime),
-                                    AchievementId = projectPlaylistAchievement.Id,
-                                };
-                                AddAchievementsRequest.UserAchievementRequests.Add(request);
+                                    AddUserAchievementRequest request = new()
+                                    {
+                                        UserGuid = userId,
+                                        IsSelfSubmitted = false,
+                                        DateAchieved = Conversions.UnixTimeToDateTime(ach.UnlockTime),
+                                        AchievementId = projectPlaylistAchievement.Id,
+                                    };
+                                    AddAchievementsRequest.UserAchievementRequests.Add(request);
+                                }
                             }
                         }
                     }
@@ -83,5 +93,21 @@ public class SteamAchievementService2 : ISteamAchievementService
         {
             throw new Exception("An Error occured when fetching achievements from Steam: " + e.Message);
         }
+    }
+
+    public async Task<List<PlayerStatsResponse>> GetAllSteamAchievements(List<string> userPgsPlatformKeys, string steamId)
+    {
+        List<PlayerStatsResponse> responses = new();
+
+        var steamKey = config["steamkey"];
+        foreach (var key in userPgsPlatformKeys)
+        {
+            string url = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={key}&key={steamKey}&steamid={steamId}";
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            responses.Add(await response.Content.ReadFromJsonAsync<PlayerStatsResponse>() ?? new PlayerStatsResponse());
+        }
+
+        return responses;
     }
 }

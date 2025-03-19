@@ -46,7 +46,6 @@ const WarningModal = ({
 
   const handleConfirmation = () => {
     startSync();
-    console.log("Action log: ", actionLog);
   };
   return (
     <>
