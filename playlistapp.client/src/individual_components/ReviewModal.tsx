@@ -1,6 +1,7 @@
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
+import BlackButton from "@/components/ui/BlackButton";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GameQueries } from "@/queries/GameQueries";
 import { GameReviewQueries } from "@/queries/GameReviewQueries";
@@ -122,16 +123,14 @@ const ReviewModal: FC<props> = ({
           />
         </svg>
       ) : (
-        <button
-          onClick={openModal}
-          className={`rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2 ${
-            hideReview == true ? `hidden` : ``
-          }`}
-          // className="rounded-md bg-clay-200 dark:bg-clay-600 sm:py-2 px-1 sm:px-4 sm:text-base w-28 h-8 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2"
-          type="button"
-        >
-          Leave a review
-        </button>
+        usr && (
+          <BlackButton
+            className={!hideReview ? "hidden" : "mb-9"}
+            onClick={openModal}
+          >
+            Leave a Review
+          </BlackButton>
+        )
       )}
 
       <div

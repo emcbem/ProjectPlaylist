@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Account.modules.scss";
-import { useAuth0 } from "@auth0/auth0-react";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import PlaylistLists from "./PlaylistLists";
@@ -16,31 +15,36 @@ import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
 import LoadingPage from "@/individual_components/LoadingPage";
 import { UserGenreQueries } from "@/queries/UserGenreQueries";
+import { useParams } from "react-router-dom";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
 
 const Account = () => {
-  const { isAuthenticated } = useAuth0();
-  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+  const { id } = useParams<{ id: string }>();
 
-  const {
-    usr,
-    userGuid,
-    isLoading: isUserLoading,
-  } = React.useContext(UserAccountContext) as UserAccountContextInterface;
+  const { userGuid, isLoading: isUserLoading } = React.useContext(
+    UserAccountContext
+  ) as UserAccountContextInterface;
+
+  const userId = id ?? userGuid;
+
+  const { data: usr } = UserAccountQueries.useGetUserById(userId!);
 
   const {
     data: userGamesFromUser,
     isLoading,
     isSuccess,
-  } = UserGameQueries.useGetAllUserGamesByUser(userGuid ?? "");
+  } = UserGameQueries.useGetAllUserGamesByUser(userId ?? "");
 
   const {
     data: allUserGoals,
     isSuccess: isGettingGoalsSuccess,
     isLoading: goalLoading,
-  } = GoalQueries.useGetGoalsByUser(userGuid ?? "");
+  } = GoalQueries.useGetGoalsByUser(userId ?? "");
 
   const { data: userGenres, isLoading: loadingGenres } =
-    UserGenreQueries.useGetAllByUser(userGuid ?? "");
+    UserGenreQueries.useGetAllByUser(userId ?? "");
+
+  const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
 
   useEffect(() => {
     const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
@@ -56,7 +60,6 @@ const Account = () => {
   }
 
   return (
-    isAuthenticated &&
     usr?.profileURL &&
     isSuccess &&
     isGettingGoalsSuccess &&
@@ -82,7 +85,7 @@ const Account = () => {
           </div>
           <div className="flex md:flex-row flex-col my-6">
             <div className="md:w-1/4 w-full md:order-1 order-2">
-              <GamerTags />
+              <GamerTags userGuid={usr.guid} usr={usr} />
             </div>
             <div className="md:ms-8 md:w-1/2 w-full md:order-2 order-1">
               <ExpandableBio bio={usr.bio} />
@@ -95,16 +98,24 @@ const Account = () => {
               <ViewAllGoalsButton />
             </div>
           </div>
-
-          <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
+          {id ? (
+            <p className="md:text-4xl mt-8 text-3xl">
+              {usr.username}'s Library
+            </p>
+          ) : (
+            <p className="md:text-4xl mt-8 text-3xl">Your Library</p>
+          )}
           {!isLoading && userGamesFromUser && userGamesFromUser.length > 0 && (
-            <LibraryList userGamesFromUser={userGamesFromUser} />
+            <LibraryList
+              userGamesFromUser={userGamesFromUser}
+              usrGuid={usr.guid}
+            />
           )}
           {!isLoading && userGamesFromUser.length <= 0 && (
             <LibraryListNoGames />
           )}
 
-          <PlaylistLists />
+          <PlaylistLists usr={usr} />
         </div>
       </div>
     )

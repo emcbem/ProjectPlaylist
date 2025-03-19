@@ -1,8 +1,11 @@
 import { UserGame } from "@/@types/usergame";
 import RemoveFromLibButton from "./Buttons/RemoveButton";
 import { GridLogoDictonary } from "./GridLogoDictonary";
+import { useParams } from "react-router-dom";
 
 const GameCover = ({ ug }: { ug: UserGame }) => {
+  const { id } = useParams<{ id: string }>();
+
   const Logo =
     GridLogoDictonary[ug.platformGame.platform.id] || (() => <div></div>);
 
@@ -10,11 +13,13 @@ const GameCover = ({ ug }: { ug: UserGame }) => {
 
   return (
     <div className="relative group">
-      <div className="absolute bottom-2 left-2">
-        <div className="xs:hidden group-hover:block sm:hidden">
-          <RemoveFromLibButton ugid={ug.userGameId} />
+      {!id && (
+        <div className="absolute bottom-2 left-2">
+          <div className="xs:hidden group-hover:block sm:hidden">
+            <RemoveFromLibButton ugid={ug.userGameId} />
+          </div>
         </div>
-      </div>
+      )}
 
       <div
         className="absolute bottom-0 right-0 w-24 h-12 dark:bg-white bg-black clip-corner rounded-br-xl  opacity-90 backdrop-blur-md"

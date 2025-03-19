@@ -1,17 +1,17 @@
-import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccount } from "@/@types/userAccount";
 import EpicIconCustom from "@/assets/CustomPlatformIcons/EpicLogoCustom";
 import SwitchIconCustom from "@/assets/CustomPlatformIcons/SwitchIconCustom";
 import XboxIconCustom from "@/assets/CustomPlatformIcons/XboxIconCustom";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
-import React from "react";
 import GamerTag from "./GamerTag";
 
-const GamerTags = () => {
-  const { userGuid, usr } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
-
+const GamerTags = ({
+  userGuid,
+  usr,
+}: {
+  userGuid: string | undefined;
+  usr: UserAccount;
+}) => {
   if (userGuid === undefined) {
     return <p>You're not logged in</p>;
   }

@@ -1,12 +1,14 @@
 import { UserGame } from "@/@types/usergame";
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface props {
+  usrGuid: string | undefined;
   userGamesFromUser: UserGame[] | undefined;
 }
 
-const LibraryList: FC<props> = ({ userGamesFromUser }) => {
+const LibraryList: FC<props> = ({ usrGuid, userGamesFromUser }) => {
+  const { id } = useParams<{ id: string }>();
   return (
     <>
       <div className="flex flex-nowrap overflow-hidden relative">
@@ -21,8 +23,7 @@ const LibraryList: FC<props> = ({ userGamesFromUser }) => {
               />
             </div>
           ))}
-
-        <Link to={"/library"}>
+        <Link to={id ? `/user/${usrGuid}/library` : "/library"}>
           <div className="absolute bottom-0 left-0 right-0 h-30 flex items-center justify-end opacity-100 dark:opacity-80 customGradient p-5">
             <p className="text-white text-2xl me-2">
               View All
