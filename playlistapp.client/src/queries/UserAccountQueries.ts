@@ -27,7 +27,7 @@ export const UserAccountQueries = {
   useGetUserById: (userId: string) => {
     return useQuery({
       queryFn: () => UserAccountService.GetUserById(userId),
-      queryKey: keys.GetUserByUserId,
+      queryKey: keys.GetUserByUserId(userId),
     });
   },
   useAddNewUser: (addUserRequest: AddUserRequest) => {
@@ -44,10 +44,11 @@ export const UserAccountQueries = {
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: (updateUserRequest: UpdateUserRequest) => UserAccountService.UpdateUser(updateUserRequest),
+      mutationFn: (updateUserRequest: UpdateUserRequest) =>
+        UserAccountService.UpdateUser(updateUserRequest),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
-        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId});
+        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId });
         toast.success("User updated");
       },
     });
@@ -66,10 +67,11 @@ export const UserAccountQueries = {
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: (userGuid: string) => UserAccountService.AddUserStrike(userGuid),
+      mutationFn: (userGuid: string) =>
+        UserAccountService.AddUserStrike(userGuid),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.UpdateUser });
-        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId});
+        queryClient.invalidateQueries({ queryKey: keys.GetUserByAuthId });
         toast.success("User updated");
       },
     });
