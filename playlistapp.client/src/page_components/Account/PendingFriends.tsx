@@ -28,11 +28,11 @@ const PendingFriends: FC<PendingFriendsProps> = ({ pendingFriends, usr }) => {
                 FilterMyPendingFriends(pendingFriends, usr.id).map((x, key) => (
                     <>
                         <h2 className="mt-3 text-xl text-gray-500">Pending Requests</h2>
-                        <div key={key} className='m-3 bg-clay-200 rounded-lg px-3 py-2'>
+                        <div key={key} className='m-3 bg-stone-50 dark:bg-clay-200 rounded-lg px-3 py-2 shadow-xl'>
                             <div className='flex flex-row justify-between align-middle items-center'>
                                 <p className='mx-3'>{x.baseUser.username}</p>
                                 <div
-                                    className="cursor-pointer relative flex flex-row items-center border border-white dark:text-white text-white hover:bg-white hover:text-clay-100 rounded-lg text-start py-1 px-2  justify-center space-x-1"
+                                    className="cursor-pointer relative flex flex-row items-center dark:text-white dark:bg-clay-600 bg-clay-200 text-white rounded-lg text-start py-1 px-2 justify-center space-x-1"
                                     role="button" onClick={() => handleAcceptFriend(x.id)}>
                                     <UserPlusIcon /> Accept
                                 </div>
