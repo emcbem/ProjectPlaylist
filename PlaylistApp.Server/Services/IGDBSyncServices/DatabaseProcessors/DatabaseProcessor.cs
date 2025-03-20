@@ -32,7 +32,13 @@ public class DatabaseProcessor : IDatabaseProcessor
     {
         await ProcessBatchAsync(itemsToAdd, async (context, batch) =>
         {
-            
+            if (batch is not null)
+            {
+                foreach (var item in batch)
+                {
+                    context.Add(item!);
+                }
+            }
             await context.SaveChangesAsync();
         });
     }

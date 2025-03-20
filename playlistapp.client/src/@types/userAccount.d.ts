@@ -47,4 +47,6 @@ export interface UserAccountContextInterface {
   userGuid: string | undefined;
   error: string | undefined;
   isLoading: booleanean;
+  roles: string[] | undefined;
+  isAuthenticated: boolean
 }
