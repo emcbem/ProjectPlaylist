@@ -6,10 +6,11 @@ import { GoalQueries } from "@/queries/GoalQueries";
 import { Goal } from "@/@types/goal";
 import GoalModalParent from "./Components/Modal/GoalModalParent";
 import LoadingPage from "@/individual_components/LoadingPage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BlackButton from "@/components/ui/BlackButton";
 
 const ViewAllGoals = () => {
+  const { id } = useParams<{ id: string }>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal>();
@@ -20,7 +21,9 @@ const ViewAllGoals = () => {
     UserAccountContext
   ) as UserAccountContextInterface;
 
-  const { data: userGoals } = GoalQueries.useGetGoalsByUser(usr?.guid ?? "");
+  const userId = id ?? usr?.guid;
+
+  const { data: userGoals } = GoalQueries.useGetGoalsByUser(userId ?? "");
   const filteredGoals = userGoals?.sort((a, b) => {
     if (a.isCurrent !== b.isCurrent) {
       return b.isCurrent ? 1 : -1;
@@ -55,17 +58,22 @@ const ViewAllGoals = () => {
     return (
       <div className="flex flex-col items-center content-center mt-8">
         <div className="text-center max-w-lg">
-          <h6 className="text-center text-black font-bold text-xl">
-            No goals found for your account
+          <h6 className="text-center text-black dark:text-white font-bold text-xl">
+            No goals found for {id ? "this" : "your"} account
           </h6>
-          <p className="text-center text-black">
-            Add a goal to one of your games from your library!
-          </p>
-          <div className="flex justify-center mt-2">
-            <BlackButton onClick={() => navigate("/library")}>
-              Go to Library
-            </BlackButton>
-          </div>
+          {!id && (
+            <p className="text-center text-black dark:text-white">
+              Add a goal to one of your games from your library!
+            </p>
+          )}
+
+          {!id && (
+            <div className="flex justify-center mt-2">
+              <BlackButton onClick={() => navigate("/library")}>
+                Go to Library
+              </BlackButton>
+            </div>
+          )}
         </div>
       </div>
     );
