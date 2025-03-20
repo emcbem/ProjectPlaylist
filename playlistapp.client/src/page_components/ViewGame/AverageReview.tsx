@@ -19,14 +19,13 @@ export const AverageReview = ({ game }: { game: Game }) => {
       setAvgReview(null);
     }
   }, [AllGameReviewsForGame]);
-  
+
   if (!avgReview) {
     return (
       <div
         className={`flex flex-row sm:text-base text-tiny font-extrabold my-3 text-yellow-500`}
       >
-        <h1>No Reviews Yet&nbsp;-&nbsp;</h1>
-        <h1 className="underline cursor-pointer">Leave a rating</h1>
+        <h1>No Reviews Yet</h1>
       </div>
     );
   }
@@ -35,18 +34,17 @@ export const AverageReview = ({ game }: { game: Game }) => {
     <div
       className={`sm:text-base text-tiny font-extrabold my-3 flex flex-row ${
         avgReview <= 10.0 && avgReview >= 8.0
-          ? `text-yellow-500`
+          ? `text-green-500`
           : avgReview < 8.0 && avgReview >= 6.0
-          ? `text-green-700`
+          ? `text-yellow-500`
           : avgReview < 6.0 && avgReview >= 3.0
-          ? `text-orange-400`
+          ? `text-orange-500`
           : avgReview < 3.0 && avgReview >= 0.0
           ? `text-red-700`
           : ``
       }`}
     >
-      <h1>{Math.round(avgReview * 10) / 10}/10&nbsp;-&nbsp;</h1>
-      <h1 className="underline cursor-pointer">Leave a rating</h1>
+      <h1>{Math.round(avgReview * 10) / 10}/10 average rating</h1>
     </div>
   );
 };

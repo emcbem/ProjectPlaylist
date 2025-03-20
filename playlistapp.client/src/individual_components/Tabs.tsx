@@ -14,6 +14,7 @@ import {
 } from "@material-tailwind/react";
 import { GameReview } from "@/@types/gameReview";
 import AchievementsPage from "@/page_components/Achievements/Achievements";
+import LoginLink from "@/components/ui/LoginLink";
 
 interface TabProps {
   TabName: string;
@@ -109,6 +110,10 @@ const Tabs = () => {
       <div className="mt-4 w-full">
         {activeTab === "Reviews" && (
           <>
+            {usr &&
+              !AllGameReviewsForGame?.some((x) => x.user.guid === usr.guid) && (
+                <ReviewModal hideReview={hideReviewButton} />
+              )}
             <div className="text-left text-2xl dark:text-white flex flex-col">
               <div className="flex flex-row">
                 <p className="sm:text-sm text-tiny font-medium text-clay-950 dark:text-clay-600 p-2">
@@ -158,12 +163,12 @@ const Tabs = () => {
                 </Menu>
               </div>
 
-              {usr && !loading ? (
+              {!loading ? (
                 AllGameReviewsForGame &&
                 AllGameReviewsForGame.length > 0 &&
                 sortedReviews[0] != undefined ? (
                   sortedReviews.map((review) => {
-                    if (usr.guid === review.user.guid) {
+                    if (usr && usr.guid === review.user.guid) {
                       hideReviewButton = true;
                     }
                     return (
@@ -174,14 +179,18 @@ const Tabs = () => {
                       />
                     );
                   })
-                ) : (
+                ) : usr ? (
                   <p>No reviews yet, leave one!</p>
+                ) : (
+                  <p>
+                    No reviews yet. <br />
+                    <LoginLink>Log in</LoginLink> to leave a review.
+                  </p>
                 )
               ) : (
                 <p>Loading...</p>
               )}
             </div>
-            <ReviewModal hideReview={hideReviewButton} />
           </>
         )}
         {activeTab === "Achievements" && (
