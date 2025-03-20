@@ -4,12 +4,12 @@ import { ReactNode } from "react";
 
 export const RoleRequired = ({
   children,
-  role,
+  roleToLookOutFor,
   displayIfUnauthorized,
 }: {
+    roleToLookOutFor: string;
+    displayIfUnauthorized: boolean;
   children: ReactNode;
-  role: string;
-  displayIfUnauthorized: boolean;
 }) => {
   var userContext = useUserContext();
 
@@ -18,8 +18,9 @@ export const RoleRequired = ({
   }
 
   console.log(userContext.roles?.[0]);
+  console.log(`role to look out for ${roleToLookOutFor}`)
 
-  if (!userContext?.roles || !userContext.roles.includes(role)) {
+  if (!userContext?.roles || !userContext.roles.includes(roleToLookOutFor)) {
     return displayIfUnauthorized ? (
       <>
         <div>Insufficient Privileges</div>
