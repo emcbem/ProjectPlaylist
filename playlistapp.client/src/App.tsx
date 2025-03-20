@@ -82,10 +82,14 @@ function App() {
                         path="user/:id/library"
                         element={<UserLibrary />}
                       />
-                      {/* <Route
+                      <Route
                         path="user/:id/list/:listId"
-                        element={<ViewPlaylist />}
-                      /> */}
+                        element={<Playlist />}
+                      />
+                      <Route
+                        path="user/:id/viewallgoals"
+                        element={<ViewAllGoals />}
+                      />
                     </Routes>
                   </div>
                 </div>

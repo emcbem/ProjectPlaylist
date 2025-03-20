@@ -8,7 +8,7 @@ export const UserPlatformQueries = {
   GetAllByUser: (userGuid: string) => {
     return useQuery({
       queryFn: () => UserPlatformService.GetAllByUser(userGuid),
-      queryKey: UserPlatformKeys.GetByUserKey,
+      queryKey: UserPlatformKeys.GetByUserKey(userGuid),
     });
   },
   UpdateUserPlatform: () => {

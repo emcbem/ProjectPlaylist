@@ -1,13 +1,14 @@
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
-import BlackButton from "@/components/ui/BlackButton";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { GameQueries } from "@/queries/GameQueries";
 import { GameReviewQueries } from "@/queries/GameReviewQueries";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Slider from "@mui/material/Slider";
 import React, { FC } from "react";
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 interface props {
@@ -24,7 +25,7 @@ const ReviewModal: FC<props> = ({
   editReview,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [val, setVal] = useState<number>(editVal ? editVal : 0);
+  const [currentRatingVal, setVal] = useState<number>(editVal ? editVal : 0);
   const [reviewText, setReviewText] = useState<string>(
     editReview ? editReview : ""
   );
@@ -72,11 +73,21 @@ const ReviewModal: FC<props> = ({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (reviewText.length == 0 || reviewText == "") {
+      toast.error("You can't leave a review without any text.");
+      return;
+    }
+
+    if (currentRatingVal == 0) {
+      toast.error("You can't leave a review with a rating of 0");
+      return;
+    }
+
     if (game && usr && !editReview && !editVal) {
       setReview({
         gameId: game?.id,
         userId: usr?.id,
-        rating: val,
+        rating: currentRatingVal,
         text: reviewText,
       });
 
@@ -88,7 +99,7 @@ const ReviewModal: FC<props> = ({
     if (game && usr && gameReviewId && editReview && editVal) {
       setUpdateReview({
         gameReviewId: gameReviewId,
-        rating: val,
+        rating: currentRatingVal,
         reviewText: reviewText,
       });
 
@@ -107,30 +118,21 @@ const ReviewModal: FC<props> = ({
   return (
     <>
       {editReview && editVal ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          className="bi bi-pencil-square mx-2 cursor-pointer text-clay-900"
-          viewBox="0 0 16 16"
+        <PencilSquareIcon
+          className="h-5 text-clay-900 mx-3"
+          role="button"
           onClick={openModal}
-        >
-          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-          <path
-            fillRule="evenodd"
-            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-          />
-        </svg>
+        />
       ) : (
-        usr && (
-          <BlackButton
-            className={!hideReview ? "hidden" : "mb-9"}
-            onClick={openModal}
-          >
-            Leave a Review
-          </BlackButton>
-        )
+        <button
+          onClick={openModal}
+          className={`rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2 ${
+            hideReview == true ? `hidden` : ``
+          }`}
+          type="button"
+        >
+          Leave a review
+        </button>
       )}
 
       <div
@@ -144,28 +146,28 @@ const ReviewModal: FC<props> = ({
         <div
           ref={modalRef}
           className={`relative mx-auto w-full max-w-[48rem] h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
-            // className={`relative mx-auto w-full sm:max-w-[48rem] sm:h-96 max-w-[16rem] h-64 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
             isOpen ? "scale-100" : "scale-95"
           }`}
         >
-          <div className="mx-5 ">
+          <div className="mx-5">
             <img
               src={game?.coverUrl.replace(/t_cover_big/g, "t_1080p")}
               className="w-40 h-64 object-cover rounded-lg shadow-xl sticky top-10"
               alt={`${game?.title} cover`}
             />
           </div>
-
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5"
           >
             <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-white">Rating</label>
+              <label className="block mb-1 text-sm text-stone-300">
+                Rating {currentRatingVal}/10
+              </label>
               <Slider
                 aria-label="Rating"
                 onChange={handleChange}
-                value={val}
+                value={currentRatingVal}
                 valueLabelDisplay="auto"
                 marks
                 step={1}
@@ -178,9 +180,9 @@ const ReviewModal: FC<props> = ({
               />
             </div>
             <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-white ">Review</label>
+              <label className="block mb-2 text-stone-300 ">Review</label>
               <textarea
-                className="resize-y w-full rounded-md bg-transparent placeholder:white text-white text-sm border border-white px-3 py-5  focus:border-white focus:ring-0"
+                className="resize-none w-full rounded-md bg-transparent placeholder:white text-white text-md border border-stone-400 px-3 py-2 focus:border-white focus:ring-0 font-sans "
                 placeholder={reviewText ? reviewText : "Enter your thoughts..."}
                 value={reviewText ? reviewText : ""}
                 onChange={(e) => setReviewText(e.target.value)}
@@ -188,7 +190,7 @@ const ReviewModal: FC<props> = ({
             </div>
             <div className="p-6 pb-0">
               <button
-                className="w-full rounded-md bg-clay-950 py-2 px-4 text-sm text-white"
+                className="w-full rounded-md bg-blue-200 py-2 px-4 text-sm text-gray-800"
                 type="submit"
               >
                 Submit

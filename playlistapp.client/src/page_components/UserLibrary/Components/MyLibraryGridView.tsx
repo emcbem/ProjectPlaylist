@@ -1,6 +1,6 @@
 import { UserGame } from "@/@types/usergame";
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import GameCover from "./GameCover";
 
 interface MyLibraryGridViewProps {
@@ -8,6 +8,7 @@ interface MyLibraryGridViewProps {
 }
 
 const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
+  const { id } = useParams<{ id: string }>();
   return (
     <div className="flex flex-wrap">
       {games
@@ -15,7 +16,11 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
         .map((ug, key) => (
           <Link
             key={key}
-            to={`/user-library-game/${ug.userGameId}`}
+            to={
+              id
+                ? `/view-game/${ug.platformGame.game.id}`
+                : `/user-library-game/${ug.userGameId}`
+            }
             className="m-2 w-24 sm:w-40"
           >
             <GameCover ug={ug} />

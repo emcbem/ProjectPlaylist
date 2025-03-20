@@ -25,7 +25,7 @@ const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
 
   return (
     <>
-      <div className="flex flex-row md:justify-normal justify-between mb-8 mt-6">
+      <div className="flex flex-row md:justify-normal justify-between mt-6">
         {id ? (
           <p className="md:text-4xl mt-8 text-3xl">
             {usr.username}'s Playlists
@@ -39,8 +39,10 @@ const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
           </>
         )}
       </div>
+      {lists?.length == 0 && <p className="text-gray-400">Nothing to be found here...</p>}
+      <div></div>
 
-      <div className="flex flex-row overflow-x-auto flex-wrap">
+      <div className="flex flex-row overflow-x-auto flex-wrap mt-8">
         {lists &&
           lists.map((list, key) => (
             <div className="xl:w-1/5 lg:w-1/5 md:w-1/2" key={key}>
@@ -59,7 +61,9 @@ const PlaylistLists = ({ usr }: { usr: UserAccount }) => {
                       </div>
                     ))}
                 </div>
-                <Link to={`/list/${list.id}`}>
+                <Link
+                  to={id ? `/user/${id}/list/${list.id}` : `/list/${list.id}`}
+                >
                   <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end opacity-100 dark:opacity-100 customGradient p-2">
                     <div>
                       <p className="text-white text-2xl me-2">

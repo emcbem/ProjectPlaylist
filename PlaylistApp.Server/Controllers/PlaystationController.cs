@@ -56,9 +56,9 @@ public class PlaystationController : Controller
     }
 
     [HttpPost("sync")]
-    public async Task<List<ItemAction>> SyncPlaystationHours(PlaystationDTO playstationDTO)
+    public async Task SyncPlaystationHours(PlaystationDTO playstationDTO)
     {
-        return await PlaystationOrchestrator.OrchestratePlaystationHoursSyncing(playstationDTO);
+        await PlaystationOrchestrator.OrchestratePlaystationHoursSyncing(playstationDTO);
     }
 
     [HttpPost("getusersgamelist")]

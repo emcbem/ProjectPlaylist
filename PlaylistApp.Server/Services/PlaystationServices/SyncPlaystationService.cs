@@ -1,12 +1,20 @@
 ﻿using PlaylistApp.Server.DTOs;
-using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserGameServices;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
 
 public class SyncPlaystationService
 {
+    private readonly IUserGameService UserGameService;
+    private readonly PlaystationGameService PlaystationGameService;
+    public SyncPlaystationService(PlaystationGameService playstationGameService, IUserGameService userGameService)
+    {
+        PlaystationGameService = playstationGameService;
+        UserGameService = userGameService;
+    }
+
     public List<UserGameDTO> KnownGames = new List<UserGameDTO>();
     public List<PlaystationGameDTO> FoundGames = new List<PlaystationGameDTO>();
 
@@ -20,20 +28,12 @@ public class SyncPlaystationService
         {"ps5", 167}
     };
 
-    private readonly IUserGameService UserGameService;
-    private readonly PlaystationGameService PlaystationGameService;
 
-    public SyncPlaystationService(PlaystationGameService playstationGameService, IUserGameService userGameService)
-    {
-        PlaystationGameService = playstationGameService;
-        UserGameService = userGameService;
-    }
-
-    public async Task<List<ItemAction>> CompareGames(PlaystationDTO playstationDTO)
+    public async Task<List<UpdateUserGameRequest>> CompareGames(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId == null)
         {
-            return new List<ItemAction>();
+            return new List<UpdateUserGameRequest>();
         }
 
         KnownGames = await UserGameService.GetUserGameByUser(playstationDTO.UserId);
@@ -41,7 +41,7 @@ public class SyncPlaystationService
 
         if (FoundGames is null)
         {
-            return new List<ItemAction>();
+            return new List<UpdateUserGameRequest>();
         }
 
         var newItemActions = CompareGamesHours(KnownGames, FoundGames);
@@ -49,11 +49,9 @@ public class SyncPlaystationService
         return newItemActions;
     }
 
-    public List<ItemAction> CompareGamesHours(List<UserGameDTO> knownGames, List<PlaystationGameDTO> foundGames)
+    public List<UpdateUserGameRequest> CompareGamesHours(List<UserGameDTO> knownGames, List<PlaystationGameDTO> foundGames)
     {
-        List<ItemAction> newItemActions = new List<ItemAction>();
-
-        int counter = 0;
+        List<UpdateUserGameRequest> updateUserGameRequests = new();
 
         var orderedGames = foundGames.OrderBy(x => x.Name);
 
@@ -97,33 +95,13 @@ public class SyncPlaystationService
                 {
                     if (userGame.TimePlayed != playstationGame.PlayDuration)
                     {
-                        var options = new List<ItemOption>();
-
-                        var option1 = new ItemOption
+                        var updateRequest = new UpdateUserGameRequest
                         {
-                            ErrorText = $"Playlist record: ",
-                            ResolveUrl = $"/action/hours?hours={userGame.TimePlayed}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
-                            GameTitle = $"{userGame.PlatformGame.Game.Title}",
-                            Hours = (int)userGame.TimePlayed,
+                            TimePlayed = playstationGame.PlayDuration, 
+                            UserGameId = userGame.UserGameId
                         };
 
-                        var option2 = new ItemOption
-                        {
-                            ErrorText = $"Playstation record: ",
-                            ResolveUrl = $"/action/hours?hours={playstationGame.PlayDuration}&pgid={userGame.PlatformGame.id}&user={userGame.User.Guid}",
-                            GameTitle = $"{userGame.PlatformGame.Game.Title}", 
-                            Hours = playstationGame.PlayDuration,
-                        };
-
-                        options.AddRange([option1, option2]);
-
-                        var newItemAction = new ItemAction
-                        {
-                            ErrorType = "Hours Mismatch",
-                            ItemOptions = options
-                        };
-
-                        newItemActions.Add(newItemAction);
+                        updateUserGameRequests.Add(updateRequest);
                     }
 
                     break;
@@ -131,6 +109,6 @@ public class SyncPlaystationService
             }
         }
 
-        return newItemActions;
+        return updateUserGameRequests;
     }
 }

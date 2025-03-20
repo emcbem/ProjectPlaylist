@@ -6,7 +6,7 @@ import formatDate from "@/lib/date.ts";
 
 interface props {
   review: GameReview;
-  currentUserGuid: string;
+  currentUserGuid: string | undefined;
 }
 
 const Review: React.FC<props> = ({ review, currentUserGuid }) => {
@@ -17,7 +17,7 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
           <img
             className="sm:w-12 sm:h-12 w-8 h-8 rounded-full block border-2 border-clay-700 bg-clay-600"
             src={review.user.profileURL!}
-            alt="Neil image"
+            alt={`${review.user.username} names`}
           />
         </div>
         <div className="flex-1 min-w-0">
@@ -36,9 +36,9 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
             <div
               className={`flex justify-end items-baseline md:text-lg sm:text-base text-tiny font-semibold mx-2 ${
                 review.rating <= 10 && review.rating >= 8
-                  ? `text-yellow-500`
-                  : review.rating <= 7 && review.rating >= 6
                   ? `text-green-500`
+                  : review.rating <= 7 && review.rating >= 6
+                  ? `text-yellow-500`
                   : review.rating <= 5 && review.rating >= 3
                   ? `text-orange-400`
                   : review.rating <= 2 && review.rating >= 0
@@ -46,7 +46,8 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
                   : ``
               }`}
             >
-              {currentUserGuid == review.user.guid ? (
+              {currentUserGuid != undefined &&
+              currentUserGuid == review.user.guid ? (
                 <div className="sm:flex hidden">
                   <DeleteModal gameReviewId={review.id} />
                   <ReviewModal
@@ -68,10 +69,12 @@ const Review: React.FC<props> = ({ review, currentUserGuid }) => {
         </div>
       </div>
 
-      <ReviewLike
-        review={review}
-        showCrud={currentUserGuid == review.user.guid}
-      />
+      {currentUserGuid != undefined && (
+        <ReviewLike
+          review={review}
+          showCrud={currentUserGuid == review.user.guid}
+        />
+      )}
     </li>
   );
 };

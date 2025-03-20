@@ -19,11 +19,17 @@ const GamerTags = ({
   const { data: usersPlatforms } = UserPlatformQueries.GetAllByUser(userGuid);
 
   if (usersPlatforms && usersPlatforms?.length <= 0) {
-    return <p className="text-gray-400">Go to settings to add a gamertag.</p>;
+    return (
+      <>
+        <p className="text-xl mb-2">Gamer Tags</p>
+        <p className="text-gray-400">No gamer tags found.</p>
+      </>
+    );
   }
 
   return (
     <div className="">
+      <p className="text-xl mb-4">Gamer Tags</p>
       {usersPlatforms && usr && (
         <>
           {usersPlatforms.filter((x) => x.platformId === 1).length > 0 && (

@@ -1,17 +1,19 @@
 import { UserGame } from "@/@types/usergame";
 import { FC } from "react";
 import formatDate from "@/lib/date.ts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import RemoveFromLibButton from "./Buttons/RemoveButton";
 
 interface MyLibraryGridViewProps {
   games: UserGame[];
 }
 
 const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const handleRowClick = (userGameId: number) => {
-    navigate(`/user-library-game/${userGameId}`);
+  const handleRowClick = (gameId: number) => {
+    navigate(id ? `/view-game/${gameId}` : `/user-library-game/${gameId}`);
   };
   return (
     <>
@@ -35,6 +37,7 @@ const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
               <th scope="col" className="px-6 py-3">
                 Date Added
               </th>
+              {!id && <th scope="col" className="px-6 py-3"></th>}
             </tr>
           </thead>
           <tbody>
@@ -42,7 +45,9 @@ const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
               <tr
                 className="bg-[#f1f3f4] border-b dark:bg-clay-200 dark:border-clay-600 dark:hover:bg-clay-100 hover:bg-clay-950 hover:cursor-pointer transition-all text-black dark:text-white"
                 key={key}
-                onClick={() => handleRowClick(g.userGameId)}
+                onClick={() =>
+                  handleRowClick(id ? g.platformGame.game.id : g.userGameId)
+                }
               >
                 <th
                   scope="row"
@@ -60,6 +65,11 @@ const MyLibraryListView: FC<MyLibraryGridViewProps> = ({ games }) => {
                   {formatDate(g.platformGame.game.publishDate)}
                 </td>
                 <td className="px-6 py-4">{formatDate(g.dateAdded)}</td>
+                {!id && (
+                  <td className="px-6 py-4">
+                    <RemoveFromLibButton ugid={g.userGameId} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
