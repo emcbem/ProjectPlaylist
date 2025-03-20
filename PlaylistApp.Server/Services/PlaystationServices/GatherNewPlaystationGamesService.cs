@@ -46,98 +46,64 @@ public class GatherNewPlaystationGamesService
         {
             var alreadyExistsGames = CurrentGames
                 .Where(x =>
-                {
-                    if (!string.IsNullOrEmpty(x.PlatformGame!.PlatformKey) &&
-                        int.TryParse(x.PlatformGame.PlatformKey, out int key))
-                    {
-                        var matchingGame = FoundGames.FirstOrDefault(y => y.Id == key);
-
-                        if (matchingGame != null)
-                        {
-                            if (x.PlatformGame.PlatformKey == matchingGame.Id.ToString())
-                            {
-                                return x.TimePlayed == matchingGame.PlayDuration;
-                            }
-                        }
-                    }
-                    return false;
-                })
+                    !string.IsNullOrEmpty(x.PlatformGame?.PlatformKey) &&
+                    int.TryParse(x.PlatformGame.PlatformKey, out int key) &&
+                    FoundGames.Any(y => y.Id == key && x.TimePlayed == y.PlayDuration))
                 .ToList();
-
 
             var newGames = FoundGames
-                .Where(x =>
-                {
-                    return !alreadyExistsGames.Any(y =>
-                    {
-                        if (!string.IsNullOrEmpty(y.PlatformGame!.PlatformKey) &&
-                            int.TryParse(y.PlatformGame.PlatformKey, out int key))
-                        {
-                            return key == x.Id;
-                        }
-                        return false;
-                    });
-                })
+                .Where(x => !alreadyExistsGames.Any(y =>
+                    !string.IsNullOrEmpty(y.PlatformGame?.PlatformKey) &&
+                    int.TryParse(y.PlatformGame.PlatformKey, out int key) &&
+                    key == x.Id))
                 .ToList();
 
-            string previousGameName = "";
-            int previousHours = -1;
+            var platformGameTasks = newGames.Select(game =>
+                PlatformGameService.GetAllPlatformGamesByExternalKey(game.Id.ToString())).ToList();
 
-            foreach (var game in newGames)
+            var platformGameResults = await Task.WhenAll(platformGameTasks);
+
+            for (int i = 0; i < newGames.Count; i++)
             {
-                var platformGame = await PlatformGameService.GetAllPlatformGamesByExternalKey(game.Id.ToString());
-                ItemAction itemAction = new ItemAction();
+                var game = newGames[i];
+                var platformGame = platformGameResults[i];
 
                 if (platformGame.Count > 0)
                 {
                     if (platformGame.Count > 1)
                     {
-                        var options = platformGame.Select(x =>
+                        var itemAction = new ItemAction
                         {
-                            if (previousGameName != x.Game.Title || previousHours != game.PlayDuration)
-                            {
-                                previousGameName = x.Game.Title;
-                                previousHours = game.PlayDuration;
-                            }
-
-                            return new ItemOption()
+                            ErrorType = "Platform Mismatch!",
+                            ItemOptions = platformGame.Select(x => new ItemOption
                             {
                                 ErrorText = $"{x.Platform.Name}",
                                 ResolveUrl = $"/action/platforms?hours={game.PlayDuration}&pgid={x.id}&user={playstationDTO.UserId}",
-                                GameTitle = platformGame[0].Game.Title,
-                                Hours = game.PlayDuration,
-                            };
-                        });
-
-                        foreach (var option in options)
-                        {
-                            itemAction.ErrorType = $"Platform Mismatch!";
-                            itemAction.ItemOptions.Add(option);
-                        }
+                                GameTitle = x.Game.Title,
+                                Hours = game.PlayDuration
+                            }).ToList()
+                        };
 
                         newItemActions.Add(itemAction);
                     }
                     else
                     {
-                        AddUserGameRequest request = new AddUserGameRequest
+                        addUserGameRequests.Add(new AddUserGameRequest
                         {
                             PlatformGameId = platformGame[0].id,
                             UserId = playstationDTO.UserId,
                             HoursPlayed = game.PlayDuration
-                        };
-
-                        addUserGameRequests.Add(request);
+                        });
                     }
                 }
             }
         }
 
-        NewPlaystationGames newPlaystationGames = new()
+        return new NewPlaystationGames
         {
             AddUserGameRequests = addUserGameRequests,
             ItemAction = newItemActions
         };
-
-        return newPlaystationGames;
     }
+
 }

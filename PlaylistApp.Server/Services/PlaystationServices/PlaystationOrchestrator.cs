@@ -1,5 +1,7 @@
 ﻿using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
+using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.UserGameServices;
 
 namespace PlaylistApp.Server.Services.PlaystationServices;
 
@@ -11,12 +13,14 @@ public class PlaystationOrchestrator
     private readonly HandlePlaystationPlatformErrorService HandlePlaystationPlatformCollisionService;
     private readonly SyncPlaystationService SyncPlaystationService;
     private readonly PlaystationTrophyService PlaystationTrophyService;
+    private readonly IUserGameService UserGameService;
     public PlaystationOrchestrator(PlaystationGameService playstationGameService,
                                    GatherNewPlaystationGamesService gatherNewPlaystationGamesService,
                                    AddNewPlaystationGamesService addNewPlaystationGamesService,
                                    HandlePlaystationPlatformErrorService handlePlaystationPlatformErrorService,
                                    SyncPlaystationService syncPlaystationService,
-                                   PlaystationTrophyService playstationTrophyService)
+                                   PlaystationTrophyService playstationTrophyService,
+                                   IUserGameService userGameService)
     {
         PlaystationGameService = playstationGameService;
         GatherNewPlaystationGamesService = gatherNewPlaystationGamesService;
@@ -24,6 +28,7 @@ public class PlaystationOrchestrator
         HandlePlaystationPlatformCollisionService = handlePlaystationPlatformErrorService;
         SyncPlaystationService = syncPlaystationService;
         PlaystationTrophyService = playstationTrophyService;
+        UserGameService = userGameService;
     }
 
     public async Task<List<ItemAction>> OrchestrateInitialAccountAdd(PlaystationDTO playstationDTO)
@@ -39,29 +44,38 @@ public class PlaystationOrchestrator
 
         var newPlaystationGames = await GatherNewPlaystationGamesService.HandleBringingInNewPlaystationGames(playstationDTO);
 
-        var newGamesSent = await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
+        await AddNewPlaystationGamesService.AddNewPlaystationGames(newPlaystationGames);
 
         ItemActions =  await HandlePlaystationPlatformCollisionService.SendPlaystationPlatformErrorsToUser(newPlaystationGames);
 
-        var hoursActions = await OrchestratePlaystationHoursSyncing(playstationDTO);
-
-        foreach (var action in hoursActions)
-        {
-            ItemActions.Add(action);
-        }
+        await OrchestratePlaystationHoursSyncing(playstationDTO);
 
         await PlaystationTrophyService.GetUserTotalEarnedPlaystationTrophies(playstationDTO);
 
         return ItemActions;
     }
 
-    public async Task<List<ItemAction>> OrchestratePlaystationHoursSyncing(PlaystationDTO playstationDTO)
+    public async Task OrchestratePlaystationHoursSyncing(PlaystationDTO playstationDTO)
     {
         if (playstationDTO.AccountId is null)
         {
-            return new List<ItemAction>();
+            return;
         }
 
-        return await SyncPlaystationService.CompareGames(playstationDTO);
+        var requests = await SyncPlaystationService.CompareGames(playstationDTO);
+
+        var updateTasks = requests.Select(async request =>
+        {
+            try
+            {
+                await UserGameService.UpdateUserGame(request);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to update game: {ex.Message}");
+            }
+        });
+
+        await Task.WhenAll(updateTasks);
     }
 }
