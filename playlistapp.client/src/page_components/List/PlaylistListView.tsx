@@ -3,7 +3,7 @@ import { FC } from "react";
 import RemoveFromListButton from "./RemoveListGameButton";
 import { List } from "@/@types/list";
 import formatDate from "@/lib/date.ts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface listViewProps {
   games: ListGame[] | undefined;
@@ -12,6 +12,10 @@ interface listViewProps {
 
 const PlaylistTableView: FC<listViewProps> = ({ games, list }) => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const handleRowClick = (gameId: number) => {
+    navigate(`/view-game/${gameId}`);
+  };
   if (!games) {
     return <div>Looks like you don't have any games yet...</div>;
   }
@@ -42,6 +46,7 @@ const PlaylistTableView: FC<listViewProps> = ({ games, list }) => {
               <tr
                 className="bg-[#f1f3f4] border-b dark:bg-clay-200 dark:border-clay-600 dark:hover:bg-clay-100 hover:bg-clay-950 hover:cursor-pointer transition-all text-black dark:text-white"
                 key={key}
+                onClick={() => handleRowClick(g.game.id)}
               >
                 <th
                   scope="row"
