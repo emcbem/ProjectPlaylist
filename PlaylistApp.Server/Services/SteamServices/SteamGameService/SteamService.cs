@@ -4,6 +4,7 @@ using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -17,17 +18,20 @@ public class SteamService : ISteamService
     private readonly IConfiguration config;
     private readonly IUserPlatformService userPlatformService;
     private readonly string steamKey;
+    private readonly IUserGameService userGameService;
 
     public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory,
         HttpClient client,
         IConfiguration config,
-        IUserPlatformService userPlatformService)
+        IUserPlatformService userPlatformService,
+        IUserGameService userGameService)
     {
         this.dbContextFactory = dbContextFactory;
         this.client = client;
         this.config = config;
         this.userPlatformService = userPlatformService;
         this.steamKey = config["steamkey"] ?? throw new Exception("No Steam Key provided in configuration.");
+        this.userGameService = userGameService;
     }
 
     public List<ItemAction> SteamActions { get; set; } = new();
@@ -97,12 +101,11 @@ public class SteamService : ISteamService
            .ThenInclude(g => g.Game)
            .Include(g => g.User)
            .ToList();
-        HashSet<int> userGameIds = new(usersGames.Select(x => x.PlatformGameId));
 
+        HashSet<int> userGameIds = new(usersGames.Select(x => x.PlatformGameId));
 
         List<ItemAction> actionsToSend = new();
 
-        int counter = 0;
         string previousGame = "";
 
         List<List<PlatformGame>> pgsGroupedByGame = gamesWithDuplicatePlatformKeys
@@ -120,13 +123,8 @@ public class SteamService : ISteamService
                 var steamGame = steamGames.Where(x => x.AppId.ToString() == pg.PlatformKey).FirstOrDefault();
                 var userGameFromPlatform = usersGames.Where(x => x.PlatformGame.GameId == pg.GameId).ToList();
 
-                if (steamGame != null && !userGameFromPlatform.Any()) // if the user doesn't already have this game
+                if (steamGame != null && userGameFromPlatform.Count == 0) // if the user doesn't already have this game
                 {
-
-                    if (pg.Game.Title != previousGame)
-                    {
-                        counter++;
-                    }
                     previousGame = pg.Game.Title;
 
                     actionToAdd.ItemOptions.Add(new ItemOption()
@@ -139,7 +137,10 @@ public class SteamService : ISteamService
 
                 }
             }
-            actionsToSend.Add(actionToAdd);
+            if (actionToAdd.ItemOptions.Count != 0)
+            {
+                actionsToSend.Add(actionToAdd);
+            }
         }
 
         return actionsToSend;
@@ -199,7 +200,7 @@ public class SteamService : ISteamService
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
+    public async Task GatherTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid)
     {
 
         var duplicatePlatformKeys = matchingPlatformGames
@@ -223,10 +224,9 @@ public class SteamService : ISteamService
             .ThenInclude(g => g.Game)
             .ToList();
 
-        HashSet<int> userGameIds = new HashSet<int>(usersGames.Select(x => x.PlatformGameId));
-        int counter = 0;
+        HashSet<int> userGameIds = [.. usersGames.Select(x => x.PlatformGameId)];
 
-        List<ItemAction> actionsToSend = new();
+        List<UpdateUserGameRequest> updateRequests = new();
 
         foreach (PlatformGame pg in matchingPlatformGames)
         {
@@ -235,34 +235,43 @@ public class SteamService : ISteamService
 
             if (ug!.TimePlayed != steamGame?.PlaytimeForever)
             {
-                counter++;
-
-                ItemAction action = new ItemAction()
+                UpdateUserGameRequest updateUserGameRequest = new()
                 {
-                    ErrorType = "We found a difference in hours. Which hours are correct?",
-                    ItemOptions = new List<ItemOption>
-                    {
-                        new ItemOption()
-                        {
-                            ErrorText = $"Steam record ",
-                            ResolveUrl = $"/action/hours?hours={steamGame!.PlaytimeForever}&pgid={ug.PlatformGame.Id}&user={userGuid}",
-                            GameTitle = ug.PlatformGame.Game.Title,
-                            Hours = steamGame!.PlaytimeForever,
-                        },
-                        new ItemOption()
-                        {
-                            ErrorText = $"Playlist record ",
-                            ResolveUrl = $"/action/hours?hours={ug.TimePlayed}&pgid={ug.PlatformGame.Id}&user={userGuid}",
-                            GameTitle = ug.PlatformGame.Game.Title,
-                            Hours = (int)(ug.TimePlayed!),
-                        }
-                    },
+                    TimePlayed = steamGame!.PlaytimeForever,
+                    UserGameId = ug.Id
                 };
 
-                actionsToSend.Add(action);
+                updateRequests.Add(updateUserGameRequest);
             }
         }
-        return actionsToSend;
+
+        if (updateRequests.Any())
+        {
+            await FixTimeDifferences(updateRequests);
+        }
+    }
+
+    public async Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGameRequests)
+    {
+        if (updateUserGameRequests is null)
+        {
+            return;
+        }
+
+        var updateTasks = updateUserGameRequests.Select(async request =>
+        {
+            try
+            {
+                await userGameService.UpdateUserGame(request);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to update game: {ex.Message}");
+            }
+
+        });
+
+        await Task.WhenAll(updateTasks);
     }
 
     public string ExtractSteamIdFromUrl(string urlParams)
