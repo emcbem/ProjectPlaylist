@@ -1,5 +1,4 @@
 import { useUserContext } from "@/hooks/useUserContext";
-import LoadingPage from "@/individual_components/LoadingPage";
 import { ReactNode } from "react";
 
 export const RoleRequired = ({
@@ -7,8 +6,8 @@ export const RoleRequired = ({
   roleToLookOutFor,
   displayIfUnauthorized,
 }: {
-    roleToLookOutFor: string;
-    displayIfUnauthorized: boolean;
+  roleToLookOutFor: string;
+  displayIfUnauthorized: boolean;
   children: ReactNode;
 }) => {
   var userContext = useUserContext();
@@ -16,9 +15,6 @@ export const RoleRequired = ({
   if (!userContext?.isAuthenticated) {
     return displayIfUnauthorized ? <div>Please log in</div> : null;
   }
-
-  console.log(userContext.roles?.[0]);
-  console.log(`role to look out for ${roleToLookOutFor}`)
 
   if (!userContext?.roles || !userContext.roles.includes(roleToLookOutFor)) {
     return displayIfUnauthorized ? (
