@@ -14,6 +14,7 @@ import { BellIcon } from "@heroicons/react/24/outline";
 import Badge from "@mui/material/Badge";
 import LoginButton from "./login";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
+import { RoleRequired } from "@/page_components/AuthenticationLockers/RoleRequired";
 
 const Profile = () => {
   const { isAuthenticated } = useAuth0();
@@ -77,11 +78,12 @@ const Profile = () => {
                 <MenuItem className="font-bold">Settings</MenuItem>
               </Link>
 
-              <hr className="my-3" />
-              <Link to={"/admin"}>
-                <MenuItem className="font-bold">Admin Page</MenuItem>
-              </Link>
-
+              <RoleRequired roleToLookOutFor="Admin">
+                <hr className="my-3" />
+                <Link to={"/admin"}>
+                  <MenuItem className="font-bold">Admin Page</MenuItem>
+                </Link>
+              </RoleRequired>
               <hr className="my-3" />
               <LogoutButton />
             </MenuList>

@@ -19,7 +19,7 @@ export const UserPlatformQueries = {
         UserPlatformService.UpdateUserPlatform(request),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: UserPlatformKeys.GetByUserKey,
+          queryKey: UserPlatformKeys.MutatePlatformKey,
         });
       },
     });
@@ -32,7 +32,7 @@ export const UserPlatformQueries = {
         UserPlatformService.AddUserPlatform(request),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: UserPlatformKeys.GetByUserKey,
+          queryKey: UserPlatformKeys.MutatePlatformKey,
         });
       },
     });
@@ -45,7 +45,7 @@ export const UserPlatformQueries = {
         UserPlatformService.DeleteUserPlatform(userPlatformId),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: UserPlatformKeys.GetByUserKey,
+          queryKey: UserPlatformKeys.MutatePlatformKey,
         });
       },
     });

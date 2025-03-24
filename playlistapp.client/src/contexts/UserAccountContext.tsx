@@ -10,7 +10,7 @@ export const UserAccountContext =
 export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [storedUserGuid, setStoredUserGuid] = useSessionStorage<
     string | undefined
   >("userGuid", undefined);
@@ -18,10 +18,6 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
   const { data, isLoading, error } = UserAccountQueries.useGetUserByAuthId(
     user?.sub ?? ""
   );
-
-
- 
-
   useEffect(() => {
     if (data && data.guid) {
       setStoredUserGuid(data.guid);
@@ -35,6 +31,8 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
         userGuid: storedUserGuid,
         error: error?.message,
         isLoading,
+        roles: user?.['project-playlist/roles'],
+        isAuthenticated
       }}
     >
       {children}
