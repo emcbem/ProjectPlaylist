@@ -13,8 +13,8 @@ const SearchDropdown = <T,>({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    filterOptions("")
-  }, [controller.options])
+    filterOptions("");
+  }, [controller.options]);
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
@@ -22,26 +22,29 @@ const SearchDropdown = <T,>({
     setIsOpen(true);
   };
 
-  const filterOptions = (value:string) => {
+  const filterOptions = (value: string) => {
     if (value.length >= controller.minLength) {
-      setFilteredOptions(
-        controller.options.filter((option) =>
-          controller
-            .stringify_option_fn(option)
-            .toLowerCase()
-            .includes(value.toLowerCase()) &&
-          !controller.selectedOptions.find((x) => x === option)
-        )
-      );
+      if (controller.options.length > 0) {
+        setFilteredOptions(
+          controller.options.filter(
+            (option) =>
+              controller
+                .stringify_option_fn(option)
+                .toLowerCase()
+                .includes(value.toLowerCase()) &&
+              !controller.selectedOptions.find((x) => x === option)
+          )
+        );
+      }
     } else {
       setFilteredOptions([]);
     }
-  }
+  };
 
   const handleSelect = (option: T) => {
     controller.setSelectedOptions((x) => [...x, option]);
     setSearchTerm("");
-    filterOptions("")
+    filterOptions("");
     setIsOpen(false);
   };
 
@@ -97,9 +100,7 @@ const SearchDropdown = <T,>({
             key={controller.stringify_option_fn(value)}
             value={controller.stringify_option_fn(value)}
             onClick={() =>
-              controller.setSelectedOptions((x) =>
-                x.filter((x) => x != value)
-              )
+              controller.setSelectedOptions((x) => x.filter((x) => x != value))
             }
           />
         ))}
