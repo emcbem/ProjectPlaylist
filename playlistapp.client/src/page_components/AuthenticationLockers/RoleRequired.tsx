@@ -4,10 +4,10 @@ import { ReactNode } from "react";
 export const RoleRequired = ({
   children,
   roleToLookOutFor,
-  displayIfUnauthorized,
+  displayIfUnauthorized = false,
 }: {
   roleToLookOutFor: string;
-  displayIfUnauthorized: boolean;
+  displayIfUnauthorized?: boolean;
   children: ReactNode;
 }) => {
   var userContext = useUserContext();
@@ -15,6 +15,9 @@ export const RoleRequired = ({
   if (!userContext?.isAuthenticated) {
     return displayIfUnauthorized ? <div>Please log in</div> : null;
   }
+
+  console.log(userContext.roles?.[0]);
+  console.log(`role to look out for ${roleToLookOutFor}`);
 
   if (!userContext?.roles || !userContext.roles.includes(roleToLookOutFor)) {
     return displayIfUnauthorized ? (

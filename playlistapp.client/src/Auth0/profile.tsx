@@ -78,10 +78,7 @@ const Profile = () => {
                 <MenuItem className="font-bold">Settings</MenuItem>
               </Link>
 
-              <RoleRequired
-                roleToLookOutFor="Admin"
-                displayIfUnauthorized={true}
-              >
+              <RoleRequired roleToLookOutFor="Admin">
                 <hr className="my-3" />
                 <Link to={"/admin"}>
                   <MenuItem className="font-bold">Admin Page</MenuItem>
