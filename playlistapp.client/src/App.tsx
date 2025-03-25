@@ -24,6 +24,7 @@ import SearchUsers from "./page_components/SearchUsers/SearchUsers";
 import NotificationPage from "./page_components/Notifications/Notifications";
 import AdminPage from "./page_components/Admin/Admin";
 import { ColorModeProvider } from "./hooks/useDarkMode";
+import ScrollToTop from "./individual_components/ScrollToTop";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -36,64 +37,69 @@ function App() {
           <SearchBarProvider>
             <ThemeProvider value={materialTheme}>
               <Toaster />
-              <div className="w-full flex-grow flex min-h-screen flex-col rounded-lg">
-                <div className="min-h-screen dark:bg-black flex-grow flex flex-col z-50 w-full">
-                  <div className="dark:bg-black bg-white w-full relative">
-                    <Navbar />
-                    <Routes>
-                      <Route
-                        path="/"
-                        element={
-                          isAuthenticated ? (
-                            <HomePageLoggedIn />
-                          ) : (
-                            <LandingPage />
-                          )
-                        }
-                      />
-                      <Route path="/search" element={<SearchPage />} />
-                      <Route path="/searchusers" element={<SearchUsers />} />
-                      <Route
-                        path="/notifications"
-                        element={<NotificationPage />}
-                      />
-                      <Route path="/view-game/:gameId" element={<ViewGame />} />
-                      <Route
-                        path="/user-library-game/:gameId"
-                        element={<ViewLibraryGame />}
-                      />
-                      <Route path="/admin" element={<AdminPage />} />
-                      <Route path="/account" element={<Account />} />
-                      <Route path="/library" element={<UserLibrary />} />
-                      <Route path="/list/:listId" element={<Playlist />} />
-                      <Route
-                        path="/achievements/:gameId"
-                        element={<AchievementsPage />}
-                      />
-                      <Route path="/test" element={<TestPage />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route
-                        path="/settings/setprofileimage"
-                        element={<ChooseProfileImg />}
-                      />
-                      <Route path="viewallgoals" element={<ViewAllGoals />} />
-                      <Route path="user/:id" element={<Account />} />
-                      <Route
-                        path="user/:id/library"
-                        element={<UserLibrary />}
-                      />
-                      <Route
-                        path="user/:id/list/:listId"
-                        element={<Playlist />}
-                      />
-                      <Route
-                        path="user/:id/viewallgoals"
-                        element={<ViewAllGoals />}
-                      />
-                    </Routes>
+              <ScrollToTop>
+                <div className="w-full flex-grow flex min-h-screen flex-col rounded-lg">
+                  <div className="min-h-screen dark:bg-black flex-grow flex flex-col z-50 w-full">
+                    <div className="dark:bg-black bg-white w-full relative">
+                      <Navbar />
+                      <Routes>
+                        <Route
+                          path="/"
+                          element={
+                            isAuthenticated ? (
+                              <HomePageLoggedIn />
+                            ) : (
+                              <LandingPage />
+                            )
+                          }
+                        />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/searchusers" element={<SearchUsers />} />
+                        <Route
+                          path="/notifications"
+                          element={<NotificationPage />}
+                        />
+                        <Route
+                          path="/view-game/:gameId"
+                          element={<ViewGame />}
+                        />
+                        <Route
+                          path="/user-library-game/:gameId"
+                          element={<ViewLibraryGame />}
+                        />
+                        <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/account" element={<Account />} />
+                        <Route path="/library" element={<UserLibrary />} />
+                        <Route path="/list/:listId" element={<Playlist />} />
+                        <Route
+                          path="/achievements/:gameId"
+                          element={<AchievementsPage />}
+                        />
+                        <Route path="/test" element={<TestPage />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route
+                          path="/settings/setprofileimage"
+                          element={<ChooseProfileImg />}
+                        />
+                        <Route path="viewallgoals" element={<ViewAllGoals />} />
+                        <Route path="user/:id" element={<Account />} />
+                        <Route
+                          path="user/:id/library"
+                          element={<UserLibrary />}
+                        />
+                        <Route
+                          path="user/:id/list/:listId"
+                          element={<Playlist />}
+                        />
+                        <Route
+                          path="user/:id/viewallgoals"
+                          element={<ViewAllGoals />}
+                        />
+                      </Routes>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollToTop>
             </ThemeProvider>
           </SearchBarProvider>
         </ColorModeProvider>
