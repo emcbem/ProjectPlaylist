@@ -71,12 +71,18 @@ export const UserGameService = {
       console.error("Game id was not found");
       throw new Error("Game id must be provided");
     }
+    let jwtToken = localStorage.getItem("authToken");
+    if (!jwtToken) {
+      console.error("Unable to make this request unauthenticated");
+      throw new Error("Unable to make this request unauthenticated");
+    }
     try {
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/UserGame/deleteusergame`,
         {
-          params: {
-            userGameId: userGameId,
+          params: { userGameId },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );

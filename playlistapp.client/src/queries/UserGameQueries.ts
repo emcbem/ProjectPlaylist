@@ -24,7 +24,6 @@ export const UserGameQueries = {
   },
   useDeleteUserGame: (userGuid: string) => {
     const queryClient = useQueryClient();
-
     return useMutation({
       mutationFn: UserGameService.DeleteUserGame,
       onSuccess: () => {

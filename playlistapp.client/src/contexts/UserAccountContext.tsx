@@ -10,7 +10,7 @@ export const UserAccountContext =
 export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [storedUserGuid, setStoredUserGuid] = useSessionStorage<
     string | undefined
   >("userGuid", undefined);
@@ -24,6 +24,18 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
     }
   }, [data, setStoredUserGuid]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      try {
+        getAccessTokenSilently().then((token) => {
+          localStorage.setItem("authToken", token)
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [isAuthenticated]);
+
   return (
     <UserAccountContext.Provider
       value={{
@@ -31,8 +43,8 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
         userGuid: storedUserGuid,
         error: error?.message,
         isLoading,
-        roles: user?.['project-playlist/roles'],
-        isAuthenticated
+        roles: user?.["project-playlist/roles"],
+        isAuthenticated,
       }}
     >
       {children}
