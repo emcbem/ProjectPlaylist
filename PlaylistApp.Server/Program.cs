@@ -1,5 +1,4 @@
 using IGDB;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.Services;
@@ -7,9 +6,9 @@ using PlaylistApp.Server.Services.GameReviewService;
 using PlaylistApp.Server.Services.IGDBServices;
 using PlaylistApp.Server.Services.IGDBSyncServices.Downloader;
 using PlaylistApp.Server.Services.SyncServices;
+using Microsoft.IdentityModel.Tokens;
 using PlaylistApp.Server.Services.UserGenreService;
 using System.Text.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,18 +19,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-	c.CustomSchemaIds(type => type.FullName.Replace(".", "_"));
+    c.CustomSchemaIds(type => type.FullName.Replace(".", "_"));
 });
 builder.Services.AddHttpClient();
 builder.Services.AddDbContextFactory<PlaylistDbContext>(config => config.UseNpgsql(builder.Configuration.GetConnectionString("ppdb"), builder =>
 {
-	builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
 }));
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
-		x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-		x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
 builder.MapProjectPlaylistCoreServices();
@@ -55,27 +54,42 @@ bool allowAll = builder.Configuration["allowAll"] == "true";
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowSpecificOrigin",
-		policy =>
-		{
-			if (allowAll)
-			{
-				policy.AllowAnyOrigin()
-						.AllowAnyHeader()
-						.AllowAnyMethod();
-			}
-			else
-			{
-				policy.WithOrigins("https://localhost:5174")
-						.AllowAnyHeader()
-						.AllowAnyMethod();
-			}
-		});
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            if (allowAll)
+            {
+                policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            }
+            else
+            {
+                policy.WithOrigins("https://localhost:5174")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            }
+        });
 });
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "https://dev-hto6puiswhque3fr.us.auth0.com",
+            ValidAudience = "https://dev-hto6puiswhque3fr.us.auth0.com/api/v2/"
+        };
+        options.Authority = "https://dev-hto6puiswhque3fr.us.auth0.com";
+    });
 
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
+
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -83,6 +97,7 @@ app.UseStaticFiles();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

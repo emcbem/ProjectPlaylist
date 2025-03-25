@@ -29,7 +29,6 @@ export const AchievementService = {
           },
         }
       );
-
       return response.data;
     } catch (error) {
       console.error("Failed to fetch achievement: ", error);

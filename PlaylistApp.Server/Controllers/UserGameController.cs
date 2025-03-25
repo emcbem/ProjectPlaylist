@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
@@ -34,8 +35,9 @@ public class UserGameController : Controller
         return await userGameService.GetUserGameByUser(userId);
     }
 
+    [Authorize]
     [HttpDelete("deleteusergame")]
-    public async Task<bool> DeleteUserGame(int userGameId)
+    public async Task<bool> DeleteUserGame([FromQuery] int userGameId)
     {
         return await userGameService.RemoveUserGame(userGameId);
     }

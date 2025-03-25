@@ -1,6 +1,7 @@
 ﻿using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
+using PlaylistApp.Server.Requests.UpdateRequests;
 
 namespace PlaylistApp.Server.Services.SteamServices.SteamGameService;
 
@@ -12,7 +13,8 @@ public interface ISteamService
     public Task<List<ItemAction>> FindGameInconsistenciesWithUserAccount(List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid);
 
     public Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid);
-    public Task<List<ItemAction>> FixTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid);
+    public Task GatherTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid);
+    public Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGAmeRequests);
     public string ExtractSteamIdFromUrl(string urlParams);
     public void AddSteamKeyToUser(string userId, string steamId);
     public Task AddSteamUsernameToUser(string userGuid, string steamId);
