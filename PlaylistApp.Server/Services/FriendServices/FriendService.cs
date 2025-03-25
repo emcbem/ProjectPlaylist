@@ -91,7 +91,7 @@ public class FriendService : IFriendService
             return new List<UserDTO>();
         }
 
-        var friendDTOs = friends.Select(x => x.Recieved.ToDTO()).ToList();
+        var friendDTOs = friends.SelectMany(x => new[] { x.Base.ToDTO(), x.Recieved.ToDTO() }.Where(x => x.Guid != userId)).ToList();
 
         var userDTOs = friendDTOs.Select(x => new UserDTO
         {
@@ -102,7 +102,7 @@ public class FriendService : IFriendService
             ProfileURL = x.ProfileURL,
             Strikes = x.Strikes,
             Username = x.Username,
-            XP = x.XP,  
+            XP = x.XP,
         }).ToList();
 
         return userDTOs;

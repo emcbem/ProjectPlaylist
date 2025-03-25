@@ -12,16 +12,24 @@ const SearchResults = ({ user }: { user: UserAccount }) => {
   const { usr } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
+
   const { data: friends } = FriendQueries.GetAllFriendsByBaseIdQuery(
     usr?.guid ?? ""
   );
+  
   const { data: pendingFriends } = FriendQueries.GetPendingFriendRequestsQuery(
     usr?.id ?? 0
   );
+
   const isFriend = friends?.some((friend) => friend.id === user.id);
   const isPending = pendingFriends?.some(
     (pendingFriend) => pendingFriend.receivingUser.id === user.id
   );
+  const recievedRequest = pendingFriends?.some(
+    (pendingFriend) => pendingFriend.baseUser.id === user.id
+  );
+
+  console.log(friends);
   return (
     <>
       <Link
@@ -43,9 +51,9 @@ const SearchResults = ({ user }: { user: UserAccount }) => {
         </div>
         {isAuthenticated && (
           <div>
-            {!isFriend && isAuthenticated && usr ? (
+            {!isFriend && !recievedRequest && isAuthenticated && usr ? (
               <AddFriendBtn baseUserId={usr.guid} recievingUserId={user.guid} />
-            ) : isPending ? (
+            ) : isPending || recievedRequest ? (
               <span className="flex flex-row align-bottom text-sm text-clay-700 dark:text-clay-900">
                 <ClockIcon height={18} />
                 <p>Pending</p>
