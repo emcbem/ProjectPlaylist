@@ -29,10 +29,6 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
       userGame.platformGame.id
     );
 
-  const { data: achievement } = AchievementQueries.useGetAchievementById(
-    Number(achievementId)
-  );
-
   const getClaimedAchievementsRequest: GetClaimedAchievementsForGameForUserRequest =
     {
       platformGameId: userGame.platformGame.id,
@@ -40,7 +36,7 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
     };
 
   const addGoalRequest: AddGoalRequest = {
-    achievementId: achievement?.id ?? 0,
+    achievementId: Number(achievementId),
     dateToAchieve: new Date(`${month}-${day}-${year}`),
     isCurrent: isCurrent,
     userId: userGame.user.guid,
