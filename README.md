@@ -12,3 +12,5 @@
   <li><a href="https://docs.google.com/document/d/1uyn-dUVNm1brA3VukafCFiiVbAmtxMrwIRhfBJ_A0ss/edit?tab=t.jltqirz1i6p5">Epic 1 Documentation</a></li>
   <li><a href="https://docs.google.com/document/d/1JjkYPGmVPwwY9WK9Pf7cfCVmFcCSquxCXvYATrSATpc/edit?usp=sharing">Epic 2 Proposal</a></li>
 </ul>
+
+<a href="https://docs.google.com/presentation/d/1FYRJ6fUBzxo9oPDnuXvHxI3zh3HYBUmeIubulhH7Oc0/edit#slide=id.g3438a1a3a99_0_0">Google Slide of Before and After</a>
