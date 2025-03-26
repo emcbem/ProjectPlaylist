@@ -2,15 +2,18 @@ import { GameReview } from "@/@types/gameReview";
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const GameReviewService = {
   AddGameReview: async (addGameReviewRequest: AddGameReviewRequest) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<number>(
         `${import.meta.env.VITE_URL}/GameReview/addgamereview`,
         addGameReviewRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -57,11 +60,13 @@ export const GameReviewService = {
     updateGameReviewRequest: UpdateGameReviewRequest
   ) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<GameReview>(
         `${import.meta.env.VITE_URL}/GameReview/updategamereview`,
         updateGameReviewRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -74,11 +79,15 @@ export const GameReviewService = {
   },
   DeleteGameReview: async (gameReviewId: number) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/GameReview/deletegamereview`,
         {
           params: {
             gameReviewId: gameReviewId,
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );

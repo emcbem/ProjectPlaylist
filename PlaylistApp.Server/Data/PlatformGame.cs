@@ -22,4 +22,5 @@ public partial class PlatformGame
     public virtual Platform Platform { get; set; } = null!;
 
     public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
+    public virtual ICollection<UserGameAuditLog> UserGameAuditLogs { get; set; } = new List<UserGameAuditLog>();
 }

@@ -6,6 +6,7 @@ using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PsnApiWrapperNet.Model;
 using System;
+using System.Security.Claims;
 
 namespace PlaylistApp.Server.Services.UserServices;
 
@@ -226,4 +227,9 @@ public class UserService : IUserService
 		return true;
     }
 
+    public Task<UserAccount> GetUserFromClaims(ClaimsPrincipal claims)
+    {
+		//TODO: STart back up here ethan, this is where we need to go from here :)
+        throw new NotImplementedException();
+    }
 }

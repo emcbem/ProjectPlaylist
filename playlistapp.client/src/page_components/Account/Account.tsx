@@ -17,6 +17,7 @@ import LoadingPage from "@/individual_components/LoadingPage";
 import { UserGenreQueries } from "@/queries/UserGenreQueries";
 import { useParams } from "react-router-dom";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
+import FriendStatus from "../SearchUsers/FriendStatus";
 
 const Account = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,6 +60,8 @@ const Account = () => {
     );
   }
 
+  console.log(userGuid, usr?.guid);
+
   return (
     usr?.profileURL &&
     isSuccess &&
@@ -67,10 +70,17 @@ const Account = () => {
       <div className="min-h-screen bg-white dark:bg-black dark:text-white flex justify-center">
         <div className="m-8 w-full" style={{ maxWidth: "1200px" }}>
           <div className="flex flex-wrap">
-            <img
-              className="rounded-full md:w-24 w-14 shadow-inner border-2  dark:bg-clay-600 bg-white dark:border-clay-950 border-black"
-              src={usr?.profileURL}
-            />
+            <div className="flex flex-col justify-center items-center">
+              <img
+                className="rounded-full md:w-24 w-14 shadow-inner border-2  dark:bg-clay-600 bg-white dark:border-clay-950 border-black"
+                src={usr?.profileURL}
+              />
+              {id && (
+                <div className="mt-2">
+                  <FriendStatus user={usr} />
+                </div>
+              )}
+            </div>
             <div className="">
               <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
               <div className="flex flex-row">

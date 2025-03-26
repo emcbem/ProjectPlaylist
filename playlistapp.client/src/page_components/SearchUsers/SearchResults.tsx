@@ -1,27 +1,8 @@
-import { ClockIcon, UserIcon } from "@heroicons/react/24/solid";
-import React from "react";
-import AddFriendBtn from "./AddFriendBtn";
-import { useAuth0 } from "@auth0/auth0-react";
-import { UserAccount, UserAccountContextInterface } from "@/@types/userAccount";
-import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { FriendQueries } from "@/queries/FriendQueries";
+import { UserAccount } from "@/@types/userAccount";
 import { Link } from "react-router-dom";
+import FriendStatus from "./FriendStatus";
 
 const SearchResults = ({ user }: { user: UserAccount }) => {
-  const { isAuthenticated } = useAuth0();
-  const { usr } = React.useContext(
-    UserAccountContext
-  ) as UserAccountContextInterface;
-  const { data: friends } = FriendQueries.GetAllFriendsByBaseIdQuery(
-    usr?.guid ?? ""
-  );
-  const { data: pendingFriends } = FriendQueries.GetPendingFriendRequestsQuery(
-    usr?.id ?? 0
-  );
-  const isFriend = friends?.some((friend) => friend.id === user.id);
-  const isPending = pendingFriends?.some(
-    (pendingFriend) => pendingFriend.receivingUser.id === user.id
-  );
   return (
     <>
       <Link
@@ -41,23 +22,7 @@ const SearchResults = ({ user }: { user: UserAccount }) => {
             </p>
           </div>
         </div>
-        {isAuthenticated && (
-          <div>
-            {!isFriend && isAuthenticated && usr ? (
-              <AddFriendBtn baseUserId={usr.guid} recievingUserId={user.guid} />
-            ) : isPending ? (
-              <span className="flex flex-row align-bottom text-sm text-clay-700 dark:text-clay-900">
-                <ClockIcon height={18} />
-                <p>Pending</p>
-              </span>
-            ) : (
-              <span className="flex flex-row align-bottom text-sm text-clay-700 dark:text-clay-900">
-                <UserIcon height={18} />
-                <span className="font-sans">Friends</span>
-              </span>
-            )}
-          </div>
-        )}
+        <FriendStatus user={user} />
       </Link>
     </>
   );

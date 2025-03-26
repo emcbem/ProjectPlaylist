@@ -91,7 +91,7 @@ public class FriendService : IFriendService
             return new List<UserDTO>();
         }
 
-        var friendDTOs = friends.Select(x => x.Recieved.ToDTO()).ToList();
+        var friendDTOs = friends.SelectMany(x => new[] { x.Base.ToDTO(), x.Recieved.ToDTO() }.Where(x => x.Guid != userId)).ToList();
 
         var userDTOs = friendDTOs.Select(x => new UserDTO
         {
@@ -102,7 +102,7 @@ public class FriendService : IFriendService
             ProfileURL = x.ProfileURL,
             Strikes = x.Strikes,
             Username = x.Username,
-            XP = x.XP,  
+            XP = x.XP,
         }).ToList();
 
         return userDTOs;
@@ -144,14 +144,15 @@ public class FriendService : IFriendService
         return friend.ToDTO();
     }
 
-    public async Task<bool> RemoveFriend(int id)
+    public async Task<bool> RemoveFriend(int friendId, int userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => x.Id == id)
+            .Where(x => (x.BaseId == friendId) || (x.RecievedId == friendId))
+            .Where(x => (x.BaseId == userId) || (x.RecievedId == userId))
             .FirstOrDefaultAsync();
 
         if (friend == null)

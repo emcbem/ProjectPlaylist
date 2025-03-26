@@ -3,7 +3,7 @@ using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Requests.UpdateRequests;
-using PlaylistApp.Server.Services.SteamServices.SteamAchievementService.SteamAchievementService;
+using PlaylistApp.Server.Services.SteamServices.SteamAchievementService;
 using PlaylistApp.Server.Services.SteamServices.SteamGameService;
 
 namespace PlaylistApp.Server.Services.SteamServices;

@@ -85,7 +85,8 @@ public class UserAchievementService : IUserAchievementService
                 throw new Exception("Cannot get achievement that doesn't exist");
             }
 
-            if (!userAchievements.Select(x => x.UserId).Contains(user.Id) && !userAchievements.Select(x => x.AchievementId).Contains(request.AchievementId))
+            bool exists = userAchievements.Any(x => x.UserId == user.Id && x.Achievement.Id == request.AchievementId);
+            if(!exists)
             {
                 UserAchievement newUserAchievement = new UserAchievement()
                 {

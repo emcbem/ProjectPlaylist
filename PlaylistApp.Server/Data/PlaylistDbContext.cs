@@ -58,6 +58,8 @@ public partial class PlaylistDbContext : DbContext
 	public virtual DbSet<UserImage> UserImages { get; set; }
 
 	public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
+	public virtual DbSet<UserTrophyAuditLog> UserTrophyAuditLogs { get; set; }
+	public virtual DbSet<UserGameAuditLog> UserGameAuditLogs { get; set; }
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		=> optionsBuilder.EnableSensitiveDataLogging();
@@ -613,6 +615,44 @@ public partial class PlaylistDbContext : DbContext
 			entity.HasOne(d => d.User).WithMany(p => p.UserPlatforms)
 				.HasForeignKey(d => d.UserId)
 				.HasConstraintName("user_platform_user_id_fkey");
+		});
+
+		modelBuilder.Entity<UserTrophyAuditLog>(entity =>
+		{
+			entity.HasKey(e => e.Id).HasName("user_trophy_audit_log_pkey");
+
+			entity.ToTable("user_trophy_audit_log", "playlistdb");
+
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.TrophiesAfter).HasColumnName("trophies_after");
+			entity.Property(e => e.TrophiesBefore).HasColumnName("trophies_before");
+			entity.Property(e => e.AuditDate).HasColumnName("audit_date");
+			entity.Property(e => e.UserId).HasColumnName("user_id");
+
+			entity.HasOne(d => d.UserAccount).WithMany(p => p.UserTrophyAuditLogs)
+				.HasForeignKey(d => d.UserId)
+				.HasConstraintName("user_trophy_audit_log_user_id_fkey");
+		});
+
+		modelBuilder.Entity<UserGameAuditLog>(entity =>
+		{
+			entity.HasKey(e => e.Id).HasName("usergame_audit_log_pkey");
+
+			entity.ToTable("usergame_audit_log", "playlistdb");
+
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.MinutesBefore).HasColumnName("minutes_before");
+			entity.Property(e => e.MinutesAfter).HasColumnName("minutes_after");
+			entity.Property(e => e.AuditDate).HasColumnName("audit_date");
+			entity.Property(e => e.UserId).HasColumnName("user_id");
+			entity.Property(e => e.PlatformGameId).HasColumnName("platform_game_id");
+
+			entity.HasOne(d => d.UserAccount).WithMany(p => p.UserGameAuditLogs)
+				.HasForeignKey(d => d.UserId)
+				.HasConstraintName("usergame_audit_log_user_id_fkey");
+			entity.HasOne(d => d.PlatformGame).WithMany(p => p.UserGameAuditLogs)
+				.HasForeignKey(d => d.PlatformGameId)
+				.HasConstraintName("usergame_audit_log_platform_game_id_fkey");
 		});
 
 		base.OnModelCreating(modelBuilder);

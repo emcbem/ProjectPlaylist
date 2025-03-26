@@ -24,7 +24,7 @@ export const UserPlatformQueries = {
       },
     });
   },
-  AddUserPlatform: () => {
+  AddUserPlatform: (userGuid: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -32,12 +32,12 @@ export const UserPlatformQueries = {
         UserPlatformService.AddUserPlatform(request),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: UserPlatformKeys.MutatePlatformKey,
+          queryKey: UserPlatformKeys.GetByUserKey(userGuid),
         });
       },
     });
   },
-  DeleteUserPlatform: () => {
+  DeleteUserPlatform: (userGuid: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -45,7 +45,7 @@ export const UserPlatformQueries = {
         UserPlatformService.DeleteUserPlatform(userPlatformId),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: UserPlatformKeys.MutatePlatformKey,
+          queryKey: UserPlatformKeys.GetByUserKey(userGuid),
         });
       },
     });
