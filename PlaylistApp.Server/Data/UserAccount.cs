@@ -96,4 +96,6 @@ public partial class UserAccount
 	public virtual UserImage UserImage { get; set; } = null!;
 
 	public virtual ICollection<UserPlatform> UserPlatforms { get; set; } = new List<UserPlatform>();
+	public virtual ICollection<UserTrophyAuditLog> UserTrophyAuditLogs { get; set; } = new List<UserTrophyAuditLog>();
+	public virtual ICollection<UserGameAuditLog> UserGameAuditLogs { get; set; } = new List<UserGameAuditLog>();
 }
