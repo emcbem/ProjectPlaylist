@@ -60,6 +60,10 @@ public class UserService : IUserService
                 .Include(ug => ug.PlatformGame)
                     .ThenInclude(pg => pg.Game)
                 .ToList();
+
+			user.UserAchievements = context.UserAchievements
+				.Where(ug => ug.UserId == user.Id)
+				.ToList();
         }
 
 		return user;
