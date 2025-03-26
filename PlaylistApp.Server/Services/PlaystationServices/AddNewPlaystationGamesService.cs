@@ -1,4 +1,6 @@
-﻿using PlaylistApp.Server.DTOs.PlaystationData;
+﻿using PlaylistApp.Server.Data;
+using PlaylistApp.Server.DTOs.PlaystationData;
+using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 
@@ -25,6 +27,20 @@ public class AddNewPlaystationGamesService
         foreach (var request in  newPlaystationGames.AddUserGameRequests)
         {
             await UserGameService.AddUserGame(request);
+
+            var newAuditLog = new AddUserGameAuditLogRequest
+            {
+                AuditDate = DateTime.Today.ToUniversalTime(),
+                MinutesBefore = 0,
+                MinutesAfter = request.HoursPlayed,
+                PlatformGameId = request.PlatformGameId,
+                UserId = request.UserId
+            };
+
+            if (newAuditLog is not null)
+            {
+                await UserGameAuditLogService.AddUserGameAuditLog(newAuditLog);
+            }
         }
 
         return true;

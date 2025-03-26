@@ -5,16 +5,19 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.UserGameServices;
+using PlaylistApp.Server.Services.UserServices;
 
 namespace PlaylistApp.Server.Services.UserGameAuditLogServices;
 
 public class UserGameAuditLogService : IUserGameAuditLogService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
+    private readonly IUserService userService;
 
-    public UserGameAuditLogService(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+    public UserGameAuditLogService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserService userService)
     {
         this.dbContextFactory = dbContextFactory;
+        this.userService = userService;
     }
 
     public async Task<bool> AddUserGameAuditLog(AddUserGameAuditLogRequest request)
@@ -26,13 +29,20 @@ public class UserGameAuditLogService : IUserGameAuditLogService
 
         using var context = await dbContextFactory.CreateDbContextAsync();
 
+        var possibleUser = await userService.GetUserById(request.UserId);
+
+        if (possibleUser is null)
+        {
+            return false;
+        }
+
         UserGameAuditLog newAuditLog = new UserGameAuditLog
         {
             AuditDate = request.AuditDate,
             MinutesAfter = request.MinutesAfter,
             MinutesBefore = request.MinutesBefore,
             PlatformGameId = request.PlatformGameId,
-            UserId = request.UserId
+            UserId = possibleUser.Id
         };
 
         await context.UserGameAuditLogs.AddAsync(newAuditLog);
