@@ -24,6 +24,7 @@ using PlaylistApp.Server.Services.SteamServices.SteamAchievementService.SteamAch
 using PlaylistApp.Server.Services.SteamServices.SteamGameService;
 using PlaylistApp.Server.Services.UserAchievementLikeServices;
 using PlaylistApp.Server.Services.UserAchievementServices;
+using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using PlaylistApp.Server.Services.UserServices;
@@ -56,6 +57,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserGameService, UserGameService>();
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
+		builder.Services.AddSingleton<IUserGameAuditLogService, UserGameAuditLogService>();
 
 		builder.Services.AddSingleton<SyncOrchestrator>();
 		builder.Services.AddSingleton<DifferenceHandler>();

@@ -57,15 +57,23 @@ export const FriendQueries = {
       queryFn: () => FriendService.GetBasePendingRequests(baseId),
     });
   },
-  RemoveFriend: () => {
+  RemoveFriend: (userGuid: string) => {
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: (friendId: string) => FriendService.RemoveFriend(friendId),
-      onSuccess: () => {
+      mutationFn: ({
+        userId,
+        friendId,
+      }: {
+        userId: number;
+        friendId: number;
+      }) => FriendService.RemoveFriend(userId, friendId),
+      onSuccess: (_, { userId }) => {
         toast.success("Friend Removed");
         queryClient.invalidateQueries({
-          queryKey: keys.addFriend,
-          refetchType: "all",
+          queryKey: keys.getFriendByBaseIdFunc(userGuid), // Ensure the correct query key is invalidated
+        });
+        queryClient.invalidateQueries({
+          queryKey: keys.getPendingFriendRequestsFunc(userId),
         });
       },
       onError: (error) => {

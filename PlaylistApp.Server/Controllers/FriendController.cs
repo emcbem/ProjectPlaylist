@@ -38,6 +38,13 @@ public class FriendController : Controller
         return await friendService.GetAllFriendsByBaseId(baseId);
     }
 
+    [HttpGet("getfriendbybaseid")]
+    public async Task<FriendDTO> GetFriendByBaseId(int id)
+    {
+        return await friendService.GetFriendByBaseId(id);
+    }
+
+
     [HttpGet("getfriendbyid")]
     public async Task<FriendDTO> GetFriendById(int friendId)
     {
@@ -52,9 +59,9 @@ public class FriendController : Controller
 
     [Authorize]
     [HttpDelete("removefriend")]
-    public async Task<bool> RemoveFriend(int friendId)
+    public async Task<bool> RemoveFriend(int friendId, int userId)
     {
-        return await friendService.RemoveFriend(friendId);
+        return await friendService.RemoveFriend(friendId, userId);
     }
 
     //[HttpPost("updateNotifications")]

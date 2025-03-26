@@ -59,6 +59,7 @@ public partial class PlaylistDbContext : DbContext
 
 	public virtual DbSet<UserPlatform> UserPlatforms { get; set; }
 	public virtual DbSet<UserTrophyAuditLog> UserTrophyAuditLogs { get; set; }
+	public virtual DbSet<UserGameAuditLog> UserGameAuditLogs { get; set; }
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		=> optionsBuilder.EnableSensitiveDataLogging();

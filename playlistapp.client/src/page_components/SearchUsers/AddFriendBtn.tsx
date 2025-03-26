@@ -20,6 +20,7 @@ const AddFriendBtn: React.FC<AddFriendBtnProps> = ({
     UserAccountContext
   ) as UserAccountContextInterface;
 
+
   const { mutateAsync } = FriendQueries.AddFriend(usr?.guid ?? "");
 
   const handleAddFriend = async () => {

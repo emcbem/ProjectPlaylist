@@ -76,7 +76,7 @@ export const FriendService = {
       throw error;
     }
   },
-  RemoveFriend: async (friendId: string) => {
+  RemoveFriend: async (friendId: number, userId: number) => {
     try {
       let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
@@ -84,6 +84,7 @@ export const FriendService = {
         {
           params: {
             friendId: friendId,
+            userId: userId,
           },
           headers: {
             Authorization: `Bearer ${jwtToken}`,
@@ -92,7 +93,7 @@ export const FriendService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to delete game review: ", error);
+      console.error("Failed to remove friend: ", error);
       throw error;
     }
   },
