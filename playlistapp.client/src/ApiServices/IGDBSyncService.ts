@@ -1,9 +1,15 @@
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const IGDBSyncService = {
   syncCompanies: async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/synccompanies`);
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/synccompanies`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
       return true;
     } catch {
       console.error("Failed to sync companies");
@@ -11,7 +17,12 @@ export const IGDBSyncService = {
   },
   syncPlatforms: async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncplatforms`);
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncplatforms`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
       return true;
     } catch {
       console.error("Failed to sync platforms");
@@ -19,7 +30,12 @@ export const IGDBSyncService = {
   },
   syncGenres: async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncgenres`);
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncgenres`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
       return true;
     } catch {
       console.error("Failed to sync genres");
@@ -27,7 +43,12 @@ export const IGDBSyncService = {
   },
   syncGames: async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncgames`);
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      await axios.get(`${import.meta.env.VITE_URL}/IGDBSync/syncgames`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
       return true;
     } catch {
       console.error("Failed to sync games");

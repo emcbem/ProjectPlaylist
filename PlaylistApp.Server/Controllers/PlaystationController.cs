@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Requests.UpdateRequests;
@@ -37,18 +38,21 @@ public class PlaystationController : Controller
         PlaystationTrophyService = playstationTrophyService;
     }
 
+    [Authorize]
     [HttpPost("gettoken")]
     public async Task<PlaystationContext> GetPlaystationAuthenticationToken()
     {
         return await PlaystationAuthService.GetPlaystationAuthenticationToken();
     }
 
+    [Authorize]
     [HttpPost("searchplayers")]
     public async Task<List<PlaystationUserDTO>> SearchPlaystationPlayers([FromBody] string username)
     {
         return await PlaystationGameService.SearchPlayer(username);
     }
 
+    [Authorize]
     [HttpPost("orchestrator")]
     public async Task<List<ItemAction>> SyncPlaystationData(PlaystationDTO playstationDTO)
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.NotificationServices;
@@ -16,13 +17,15 @@ public class NotificationController : Controller
 		this.notificationService = notificationService;
 	}
 
-	[HttpPost("/update")]
+    [Authorize]
+    [HttpPost("/update")]
 	public async Task<NotificationDTO?> UpdateNotification([FromBody] UpdateNotificationRequest request)
 	{
 		return await notificationService.UpdateNotification(request);
 	}
 
-	[HttpDelete("/delete/{id}")]
+    [Authorize]
+    [HttpDelete("/delete/{id}")]
 	public async Task<bool?> DeleteNotification(int id)
 	{
 		return await notificationService.DeleteNotification(id);

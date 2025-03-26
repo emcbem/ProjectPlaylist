@@ -35,7 +35,7 @@ export const ListQueries = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: (updateListRequest: UpdateListRequest) =>
-        ListService.UpdateListQuery(updateListRequest),
+        ListService.UpdateList(updateListRequest),
       onSuccess: () => {
         toast.success("List updated!");
         queryClient.invalidateQueries({ queryKey: ListKeys.Lists });
@@ -46,7 +46,7 @@ export const ListQueries = {
   useDeleteListQuery: () => {
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: (listId: number) => ListService.DeleteListQuery(listId),
+      mutationFn: (listId: number) => ListService.DeleteList(listId),
       onSuccess: () => {
         toast.success("List removed!");
         queryClient.invalidateQueries({ queryKey: ListKeys.Lists });

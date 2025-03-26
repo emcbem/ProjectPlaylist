@@ -7,6 +7,7 @@ import { useState } from "react";
 import PlaystationResultList from "./PlaystationResultList";
 import LoadingDots from "../SVGs/LoadingDots";
 import { UserPlatform } from "@/@types/userPlatform";
+import { useUserContext } from "@/hooks/useUserContext";
 
 const AddButton = ({
   platform,
@@ -31,9 +32,10 @@ const AddButton = ({
   >();
   const [loading, setLoading] = useState(false);
 
-
-  const { mutateAsync: addUserPlatform } =
-    UserPlatformQueries.AddUserPlatform();
+  const userContext = useUserContext();
+  const { mutateAsync: addUserPlatform } = UserPlatformQueries.AddUserPlatform(
+    userContext?.userGuid ?? ""
+  );
   const { mutateAsync: searchForPlaystationUser } =
     PlaystationQueries.useGetPlaystationUsersBasedOffUsername(value);
 

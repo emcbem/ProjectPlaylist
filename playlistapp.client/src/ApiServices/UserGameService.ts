@@ -3,6 +3,7 @@ import { AddUserGameRequest } from "@/@types/Requests/AddRequests/addUserGameReq
 import { updateUserGameRequest } from "@/@types/Requests/UpdateRequests/updateUserGameRequest";
 import { UserGame } from "@/@types/usergame";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const UserGameService = {
   GetAllUserGamesByUser: async (userId: string | undefined) => {
@@ -50,12 +51,14 @@ export const UserGameService = {
       console.error("Add user game request is undefined or empty");
       throw new Error("Add user game request must be provided");
     }
+    let jwtToken = AuthenticationUtils.GetJwtToken();
     try {
       const response = await axios.post<number>(
         `${import.meta.env.VITE_URL}/UserGame/addusergame`,
         addUserGameRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -71,11 +74,7 @@ export const UserGameService = {
       console.error("Game id was not found");
       throw new Error("Game id must be provided");
     }
-    let jwtToken = localStorage.getItem("authToken");
-    if (!jwtToken) {
-      console.error("Unable to make this request unauthenticated");
-      throw new Error("Unable to make this request unauthenticated");
-    }
+    let jwtToken = AuthenticationUtils.GetJwtToken();
     try {
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/UserGame/deleteusergame`,
@@ -97,12 +96,14 @@ export const UserGameService = {
       console.error("Update user game request was not found");
       throw new Error("Update user game request must be provided");
     }
+    let jwtToken = AuthenticationUtils.GetJwtToken();
     try {
       const response = await axios.patch<PlatformGame>(
         `${import.meta.env.VITE_URL}/UserGame/updateusergame`,
         updateUserGameRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }

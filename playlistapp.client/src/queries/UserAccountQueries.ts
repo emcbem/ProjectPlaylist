@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import keys from "@/QueryKeys/UserAccountKeys";
 import { UserAccountService } from "@/ApiServices/UserAccountService";
-import { AddUserRequest } from "@/@types/Requests/AddRequests/addUserRequest";
 import { UpdateUserRequest } from "@/@types/Requests/UpdateRequests/updateUserRequest";
 import toast from "react-hot-toast";
 
@@ -28,16 +27,6 @@ export const UserAccountQueries = {
     return useQuery({
       queryFn: () => UserAccountService.GetUserById(userId),
       queryKey: keys.GetUserByUserId(userId),
-    });
-  },
-  useAddNewUser: (addUserRequest: AddUserRequest) => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: () => UserAccountService.AddNewUser(addUserRequest),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.AddNewUser });
-      },
     });
   },
   useUpdateUser: () => {

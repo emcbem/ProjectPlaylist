@@ -3,15 +3,18 @@ import { AcceptFriendRequest } from "@/@types/Requests/AddRequests/acceptFriendR
 import { AddFriendRequest } from "@/@types/Requests/AddRequests/addFriendRequest";
 import { UserAccount } from "@/@types/userAccount";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const FriendService = {
   AcceptFriend: async (request: AcceptFriendRequest) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${import.meta.env.VITE_URL}/friend/acceptfriend`,
         request,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -22,13 +25,15 @@ export const FriendService = {
       throw error;
     }
   },
-  AddFriend: async(request: AddFriendRequest) => {
+  AddFriend: async (request: AddFriendRequest) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/friend/addfriend`,
         request,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -71,19 +76,24 @@ export const FriendService = {
       throw error;
     }
   },
-  RemoveFriend: async (friendId: string) => {
+  RemoveFriend: async (friendId: number, userId: number) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/Friend/removefriend`,
         {
           params: {
             friendId: friendId,
+            userId: userId,
           },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          }
         }
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to delete game review: ", error);
+      console.error("Failed to remove friend: ", error);
       throw error;
     }
   },
@@ -102,5 +112,5 @@ export const FriendService = {
       console.error("Failed to get friend by id");
       throw error;
     }
-  }
-}
+  },
+};

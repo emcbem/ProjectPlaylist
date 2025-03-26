@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
@@ -18,6 +19,7 @@ public class GoalLikeController : Controller
         this.goalLikeService = goalLikeService;
     }
 
+    [Authorize]
     [HttpPost("addgoallike")]
     public async Task<bool> AddGoalLike(AddGoalLikeRequest request)
     {
@@ -30,12 +32,14 @@ public class GoalLikeController : Controller
         return await goalLikeService.GetGoalLikesFromUser(userId);
     }
 
+    [Authorize]
     [HttpPost("removegoallike")]
     public async Task<bool> RemoveGoalLike(RemoveGoalLikeRequest request)
     {
         return await goalLikeService.RemoveGoalLike(request);
     }
 
+    [Authorize]
     [HttpPatch("updategoallike")]
     public async Task<bool> UpdateGoalLike(UpdateGoalLikeRequest request)
     {
