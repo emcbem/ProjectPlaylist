@@ -1,6 +1,8 @@
-﻿using PlaylistApp.Server.DTOs;
+﻿using PlaylistApp.Server.Data;
+using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using System.Security.Claims;
 
 namespace PlaylistApp.Server.Services.UserServices;
 
@@ -14,5 +16,6 @@ public interface IUserService
     public Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery);
     public Task<bool> AddUser(AddUserRequest addUserRequest);
     public Task<bool> StrikeUser(string request);
+    public Task<UserAccount> GetUserFromClaims(ClaimsPrincipal claims);
 
 }
