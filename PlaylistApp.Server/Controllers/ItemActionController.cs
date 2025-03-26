@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MimeKit.Encodings;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.SteamServices.SteamAchievementService;
 using PlaylistApp.Server.Services.UserGameServices;
 
 namespace PlaylistApp.Server.Controllers;
@@ -11,10 +13,12 @@ namespace PlaylistApp.Server.Controllers;
 public class ItemActionController : Controller
 {
     private readonly IUserGameService UserGameService;
+    private readonly ISteamAchievementService SteamAchievementService;
 
-    public ItemActionController(IUserGameService userGameService)
+    public ItemActionController(IUserGameService userGameService, ISteamAchievementService steamAchievementService)
     {
         UserGameService = userGameService;
+        SteamAchievementService = steamAchievementService;
     }
 
     [HttpGet("/action/platforms")]
@@ -32,7 +36,22 @@ public class ItemActionController : Controller
             UserId = userId
         };
 
-        await UserGameService.AddUserGame(addUserGameRequest);
+        var newUserGameId = await UserGameService.AddUserGame(addUserGameRequest);
+
+
+        var gameJustMade = await UserGameService.GetUserGameById(newUserGameId);
+        
+        if(gameJustMade is null || gameJustMade.PlatformGame is null)
+        {
+            throw new Exception("Failed adding user platform game");
+        }
+
+        var platformIdOfGameJustMade = gameJustMade.PlatformGame.PlatformKey;
+
+        if (gameJustMade.PlatformGame.Platform.Id == 6 || gameJustMade.PlatformGame.Platform.Id == 163)  // this feels so stinky. sooo so stinky
+        {
+            SteamAchievementService.AddMissingActionsAfterResolvingGameCollision(new List<string>() { platformIdOfGameJustMade.ToString() }, userId);
+        }
 
         return Ok($"Successfully handled collision for {addUserGameRequest.PlatformGameId}");
     }
