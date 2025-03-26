@@ -3,6 +3,7 @@ import { AddGoalRequest } from "@/@types/Requests/AddRequests/addGoalRequest";
 import { GetGoalToCompleteRequest } from "@/@types/Requests/GetRequests/getGoalToCompleteRequest";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const GoalService = {
   addGoal: async (addGoalRequest: AddGoalRequest) => {
@@ -11,11 +12,13 @@ export const GoalService = {
       throw new Error("Add goal request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post(
         `${import.meta.env.VITE_URL}/Goal/addgoal`,
         addGoalRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -72,11 +75,13 @@ export const GoalService = {
       throw new Error("Update goal request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<Goal>(
         `${import.meta.env.VITE_URL}/Goal/updategoal`,
         updateGoalRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -93,12 +98,16 @@ export const GoalService = {
       throw new Error("Goal id must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/Goal/deletegoal`,
         {
           params: {
             goalId: goalId,
           },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          }
         }
       );
       return response.data;

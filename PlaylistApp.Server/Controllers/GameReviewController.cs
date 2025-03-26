@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
@@ -17,12 +18,14 @@ public class GameReviewController : Controller
         this.gameReviewService = gameReviewService;
     }
 
+    [Authorize]
     [HttpPost("addgamereview")]
     public async Task<int> AddGameReview(AddGameReviewRequest request)
     {
         return await gameReviewService.AddGameReview(request);
     }
 
+    [Authorize]
     [HttpDelete("deletegamereview")]
     public async Task<bool> DeleteGameReview(int gameReviewId)
     {
@@ -41,6 +44,7 @@ public class GameReviewController : Controller
         return await gameReviewService.GetGameReviewById(gameReviewId);
     }
 
+    [Authorize]
     [HttpPatch("updategamereview")]
     public async Task<GameReviewDTO> UpdateGameReview(UpdateGameReviewRequest request)
     {

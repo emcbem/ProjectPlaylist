@@ -1,7 +1,7 @@
-import { AddUserRequest } from "@/@types/Requests/AddRequests/addUserRequest";
 import { UpdateUserRequest } from "@/@types/Requests/UpdateRequests/updateUserRequest";
 import { UserAccount } from "@/@types/userAccount";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const UserAccountService = {
   GetUserByUsername: async (
@@ -82,38 +82,19 @@ export const UserAccountService = {
       throw error;
     }
   },
-  AddNewUser: async (addUserRequest: AddUserRequest) => {
-    if (!addUserRequest) {
-      console.error("Add user request was undefined or empty");
-      throw new Error("Add user request must be provided");
-    }
-    try {
-      const response = await axios.post<boolean>(
-        `${import.meta.env.VITE_URL}/User/addnewuser`,
-        addUserRequest,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Failed to get user");
-      throw error;
-    }
-  },
   UpdateUser: async (request: UpdateUserRequest) => {
     if (!request) {
       console.error("Update user request was undefined or empty");
       throw new Error("Update user request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<UserAccount>(
         `${import.meta.env.VITE_URL}/User/updateuser`,
         request,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -130,11 +111,13 @@ export const UserAccountService = {
       throw new Error("Update user request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${import.meta.env.VITE_URL}/User/strikeuser`,
-        userGuid ,
+        userGuid,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -151,11 +134,15 @@ export const UserAccountService = {
       throw new Error("User id must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/User/deleteuser`,
         {
           params: {
             userId: userId,
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );

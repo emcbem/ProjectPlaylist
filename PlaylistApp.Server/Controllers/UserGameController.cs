@@ -17,6 +17,7 @@ public class UserGameController : Controller
         this.userGameService = userGameService;
     }
 
+    [Authorize]
     [HttpPost("addusergame")]
     public async Task<int> AddUserGame(AddUserGameRequest request)
     {
@@ -42,6 +43,7 @@ public class UserGameController : Controller
         return await userGameService.RemoveUserGame(userGameId);
     }
 
+    [Authorize]
     [HttpPatch("updateusergame")]
     public async Task<UserGameDTO> UpdateUserGame(UpdateUserGameRequest request)
     {

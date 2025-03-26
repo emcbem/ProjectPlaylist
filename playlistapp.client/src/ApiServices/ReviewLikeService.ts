@@ -5,6 +5,7 @@ import { GetReviewLikeRequest } from "@/@types/Requests/GetRequests/getReviewLik
 import { UpdateReviewLikeRequest } from "@/@types/Requests/UpdateRequests/updateReviewLikeRequest";
 import { ReviewLike } from "@/@types/reviewLike";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const ReviewLikeService = {
   addReviewLike: async (addReviewLikeRequest: AddReviewLikeRequest) => {
@@ -13,11 +14,13 @@ export const ReviewLikeService = {
       throw new Error("Add review like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/ReviewLike/addreviewlike`,
         addReviewLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -56,11 +59,13 @@ export const ReviewLikeService = {
       throw new Error("Remove review like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/ReviewLike/removereviewlike`,
         removeReviewLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -79,11 +84,13 @@ export const ReviewLikeService = {
       throw new Error("Update review like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${import.meta.env.VITE_URL}/ReviewLike/updatereviewlike`,
         updateReviewLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }

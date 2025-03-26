@@ -5,6 +5,7 @@ import { RemoveGoalLikerequest } from "@/@types/Requests/DeleteRequests/removeGo
 import { GetGoalLikeRequest } from "@/@types/Requests/GetRequests/getGoalLikeRequest";
 import { UpdateGoalLikeRequest } from "@/@types/Requests/UpdateRequests/updateGoalLikeRequest";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const GoalLikeService = {
   addGoalLike: async (addGoalLikeRequest: AddGoalLikeRequest) => {
@@ -13,11 +14,13 @@ export const GoalLikeService = {
       throw new Error("Add goal like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/GoalLike/addgoallike`,
         addGoalLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -75,11 +78,13 @@ export const GoalLikeService = {
       throw new Error("Update goal like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${import.meta.env.VITE_URL}/GoalLike/updategoallike`,
         updateGoalLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -96,11 +101,13 @@ export const GoalLikeService = {
       throw new Error("Remove goal like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/GoalLike/removegoallike`,
         removeGoalLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }

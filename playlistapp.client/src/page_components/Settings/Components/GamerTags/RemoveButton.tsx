@@ -1,4 +1,5 @@
 import { UserPlatform } from "@/@types/userPlatform";
+import { useUserContext } from "@/hooks/useUserContext";
 import { UserPlatformQueries } from "@/queries/UserPlatformQueries";
 
 const RemoveButton = ({
@@ -8,8 +9,9 @@ const RemoveButton = ({
   userPlatform: UserPlatform | null;
   isVisible: boolean;
 }) => {
+  const userData = useUserContext();
   const { mutateAsync: deleteUserPlatform } =
-    UserPlatformQueries.DeleteUserPlatform();
+    UserPlatformQueries.DeleteUserPlatform(userData?.userGuid ?? "");
 
   const handleRemove = async () => {
     if (userPlatform != undefined) {

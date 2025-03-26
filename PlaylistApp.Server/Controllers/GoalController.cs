@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
@@ -18,12 +19,14 @@ public class GoalController : Controller
         this.goalService = goalService;
     }
 
+    [Authorize]
     [HttpPost("addgoal")]
     public async Task<int> AddGoal(AddGoalRequest request)
     {
         return await goalService.AddGoal(request);
     }
 
+    [Authorize]
     [HttpDelete("deletegoal")]
     public async Task<bool> DeleteGoal(int goalId)
     {
@@ -42,6 +45,7 @@ public class GoalController : Controller
         return await goalService.GetGoalsFromUser(userId);
     }
 
+    [Authorize]
     [HttpPatch("updategoal")]
     public async Task<GoalDTO> UpdateGoal(UpdateGoalRequest request)
     {

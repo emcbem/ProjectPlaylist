@@ -5,6 +5,7 @@ import { UpdateUserAchievementLikeRequest } from "@/@types/Requests/UpdateReques
 import { UserAchievement } from "@/@types/userAchievement";
 import { UserAchievementLike } from "@/@types/userAchievementLike";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const UserAchievementLikeService = {
   AddUserAchievementLike: async (
@@ -15,6 +16,7 @@ export const UserAchievementLikeService = {
       throw new Error("Add user achievement like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${
           import.meta.env.VITE_URL
@@ -22,6 +24,7 @@ export const UserAchievementLikeService = {
         addUserAchievementLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -64,6 +67,7 @@ export const UserAchievementLikeService = {
       throw new Error("Remove user achievement like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const resonse = await axios.post<boolean>(
         `${
           import.meta.env.VITE_URL
@@ -71,6 +75,7 @@ export const UserAchievementLikeService = {
         removeUserAchievementLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -91,6 +96,7 @@ export const UserAchievementLikeService = {
       throw new Error("Update user achievement like request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${
           import.meta.env.VITE_URL
@@ -98,6 +104,7 @@ export const UserAchievementLikeService = {
         updateUserAchievementLikeRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
