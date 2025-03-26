@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
@@ -17,12 +18,14 @@ public class FriendController : Controller
         this.friendService = friendService; 
     }
 
+    [Authorize]
     [HttpPatch("acceptfriend")]
     public async Task<bool> AcceptFriend(AcceptFriendRequest request)
     {
         return await friendService.AcceptFriend(request);
     }
 
+    [Authorize]
     [HttpPost("addfriend")]
     public async Task<bool> AddFriend(AddFriendRequest request)
     {
@@ -54,6 +57,7 @@ public class FriendController : Controller
         return await friendService.GetBasePendingRequests(baseId);
     }
 
+    [Authorize]
     [HttpDelete("removefriend")]
     public async Task<bool> RemoveFriend(int friendId, int userId)
     {

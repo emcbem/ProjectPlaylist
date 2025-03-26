@@ -3,15 +3,18 @@ import { AcceptFriendRequest } from "@/@types/Requests/AddRequests/acceptFriendR
 import { AddFriendRequest } from "@/@types/Requests/AddRequests/addFriendRequest";
 import { UserAccount } from "@/@types/userAccount";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const FriendService = {
   AcceptFriend: async (request: AcceptFriendRequest) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<boolean>(
         `${import.meta.env.VITE_URL}/friend/acceptfriend`,
         request,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -24,11 +27,13 @@ export const FriendService = {
   },
   AddFriend: async (request: AddFriendRequest) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/friend/addfriend`,
         request,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -73,6 +78,7 @@ export const FriendService = {
   },
   RemoveFriend: async (friendId: number, userId: number) => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/Friend/removefriend`,
         {
@@ -80,6 +86,9 @@ export const FriendService = {
             friendId: friendId,
             userId: userId,
           },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          }
         }
       );
       return response.data;

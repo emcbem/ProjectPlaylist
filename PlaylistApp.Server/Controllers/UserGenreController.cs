@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
@@ -16,12 +17,14 @@ public class UserGenreController : Controller
         this.userGenreService = userGenreService;
     }
 
+    [Authorize]
     [HttpPost("addusergenre")]
     public async Task<bool> AddUserGenre(AddUserGenreRequest request)
     {
         return await userGenreService.AddUserGenre(request);
     }
 
+    [Authorize]
     [HttpDelete("deleteusergenre")]
     public async Task<bool> DeleteUserGenre(RemoveUserGenreRequest request)
     {

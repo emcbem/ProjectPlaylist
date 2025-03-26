@@ -30,16 +30,6 @@ export const UserAccountQueries = {
       queryKey: keys.GetUserByUserId(userId),
     });
   },
-  useAddNewUser: (addUserRequest: AddUserRequest) => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: () => UserAccountService.AddNewUser(addUserRequest),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.AddNewUser });
-      },
-    });
-  },
   useUpdateUser: () => {
     const queryClient = useQueryClient();
 

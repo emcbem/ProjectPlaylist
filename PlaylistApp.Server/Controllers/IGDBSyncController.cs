@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using IGDB;
 using IGDB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
@@ -31,26 +32,28 @@ public class IGDBSyncController
         this.syncOrchestrator = syncOrchestrator;
     }
 
+    [Authorize]
     [HttpGet("SyncCompanies")]
     public async Task SyncCompanies()
     {
         await syncOrchestrator.OrchestrateCompanies();
     }
 
+    [Authorize]
     [HttpGet("SyncPlatforms")]
-    [EndpointDescription("A way to upload the platforms from IGDB in a quick and easy way")]
     public async Task<DifferencesToCheck> SyncPlatforms()
     {
         return await syncOrchestrator.OrchestratePlatforms();
     }
 
-
+    [Authorize]
     [HttpGet("SyncGenres")]
     public async Task<DifferencesToCheck> SyncGenres()
     {
         return await syncOrchestrator.OrchestrateGenres();
     }
 
+    [Authorize]
     [HttpGet("SyncGames")]
     public async Task<DifferencesToCheck> SyncGames()
     {

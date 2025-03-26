@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
@@ -18,6 +19,7 @@ public class ReviewLikeController : Controller
         this.reviewLikeService = reviewLikeService;
     }
 
+    [Authorize]
     [HttpPost("addreviewlike")]
     public async Task<bool> AddReviewLikeService(AddReviewLikeRequest request)
     {
@@ -30,12 +32,14 @@ public class ReviewLikeController : Controller
         return await reviewLikeService.GetAllByUser(userId);
     }
 
+    [Authorize]
     [HttpPost("removereviewlike")]
     public async Task<bool> RemoveReviewLike(RemoveReviewLikeRequest request)
     {
         return await reviewLikeService.RemoveReviewLike(request);
     }
 
+    [Authorize]
     [HttpPatch("updatereviewlike")]
     public async Task<bool> UpdateReviewLike(UpdateReviewLikeRequest request)
     {

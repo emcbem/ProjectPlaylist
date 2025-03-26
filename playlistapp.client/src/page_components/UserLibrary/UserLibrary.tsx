@@ -65,12 +65,13 @@ const UserLibrary = () => {
               isListView={isListView}
               setIsListView={setIsListView}
             />
-
-            {isListView ? (
-              <MyLibraryGridView games={userGamesFromUser} />
-            ) : (
-              <MyLibraryListView games={userGamesFromUser} />
-            )}
+            <div className="mb-24 sm:mb-48">
+              {isListView ? (
+                <MyLibraryGridView games={userGamesFromUser} />
+              ) : (
+                <MyLibraryListView games={userGamesFromUser} />
+              )}
+            </div>
           </div>
         </div>
       </div>

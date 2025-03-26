@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
@@ -17,12 +18,14 @@ public class ListController : Controller
         this.listService = listService;
     }
 
+    [Authorize]
     [HttpPost("addlist")]
     public async Task<int> AddList(AddListRequest request)
     {
         return await listService.AddList(request);
     }
 
+    [Authorize]
     [HttpDelete("deletelist")]
     public async Task<bool> DeleteList(int listId)
     {
@@ -47,6 +50,7 @@ public class ListController : Controller
         return await listService.GetListById(listId);
     }
 
+    [Authorize]
     [HttpPatch("updatelist")]
     public async Task<ListDTO> UpdateList(UpdateListRequest request)
     {
