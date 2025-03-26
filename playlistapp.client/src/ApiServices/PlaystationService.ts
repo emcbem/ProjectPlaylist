@@ -3,12 +3,20 @@ import { PlaystationContext } from "@/@types/Playstation/playstationContext";
 import { PlaystationDTO } from "@/@types/Playstation/playstationDTO";
 import { PlaystationUser } from "@/@types/Playstation/playstationUser";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const PlaystationService = {
   getPlaystationAuthenticationService: async () => {
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<PlaystationContext>(
-        `${import.meta.env.VITE_URL}/Playstation/gettoken`
+        `${import.meta.env.VITE_URL}/Playstation/gettoken`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -22,11 +30,13 @@ export const PlaystationService = {
       throw new Error("Playstation Username was undefined or empty");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<PlaystationUser[]>(
         `${import.meta.env.VITE_URL}/Playstation/searchplayers`,
         username,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -47,11 +57,13 @@ export const PlaystationService = {
       throw new Error("Playstation DTO was undefined or empty");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<ItemAction[]>(
         `${import.meta.env.VITE_URL}/Playstation/orchestrator`,
         playstationDTO,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }

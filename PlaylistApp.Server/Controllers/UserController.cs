@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
@@ -17,6 +18,7 @@ public class UserController : Controller
         this.userService = userService;
     }
 
+    [Authorize]
     [HttpDelete("deleteuser")]
     public async Task<bool> DeleteUserById(Guid userId)
     {
@@ -41,6 +43,7 @@ public class UserController : Controller
         return await userService.GetUsersBySearchQuery(query);
     }
 
+    [Authorize]
     [HttpPatch("updateuser")]
     public async Task<UserDTO> UpdateUser(UpdateUserRequest request)
     {
@@ -59,6 +62,7 @@ public class UserController : Controller
         return await userService.AddUser(addUserRequest);
     }
 
+    [Authorize]
     [HttpPatch("strikeuser")]
     public async Task<bool> StrikeUser([FromBody] string userGuid)
     {

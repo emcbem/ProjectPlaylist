@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.DeleteRequests;
@@ -18,6 +19,7 @@ public class UserAchievementLikeController : Controller
         this.userAchievementLikeService = userAchievementLikeService;   
     }
 
+    [Authorize]
     [HttpPost("adduserachievementlike")]
     public async Task<bool> AddUserAchievementLike(AddUserAchievementLike request)
     {
@@ -30,12 +32,14 @@ public class UserAchievementLikeController : Controller
         return await userAchievementLikeService.GetAchievementUserLikesFromUserId(userId);
     }
 
+    [Authorize]
     [HttpPost("removeuserachievementlike")]
     public async Task<bool> RemoveUserAchievementLike(RemoveUserAchievementLikeRequest request)
     {
         return await userAchievementLikeService.RemoveUserAchievementLike(request);
     }
 
+    [Authorize]
     [HttpPatch("updateuserachievementlike")]
     public async Task<bool> UpdateUserAchievementLike(UpdateUserAchievementLikeRequest request)
     {

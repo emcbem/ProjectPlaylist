@@ -4,6 +4,7 @@ import { GetClaimedAchievementsForGameForUserRequest } from "@/@types/Requests/G
 import { UpdateUserAchievementRequest } from "@/@types/Requests/UpdateRequests/updateUserAchievementRequest";
 import { UserAchievement } from "@/@types/userAchievement";
 import axios from "axios";
+import { AuthenticationUtils } from "./AuthenticationUtils";
 
 export const UserAchievementService = {
   AddUserAchievement: async (
@@ -14,11 +15,13 @@ export const UserAchievementService = {
       throw new Error("Add user achievement request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.post<number>(
         `${import.meta.env.VITE_URL}/UserAchievement/adduserachievement`,
         addUserAchievementRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -101,11 +104,13 @@ export const UserAchievementService = {
       throw new Error("Update User Achievement Request must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.patch<UserAchievement>(
         `${import.meta.env.VITE_URL}/UserAchievement/updateuserachievement`,
         updateUserAchievementRequest,
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -122,11 +127,15 @@ export const UserAchievementService = {
       throw new Error("User Achievement Id must be provided");
     }
     try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/UserAchievement/deleteuserachievement`,
         {
           params: {
             id: userAchievementId,
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );

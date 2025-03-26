@@ -34,10 +34,10 @@ const PendingFriends: FC<PendingFriendsProps> = ({ pendingFriends, usr }) => {
   };
   return (
     <div>
-      <h2 className="mt-3 text-xl text-gray-500">Pending Requests</h2>
       {FilterMyPendingFriends(pendingFriends, usr.id)?.length ? (
-        FilterMyPendingFriends(pendingFriends, usr.id).map((x, key) => (
-          <>
+        <>
+          <h2 className="mt-3 text-xl text-gray-500">Pending Requests</h2>
+          {FilterMyPendingFriends(pendingFriends, usr.id).map((x, key) => (
             <div
               key={key}
               className="m-3 bg-stone-50 dark:bg-clay-200 rounded-lg px-3 py-2 shadow-xl"
@@ -53,8 +53,8 @@ const PendingFriends: FC<PendingFriendsProps> = ({ pendingFriends, usr }) => {
                 </div>
               </div>
             </div>
-          </>
-        ))
+          ))}
+        </>
       ) : (
         <p></p>
       )}
