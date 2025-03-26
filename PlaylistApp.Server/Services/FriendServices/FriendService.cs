@@ -144,14 +144,15 @@ public class FriendService : IFriendService
         return friend.ToDTO();
     }
 
-    public async Task<bool> RemoveFriend(int id)
+    public async Task<bool> RemoveFriend(int friendId, int userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => x.Id == id)
+            .Where(x => (x.BaseId == friendId) || (x.RecievedId == friendId))
+            .Where(x => (x.BaseId == userId) || (x.RecievedId == userId))
             .FirstOrDefaultAsync();
 
         if (friend == null)

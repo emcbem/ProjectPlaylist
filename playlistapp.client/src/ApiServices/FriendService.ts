@@ -22,7 +22,7 @@ export const FriendService = {
       throw error;
     }
   },
-  AddFriend: async(request: AddFriendRequest) => {
+  AddFriend: async (request: AddFriendRequest) => {
     try {
       const response = await axios.post<boolean>(
         `${import.meta.env.VITE_URL}/friend/addfriend`,
@@ -71,19 +71,20 @@ export const FriendService = {
       throw error;
     }
   },
-  RemoveFriend: async (friendId: string) => {
+  RemoveFriend: async (friendId: number, userId: number) => {
     try {
       const response = await axios.delete<boolean>(
         `${import.meta.env.VITE_URL}/Friend/removefriend`,
         {
           params: {
             friendId: friendId,
+            userId: userId,
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to delete game review: ", error);
+      console.error("Failed to remove friend: ", error);
       throw error;
     }
   },
@@ -102,5 +103,5 @@ export const FriendService = {
       console.error("Failed to get friend by id");
       throw error;
     }
-  }
-}
+  },
+};
