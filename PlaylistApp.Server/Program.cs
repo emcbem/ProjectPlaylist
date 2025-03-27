@@ -9,6 +9,7 @@ using PlaylistApp.Server.Services.SyncServices;
 using Microsoft.IdentityModel.Tokens;
 using PlaylistApp.Server.Services.UserGenreService;
 using System.Text.Json.Serialization;
+using PlaylistApp.Server.Services.ItemActionService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ builder.MapPlaystationServices();
 //These ones don't want to be in the mapper for some reason.
 builder.Services.AddSingleton<IUserGenreService, UserGenreService>();
 builder.Services.AddSingleton<IGameReviewService, GameReviewService>();
+builder.Services.AddSingleton<IItemActionService, ItemActionService>();
+
 
 builder.Services.AddSingleton<SyncService>();
 builder.Services.AddSingleton<CsvDownloader>();
