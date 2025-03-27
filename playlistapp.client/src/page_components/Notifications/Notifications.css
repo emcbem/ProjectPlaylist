@@ -1,0 +1,29 @@
+.prose img {
+  border-radius: 50%;
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: cover;
+}
+
+.prose h1 {
+  font-size: 24px;
+  margin-bottom: 0px;
+  font: 100;
+}
+
+.prose p {
+  margin: 0px;
+}
+
+.notification-body {
+  display: flex;
+  align-items: center; /* Aligns text and image */
+  gap: 10px; /* Adds space between image and text */
+}
+
+.notification-body img {
+  width: 80px; /* Adjust size */
+  height: 80px;
+  border-radius: 50%; /* Optional: Makes it circular */
+  object-fit: cover;
+}
