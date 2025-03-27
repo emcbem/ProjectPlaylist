@@ -8,6 +8,7 @@ using PlaylistApp.Server.Services.GoalLikeServices;
 using PlaylistApp.Server.Services.GoalServices;
 using PlaylistApp.Server.Services.IGDBSyncServices;
 using PlaylistApp.Server.Services.ImageServices;
+using PlaylistApp.Server.Services.ItemActionService;
 using PlaylistApp.Server.Services.ListServices;
 using PlaylistApp.Server.Services.NotificationServices;
 using PlaylistApp.Server.Services.PlatformGameServices;
@@ -55,6 +56,7 @@ public static class Mapper
 
 		builder.Services.AddSingleton<SyncOrchestrator>();
 		builder.Services.AddSingleton<DifferenceHandler>();
+
 
     }
 }

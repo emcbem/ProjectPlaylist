@@ -1,6 +1,7 @@
 ﻿using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 
@@ -19,30 +20,43 @@ public class AddNewPlaystationGamesService
 
     public async Task<bool> AddNewPlaystationGames(NewPlaystationGames newPlaystationGames)
     {
-        if (newPlaystationGames.AddUserGameRequests is null)
+        if (newPlaystationGames.AddUserGameRequests is null || !newPlaystationGames.AddUserGameRequests.Any())
         {
             return false;
         }
 
-        foreach (var request in  newPlaystationGames.AddUserGameRequests)
+        var tasks = newPlaystationGames.AddUserGameRequests.Select(async request =>
         {
-            await UserGameService.AddUserGame(request);
-
-            var newAuditLog = new AddUserGameAuditLogRequest
+            var getRequest = new GetUserGameRequest
             {
-                AuditDate = DateTime.Today.ToUniversalTime(),
-                MinutesBefore = 0,
-                MinutesAfter = request.HoursPlayed,
                 PlatformGameId = request.PlatformGameId,
                 UserId = request.UserId
             };
 
-            if (newAuditLog is not null)
+            var possibleUserGame = await UserGameService.GetUserGameByPlatformGameAndUser(getRequest);
+
+            if (possibleUserGame.PlatformGame is not null)
             {
-                await UserGameAuditLogService.AddUserGameAuditLog(newAuditLog);
+                return;
             }
-        }
+
+            await UserGameService.AddUserGame(request);
+
+            var newAuditLog = new AddUserGameAuditLogRequest
+            {
+                AuditDate = DateTime.UtcNow,
+                MinutesBefore = 0,
+                MinutesAfter = request.HoursPlayed / 60,
+                PlatformGameId = request.PlatformGameId,
+                UserId = request.UserId
+            };
+
+            await UserGameAuditLogService.AddUserGameAuditLog(newAuditLog);
+        });
+
+        await Task.WhenAll(tasks);
 
         return true;
     }
+
 }
