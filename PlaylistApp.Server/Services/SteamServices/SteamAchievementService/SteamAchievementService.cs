@@ -148,7 +148,7 @@ public class SteamAchievementService : ISteamAchievementService
                 }
             }
         }
-         await userAchievementService.AddMultipleUserAchievement(AddAchievementsRequest);
+        await userAchievementService.AddMultipleUserAchievement(AddAchievementsRequest);
     }
 
     public async Task<List<PlayerStatsResponse>> GetAllSteamAchievementsFromSteam(List<string> userPgsPlatformKeys, string steamId)
@@ -164,7 +164,12 @@ public class SteamAchievementService : ISteamAchievementService
             responses.Add(await response.Content.ReadFromJsonAsync<PlayerStatsResponse>() ?? new PlayerStatsResponse());
         }
 
-        return responses;
+        return responses
+            .SelectMany(x => x.PlayerStats.Achievements, (response, achievement) => new { response, achievement })
+            .GroupBy(x => x.achievement.Apiname)
+            .Select(g => g.First().response)
+            .Distinct()
+            .ToList();
     }
 
     public async void AddMissingActionsAfterResolvingGameCollision(List<string> pgIds, Guid userGuid)
