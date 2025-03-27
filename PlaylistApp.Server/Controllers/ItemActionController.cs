@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MimeKit.Encodings;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.SteamServices.SteamAchievementService;
 using PlaylistApp.Server.Services.UserGameServices;
+using PlaylistApp.Server.Services.UserPlatformServices;
+using PlaylistApp.Server.Services.UserServices;
 
 namespace PlaylistApp.Server.Controllers;
 
@@ -14,11 +17,14 @@ public class ItemActionController : Controller
 {
     private readonly IUserGameService UserGameService;
     private readonly ISteamAchievementService SteamAchievementService;
+    private readonly IUserPlatformService UserPlatformService;
 
-    public ItemActionController(IUserGameService userGameService, ISteamAchievementService steamAchievementService)
+
+    public ItemActionController(IUserGameService userGameService, ISteamAchievementService steamAchievementService, IUserPlatformService userPlatformService)
     {
         UserGameService = userGameService;
         SteamAchievementService = steamAchievementService;
+        UserPlatformService = userPlatformService;
     }
 
     [HttpGet("/action/platforms")]
@@ -48,9 +54,22 @@ public class ItemActionController : Controller
 
         var platformIdOfGameJustMade = gameJustMade.PlatformGame.PlatformKey;
 
-        if (gameJustMade.PlatformGame.Platform.Id == 6 || gameJustMade.PlatformGame.Platform.Id == 163)  // this feels so stinky. sooo so stinky
+        var usersPlatforms = await UserPlatformService.GetAllByUser(userId);
+
+        string userExternalPlatformId = string.Empty;
+        foreach (var up in usersPlatforms)
         {
-            SteamAchievementService.AddMissingActionsAfterResolvingGameCollision(new List<string>() { platformIdOfGameJustMade.ToString() }, userId);
+            if (up.PlatformId == 6 || up.PlatformId == 163)
+            {
+                userExternalPlatformId = up.ExternalPlatformId;
+            }
+        }
+        //var userPlatform = user2.Where(x => x.PlatformId == 6).First();
+        
+
+        if ((gameJustMade.PlatformGame.Platform.Id == 6 || gameJustMade.PlatformGame.Platform.Id == 163) && !userExternalPlatformId.IsNullOrEmpty())  // this feels so stinky. sooo so stinky
+        {
+            await SteamAchievementService.AddMissingAchievementsToUser(userId, userExternalPlatformId);
         }
 
         return Ok($"Successfully handled collision for {addUserGameRequest.PlatformGameId}");
