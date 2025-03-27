@@ -7,11 +7,14 @@ import { UserGame } from "@/@types/usergame";
 import AddGoalButton from "@/page_components/Goals/Components/Buttons/AddGoalButton";
 import GoalModalAdd from "@/page_components/Goals/Components/Modal/GoalModalAdd";
 import ShineBorder from "@/components/ui/shine-border";
+import { useParams } from "react-router-dom";
 
 const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
   usr,
   userGame,
 }) => {
+  const { id } = useParams<{ id: string }>();
+  const userId = id ?? usr?.guid;
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const HandleAddModal = () => {
@@ -26,7 +29,7 @@ const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
     data: userEarnedAchievement,
     isLoading,
     error,
-  } = UserAchievementQueries.useGetUserAchievementByUserId(usr?.guid ?? "");
+  } = UserAchievementQueries.useGetUserAchievementByUserId(userId ?? "");
 
   if (!usr?.guid) {
     return <p>Error: User not logged in.</p>;
@@ -47,6 +50,7 @@ const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
     );
 
   //dark:shadow-[0px_0px_35px_8px_rgba(77,35,66,1)] shadow-[0px_0px_35px_8px_rgba(245,159,137,1)]
+  console.log(userGame, "like what");
 
   return userEarnedAchievement && userGame ? (
     <div>

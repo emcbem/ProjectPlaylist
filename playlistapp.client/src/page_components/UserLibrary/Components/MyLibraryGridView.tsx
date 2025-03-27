@@ -18,7 +18,7 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
             key={key}
             to={
               id
-                ? `/view-game/${ug.platformGame.game.id}`
+                ? `/user/${id}/user-library-game/${ug.userGameId}`
                 : `/user-library-game/${ug.userGameId}`
             }
             className="m-2 w-24 sm:w-40"
