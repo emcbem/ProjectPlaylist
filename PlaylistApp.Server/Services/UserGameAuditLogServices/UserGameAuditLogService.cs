@@ -50,11 +50,11 @@ public class UserGameAuditLogService : IUserGameAuditLogService
         return true;
     }
 
-    public async Task<List<UserGameDTO>> GetUserGameAuditLogByDate(GetUserGameAuditLogRequest request)
+    public async Task<List<UserGameDTO>> GetUserGameAuditLogByDate(GetUserGameAuditLogByDateRequest request)
     {
         if (request is null)
         {
-            throw new ArgumentNullException(nameof(request));
+            return new List<UserGameDTO>();
         }
 
         using var context = await dbContextFactory.CreateDbContextAsync();
@@ -68,5 +68,4 @@ public class UserGameAuditLogService : IUserGameAuditLogService
 
         return allUserGames;
     }
-
 }
