@@ -1,18 +1,21 @@
 import { UserGame } from "@/@types/usergame";
 import formatDate from "@/lib/date";
 import { FC } from "react";
+import { useParams } from "react-router-dom";
 
 interface props {
   userGame: UserGame;
 }
 
 const MyLibraryDescription: FC<props> = ({ userGame }) => {
+  const { id } = useParams<{ id: string }>();
   return (
     <div>
       <div className="flex flex-col">
         <div className="flex items-center justify-between relative">
           <div>
             <h1 className="dark:text-white text-black font-extrabold 2xl:text-5xl xl:text-3xl lg:text-1xl sm:text-2xl text-base">
+              {id ? `${userGame.user.username}'s` + " " : " "}
               {userGame?.platformGame.game?.title}
             </h1>
             <p className="text-clay-950 dark:text-clay-900"></p>

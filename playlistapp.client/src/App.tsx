@@ -81,19 +81,23 @@ function App() {
                           path="/settings/setprofileimage"
                           element={<ChooseProfileImg />}
                         />
-                        <Route path="viewallgoals" element={<ViewAllGoals />} />
-                        <Route path="user/:id" element={<Account />} />
+                        <Route path="/viewallgoals" element={<ViewAllGoals />} />
+                        <Route path="/user/:id" element={<Account />} />
                         <Route
-                          path="user/:id/library"
+                          path="/user/:id/library"
                           element={<UserLibrary />}
                         />
                         <Route
-                          path="user/:id/list/:listId"
+                          path="/user/:id/list/:listId"
                           element={<Playlist />}
                         />
                         <Route
-                          path="user/:id/viewallgoals"
+                          path="/user/:id/viewallgoals"
                           element={<ViewAllGoals />}
+                        />
+                        <Route
+                          path="/user/:id/user-library-game/:gameId"
+                          element={<ViewLibraryGame />}
                         />
                       </Routes>
                     </div>

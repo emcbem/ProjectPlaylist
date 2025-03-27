@@ -90,7 +90,7 @@ public static class UserConverter
 			ReviewsPrivate = user.ReviewsPrivate,
 			UsernamePrivate = user.UsernamePrivate,
 			XpPrivate = user.XpPrivate,
-			TotalTrophies = user.TotalTrophies
+			TotalTrophies = user.TotalTrophies + user.UserAchievements.Count()
 		};
 	}
 
@@ -135,7 +135,7 @@ public static class UserConverter
 			ReviewsPrivate = user.ReviewsPrivate,
 			UsernamePrivate = user.UsernamePrivate,
 			XpPrivate = user.XpPrivate,
-			TotalTrophies = user.TotalTrophies
-		};
+			TotalTrophies = user.TotalTrophies + user.UserAchievements.Count()
+        };
 	}
 }
