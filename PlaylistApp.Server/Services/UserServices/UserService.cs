@@ -28,7 +28,7 @@ public class UserService : IUserService
 		this.dbContextFactory = dbContextFactory;
 	}
 
-    public async Task<UserAccount> GetUser(System.Linq.Expressions.Expression<Func<UserAccount, bool>>? predicate)
+    public async Task<UserAccount?> GetUser(System.Linq.Expressions.Expression<Func<UserAccount, bool>> predicate)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -227,9 +227,10 @@ public class UserService : IUserService
 		return true;
     }
 
-    public Task<UserAccount> GetUserFromClaims(ClaimsPrincipal claims)
+    public async Task<UserDTO> GetUserFromClaims(ClaimsPrincipal claims)
     {
-		//TODO: STart back up here ethan, this is where we need to go from here :)
-        throw new NotImplementedException();
+		var authIdClaim = claims.Claims.First(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+
+		return await GetUserByAuthId(authIdClaim.Value);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserAchievementServices;
+using PlaylistApp.Server.Services.UserServices;
 
 namespace PlaylistApp.Server.Controllers;
 [ApiController]
@@ -12,24 +14,40 @@ namespace PlaylistApp.Server.Controllers;
 public class UserAchievementController : Controller
 {
     private readonly IUserAchievementService userAchievementService;
+    private readonly IUserService userService;
 
-    public UserAchievementController(IUserAchievementService userAchievementService)
+    public UserAchievementController(IUserAchievementService userAchievementService, IUserService userService)
     {
         this.userAchievementService = userAchievementService;
+        this.userService = userService;
     }
 
     [Authorize]
     [HttpPost("adduserachievement")]
-    public async Task<int> AddUserAchievement(AddUserAchievementRequest request)
+    public async Task<IResult> AddUserAchievement(AddUserAchievementRequest request)
     {
-        return await userAchievementService.AddUserAchievement(request);
+        var user = await userService.GetUserFromClaims(User);
+        if(user.Guid != request.UserGuid)
+        {
+            return Results.Unauthorized();
+        }
+
+        return Results.Ok(await userAchievementService.AddUserAchievement(request));
     }
 
     [Authorize]
     [HttpDelete("deleteuserachievement")]
-    public async Task<bool> DeleteUserAchievement(int id)
+    public async Task<IResult> DeleteUserAchievement(int id)
     {
-        return await userAchievementService.DeleteUserAchievement(id);
+        var user = await userService.GetUserFromClaims(User);
+        var achievement = await GetUserAchievementById(id);
+
+        if (user.Id != achievement?.User?.Id)
+        {
+            return Results.Unauthorized();
+        }
+
+        return Results.Ok(await userAchievementService.DeleteUserAchievement(id));
     }
 
     [HttpGet("getuserachievementbyachievementid")]
@@ -52,9 +70,18 @@ public class UserAchievementController : Controller
 
     [Authorize]
     [HttpPatch("updateuserachievement")]
-    public async Task<UserAchievementDTO> UpdateuserAchievement(UpdateUserAchievementRequest request)
+    public async Task<IResult> UpdateuserAchievement(UpdateUserAchievementRequest request)
     {
-        return await userAchievementService.UpdateUserAchievement(request);
+        var user = await userService.GetUserFromClaims(User);
+        var achievement = await GetUserAchievementById(request.Id);
+
+        if (user.Id != achievement?.User?.Id)
+        {
+            return Results.Unauthorized();
+        }
+
+
+        return Results.Ok(await userAchievementService.UpdateUserAchievement(request));
     }
 
     [HttpPost("getachievementsfromgamefromuser")]

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserGameServices;
+using PlaylistApp.Server.Services.UserServices;
 
 namespace PlaylistApp.Server.Controllers;
 [ApiController]
@@ -11,17 +13,25 @@ namespace PlaylistApp.Server.Controllers;
 public class UserGameController : Controller
 {
     private readonly IUserGameService userGameService;
+    private readonly IUserService userService;
 
-    public UserGameController(IUserGameService userGameService)
+    public UserGameController(IUserGameService userGameService, IUserService userService)
     {
         this.userGameService = userGameService;
+        this.userService = userService;
     }
 
     [Authorize]
     [HttpPost("addusergame")]
-    public async Task<int> AddUserGame(AddUserGameRequest request)
+    public async Task<IResult> AddUserGame(AddUserGameRequest request)
     {
-        return await userGameService.AddUserGame(request);
+        var user = await userService.GetUserFromClaims(User);
+        if (user.Guid != request.UserId)
+        {
+            return Results.Unauthorized();
+        }
+
+        return Results.Ok(await userGameService.AddUserGame(request));
     }
 
     [HttpGet("getusergamebyid")]
@@ -38,15 +48,30 @@ public class UserGameController : Controller
 
     [Authorize]
     [HttpDelete("deleteusergame")]
-    public async Task<bool> DeleteUserGame([FromQuery] int userGameId)
+    public async Task<IResult> DeleteUserGame([FromQuery] int userGameId)
     {
-        return await userGameService.RemoveUserGame(userGameId);
+        var user = await userService.GetUserFromClaims(User);
+        var userGame = await GetUserGameById(userGameId);
+
+        if (userGame?.User?.Id != user.Id)
+        {
+            return Results.Unauthorized();
+        }
+        return Results.Ok(await userGameService.RemoveUserGame(userGameId));
     }
 
     [Authorize]
     [HttpPatch("updateusergame")]
-    public async Task<UserGameDTO> UpdateUserGame(UpdateUserGameRequest request)
+    public async Task<IResult> UpdateUserGame(UpdateUserGameRequest request)
     {
-        return await userGameService.UpdateUserGame(request);
+        var user = await userService.GetUserFromClaims(User);
+        var userGame = await GetUserGameById(request.UserGameId);
+
+        if (userGame?.User?.Id != user.Id)
+        {
+            return Results.Unauthorized();
+        }
+
+        return Results.Ok(await userGameService.UpdateUserGame(request));
     }
 }

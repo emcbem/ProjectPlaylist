@@ -16,6 +16,6 @@ public interface IUserService
     public Task<List<UserDTO>> GetUsersBySearchQuery(string searchQuery);
     public Task<bool> AddUser(AddUserRequest addUserRequest);
     public Task<bool> StrikeUser(string request);
-    public Task<UserAccount> GetUserFromClaims(ClaimsPrincipal claims);
+    public Task<UserDTO> GetUserFromClaims(ClaimsPrincipal claims);
 
 }

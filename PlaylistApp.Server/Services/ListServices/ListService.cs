@@ -99,7 +99,7 @@ public class ListService : IListService
         return lists.Select(x => x.ToDTO()).ToList();
     }
 
-    public async Task<ListDTO> GetListById(int Id)
+    public async Task<List?> GetActualListById(int Id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -110,6 +110,13 @@ public class ListService : IListService
                 .ThenInclude(x => x.Game)
             .Where(x => x.Id == Id)
             .FirstOrDefaultAsync();
+
+        return list;
+    }
+
+    public async Task<ListDTO> GetListById(int Id)
+    {
+        var list = await GetActualListById(Id);
 
         if (list == null)
         {

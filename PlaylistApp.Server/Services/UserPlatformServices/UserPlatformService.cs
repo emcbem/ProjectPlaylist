@@ -88,6 +88,13 @@ public class UserPlatformService : IUserPlatformService
         return userPlatforms.Select(x => x.ToDTO()).ToList();
     }
 
+    public async Task<UserPlatform?> GetUserPlatfromById(int id)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        return context.UserPlatforms.FirstOrDefault(x => x.Id == id);
+    }
+
     public async Task<UserPlatformDTO> UpdateUserPlatform(UpdateUserPlatformRequest request)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();

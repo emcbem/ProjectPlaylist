@@ -1,4 +1,5 @@
-﻿using PlaylistApp.Server.DTOs;
+﻿using PlaylistApp.Server.Data;
+using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
@@ -10,4 +11,5 @@ public interface IUserPlatformService
     public Task<bool> AddUserPlatform(AddUserPlatformRequest request);
     public Task<UserPlatformDTO> UpdateUserPlatform(UpdateUserPlatformRequest request);
     public Task<bool> DeleteUserPlatform(int userPlatformId);
+    public Task<UserPlatform?> GetUserPlatfromById(int id);
 }
