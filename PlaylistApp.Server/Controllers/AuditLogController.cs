@@ -22,7 +22,7 @@ public class AuditLogController : Controller
 	}
 
 	[HttpPost("getusergameauditlog")]
-	public async Task<List<UserGameDTO>> GetUserGameAuditLog(GetUserGameAuditLogRequest request)
+	public async Task<List<UserGameDTO>> GetUserGameAuditLog(GetUserGameAuditLogByDateRequest request)
 	{
 		return await userGameAuditLogService.GetUserGameAuditLogByDate(request);
 	}

@@ -7,8 +7,8 @@ public class UserGameAuditLogDTO
     public int UserId { get; set; }
     public int PlatformGameId { get; set; }
     public DateTime AuditDate { get; set; }
-    public int MinutesBefore { get; set; }
-    public int MinutesAfter { get; set; }
+    public long? MinutesBefore { get; set; }
+    public long? MinutesAfter { get; set; }
 }
 
 public static class UserGameAuditLogConverter
