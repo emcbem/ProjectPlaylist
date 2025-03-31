@@ -36,6 +36,8 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
     }
   }, [isAuthenticated]);
 
+  console.log(user)
+
   return (
     <UserAccountContext.Provider
       value={{
@@ -43,7 +45,7 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
         userGuid: storedUserGuid,
         error: error?.message,
         isLoading,
-        roles: user?.["project-playlist/roles"],
+        roles: user?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
         isAuthenticated,
       }}
     >
