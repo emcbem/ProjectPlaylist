@@ -23,6 +23,7 @@ using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using PlaylistApp.Server.Services.UserServices;
+using PlaylistApp.Server.Services.UserTrophyAuditLogServices;
 
 namespace PlaylistApp.Server.Services;
 
@@ -53,6 +54,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<IUserGameAuditLogService, UserGameAuditLogService>();
+		builder.Services.AddSingleton<IUserTrophyAuditLogService, UserTrophyAuditLogService>();
 
 		builder.Services.AddSingleton<SyncOrchestrator>();
 		builder.Services.AddSingleton<DifferenceHandler>();
