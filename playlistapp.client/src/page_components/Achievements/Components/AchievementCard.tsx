@@ -36,7 +36,12 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
           </div>
           <div className="flex-1 min-w-0">
             <p className="md:text-2xl sm:text-xl text-tiny font-medium text-gray-900  dark:text-white">
-              {achievement.name}
+              {achievement.name}{" "}
+              {earnedAchievement?.isSelfSubmitted && (
+                <span className="text-sm font-sans font-light text-gray-400">
+                  Self Submitted
+                </span>
+              )}
             </p>
             <p className="md:text-lg sm:text-base text-tiny text-gray-500 dark:text-gray-400">
               {usr?.guid && !showAddButton && <p>{achievement.description}</p>}

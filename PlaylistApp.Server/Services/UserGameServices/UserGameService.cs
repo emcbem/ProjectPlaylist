@@ -4,6 +4,7 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using System.Collections.Generic;
 
 namespace PlaylistApp.Server.Services.UserGameServices;
 
@@ -141,6 +142,16 @@ public class UserGameService : IUserGameService
         var userGame = await context.UserGames
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
+
+        var platformGame = await context.PlatformGames.Where(x => x.Id == userGame.PlatformGameId).FirstOrDefaultAsync();
+
+        var pgAchievements = await context.Achievements.Where(x => x.PlatformGameId == platformGame.Id).ToListAsync();
+        var pgAchievementIds = pgAchievements.Select(pgAch => pgAch.Id).ToHashSet();
+
+        var earnedUserAchievements = await context.UserAchievements.Select(x => pgAchievementIds.Contains(x.Id)).ToListAsync();
+
+
+        // TODO remove earned UserAchievements
 
         if (userGame == null)
         {
