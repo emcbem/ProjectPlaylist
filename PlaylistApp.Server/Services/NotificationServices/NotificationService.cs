@@ -63,7 +63,24 @@ public class NotificationService : INotificationService
 		return true;
 	}
 
-	public async Task<NotificationDTO?> UpdateNotification(UpdateNotificationRequest request)
+    public async Task<bool> DeleteAllNotifications(int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+		List<Notification> notificationsToDelete = await context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+
+        if (notificationsToDelete == null)
+        {
+            return false;
+        }
+
+        context.Notifications.RemoveRange(notificationsToDelete);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<NotificationDTO?> UpdateNotification(UpdateNotificationRequest request)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync();
 
