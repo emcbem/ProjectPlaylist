@@ -23,7 +23,7 @@ namespace PlaylistApp.Server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class IGDBSyncController
+public class IGDBSyncController : Controller
 {
     private readonly SyncOrchestrator syncOrchestrator;
 
@@ -36,29 +36,34 @@ public class IGDBSyncController
     [HttpGet("SyncCompanies")]
     public async Task SyncCompanies()
     {
+        var user = User;
+
         await syncOrchestrator.OrchestrateCompanies();
     }
 
     [Authorize]
     [HttpGet("SyncPlatforms")]
-    public async Task<DifferencesToCheck> SyncPlatforms()
+    public async Task SyncPlatforms()
     {
-        return await syncOrchestrator.OrchestratePlatforms();
+        var user = User;
+
+        await syncOrchestrator.OrchestratePlatforms();
     }
 
     [Authorize]
     [HttpGet("SyncGenres")]
-    public async Task<DifferencesToCheck> SyncGenres()
+    public async Task SyncGenres()
     {
-        return await syncOrchestrator.OrchestrateGenres();
+        var user = User;
+         await syncOrchestrator.OrchestrateGenres();
     }
 
     [Authorize]
     [HttpGet("SyncGames")]
-    public async Task<DifferencesToCheck> SyncGames()
+    public async Task SyncGames()
     {
-        var differences =  await syncOrchestrator.OrchestrateGamesAndManyToManys();
+        var user = User;
 
-        return differences;
+        await syncOrchestrator.OrchestrateGamesAndManyToManys();
     }
 }
