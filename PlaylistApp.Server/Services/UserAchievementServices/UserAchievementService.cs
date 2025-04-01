@@ -4,23 +4,21 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
-using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.NotificationServices;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using PlaylistApp.Server.Utils;
 
 namespace PlaylistApp.Server.Services.UserAchievementServices;
 
 public class UserAchievementService : IUserAchievementService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
-	private readonly INotificationService notificationService;
+    private readonly INotificationService notificationService;
 
-	public UserAchievementService(IDbContextFactory<PlaylistDbContext> dbContextFactory, INotificationService notificationService)
+    public UserAchievementService(IDbContextFactory<PlaylistDbContext> dbContextFactory, INotificationService notificationService)
     {
         this.dbContextFactory = dbContextFactory;
-		this.notificationService = notificationService;
-	}
+        this.notificationService = notificationService;
+    }
 
     public async Task<int> AddUserAchievement(AddUserAchievementRequest addRequest)
     {
@@ -51,7 +49,7 @@ public class UserAchievementService : IUserAchievementService
             DateAchieved = addRequest.DateAchieved.ToUniversalTime(),
         };
 
-		await SendFriendsNotification(user, achievement);
+        await SendFriendsNotification(user, achievement);
 
         await context.AddAsync(newAchievement);
         await context.SaveChangesAsync();
@@ -86,7 +84,7 @@ public class UserAchievementService : IUserAchievementService
             }
 
             bool exists = userAchievements.Any(x => x.UserId == user.Id && x.AchievementId == request.AchievementId); // this check isn't working :(
-            if(!exists)
+            if (!exists)
             {
                 UserAchievement newUserAchievement = new UserAchievement()
                 {
@@ -106,14 +104,14 @@ public class UserAchievementService : IUserAchievementService
 
 
     private async Task SendFriendsNotification(UserAccount user, Data.Achievement newAchievement)
-	{
-		using var context = await dbContextFactory.CreateDbContextAsync();
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friends = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => 
-                (x.BaseId == user.Id && x.NotifyRecievedFriendOnBaseFriend == true) || 
+            .Where(x =>
+                (x.BaseId == user.Id && x.NotifyRecievedFriendOnBaseFriend == true) ||
                 (x.RecievedId == user.Id && x.NotifyBaseFriendOnRecievedFriend == true))
             .ToListAsync();
 
@@ -124,27 +122,27 @@ public class UserAchievementService : IUserAchievementService
                 return x.Recieved;
             }
             return x.Base;
-        }).ToList();
+        }).Where(x => EmailValidator.IsValidEmail(x.Email)).ToList();
 
 
-		var emails = users.Select(friend =>
+        var emails = users.Select(friend =>
         {
             return SendIndividualFriendMail(user, newAchievement, friend);
         }).ToArray();
 
         await Task.WhenAll(emails.ToArray());
-	}
+    }
 
-	private async Task SendIndividualFriendMail(UserAccount user, Data.Achievement newAchievement, UserAccount friend)
-	{
-		 AddNotificationRequest notifcation = GenerateAchievementNotification(user, newAchievement, friend);
+    private async Task SendIndividualFriendMail(UserAccount user, Data.Achievement newAchievement, UserAccount friend)
+    {
+        AddNotificationRequest notifcation = GenerateAchievementNotification(user, newAchievement, friend);
 
-         await notificationService.CreateNotification(notifcation);
-	}
+        await notificationService.CreateNotification(notifcation);
+    }
 
 
-	private AddNotificationRequest GenerateAchievementNotification(UserAccount user, Data.Achievement newAchievement, UserAccount friend)
-	{
+    private AddNotificationRequest GenerateAchievementNotification(UserAccount user, Data.Achievement newAchievement, UserAccount friend)
+    {
         var notificationToCreate = new AddNotificationRequest()
         {
             Body = $"""
@@ -163,10 +161,10 @@ public class UserAchievementService : IUserAchievementService
             Url = "/",
             UserId = friend.Id,
         };
-		return notificationToCreate;
-	}
+        return notificationToCreate;
+    }
 
-	public async Task<bool> DeleteUserAchievement(int id)
+    public async Task<bool> DeleteUserAchievement(int id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
@@ -181,6 +179,27 @@ public class UserAchievementService : IUserAchievementService
         }
 
         context.UserAchievements.Remove(UserAchievement);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteUserAchievementsForUserGame(int userGamePlatformId, int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var platformGame = await context.PlatformGames.Where(x => x.Id == userGamePlatformId).FirstOrDefaultAsync();
+        if (platformGame is null) return false;
+
+        var pgAchievements = await context.Achievements.Where(x => x.PlatformGameId == platformGame.Id).ToListAsync();
+        var pgAchievementIds = pgAchievements.Select(pgAch => pgAch.Id).ToHashSet();
+
+        var earnedUserAchievements = await context.UserAchievements
+            .Where(x => x.UserId == userId &&
+            pgAchievementIds.Contains(x.AchievementId))
+            .ToListAsync();
+
+        context.UserAchievements.RemoveRange(earnedUserAchievements);
         await context.SaveChangesAsync();
 
         return true;
@@ -298,9 +317,9 @@ public class UserAchievementService : IUserAchievementService
             .Where(x => x.Id == updatedRequest.Id)
             .FirstOrDefaultAsync();
 
-        if (UserAchievementUnderChange is null) 
-        { 
-            return new UserAchievementDTO(); 
+        if (UserAchievementUnderChange is null)
+        {
+            return new UserAchievementDTO();
         }
 
         UserAchievementUnderChange.IsSelfSubmitted = updatedRequest.IsSelfSubmitted;

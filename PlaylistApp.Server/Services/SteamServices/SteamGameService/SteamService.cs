@@ -4,6 +4,7 @@ using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using System.Text.Json;
@@ -19,12 +20,14 @@ public class SteamService : ISteamService
     private readonly IUserPlatformService userPlatformService;
     private readonly string steamKey;
     private readonly IUserGameService userGameService;
+    private readonly IUserGameAuditLogService userGameAuditLogService;
 
     public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory,
         HttpClient client,
         IConfiguration config,
         IUserPlatformService userPlatformService,
-        IUserGameService userGameService)
+        IUserGameService userGameService,
+        IUserGameAuditLogService userGameAuditLogService)
     {
         this.dbContextFactory = dbContextFactory;
         this.client = client;
@@ -32,6 +35,7 @@ public class SteamService : ISteamService
         this.userPlatformService = userPlatformService;
         this.steamKey = config["steamkey"] ?? throw new Exception("No Steam Key provided in configuration.");
         this.userGameService = userGameService;
+        this.userGameAuditLogService = userGameAuditLogService;
     }
 
     public List<ItemAction> SteamActions { get; set; } = new();
