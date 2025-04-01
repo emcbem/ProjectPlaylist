@@ -4,17 +4,20 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
-using System.Collections.Generic;
+using PlaylistApp.Server.Services.Achievement;
+using PlaylistApp.Server.Services.UserAchievementServices;
 
 namespace PlaylistApp.Server.Services.UserGameServices;
 
 public class UserGameService : IUserGameService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
+    private readonly IUserAchievementService achievementService;
 
-    public UserGameService(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+    public UserGameService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserAchievementService achievementService)
     {
         this.dbContextFactory = dbContextFactory;
+        this.achievementService = achievementService;
     }
     public async Task<int> AddUserGame(AddUserGameRequest request)
     {
@@ -143,20 +146,12 @@ public class UserGameService : IUserGameService
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
-        var platformGame = await context.PlatformGames.Where(x => x.Id == userGame.PlatformGameId).FirstOrDefaultAsync();
-
-        var pgAchievements = await context.Achievements.Where(x => x.PlatformGameId == platformGame.Id).ToListAsync();
-        var pgAchievementIds = pgAchievements.Select(pgAch => pgAch.Id).ToHashSet();
-
-        var earnedUserAchievements = await context.UserAchievements.Select(x => pgAchievementIds.Contains(x.Id)).ToListAsync();
-
-
-        // TODO remove earned UserAchievements
-
         if (userGame == null)
         {
             return false;
         }
+
+        await achievementService.DeleteUserAchievementsForUserGame(userGame.PlatformGameId, userGame.UserId);
 
         context.UserGames.Remove(userGame);
         await context.SaveChangesAsync();
