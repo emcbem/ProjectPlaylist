@@ -233,4 +233,18 @@ public class UserService : IUserService
 
 		return await GetUserByAuthId(authIdClaim.Value);
     }
+
+    public async Task<UserAccount> GetAuditUser(Guid userId)
+    {
+		using var context = await dbContextFactory.CreateDbContextAsync();
+
+		var user = await context.UserAccounts.Where(x => x.Guid == userId).FirstOrDefaultAsync();
+
+		if (user is null)
+		{
+			return new UserAccount();
+		}
+
+		return user;
+    }
 }
