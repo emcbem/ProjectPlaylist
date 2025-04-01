@@ -17,5 +17,5 @@ public interface IUserService
     public Task<bool> AddUser(AddUserRequest addUserRequest);
     public Task<bool> StrikeUser(string request);
     public Task<UserDTO> GetUserFromClaims(ClaimsPrincipal claims);
-
+    public Task<UserAccount> GetAuditUser(Guid userId);
 }
