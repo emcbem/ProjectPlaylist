@@ -4,11 +4,8 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
-using PlaylistApp.Server.Services.EmailServices;
 using PlaylistApp.Server.Services.NotificationServices;
 using PlaylistApp.Server.Utils;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace PlaylistApp.Server.Services.UserAchievementServices;
 
@@ -182,6 +179,27 @@ public class UserAchievementService : IUserAchievementService
         }
 
         context.UserAchievements.Remove(UserAchievement);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteUserAchievementsForUserGame(int userGamePlatformId, int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var platformGame = await context.PlatformGames.Where(x => x.Id == userGamePlatformId).FirstOrDefaultAsync();
+        if (platformGame is null) return false;
+
+        var pgAchievements = await context.Achievements.Where(x => x.PlatformGameId == platformGame.Id).ToListAsync();
+        var pgAchievementIds = pgAchievements.Select(pgAch => pgAch.Id).ToHashSet();
+
+        var earnedUserAchievements = await context.UserAchievements
+            .Where(x => x.UserId == userId &&
+            pgAchievementIds.Contains(x.AchievementId))
+            .ToListAsync();
+
+        context.UserAchievements.RemoveRange(earnedUserAchievements);
         await context.SaveChangesAsync();
 
         return true;

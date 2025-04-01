@@ -5,6 +5,7 @@ import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import AchievementModalParent from "./Modal/AchievementModalParent";
 import { useParams } from "react-router-dom";
+import formatDate from "@/lib/date";
 
 interface props {
   achievement: Achievement;
@@ -40,6 +41,12 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
               {earnedAchievement?.isSelfSubmitted && (
                 <span className="text-sm font-sans font-light text-gray-400">
                   Self Submitted
+                </span>
+              )}
+              <br />
+              {earnedAchievement?.dateAchieved && (
+                <span className="text-sm font-sans font-light text-gray-400">
+                  {formatDate(earnedAchievement.dateAchieved)}
                 </span>
               )}
             </p>
