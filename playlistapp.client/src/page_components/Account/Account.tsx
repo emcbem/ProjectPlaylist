@@ -60,7 +60,6 @@ const Account = () => {
     );
   }
 
-  console.log(userGuid, usr?.guid);
 
   return (
     usr?.profileURL &&

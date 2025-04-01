@@ -50,7 +50,6 @@ const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
     );
 
   //dark:shadow-[0px_0px_35px_8px_rgba(77,35,66,1)] shadow-[0px_0px_35px_8px_rgba(245,159,137,1)]
-  console.log(userGame, "like what");
 
   return userEarnedAchievement && userGame ? (
     <div>

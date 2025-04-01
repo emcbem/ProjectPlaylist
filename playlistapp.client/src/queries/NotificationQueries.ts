@@ -26,4 +26,15 @@ export const NotificationQueries = {
       },
     });
   },
+  useDeleteAllNotification: () => {
+    const query = useQueryClient();
+    return useMutation({
+      mutationFn: (userId: number) => {
+        return NotificationService.DeleteAllNotifications(userId);
+      },
+      onSuccess: () => {
+        query.invalidateQueries({ queryKey: keys.GetUserByAuthId });
+      },
+    });
+  },
 };

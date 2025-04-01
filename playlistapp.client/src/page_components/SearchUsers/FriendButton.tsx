@@ -18,7 +18,6 @@ const FriendButton = ({
   const { mutateAsync } = FriendQueries.RemoveFriend(userGuid);
 
   const handleRemoveFriend = async () => {
-    console.log("Removing friend with ID:", userId, friendId);
     try {
       await mutateAsync({ userId, friendId });
       setIsModalOpen(false);

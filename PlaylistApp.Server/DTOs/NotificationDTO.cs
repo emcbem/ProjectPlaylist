@@ -5,6 +5,7 @@ namespace PlaylistApp.Server.DTOs;
 public class NotificationDTO
 {
     public int Id { get; set; }
+    public int? UserId { get; set; }
     public string? Title { get; set; }
     public string? Body { get; set; }
     public DateTime? DateNotified { get; set; }
@@ -22,6 +23,7 @@ public static class NotificationConverter
             Body = notification.Body,
             DateNotified = notification.DateNotified,
             Id = notification.Id,
+            UserId = notification.UserId,
             Title = notification.Title,
             UserNotified = notification.UserNotified,
             Url = notification.Url
