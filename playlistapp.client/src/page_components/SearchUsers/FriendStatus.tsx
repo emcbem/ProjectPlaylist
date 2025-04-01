@@ -29,20 +29,21 @@ const FriendStatus = ({ user }: { user: UserAccount }) => {
 
   return (
     <>
-      {!isFriend && !recievedRequest && isAuthenticated && usr ? (
-        <AddFriendBtn baseUserId={usr.guid} recievingUserId={user.guid} />
-      ) : isPending || recievedRequest ? (
-        <span className="cursor-pointer flex flex-row items-center border-2 text-black dark:text-white rounded-lg py-1 px-2 border-clay-700 dark:border-clay-900 justify-center space-x-1 mt-2">
-          <ClockIcon height={18} />
-          <p>Pending</p>
-        </span>
-      ) : (
-        <FriendButton
-          userGuid={usr?.guid!}
-          userId={usr?.id!}
-          friendId={user.id}
-        />
-      )}
+      {usr?.guid != user.guid &&
+        (!isFriend && !recievedRequest && isAuthenticated && usr ? (
+          <AddFriendBtn baseUserId={usr.guid} recievingUserId={user.guid} />
+        ) : isPending || recievedRequest ? (
+          <span className="cursor-pointer flex flex-row items-center border-2 text-black dark:text-white rounded-lg py-1 px-2 border-clay-700 dark:border-clay-900 justify-center space-x-1 mt-2">
+            <ClockIcon height={18} />
+            <p>Pending</p>
+          </span>
+        ) : (
+          <FriendButton
+            userGuid={usr?.guid!}
+            userId={usr?.id!}
+            friendId={user.id}
+          />
+        ))}
     </>
   );
 };

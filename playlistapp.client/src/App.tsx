@@ -25,6 +25,7 @@ import NotificationPage from "./page_components/Notifications/Notifications";
 import AdminPage from "./page_components/Admin/Admin";
 import { ColorModeProvider } from "./hooks/useDarkMode";
 import ScrollToTop from "./individual_components/ScrollToTop";
+import ViewFriends from "./page_components/Friends/ViewFriends";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -69,6 +70,14 @@ function App() {
                         />
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/account" element={<Account />} />
+                        <Route
+                          path="/account/friends"
+                          element={<ViewFriends />}
+                        />
+                        <Route
+                          path="/user/:id/friends"
+                          element={<ViewFriends />}
+                        />
                         <Route path="/library" element={<UserLibrary />} />
                         <Route path="/list/:listId" element={<Playlist />} />
                         <Route
@@ -81,7 +90,10 @@ function App() {
                           path="/settings/setprofileimage"
                           element={<ChooseProfileImg />}
                         />
-                        <Route path="/viewallgoals" element={<ViewAllGoals />} />
+                        <Route
+                          path="/viewallgoals"
+                          element={<ViewAllGoals />}
+                        />
                         <Route path="/user/:id" element={<Account />} />
                         <Route
                           path="/user/:id/library"
@@ -97,6 +109,10 @@ function App() {
                         />
                         <Route
                           path="/user/:id/user-library-game/:gameId"
+                          element={<ViewLibraryGame />}
+                        />
+                        <Route
+                          path="/user/:id/friends"
                           element={<ViewLibraryGame />}
                         />
                       </Routes>

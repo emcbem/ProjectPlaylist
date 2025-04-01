@@ -44,7 +44,6 @@ export const NotificationService = {
   DeleteAllNotifications: async (userId: number) => {
     try {
       let jwtToken = AuthenticationUtils.GetJwtToken();
-      console.log(jwtToken)
       const response = await axios.delete<number>(
         `${import.meta.env.VITE_URL}/Notification/deleteall/${userId}`,
         {
