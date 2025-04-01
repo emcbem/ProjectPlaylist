@@ -14,7 +14,7 @@ public interface ISteamService
 
     public Task AddMissingGamesToUserGames(OwnedGamesResponse response, Guid userGuid);
     public Task GatherTimeDifferences(OwnedGamesResponse response, List<PlatformGame> matchingPlatformGames, List<SteamRawGame> steamGames, Guid userGuid);
-    public Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGAmeRequests);
+    public Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGAmeRequests, Guid userGuid);
     public string ExtractSteamIdFromUrl(string urlParams);
     public void AddSteamKeyToUser(string userId, string steamId);
     public Task AddSteamUsernameToUser(string userGuid, string steamId);
