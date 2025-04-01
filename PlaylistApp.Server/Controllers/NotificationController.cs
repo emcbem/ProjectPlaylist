@@ -18,16 +18,23 @@ public class NotificationController : Controller
 	}
 
     [Authorize]
-    [HttpPost("/update")]
+    [HttpPost("update")]
 	public async Task<NotificationDTO?> UpdateNotification([FromBody] UpdateNotificationRequest request)
 	{
 		return await notificationService.UpdateNotification(request);
 	}
 
     [Authorize]
-    [HttpDelete("/delete/{id}")]
+    [HttpDelete("delete/{id}")]
 	public async Task<bool?> DeleteNotification(int id)
 	{
 		return await notificationService.DeleteNotification(id);
 	}
+
+ 
+    [HttpDelete("deleteall/{userId}")]
+    public async Task<bool?> DeleteAllNotification(int userId)
+    {
+        return await notificationService.DeleteAllNotifications(userId);
+    }
 }

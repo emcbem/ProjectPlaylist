@@ -14,6 +14,7 @@ public interface IUserAchievementService
     public Task<int> AddUserAchievement(AddUserAchievementRequest addRequest);
     public Task<UserAchievementDTO> UpdateUserAchievement(UpdateUserAchievementRequest updatedRequest);
     public Task<bool> DeleteUserAchievement(int id);
+    public Task<bool> DeleteUserAchievementsForUserGame(int userGamePlatformId, int userId);
     public Task AddMultipleUserAchievement(AddMultipleUserAchievementRequest addRequest);
 }
  

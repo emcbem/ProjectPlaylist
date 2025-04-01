@@ -16,6 +16,7 @@ export const RoleRequired = ({
     return displayIfUnauthorized ? <div>Please log in</div> : null;
   }
 
+
   if (!userContext?.roles || !userContext.roles.includes(roleToLookOutFor)) {
     return displayIfUnauthorized ? (
       <>

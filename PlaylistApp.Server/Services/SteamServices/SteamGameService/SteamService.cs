@@ -4,6 +4,7 @@ using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.SteamData.SteamGames;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using System.Text.Json;
@@ -19,12 +20,14 @@ public class SteamService : ISteamService
     private readonly IUserPlatformService userPlatformService;
     private readonly string steamKey;
     private readonly IUserGameService userGameService;
+    private readonly IUserGameAuditLogService userGameAuditLogService;
 
     public SteamService(IDbContextFactory<PlaylistDbContext> dbContextFactory,
         HttpClient client,
         IConfiguration config,
         IUserPlatformService userPlatformService,
-        IUserGameService userGameService)
+        IUserGameService userGameService,
+        IUserGameAuditLogService userGameAuditLogService)
     {
         this.dbContextFactory = dbContextFactory;
         this.client = client;
@@ -32,6 +35,7 @@ public class SteamService : ISteamService
         this.userPlatformService = userPlatformService;
         this.steamKey = config["steamkey"] ?? throw new Exception("No Steam Key provided in configuration.");
         this.userGameService = userGameService;
+        this.userGameAuditLogService = userGameAuditLogService;
     }
 
     public List<ItemAction> SteamActions { get; set; } = new();
@@ -247,11 +251,11 @@ public class SteamService : ISteamService
 
         if (updateRequests.Any())
         {
-            await FixTimeDifferences(updateRequests);
+            await FixTimeDifferences(updateRequests, userGuid);
         }
     }
 
-    public async Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGameRequests)
+    public async Task FixTimeDifferences(List<UpdateUserGameRequest> updateUserGameRequests, Guid userGuid)
     {
         if (updateUserGameRequests is null)
         {
@@ -262,7 +266,24 @@ public class SteamService : ISteamService
         {
             try
             {
+                var currentUserGame = await userGameService.GetUserGameById(request.UserGameId);
+
+                if (currentUserGame?.PlatformGame == null)
+                {
+                    return;
+                }
+
+                var newAuditLog = new AddUserGameAuditLogRequest
+                {
+                    AuditDate = DateTime.UtcNow,
+                    PlatformGameId = currentUserGame.PlatformGame.id,
+                    UserId = userGuid,
+                    MinutesBefore = currentUserGame.TimePlayed,
+                    MinutesAfter = request.TimePlayed
+                };
+
                 await userGameService.UpdateUserGame(request);
+                await userGameAuditLogService.AddUserGameAuditLog(newAuditLog);
             }
             catch (Exception ex)
             {

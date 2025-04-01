@@ -1,6 +1,7 @@
 ﻿using PlaylistApp.Server.DTOs.CombinationData;
 using PlaylistApp.Server.DTOs.PlaystationData;
 using PlaylistApp.Server.Requests.AddRequests;
+using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using System.Threading.Tasks;
@@ -86,7 +87,7 @@ public class PlaystationOrchestrator
         await Task.WhenAll(updateTasks);
     }
 
-    private async Task OrcestratePlaystationAuditLog(PlaystationDTO playstationDTO, List<Requests.UpdateRequests.UpdateUserGameRequest> requests)
+    private async Task OrcestratePlaystationAuditLog(PlaystationDTO playstationDTO, List<UpdateUserGameRequest> requests)
     {
         var auditLogTasks = requests.Select(async request =>
         {

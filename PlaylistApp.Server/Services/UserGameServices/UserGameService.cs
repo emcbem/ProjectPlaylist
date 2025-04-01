@@ -4,16 +4,20 @@ using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
+using PlaylistApp.Server.Services.Achievement;
+using PlaylistApp.Server.Services.UserAchievementServices;
 
 namespace PlaylistApp.Server.Services.UserGameServices;
 
 public class UserGameService : IUserGameService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
+    private readonly IUserAchievementService achievementService;
 
-    public UserGameService(IDbContextFactory<PlaylistDbContext> dbContextFactory)
+    public UserGameService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserAchievementService achievementService)
     {
         this.dbContextFactory = dbContextFactory;
+        this.achievementService = achievementService;
     }
     public async Task<int> AddUserGame(AddUserGameRequest request)
     {
@@ -146,6 +150,8 @@ public class UserGameService : IUserGameService
         {
             return false;
         }
+
+        await achievementService.DeleteUserAchievementsForUserGame(userGame.PlatformGameId, userGame.UserId);
 
         context.UserGames.Remove(userGame);
         await context.SaveChangesAsync();

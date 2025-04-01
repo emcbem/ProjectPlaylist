@@ -36,7 +36,25 @@ export const NotificationService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Failed to update notification", error);
+      console.error("Failed to remove notification", error);
+      throw error;
+    }
+  },
+
+  DeleteAllNotifications: async (userId: number) => {
+    try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      const response = await axios.delete<number>(
+        `${import.meta.env.VITE_URL}/Notification/deleteall/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to remove notifications", error);
       throw error;
     }
   },
