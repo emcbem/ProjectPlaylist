@@ -23,24 +23,38 @@ public class SyncOrchestrator
         var igdbCompanyLogos = await dataGetter.GetCompanyLogos();
         var localCompanies = Translator.TranslateIGDBCompaniesIntoPersonalData(igdbCompanies, igdbCompanyLogos);
         await differenceHandler.HandleCompanyDifferences(localCompanies);
+
+        igdbCompanies = null;
+        igdbCompanyLogos = null;
+        localCompanies = null;
+        GC.Collect();
     }
 
-    public async Task<DifferencesToCheck> OrchestratePlatforms()
+    public async Task OrchestratePlatforms()
     {
         var igdbPlatforms = await dataGetter.GetPlatforms();
         var igdbPlatformLogos = await dataGetter.GetPlatformLogos();
         var localPlatforms = Translator.TranslateIGDBPlatformsIntoPersonalData(igdbPlatforms, igdbPlatformLogos);
-        return await differenceHandler.HandlePlatformDifferences(localPlatforms);
+        await differenceHandler.HandlePlatformDifferences(localPlatforms);
+
+        igdbPlatforms = null;
+        igdbPlatformLogos = null;
+        localPlatforms = null;
+        GC.Collect();
     }
 
-    public async Task<DifferencesToCheck> OrchestrateGenres()
+    public async Task OrchestrateGenres()
     {
         var igdbGenres = await dataGetter.GetGenres();
         var localGenres = Translator.TranslateIGDBGenresIntoPersonalData(igdbGenres);
-        return await differenceHandler.HandleGenreDifferences(localGenres);
+        await differenceHandler.HandleGenreDifferences(localGenres);
+
+        igdbGenres = null;
+        localGenres = null;
+        GC.Collect();
     }
 
-    public async Task<DifferencesToCheck> OrchestrateGamesAndManyToManys()
+    public async Task OrchestrateGamesAndManyToManys()
     {
         var igdbGames = await dataGetter.GetGames();
         igdbGames = Strainer.StrainGames(igdbGames);
@@ -50,11 +64,19 @@ public class SyncOrchestrator
         var localGames = Translator.TranslateIGDBGamesIntoPersonalData(igdbGames, igdbCovers, igdbRatings);
         var gameDifference =  await differenceHandler.HandleGameDifferences(localGames);
         
+        igdbGames = null;
+        igdbCovers = null;
+        GC.Collect();
+
         await OrchestratePlatformGamesAndAchievements(gameDifference, localGames);
+        GC.Collect();
+
         await OrchestrateGameGenres(gameDifference, localGames);
+        GC.Collect();
+
         await OrchestrateInvolvedCompanies(gameDifference, localGames);
 
-        return gameDifference;
+        GC.Collect();
     }
 
     private async Task OrchestrateInvolvedCompanies(DifferencesToCheck gameDifference, List<Data.Game> localGames)

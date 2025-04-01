@@ -40,9 +40,14 @@ public class PlaystationController : Controller
 
     [Authorize]
     [HttpPost("gettoken")]
-    public async Task<PlaystationContext> GetPlaystationAuthenticationToken()
+    public async Task<IResult> GetPlaystationAuthenticationToken()
     {
-        return await PlaystationAuthService.GetPlaystationAuthenticationToken();
+        if (User.IsInRole("Admin") == false)
+        {
+            return Results.Unauthorized();
+        }
+
+        return Results.Ok(await PlaystationAuthService.GetPlaystationAuthenticationToken());
     }
 
     [Authorize]

@@ -34,36 +34,55 @@ public class IGDBSyncController : Controller
 
     [Authorize]
     [HttpGet("SyncCompanies")]
-    public async Task SyncCompanies()
+    public async Task<IResult> SyncCompanies()
     {
-        var user = User;
+
+        if (User.IsInRole("Admin") == false)
+        {
+            return Results.Unauthorized();
+        }
 
         await syncOrchestrator.OrchestrateCompanies();
+        return Results.Ok();
     }
 
     [Authorize]
     [HttpGet("SyncPlatforms")]
-    public async Task SyncPlatforms()
+    public async Task<IResult> SyncPlatforms()
     {
-        var user = User;
+
+        if (User.IsInRole("Admin") == false)
+        {
+            return Results.Unauthorized();
+        }
 
         await syncOrchestrator.OrchestratePlatforms();
+        return Results.Ok();
     }
 
     [Authorize]
     [HttpGet("SyncGenres")]
-    public async Task SyncGenres()
+    public async Task<IResult> SyncGenres()
     {
-        var user = User;
-         await syncOrchestrator.OrchestrateGenres();
+        if (User.IsInRole("Admin") == false)
+        {
+            return Results.Unauthorized();
+        }
+        await syncOrchestrator.OrchestrateGenres();
+        return Results.Ok();
     }
 
     [Authorize]
     [HttpGet("SyncGames")]
-    public async Task SyncGames()
+    public async Task<IResult> SyncGames()
     {
-        var user = User;
+
+        if (User.IsInRole("Admin") == false)
+        {
+            return Results.Unauthorized();
+        }
 
         await syncOrchestrator.OrchestrateGamesAndManyToManys();
+        return Results.Ok();
     }
 }

@@ -53,10 +53,5 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserPlatformService, UserPlatformService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<IUserGameAuditLogService, UserGameAuditLogService>();
-
-		builder.Services.AddSingleton<SyncOrchestrator>();
-		builder.Services.AddSingleton<DifferenceHandler>();
-
-
     }
 }

@@ -7,12 +7,12 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices.Builders;
 
 public class PlatformGameBuilder
 {
-    private List<Website> _websites { get; set; } = new();
-    public Dictionary<int, List<Website>> WebsiteIdToWebsites { get; set; } = new();
-    private List<ExternalGame> _externalGames { get; set; } = new();
-    public Dictionary<int, List<ExternalGame>> ExternalIdToExternalGames { get; set; } = new();
-    public Dictionary<int, PlaylistApp.Server.Data.Game> IgdbIdToLocalGame { get; set; } = new();
-    public Dictionary<int, PlaylistApp.Server.Data.Game> IgdbIdToDatabaseGame { get; set; } = new();
+    private List<Website>? _websites { get; set; } = new();
+    public Dictionary<int, List<Website>>? WebsiteIdToWebsites { get; set; } = new();
+    private List<ExternalGame>? _externalGames { get; set; } = new();
+    public Dictionary<int, List<ExternalGame>>? ExternalIdToExternalGames { get; set; } = new();
+    public Dictionary<int, PlaylistApp.Server.Data.Game>? IgdbIdToLocalGame { get; set; } = new();
+    public Dictionary<int, PlaylistApp.Server.Data.Game>? IgdbIdToDatabaseGame { get; set; } = new();
 
     private IDataGetter _dataGetter;
 
@@ -33,21 +33,15 @@ public class PlatformGameBuilder
             IgdbIdToLocalGame = localGames;
             IgdbIdToDatabaseGame = allGames;
         }
-
-
-        //ENDING OF WEEK DISCUSSION
-        /* Heres what you need to do bud. we need the local games to be stored along with the dictionary of igdbId to the game.  DONE
-         * Once this gets made the setup is done. 
-         * After setup the MakePlatformGame and MakePlatformGames methods need to get made. DONE
-         * Once each of those are done it is time to go over back to the difference handler. 
-         * There we can finally add the single difference based on if it isn't in the database.
-         * Then also add all of the platform games if it is new. 
-         * Possibly returning the platform games that are new incase we need to crawl steam and handle those.
-         */
     }
 
     public PlatformGame? MakePlatformGame(int gameIgdbId, int platformId)
     {
+        if(IgdbIdToLocalGame is null || IgdbIdToDatabaseGame is null || WebsiteIdToWebsites is null || ExternalIdToExternalGames is null)
+        {
+            return null;
+        }
+
         if (!IgdbIdToLocalGame.ContainsKey(gameIgdbId) || !IgdbIdToDatabaseGame.ContainsKey(gameIgdbId))
         {
             return null;
@@ -84,6 +78,11 @@ public class PlatformGameBuilder
 
     public List<PlatformGame>? MakePlatfromGames(int gameIgdbId)
     {
+        if(IgdbIdToDatabaseGame is null || IgdbIdToLocalGame is null)
+        {
+            return [];
+        }
+
         if (!IgdbIdToLocalGame.ContainsKey(gameIgdbId) || !IgdbIdToDatabaseGame.ContainsKey(gameIgdbId))
         {
             return null;
@@ -101,6 +100,17 @@ public class PlatformGameBuilder
             }
         }
         return platforms;
+    }
+
+    public void Dispose()
+    {
+        _websites = null;
+        WebsiteIdToWebsites = null;
+        _externalGames = null;
+        ExternalIdToExternalGames = null;
+        IgdbIdToLocalGame = null;
+        IgdbIdToDatabaseGame = null;
+        GC.Collect();
     }
 
 

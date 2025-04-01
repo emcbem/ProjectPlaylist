@@ -244,6 +244,11 @@ namespace PlaylistApp.Server.Services.IGDBSyncServices
 
             await context.SaveChangesAsync();
 
+            allGames = null;
+            IgdbIdToLocalGame = null;
+            IgdbIdToActualGame = null;
+            platformGameBuilder.Dispose();
+
             return platformGamesToUpdate;
         }
 
