@@ -36,8 +36,6 @@ export const UserAccountContextProvider: FC<{ children: ReactNode }> = ({
     }
   }, [isAuthenticated]);
 
-  console.log(user)
-
   return (
     <UserAccountContext.Provider
       value={{

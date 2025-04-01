@@ -81,7 +81,13 @@ public class FriendService : IFriendService
 
         var friends = await context.Friends
             .Include(x => x.Base)
+                .ThenInclude(x => x.UserImage)
+            .Include(x => x.Base)
+                .ThenInclude(x => x.UserGames)
             .Include(x => x.Recieved)
+                .ThenInclude(x => x.UserImage)
+            .Include(x => x.Recieved)
+                .ThenInclude(x => x.UserGames)
             .Where(x => x.Base.Guid == userId || x.Recieved.Guid == userId)
             .ToListAsync();
 
@@ -96,10 +102,13 @@ public class FriendService : IFriendService
         var userDTOs = friendDTOs.Select(x => new UserDTO
         {
             Id = x.Id,
+            Guid = x.Guid,
             AuthID = x.AuthID,
             CreationDate = x.CreationDate,
             Bio = x.Bio,
             ProfileURL = x.ProfileURL,
+            ProfileImageId = x.ProfileImageId,
+            UserGames = x.UserGames,
             Strikes = x.Strikes,
             Username = x.Username,
             XP = x.XP,

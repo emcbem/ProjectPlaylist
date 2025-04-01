@@ -15,9 +15,10 @@ import GamerTags from "./GamerTags";
 import ExpandableBio from "./Bio";
 import LoadingPage from "@/individual_components/LoadingPage";
 import { UserGenreQueries } from "@/queries/UserGenreQueries";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
 import FriendStatus from "../SearchUsers/FriendStatus";
+import { FriendQueries } from "@/queries/FriendQueries";
 
 const Account = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +43,10 @@ const Account = () => {
     isLoading: goalLoading,
   } = GoalQueries.useGetGoalsByUser(userId ?? "");
 
+  const { data: friends } = FriendQueries.GetAllFriendsByBaseIdQuery(
+    userId ?? ""
+  );
+
   const { data: userGenres, isLoading: loadingGenres } =
     UserGenreQueries.useGetAllByUser(userId ?? "");
 
@@ -59,8 +64,6 @@ const Account = () => {
       </div>
     );
   }
-
-  console.log(userGuid, usr?.guid);
 
   return (
     usr?.profileURL &&
@@ -90,6 +93,12 @@ const Account = () => {
                 <p className="md:text-2xl text-lg ms-8">
                   {usr.totalTrophies ?? 0} Trophies
                 </p>
+                <Link
+                  to={id ? `/user/${usr.guid}/friends` : `/account/friends`}
+                  className="md:text-2xl text-lg ms-8 hover:underline cursor-pointer"
+                >
+                  {friends?.length ?? 0} Friends
+                </Link>
               </div>
             </div>
           </div>
