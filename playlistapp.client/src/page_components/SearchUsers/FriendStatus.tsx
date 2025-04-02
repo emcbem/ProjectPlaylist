@@ -29,22 +29,6 @@ const FriendStatus = ({ user }: { user: UserAccount }) => {
     (pendingFriend) => pendingFriend.baseUser.id === user.id
   );
 
-  console.log(
-    isFriend,
-    "isFriend",
-    recievedRequest,
-    "recievedRequest",
-    isAuthenticated,
-    "isAuthenticated",
-    isPending,
-    "isPending",
-    recievedRequest,
-    "recievedRequest"
-  );
-
-  //isFriend: false, recievedRequest: false, isAuthenticated: true => Add Friend
-  //isFriend: false, recievedRequest: true, isAuthenticated: true && isPending: true || receivedRequest: true => Pending
-
   return (
     <span
       onClick={(e) => {
