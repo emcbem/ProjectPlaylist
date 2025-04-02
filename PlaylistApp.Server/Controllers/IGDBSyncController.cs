@@ -43,6 +43,7 @@ public class IGDBSyncController : Controller
         }
 
         await syncOrchestrator.OrchestrateCompanies();
+
         return Results.Ok();
     }
 
@@ -57,6 +58,7 @@ public class IGDBSyncController : Controller
         }
 
         await syncOrchestrator.OrchestratePlatforms();
+
         return Results.Ok();
     }
 
@@ -69,6 +71,7 @@ public class IGDBSyncController : Controller
             return Results.Unauthorized();
         }
         await syncOrchestrator.OrchestrateGenres();
+
         return Results.Ok();
     }
 
@@ -83,6 +86,10 @@ public class IGDBSyncController : Controller
         }
 
         await syncOrchestrator.OrchestrateGamesAndManyToManys();
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
         return Results.Ok();
     }
 }

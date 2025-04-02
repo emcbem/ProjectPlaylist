@@ -27,7 +27,6 @@ public class SyncOrchestrator
         igdbCompanies = null;
         igdbCompanyLogos = null;
         localCompanies = null;
-        GC.Collect();
     }
 
     public async Task OrchestratePlatforms()
@@ -40,7 +39,6 @@ public class SyncOrchestrator
         igdbPlatforms = null;
         igdbPlatformLogos = null;
         localPlatforms = null;
-        GC.Collect();
     }
 
     public async Task OrchestrateGenres()
@@ -51,7 +49,6 @@ public class SyncOrchestrator
 
         igdbGenres = null;
         localGenres = null;
-        GC.Collect();
     }
 
     public async Task OrchestrateGamesAndManyToManys()
@@ -66,17 +63,12 @@ public class SyncOrchestrator
         
         igdbGames = null;
         igdbCovers = null;
-        GC.Collect();
 
         await OrchestratePlatformGamesAndAchievements(gameDifference, localGames);
-        GC.Collect();
 
         await OrchestrateGameGenres(gameDifference, localGames);
-        GC.Collect();
 
         await OrchestrateInvolvedCompanies(gameDifference, localGames);
-
-        GC.Collect();
     }
 
     private async Task OrchestrateInvolvedCompanies(DifferencesToCheck gameDifference, List<Data.Game> localGames)

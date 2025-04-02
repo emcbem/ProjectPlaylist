@@ -110,7 +110,6 @@ public class PlatformGameBuilder
         ExternalIdToExternalGames = null;
         IgdbIdToLocalGame = null;
         IgdbIdToDatabaseGame = null;
-        GC.Collect();
     }
 
 
