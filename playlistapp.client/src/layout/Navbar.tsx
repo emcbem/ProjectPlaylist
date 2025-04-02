@@ -7,7 +7,7 @@ import { ScrollProgress } from "@/components/ui/scroll-progress";
 import Abstract from "./maze.svg";
 import LightAbstract from "./mazelight.svg";
 import { useTheme } from "@/hooks/useDarkMode";
-import Profile from "@/Auth0/profile";
+import DropDownNavMenu from "@/Auth0/dropDownNavMenu";
 import { Link } from "react-router-dom";
 const Navbar: React.FC = () => {
   const { theme } = useTheme();
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
 
           <SearchBar />
 
-          <Profile />
+          <DropDownNavMenu />
         </nav>
       </div>
       <ScrollProgress className="top-[65px]" />

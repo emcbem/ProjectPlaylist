@@ -26,6 +26,7 @@ import AdminPage from "./page_components/Admin/Admin";
 import { ColorModeProvider } from "./hooks/useDarkMode";
 import ScrollToTop from "./individual_components/ScrollToTop";
 import ViewFriends from "./page_components/Friends/ViewFriends";
+import WrapUpPage from "./page_components/WrapUps/WrapUpPage";
 const queryClient = new QueryClient(); // stay OUTSIDE of App()
 
 function App() {
@@ -115,6 +116,7 @@ function App() {
                           path="/user/:id/friends"
                           element={<ViewLibraryGame />}
                         />
+                        <Route path="/wrapups" element={<WrapUpPage />} />
                       </Routes>
                     </div>
                   </div>

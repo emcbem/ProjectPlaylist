@@ -1,8 +1,8 @@
+import { UserAchivementListItem } from "../Achievements";
 import AchievementCard from "./AchievementCard";
-import { Achievement } from "@/@types/achievement";
 
 interface props {
-  achievements: Achievement[];
+  achievements: UserAchivementListItem[];
   showAddButton: boolean;
 }
 

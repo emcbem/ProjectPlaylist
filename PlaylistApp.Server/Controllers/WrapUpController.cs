@@ -7,10 +7,10 @@ namespace PlaylistApp.Server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WarpUpController : Controller
+public class WrapUpController : Controller
 {
     private readonly IWrapUpService wrapUpService;
-    public WarpUpController(IWrapUpService wrapUpService)
+    public WrapUpController(IWrapUpService wrapUpService)
     {
         this.wrapUpService = wrapUpService;
     }

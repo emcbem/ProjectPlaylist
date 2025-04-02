@@ -1,28 +1,17 @@
-import { Achievement } from "@/@types/achievement";
 import { FC, useContext } from "react";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import AchievementModalParent from "./Modal/AchievementModalParent";
-import { useParams } from "react-router-dom";
 import formatDate from "@/lib/date";
+import { UserAchivementListItem } from "../Achievements";
 
 interface props {
-  achievement: Achievement;
+  achievement: UserAchivementListItem;
   showAddButton: boolean;
 }
 
 const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
-  const { id } = useParams<{ id: string }>();
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
-  const userId = id ?? usr?.guid;
-
-  const { data: userEarnedAchievement } =
-    UserAchievementQueries.useGetUserAchievementByUserId(userId ?? "");
-
-  const earnedAchievement =
-    userEarnedAchievement &&
-    userEarnedAchievement.find((e) => e.achievement.id === achievement.id);
 
   return (
     <>
@@ -31,35 +20,35 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
           <div className="flex-shrink-0">
             <img
               className="sm:w-12 sm:h-12 w-8 h-8 rounded-full"
-              src={achievement.imageURL}
+              src={achievement.Achievement.imageURL}
               alt="Achievement Logo"
             />
           </div>
           <div className="flex-1 min-w-0">
             <p className="md:text-2xl sm:text-xl text-tiny font-medium text-gray-900  dark:text-white">
-              {achievement.name}{" "}
-              {earnedAchievement?.isSelfSubmitted && (
+              {achievement.Achievement.name}{" "}
+              {achievement?.Earned?.isSelfSubmitted && (
                 <span className="text-sm font-sans font-light text-gray-400">
                   Self Submitted
                 </span>
               )}
               <br />
-              {earnedAchievement?.dateAchieved && (
+              {achievement?.Earned?.dateAchieved && (
                 <span className="text-sm font-sans font-light text-gray-400">
-                  {formatDate(earnedAchievement.dateAchieved)}
+                  {formatDate(achievement?.Earned?.dateAchieved)}
                 </span>
               )}
             </p>
             <p className="md:text-lg sm:text-base text-tiny text-gray-500 dark:text-gray-400">
-              {usr?.guid && !showAddButton && <p>{achievement.description}</p>}
+              {usr?.guid && !showAddButton && <p>{achievement.Achievement?.description}</p>}
             </p>
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">
             <div className="relative inline-block md:ml-4 ml-0 cursor-pointer">
               {usr?.guid && showAddButton && (
                 <AchievementModalParent
-                  achievement={achievement}
-                  earned={earnedAchievement!}
+                  achievement={achievement.Achievement}
+                  earned={achievement.Earned!}
                   userGuid={usr.guid}
                 />
               )}
