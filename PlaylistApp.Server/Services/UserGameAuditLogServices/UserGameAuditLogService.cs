@@ -55,7 +55,7 @@ public class UserGameAuditLogService : IUserGameAuditLogService
         return true;
     }
 
-    public async Task<List<GameDTO>> GetUserGameAuditLogByDate(GetAuditLogByDateRequest request)
+    public async Task<List<GameDTO>> GetUserGamesFromUserGameAuditLogDate(GetAuditLogByDateRequest request)
     {
         if (request is null)
         {
