@@ -24,6 +24,7 @@ using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserPlatformServices;
 using PlaylistApp.Server.Services.UserServices;
 using PlaylistApp.Server.Services.UserTrophyAuditLogServices;
+using PlaylistApp.Server.Services.WrapUpServices;
 
 namespace PlaylistApp.Server.Services;
 
@@ -55,7 +56,7 @@ public static class Mapper
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<IUserGameAuditLogService, UserGameAuditLogService>();
 		builder.Services.AddSingleton<IUserTrophyAuditLogService, UserTrophyAuditLogService>();
-
+		builder.Services.AddSingleton<IWrapUpService, WrapUpService>();
 
     }
 }
