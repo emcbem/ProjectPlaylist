@@ -76,6 +76,27 @@ export const FriendService = {
       throw error;
     }
   },
+  ToggleFriendNotis: async (friendId: number, userId: number) => {
+    try {
+      let jwtToken = AuthenticationUtils.GetJwtToken();
+      const response = await axios.delete<boolean>(
+        `${import.meta.env.VITE_URL}/Friend/togglefriendnotis`,
+        {
+          params: {
+            friendId: friendId,
+            userId: userId,
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to toggle notis: ", error);
+      throw error;
+    }
+  },
   RemoveFriend: async (friendId: number, userId: number) => {
     try {
       let jwtToken = AuthenticationUtils.GetJwtToken();
@@ -88,7 +109,7 @@ export const FriendService = {
           },
           headers: {
             Authorization: `Bearer ${jwtToken}`,
-          }
+          },
         }
       );
       return response.data;
