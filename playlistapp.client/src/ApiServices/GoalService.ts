@@ -124,7 +124,6 @@ export const GoalService = {
       throw new Error("Get Goal To Complete Request must be provided");
     }
     try {
-      console.log("GoalToCompleteRequest: ", getGoalToCompleteRequest);
       const response = await axios.post<Goal>(
         `${import.meta.env.VITE_URL}/Goal/getgoaltocomplete`,
         getGoalToCompleteRequest,

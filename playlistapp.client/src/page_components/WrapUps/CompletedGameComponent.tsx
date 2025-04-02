@@ -8,7 +8,6 @@ interface CompletedGameComponentProps {
 const CompletedGameComponent: React.FC<CompletedGameComponentProps> = ({
   completedGame,
 }) => {
-  console.log(completedGame);
   return <div>CompletedGameComponent</div>;
 };
 

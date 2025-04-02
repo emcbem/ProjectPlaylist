@@ -9,11 +9,7 @@ interface props {
   ageRating: string;
 }
 
-const GameCard: React.FC<props> = ({
-  index,
-  cover,
-
-}) => {
+const GameCard: React.FC<props> = ({ index, cover }) => {
   return (
     <div className="flex flex-col rounded-lg bg-[#D9D9D9] md:max-w-sm md:flex-col w-full">
       <img

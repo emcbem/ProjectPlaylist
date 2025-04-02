@@ -6,15 +6,9 @@ import toast from "react-hot-toast";
 export const WrapUpService = {
   GetWrapUp: async (request: GetWrapUpRequest) => {
     try {
-      const response = await axios.get<WrapUp>(
-        `${import.meta.env.VITE_URL}/REPLACE`,
-        {
-          params: {
-            userId: request.userId,
-            month: request.month,
-            year: request.year,
-          },
-        }
+      const response = await axios.post<WrapUp>(
+        `${import.meta.env.VITE_URL}/wrapup/getwrapup`,
+        request
       );
       return response.data;
     } catch (error) {

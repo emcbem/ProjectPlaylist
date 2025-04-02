@@ -32,8 +32,8 @@ const WrapUpPage = () => {
   const makeWrapUpRequest = () => {
     const _wrapUpRequest: GetWrapUpRequest = {
       userId: userGuid ?? "",
-      year: selectedMonth ?? 0,
-      month: selectedYear ?? 0,
+      month: selectedMonth ?? -1,
+      year: selectedYear ?? 2025,
     };
     setWrapUpRequest(_wrapUpRequest);
   };
@@ -60,6 +60,9 @@ const WrapUpPage = () => {
     <>
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
         <div className="grid justify-items-center ">
+          <p>
+            month: {selectedMonth} - year: {selectedYear}
+          </p>
           <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
             <div className="text-center">
               <h1 className="text-3xl my-5">Your Wrap Ups</h1>

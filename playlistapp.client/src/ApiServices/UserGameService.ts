@@ -40,10 +40,6 @@ export const UserGameService = {
           },
         }
       );
-      console.log(
-        "RESPONSE FROM GETTING USERGAMEBY USER GAME ID: ",
-        response.data
-      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch user games:", error);
