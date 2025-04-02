@@ -32,7 +32,10 @@ const FriendButton = ({
         className="cursor-pointer flex flex-row items-center border-2 text-black dark:text-white rounded-lg py-1 px-2 border-clay-700 dark:border-clay-900 justify-center space-x-1 mt-2"
         onMouseEnter={() => setFriendsHovered(true)}
         onMouseLeave={() => setFriendsHovered(false)}
-        onClick={() => setIsModalOpen(true)}
+        onClick={(e) => {
+          e.preventDefault();
+          setIsModalOpen(true);
+        }}
       >
         <UserIcon height={18} />
         <span>{friendsHovered ? "Remove" : "Friends"}</span>
@@ -43,6 +46,8 @@ const FriendButton = ({
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleRemoveFriend}
       />
+
+      
     </>
   );
 };

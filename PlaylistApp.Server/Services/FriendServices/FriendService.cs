@@ -89,6 +89,7 @@ public class FriendService : IFriendService
             .Include(x => x.Recieved)
                 .ThenInclude(x => x.UserGames)
             .Where(x => x.Base.Guid == userId || x.Recieved.Guid == userId)
+            .Where(x => x.IsAccepted == true)
             .ToListAsync();
 
 
