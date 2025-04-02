@@ -1,11 +1,11 @@
-import { AddFriendRequest } from '@/@types/Requests/AddRequests/addFriendRequest';
-import { UserAccountContextInterface } from '@/@types/userAccount';
-import { UserAccountContext } from '@/contexts/UserAccountContext';
-import { FriendQueries } from '@/queries/FriendQueries'
-import { UserPlusIcon } from '@heroicons/react/24/solid'
-import React from 'react'
-import toast from 'react-hot-toast';
-
+import { AddFriendRequest } from "@/@types/Requests/AddRequests/addFriendRequest";
+import { UserAccountContextInterface } from "@/@types/userAccount";
+import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { FriendQueries } from "@/queries/FriendQueries";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
+import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import toast from "react-hot-toast";
 
 interface AddFriendBtnProps {
   baseUserId: string;
@@ -20,8 +20,8 @@ const AddFriendBtn: React.FC<AddFriendBtnProps> = ({
     UserAccountContext
   ) as UserAccountContextInterface;
 
-
   const { mutateAsync } = FriendQueries.AddFriend(usr?.guid ?? "");
+  const queryClient = useQueryClient();
 
   const handleAddFriend = async () => {
     if (baseUserId == undefined || recievingUserId == undefined) {
@@ -33,6 +33,9 @@ const AddFriendBtn: React.FC<AddFriendBtnProps> = ({
         recievingUserId: recievingUserId ?? "", // guid
       };
       await mutateAsync(addFriendRequest);
+      queryClient.invalidateQueries({
+        queryKey: ["Friend", "GetPendingFriendReqeusts", usr?.id ?? 0],
+      });
     }
   };
 
