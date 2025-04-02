@@ -8,6 +8,8 @@ import { Link, useParams } from "react-router-dom";
 import MyLibraryGridView from "./Components/MyLibraryGridView";
 import LoadingPage from "../../individual_components/LoadingPage";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
+import { SearchableList } from "./Components/SearchableList/SearchableList";
+import { UserGame } from "@/@types/usergame";
 
 const UserLibrary = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,13 +67,22 @@ const UserLibrary = () => {
               isListView={isListView}
               setIsListView={setIsListView}
             />
-            <div className="mb-24 sm:mb-48">
-              {isListView ? (
-                <MyLibraryGridView games={userGamesFromUser} />
-              ) : (
-                <MyLibraryListView games={userGamesFromUser} />
+            <SearchableList
+              ItemToString={(userGame: UserGame) =>
+                userGame.platformGame.game.title.toLowerCase()
+              }
+              OriginalList={userGamesFromUser}
+              Placeholder="Search through games!"
+              SearchedView={(userGames: UserGame[]) => (
+                <div className="mb-24 sm:mb-48">
+                  {isListView ? (
+                    <MyLibraryGridView games={userGames} />
+                  ) : (
+                    <MyLibraryListView games={userGames} />
+                  )}
+                </div>
               )}
-            </div>
+            ></SearchableList>
           </div>
         </div>
       </div>
