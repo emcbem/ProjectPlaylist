@@ -57,6 +57,29 @@ export const FriendQueries = {
       queryFn: () => FriendService.GetBasePendingRequests(baseId),
     });
   },
+  ToggleFriendNotis: (userGuid: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({
+        userId,
+        friendId,
+      }: {
+        userId: number;
+        friendId: number;
+      }) => FriendService.ToggleFriendNotis(userId, friendId),
+      onSuccess: (_, { userId }) => {
+        queryClient.invalidateQueries({
+          queryKey: keys.getFriendByBaseIdFunc(userGuid),
+        });
+        queryClient.invalidateQueries({
+          queryKey: keys.getPendingFriendRequestsFunc(userId),
+        });
+      },
+      onError: (error) => {
+        console.error("Error sending friend request ", error);
+      },
+    });
+  },
   RemoveFriend: (userGuid: string) => {
     const queryClient = useQueryClient();
     return useMutation({
