@@ -8,6 +8,7 @@ import GridAndListIcons from "../../individual_components/GridAndListIcons";
 import PlaylistTableView from "./PlaylistListView";
 import PlaylistGridView from "./PlaylistGridView";
 import ListOptionsComponent from "./ListOptionsComponent";
+import { SearchableList } from "../UserLibrary/Components/SearchableList/SearchableList";
 
 const Playlist = () => {
   const { id } = useParams<{ id: string }>();
@@ -62,12 +63,20 @@ const Playlist = () => {
               setIsListView={setIsListView}
             />
           </div>
-
-          {!isListView ? (
-            <PlaylistTableView games={listGames} list={list} />
-          ) : (
-            <PlaylistGridView listGames={listGames} list={list} />
-          )}
+          <SearchableList
+            Placeholder="Search through the list!"
+            OriginalList={listGames ?? ([] as ListGame[])}
+            ItemToString={(listGame: ListGame) => {
+              return listGame.game.title.toLowerCase();
+            }}
+            SearchedView={(listGames: ListGame[]) => {
+              return !isListView ? (
+                <PlaylistTableView games={listGames} list={list} />
+              ) : (
+                <PlaylistGridView listGames={listGames} list={list} />
+              );
+            }}
+          />
         </div>
       </div>
     </div>

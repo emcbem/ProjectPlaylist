@@ -12,5 +12,6 @@ public interface IFriendService
     public Task<List<FriendDTO>> GetBasePendingRequests(int baseId);
     public Task<bool> AddFriend(AddFriendRequest request);
     public Task<bool> AcceptFriend(AcceptFriendRequest request);
-    public Task<bool> RemoveFriend(int friendId, int userId); 
+    public Task<bool> RemoveFriend(int friendId, int userId);
+    public Task<bool> ToggleFriendNotis(int friendId, int userId);
 }

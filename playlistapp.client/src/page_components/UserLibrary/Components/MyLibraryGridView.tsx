@@ -10,22 +10,28 @@ interface MyLibraryGridViewProps {
 const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
   const { id } = useParams<{ id: string }>();
   return (
-    <div className="flex flex-wrap">
-      {games
-        .sort((a, b) => (a.platformGame.id < b.platformGame.id ? -1 : 1))
-        .map((ug, key) => (
-          <Link
-            key={key}
-            to={
-              id
-                ? `/user/${id}/user-library-game/${ug.userGameId}`
-                : `/user-library-game/${ug.userGameId}`
-            }
-            className="m-2 w-24 sm:w-40"
-          >
-            <GameCover ug={ug} />
-          </Link>
-        ))}
+    <div className="grid grid-cols-[repeat(auto-fill,_minmax(12rem,_1fr))] gap-3">
+      {games.length === 0 ? (
+        <div className="col-span-full text-center text-gray-500">
+          No games match that criteria
+        </div>
+      ) : (
+        games
+          .sort((a, b) => (a.platformGame.id < b.platformGame.id ? -1 : 1))
+          .map((ug, key) => (
+            <Link
+              key={key}
+              to={
+                id
+                  ? `/user/${id}/user-library-game/${ug.userGameId}`
+                  : `/user-library-game/${ug.userGameId}`
+              }
+              className="m-2"
+            >
+              <GameCover ug={ug} />
+            </Link>
+          ))
+      )}
     </div>
   );
 };

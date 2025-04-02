@@ -30,6 +30,7 @@ const Account = () => {
   const userId = id ?? userGuid;
 
   const { data: usr } = UserAccountQueries.useGetUserById(userId!);
+  const { data: currentUser } = UserAccountQueries.useGetUserById(userGuid!);
 
   const {
     data: userGamesFromUser,
@@ -51,6 +52,14 @@ const Account = () => {
     UserGenreQueries.useGetAllByUser(userId ?? "");
 
   const [currentGoal, setCurrentGoal] = useState<Goal | undefined>(undefined);
+
+  const isFriend = friends?.some((friend) => friend.guid === userGuid);
+
+  const toggleNotisMutation = FriendQueries.ToggleFriendNotis(userGuid!);
+
+  const handleToggle = (userId: number, friendId: number) => {
+    toggleNotisMutation.mutate({ userId, friendId });
+  };
 
   useEffect(() => {
     const foundCurrentGoal = allUserGoals?.find((x) => x.isCurrent === true);
@@ -85,7 +94,17 @@ const Account = () => {
               )}
             </div>
             <div className="">
-              <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
+              <div className="flex flex-row">
+                <p className="md:text-4xl text-2xl ms-8">{usr.username}</p>
+                <p
+                  className={`text-2xl p-2 border-2 border-black rounded-md cursor-pointer ${
+                    isFriend ? "block" : "hidden"
+                  }`}
+                  onClick={() => handleToggle(usr.id, currentUser?.id!)}
+                >
+                  🔔
+                </p>
+              </div>
               <div className="flex flex-row">
                 <p className="md:text-2xl text-lg ms-8">
                   {usr?.xp == 0 ? 0 : usr?.xp} Xp

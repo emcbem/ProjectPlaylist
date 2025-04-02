@@ -175,6 +175,36 @@ public class FriendService : IFriendService
         return true;
     }
 
+    public async Task<bool> ToggleFriendNotis(int friendId, int userId)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var friend = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
+            .Where(x => (x.BaseId == friendId) || (x.RecievedId == friendId))
+            .Where(x => (x.BaseId == userId) || (x.RecievedId == userId))
+            .FirstOrDefaultAsync();
+
+
+        if (friend == null)
+        {
+            return false;
+        }
+
+        if (userId == friend.RecievedId)
+        {
+            friend.NotifyRecievedFriendOnBaseFriend = !friend.NotifyRecievedFriendOnBaseFriend;
+        }
+        else
+        {
+            friend.NotifyBaseFriendOnRecievedFriend = !friend.NotifyBaseFriendOnRecievedFriend;
+        }
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<List<FriendDTO>> GetBasePendingRequests(int userId)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();

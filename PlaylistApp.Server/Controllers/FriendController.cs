@@ -57,6 +57,12 @@ public class FriendController : Controller
         return await friendService.GetBasePendingRequests(baseId);
     }
 
+    [HttpDelete("togglefriendnotis")]
+    public async Task<bool> ToggleFriendNotis(int friendId, int userId)
+    {
+        return await friendService.ToggleFriendNotis(friendId, userId);
+    }
+
     [Authorize]
     [HttpDelete("removefriend")]
     public async Task<bool> RemoveFriend(int friendId, int userId)

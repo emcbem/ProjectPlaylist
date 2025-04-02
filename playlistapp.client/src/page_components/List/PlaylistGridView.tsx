@@ -13,11 +13,13 @@ const PlaylistGridView: FC<props> = ({ listGames, list }) => {
   const { id } = useParams<{ id: string }>();
   if (!listGames || listGames.length <= 0) {
     return (
-      <div>
-        <p className="text-lg">
-          Looks like you don't have any games added to this playlist yet...
-        </p>
-      </div>
+      <div className="flex items-center justify-center text-center max-w-[300px]">
+  <p className="text-lg">
+    Looks like we can't find any games in this list (Either add games to
+    this list or change your search criteria)
+  </p>
+</div>
+
     );
   }
 
