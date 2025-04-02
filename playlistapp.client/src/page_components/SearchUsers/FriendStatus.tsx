@@ -12,9 +12,11 @@ const FriendStatus = ({ user }: { user: UserAccount }) => {
   const { usr } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
+
   const { data: friends } = FriendQueries.GetAllFriendsByBaseIdQuery(
     usr?.guid ?? ""
   );
+
   const { data: pendingFriends } = FriendQueries.GetPendingFriendRequestsQuery(
     usr?.id ?? 0
   );
@@ -28,9 +30,17 @@ const FriendStatus = ({ user }: { user: UserAccount }) => {
   );
 
   return (
-    <>
+    <span
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
       {usr?.guid != user.guid &&
-        (!isFriend && !recievedRequest && isAuthenticated && usr ? (
+        (!isFriend &&
+        !recievedRequest &&
+        !isPending &&
+        isAuthenticated &&
+        usr ? (
           <AddFriendBtn baseUserId={usr.guid} recievingUserId={user.guid} />
         ) : isPending || recievedRequest ? (
           <span className="cursor-pointer flex flex-row items-center border-2 text-black dark:text-white rounded-lg py-1 px-2 border-clay-700 dark:border-clay-900 justify-center space-x-1 mt-2">
@@ -44,7 +54,7 @@ const FriendStatus = ({ user }: { user: UserAccount }) => {
             friendId={user.id}
           />
         ))}
-    </>
+    </span>
   );
 };
 
