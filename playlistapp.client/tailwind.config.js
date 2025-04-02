@@ -1,3 +1,5 @@
+import { keyframes } from "framer-motion";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "media",
@@ -131,6 +133,15 @@ export default {
           800: "#676a6a",
           900: "#737575",
           950: "#b9baba",
+        },
+        animation: {
+          "infinite-scroll": "infinite-scroll 25s linear infinite",
+        },
+        keyframes: {
+          "infinite-scroll": {
+            from: { transform: "translateX(0)" },
+            to: { transform: "translateX(-100%)" },
+          },
         },
       },
 
