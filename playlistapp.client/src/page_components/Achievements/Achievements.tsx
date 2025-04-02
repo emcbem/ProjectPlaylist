@@ -64,8 +64,6 @@ const AchievementsPage: React.FC<AchievementsPageProps> = ({
     return <p>Loading...</p>;
   }
 
-  console.log(allAchievements);
-
   const CompletedAchievementSortFunction: SortFunction = {
     SortName: "Completed",
     SortFunction: (
