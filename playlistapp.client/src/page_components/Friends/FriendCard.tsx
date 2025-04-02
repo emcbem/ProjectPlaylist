@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import FriendStatus from "../SearchUsers/FriendStatus";
 
 const FriendCard = ({ user }: { user: UserAccount }) => {
-  console.log(user, "please");
+
   return (
     <Link
-      className="rounded-lg mt-3 flex flex-row align-middle items-center justify-between p-5 w-50 hover:scale-105 transition-all shadow-lg dark:bg-clay-100 md:m-5 my-2 shadow-pporange-100 dark:shadow-pppurple-600 dark:hover:shadow-pporange-700 duration-300 bg-stone-50 cursor-pointer"
+      className="rounded-lg mt-3 flex flex-row align-middle items-center justify-between p-5 w-50 transition-all shadow-lg dark:bg-clay-100 md:m-5 my-2 shadow-pporange-100 dark:shadow-pppurple-600 dark:hover:shadow-pporange-700 duration-300 bg-stone-50 cursor-pointer"
       to={`/user/${user.guid}`}
     >
       <div className="flex flex-row">

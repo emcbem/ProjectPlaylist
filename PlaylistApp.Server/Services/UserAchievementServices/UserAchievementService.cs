@@ -107,23 +107,17 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-        var friends = await context.Friends
-            .Include(x => x.Base)
-            .Include(x => x.Recieved)
-            .Where(x =>
-                (x.BaseId == user.Id && x.NotifyRecievedFriendOnBaseFriend == true) ||
-                (x.RecievedId == user.Id && x.NotifyBaseFriendOnRecievedFriend == true))
+
+
+        var userAccountsToNotify = await context.Friends
+            .Where(f => ((f.BaseId == user.Id && f.NotifyBaseFriendOnRecievedFriend == true) || (f.RecievedId == user.Id && f.NotifyRecievedFriendOnBaseFriend == true)) && f.IsAccepted == true)
+            .Join(context.UserAccounts,
+                  friend => friend.BaseId == user.Id ? friend.RecievedId : friend.BaseId,
+                  userAccount => userAccount.Id,
+                  (friend, userAccount) => userAccount)
             .ToListAsync();
 
-        var users = friends.Select(x =>
-        {
-            if (x.BaseId == user.Id)
-            {
-                return x.Recieved;
-            }
-            return x.Base;
-        }).Where(x => EmailValidator.IsValidEmail(x.Email)).ToList();
-
+        var users = userAccountsToNotify.Where(x => EmailValidator.IsValidEmail(x.Email)).ToList();
 
         var emails = users.Select(friend =>
         {

@@ -7,5 +7,5 @@ namespace PlaylistApp.Server.Services.UserGameAuditLogServices;
 public interface IUserGameAuditLogService
 {
     public Task<bool> AddUserGameAuditLog(AddUserGameAuditLogRequest request);
-    public Task<List<UserGameDTO>> GetUserGameAuditLogByDate(GetAuditLogByDateRequest request);
+    public Task<List<GameDTO>> GetUserGamesFromUserGameAuditLogDate(GetAuditLogByDateRequest request);
 }

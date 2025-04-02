@@ -16,7 +16,7 @@ import LoginButton from "./login";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
 import { RoleRequired } from "@/page_components/AuthenticationLockers/RoleRequired";
 
-const Profile = () => {
+const DropDownNavMenu = () => {
   const { isAuthenticated } = useAuth0();
 
   const { usr, isLoading } = React.useContext(
@@ -78,6 +78,11 @@ const Profile = () => {
                 <MenuItem className="font-bold">Settings</MenuItem>
               </Link>
 
+              <hr className="my-3" />
+              <Link to={"/wrapups"}>
+                <MenuItem className="font-bold">Wrap Ups</MenuItem>
+              </Link>
+
               <RoleRequired roleToLookOutFor="Admin">
                 <hr className="my-3" />
                 <Link to={"/admin"}>
@@ -94,4 +99,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default DropDownNavMenu;
