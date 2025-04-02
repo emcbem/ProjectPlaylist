@@ -26,7 +26,7 @@ public class WrapUpService : IWrapUpService
     {
         if (string.IsNullOrWhiteSpace(request.UserId) || !Guid.TryParse(request.UserId, out var userGuid))
         {
-            throw new Exception("Invalid UserId Provided To Convert User Games Audit Logs To Carousel Games");
+            return new List<WrapUpCarouselGameDTO>();
         }
 
         var context = await dbContextFactory.CreateDbContextAsync();
@@ -42,7 +42,7 @@ public class WrapUpService : IWrapUpService
 
         if (games == null || !games.Any())
         {
-            throw new Exception("No User Games Audit Logs Found For Current User");
+            return new List<WrapUpCarouselGameDTO>();
         }
 
         return GatherCarouselGames(games);
@@ -52,7 +52,7 @@ public class WrapUpService : IWrapUpService
     {
         if (request is null)
         {
-            throw new Exception("Invalid GetWrapUpRequest Provided To Orchestrate Wrap Up Gathering");
+            return new WrapUpDTO();
         }
 
         var carouselGames = await ConvertUserGameAuditLogsToCarouselGame(request);
