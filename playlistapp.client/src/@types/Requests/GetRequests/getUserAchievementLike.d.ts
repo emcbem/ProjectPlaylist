@@ -1,4 +1,4 @@
 export interface GetUserAchievementLikeRequest {
-    userId: string,
-    userAchievementId: number
+  userId: string;
+  userAchievementId: number;
 }
