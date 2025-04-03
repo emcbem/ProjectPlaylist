@@ -8,7 +8,12 @@ interface CompletedGameComponentProps {
 const CompletedGameComponent: React.FC<CompletedGameComponentProps> = ({
   completedGame,
 }) => {
-  return <div>CompletedGameComponent</div>;
+  return (
+    <>
+      {completedGame.map((x, key) => (
+        <p key={key}>{x.title}</p>
+      ))}
+    </>
+  );
 };
-
 export default CompletedGameComponent;

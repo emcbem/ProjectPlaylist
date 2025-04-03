@@ -8,6 +8,7 @@ import GameCarousel from "./GameCarousel";
 import { WrapUp } from "@/@types/WrapUps/WrapUp";
 import HourBarChart from "./HourBarChart";
 import DateRangeSelector from "./DateRangeSelector/DateRangeSelector";
+import HourLineGraph from "./HourLineGraph";
 
 const WrapUpPage = () => {
   const { userGuid, isLoading: isAccountLoading } = React.useContext(
@@ -19,21 +20,21 @@ const WrapUpPage = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>();
   const [wrapUp, setWrapUp] = useState<WrapUp>();
 
-  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(Number(event.target.value));
-    makeWrapUpRequest();
+  const handleYearChange = (year: number | undefined) => {
+    setSelectedYear(year);
+    makeWrapUpRequest(selectedMonth, year);
   };
 
   const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedMonth(Number(event.target.value));
-    makeWrapUpRequest();
+    makeWrapUpRequest(Number(event.target.value), selectedYear);
   };
 
-  const makeWrapUpRequest = () => {
+  const makeWrapUpRequest = (month = selectedMonth, year = selectedYear) => {
     const _wrapUpRequest: GetWrapUpRequest = {
       userId: userGuid ?? "",
-      month: selectedMonth ?? -1,
-      year: selectedYear ?? 2025,
+      month: month ?? -1,
+      year: year ?? 2025,
     };
     setWrapUpRequest(_wrapUpRequest);
   };
@@ -59,10 +60,10 @@ const WrapUpPage = () => {
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
-        <div className="grid justify-items-center ">
-          <p>
+        <div className="grid justify-items-center mb-48">
+          {/* <p>
             month: {selectedMonth} - year: {selectedYear}
-          </p>
+          </p> */}
           <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
             <div className="text-center">
               <h1 className="text-3xl my-5">Your Wrap Ups</h1>
@@ -74,18 +75,22 @@ const WrapUpPage = () => {
           </div>
           {/* {wrapUp && ( */}
           <>
-            <div className="text-center mt-24 sm:mt-10 text-2xl dark:text-gray-200">
+            <div className="text-center mt-24 text-2xl dark:text-gray-200">
               You played{" "}
-              <span className="font-bold dark:text-white">
-                {wrapUp?.gamesPlayed.length}
+              <span className="font-semibold text-4xl dark:text-white">
+                {
+                  wrapUp?.barGraphGameData.filter((x) => x.timePlayed > 0)
+                    .length
+                }
               </span>
-              <br /> number of games
+              <br /> games
             </div>
             <GameCarousel carouselGames={wrapUp?.gamesPlayed} />
 
             <HourBarChart HourBarChartData={wrapUp?.barGraphGameData} />
-          </>
 
+            <HourLineGraph />
+          </>
           {/* )} */}
         </div>
       </div>

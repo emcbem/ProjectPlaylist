@@ -9,4 +9,5 @@ public interface IWrapUpService
     public Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request);
     public Task<List<WrapUpCarouselGameDTO>> ConvertUserGameAuditLogsToCarouselGame(GetWrapUpRequest request);
     public Task<List<WrapUpHourBarGraphDTO>> GatherBarGraphData(GetWrapUpRequest request);
+    public Task<GraphDTO> GatherHourGraphData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs);
 }

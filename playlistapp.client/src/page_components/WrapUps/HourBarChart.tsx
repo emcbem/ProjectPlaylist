@@ -18,24 +18,35 @@ const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData }) => {
     setNumRows(numRows + 5);
   };
 
+  const filteredSortedData: WrapUpHourBarGraph[] = HourBarChartData.filter(
+    (x) => x.timePlayed > 0
+  ).sort((a, b) => b.timePlayed - a.timePlayed);
   return (
-    <div className="bg-gray-100 p-5 px-8 rounded-lg border-gray-300 dark:bg-gray-800 text-center w-3/4">
-      {HourBarChartData!.slice(0, numRows).map((x, key) => (
+    <div className="bg-gray-100 py-12 px-8 rounded-lg border-gray-300 dark:bg-gray-800 text-center mb-20 md:w-3/4 xl:w-1/2 lg:w-3/4">
+      {filteredSortedData.slice(0, numRows).map((x, key) => (
         <div key={key} className="flex flex-row">
-          <div className="px-3 my-2 w-1/5">
+          <div className="px-3 my-2 w-1/4 truncate me-6 text-left">
             <div>{x.gameTitle}</div>
           </div>
-          <div
-            className="bg-blue-500 m-1 rounded-sm text-end"
-            style={{ width: `${(x.timePlayed / maxValue) * 100 - 1}%` }}
-          >
-            <span className="text-white text-xs p-1">{x.timePlayed}</span>
+          <div className="w-3/4">
+            <div
+              className="bg-cyan-500 m-1 rounded-sm text-end"
+              style={{ width: `${(x.timePlayed / maxValue) * 100}%` }}
+            >
+              <span className="text-white text-sm font-semibold font-sans p-1">
+                {x.timePlayed}
+              </span>
+            </div>
           </div>
         </div>
       ))}
-      {HourBarChartData!.length > numRows && (
-        <div className="text-center font-sans hover:cursor-pointer">
-          <p onClick={increaseNumRows}>more...</p>
+      {filteredSortedData!.length > numRows && (
+        <div className="font-semibold text-center font-sans hover:cursor-pointer underline underline-offset-2">
+          <p onClick={increaseNumRows}>
+            {filteredSortedData.length -
+              filteredSortedData!.slice(0, numRows).length}{" "}
+            more...
+          </p>
         </div>
       )}
     </div>

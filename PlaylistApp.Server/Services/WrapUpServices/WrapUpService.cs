@@ -6,6 +6,9 @@ using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
+using System.Globalization;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.WrapUpServices;
 
@@ -101,6 +104,57 @@ public class WrapUpService : IWrapUpService
         return wrapUpHourBarGraphDTOs;
     }
 
+    public async Task<GraphDTO> GatherHourGraphData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs)
+    {
+        if (string.IsNullOrWhiteSpace(request.UserId) || !Guid.TryParse(request.UserId, out var userGuid))
+        {
+            return new GraphDTO();
+        }
+
+        var getUserGameAuditLogsRequest = new GetAuditLogByDateRequest
+        {
+            UserGuid = userGuid,
+            Month = request.Month,
+            Year = request.Year
+        };
+
+        var games = await userGameAuditLogService.GetUserGamesFromUserGameAuditLogDate(getUserGameAuditLogsRequest);
+        var maxMinutes = barGraphDTOs.Max(x => x.TimePlayed) / 60;
+        int groups = 5;
+
+        if (request.Month == -1)
+        {
+
+            var newGraphDTO = new GraphDTO
+            {
+                Title = $"{request.Year} Hours",
+                X_Ticks = Enumerable.Range(1, 12).Select(x => x.ToString()).ToList(),
+                Y_Ticks = Enumerable.Range(0, groups + 1).Select(i => Math.Round(i * (maxMinutes / groups)).ToString()).ToList(),
+                X_Axis = "Months",
+                Y_Axis = "Hours",
+                Data = barGraphDTOs.Select(x => Math.Round(x.TimePlayed / 60)).ToList()
+            };
+
+            return newGraphDTO;
+        }
+        else
+        {
+            var numberOfDays = DateTime.DaysInMonth(request.Year, request.Month);
+            var month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(request.Month);
+
+            var newGraphDTO = new GraphDTO
+            {
+                Title = $"{month}, {request.Year} Hours",
+                X_Ticks = Enumerable.Range(1, numberOfDays).Select(x => x.ToString()).ToList(),
+                Y_Ticks = Enumerable.Range(0, groups + 1).Select(i => Math.Round(i * (maxMinutes / groups)).ToString()).ToList(),
+                X_Axis = "Days",
+                Y_Axis = "Hours",
+                Data = barGraphDTOs.Select(x => Math.Round(x.TimePlayed / 60)).ToList()
+            };
+
+            return newGraphDTO;
+        }
+    }
 
     public async Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request)
     {
@@ -110,14 +164,14 @@ public class WrapUpService : IWrapUpService
         }
 
         var carouselGames = await ConvertUserGameAuditLogsToCarouselGame(request);
-
         var hourBarGraphDTOs = await GatherBarGraphData(request);
-
+        var graphDTO = await GatherHourGraphData(request, hourBarGraphDTOs);
 
         var newWrapUpDTO = new WrapUpDTO()
         {
             GamesPlayed = carouselGames,
-            BarGraphGameData = hourBarGraphDTOs
+            BarGraphGameData = hourBarGraphDTOs,
+            HourGraph = graphDTO
         };
 
         return newWrapUpDTO;
