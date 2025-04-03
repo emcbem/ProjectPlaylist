@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface YearSelectorProps {
-  setSelectedYear: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  currentSelectedMonth: number | undefined;
+  setSelectedYear: (year: number | undefined) => void;
 }
 
-const YearSelector: React.FC<YearSelectorProps> = ({ setSelectedYear }) => {
+const YearSelector: React.FC<YearSelectorProps> = ({
+  currentSelectedMonth,
+  setSelectedYear,
+}) => {
   const currentYear = new Date().getFullYear();
   const years = [];
+
+  const [selectedYear, setSelectedYearState] = useState<number | "">("");
+
+  useEffect(() => {
+    if (currentSelectedMonth !== undefined && selectedYear === "") {
+      setSelectedYearState(currentYear);
+      setSelectedYear(currentYear);
+    }
+  }, [currentSelectedMonth, selectedYear, currentYear]);
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYearState(
+      event.target.value === "" ? "" : Number(event.target.value)
+    );
+    setSelectedYear(Number(event.target.value));
+  };
 
   for (let year = currentYear; year >= 1979; year--) {
     years.push(year);
@@ -24,9 +44,14 @@ const YearSelector: React.FC<YearSelectorProps> = ({ setSelectedYear }) => {
          focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500
            dark:focus:border-teal-500 px-10"
-        onChange={setSelectedYear}
+        onChange={handleYearChange}
       >
-        <option value={""}>Year</option>
+        {currentSelectedMonth == undefined ? (
+          <option value={""}>Year</option>
+        ) : null}
+
+        {currentSelectedMonth == 0 && <option value={""}>Year</option>}
+
         {years.map((year) => (
           <option key={year} value={year}>
             {year}
