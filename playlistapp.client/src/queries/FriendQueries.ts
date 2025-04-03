@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import keys from "../QueryKeys/FriendKeys";
 import { AddFriendRequest } from "@/@types/Requests/AddRequests/addFriendRequest";
+import { UpdateMuteToggleRequest } from "@/@types/Requests/UpdateRequests/updateMuteToggleRequest";
 
 export const FriendQueries = {
   AcceptFriend: () => {
@@ -45,6 +46,12 @@ export const FriendQueries = {
       queryFn: () => FriendService.GetAllFriendsByBaseId(guid),
     });
   },
+  GetAllFriendsByNotiQuery: (guid: string) => {
+    return useQuery({
+      queryKey: keys.getFriendNotisFunc(guid),
+      queryFn: () => FriendService.GetAllFriendsNoti(guid),
+    });
+  },
   GetFriendById: (friendId: number) => {
     return useQuery({
       queryKey: keys.getFriendById,
@@ -60,19 +67,14 @@ export const FriendQueries = {
   ToggleFriendNotis: (userGuid: string) => {
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: ({
-        userId,
-        friendId,
-      }: {
-        userId: number;
-        friendId: number;
-      }) => FriendService.ToggleFriendNotis(userId, friendId),
-      onSuccess: (_, { userId }) => {
+      mutationFn: ({ request }: { request: UpdateMuteToggleRequest }) =>
+        FriendService.ToggleFriendNotis(request),
+      onSuccess: (_, { request }) => {
         queryClient.invalidateQueries({
-          queryKey: keys.getFriendByBaseIdFunc(userGuid),
+          queryKey: keys.getFriendNotisFunc(userGuid),
         });
         queryClient.invalidateQueries({
-          queryKey: keys.getPendingFriendRequestsFunc(userId),
+          queryKey: keys.getPendingFriendRequestsFunc(request.userId),
         });
       },
       onError: (error) => {
