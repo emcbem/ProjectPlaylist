@@ -16,21 +16,19 @@ const MyLibraryGridView: FC<MyLibraryGridViewProps> = ({ games }) => {
           No games match that criteria
         </div>
       ) : (
-        games
-          .sort((a, b) => (a.platformGame.id < b.platformGame.id ? -1 : 1))
-          .map((ug, key) => (
-            <Link
-              key={key}
-              to={
-                id
-                  ? `/user/${id}/user-library-game/${ug.userGameId}`
-                  : `/user-library-game/${ug.userGameId}`
-              }
-              className="m-2"
-            >
-              <GameCover ug={ug} />
-            </Link>
-          ))
+        games.map((ug, key) => (
+          <Link
+            key={key}
+            to={
+              id
+                ? `/user/${id}/user-library-game/${ug.userGameId}`
+                : `/user-library-game/${ug.userGameId}`
+            }
+            className="m-2"
+          >
+            <GameCover ug={ug} />
+          </Link>
+        ))
       )}
     </div>
   );
