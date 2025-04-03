@@ -1,6 +1,5 @@
 const FriendKeys = {
-  acceptFriend:
-    ["Friend", "AcceptFriend", "GetPendingFriendReqeusts"] as const,
+  acceptFriend: ["Friend", "AcceptFriend", "GetPendingFriendReqeusts"] as const,
   addFriend: ["Friend", "AddFriend"] as const,
   getFriendByBaseId: ["Friend", "GetFriendByBaseId"] as const,
   getFriendById: ["Friend", "GetFriendById"] as const,
@@ -8,6 +7,8 @@ const FriendKeys = {
   getPendingFriendRequests: ["Friend", "GetPendingFriendReqeusts"] as const,
   getFriendByBaseIdFunc: (guid: string) =>
     ["Friend", "GetFriendByBaseId", guid] as const,
+  getFriendNotisFunc: (guid: string) =>
+    ["Friend", "GetFriendNotis", guid] as const,
   getFriendByIdFunc: (friendId: number) =>
     ["Friend", "GetFriendById", friendId] as const,
   getPendingFriendRequestsFunc: (friendId: number) =>
