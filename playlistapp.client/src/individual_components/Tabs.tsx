@@ -28,23 +28,42 @@ const Tab: React.FC<TabProps> = ({ TabName, isActive, onClick }) => {
       <Link
         to="#"
         onClick={onClick}
-        className={`inline-flex items-center justify-center border-b-2 rounded-t-lg sm:p-4 hover:text-black dark:hover:text-gray-300 group sm:text-sm text-xs ${
+        className={`inline-flex items-center justify-center border-b-2 rounded-t-lg sm:p-4 hover:text-black dark:hover:text-gray-300 group sm:text-base text-sm ${
           isActive
             ? "text-black border-black dark:border-white dark:text-white"
             : "text-gray-500 border-transparent hover:border-black dark:hover:border-white"
         }`}
       >
-        <svg
-          className={`w-4 h-4 me-2 ${
-            isActive ? "text-black dark:text-white" : "text-gray-500"
-          } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white sm:block hidden`}
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
-        </svg>
+        {TabName == "Reviews" && (
+          <svg
+            className={`w-4 h-4 me-2 ${
+              isActive ? "text-black dark:text-white" : "text-gray-500"
+            } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white sm:block hidden`}
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+          </svg>
+        )}
+        {TabName == "Achievements" && (
+          <svg
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            className={`w-4 h-4 me-2 ${
+              isActive ? "text-black dark:text-white" : "text-gray-500"
+            } group-hover:text-black dark:text-gray-500 dark:group-hover:text-white sm:block hidden`}
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M4 0H12V2H16V4C16 6.45641 14.2286 8.49909 11.8936 8.92038C11.5537 10.3637 10.432 11.5054 9 11.874V14H12V16H4V14H7V11.874C5.56796 11.5054 4.44628 10.3637 4.1064 8.92038C1.77136 8.49909 0 6.45641 0 4V2H4V0ZM12 6.82929V4H14C14 5.30622 13.1652 6.41746 12 6.82929ZM4 4H2C2 5.30622 2.83481 6.41746 4 6.82929V4Z"
+            ></path>{" "}
+          </svg>
+        )}
+
         {TabName}
       </Link>
     </li>
@@ -62,8 +81,10 @@ const Tabs = () => {
   const [filter, setFilter] = useState<string>("Recommended");
   const [sortedReviews, setSortedReviews] = useState<GameReview[]>([]);
 
-  const tabs = ["Reviews", "Achievements", "Global Leaderboard"];
+  const tabs = ["Reviews", "Achievements"];
   let hideReviewButton = false;
+
+  console.log(AllGameReviewsForGame, "ENOCH");
 
   useEffect(() => {
     if (AllGameReviewsForGame) {
@@ -97,23 +118,21 @@ const Tabs = () => {
   }, [AllGameReviewsForGame, filter, usr]);
   return (
     <div className="w-full">
-      <ul className="flex justify-between">
+      <ul className="flex">
         {tabs.map((tab, key) => (
-          <Tab
-            key={key}
-            TabName={tab}
-            isActive={tab === activeTab}
-            onClick={() => setActiveTab(tab)}
-          />
+          <div className={tab == "Achievements" ? "ml-12" : ""} key={key}>
+            <Tab
+              key={key}
+              TabName={tab}
+              isActive={tab === activeTab}
+              onClick={() => setActiveTab(tab)}
+            />
+          </div>
         ))}
       </ul>
       <div className="mt-4 w-full">
         {activeTab === "Reviews" && (
           <>
-            {usr &&
-              !AllGameReviewsForGame?.some((x) => x.user.guid === usr.guid) && (
-                <ReviewModal hideReview={hideReviewButton} />
-              )}
             <div className="text-left text-2xl dark:text-white flex flex-col">
               <div className="flex flex-row">
                 <p className="sm:text-sm text-tiny font-medium text-clay-950 dark:text-clay-600 p-2">
@@ -191,14 +210,17 @@ const Tabs = () => {
                 <p>Loading...</p>
               )}
             </div>
+            {usr &&
+              !AllGameReviewsForGame?.some((x) => x.user.guid === usr.guid) && (
+                <ReviewModal hideReview={hideReviewButton} />
+              )}
           </>
         )}
         {activeTab === "Achievements" && (
           <div className="text-left text-2xl dark:text-white flex flex-col">
-            <AchievementsPage />
+            <AchievementsPage isViewingOwnProfile={false} />
           </div>
         )}
-        {activeTab === "Global Leaderboard" && <div>Coming soon...</div>}
       </div>
     </div>
   );

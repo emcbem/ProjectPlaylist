@@ -8,4 +8,5 @@ public interface IUserGameAuditLogService
 {
     public Task<bool> AddUserGameAuditLog(AddUserGameAuditLogRequest request);
     public Task<List<GameDTO>> GetUserGamesFromUserGameAuditLogDate(GetAuditLogByDateRequest request);
+    public Task<List<UserGameAuditLogDTO>> GetAllUserGameAuditLogsByDate(GetAuditLogByDateRequest request);
 }
