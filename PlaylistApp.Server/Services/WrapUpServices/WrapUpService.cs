@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.WrapUpData;
@@ -6,9 +7,8 @@ using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
+using PlaylistApp.Server.Services.UserGameServices;
 using System.Globalization;
-using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.WrapUpServices;
 
@@ -18,12 +18,14 @@ public class WrapUpService : IWrapUpService
     private readonly IUserGameAuditLogService userGameAuditLogService;
     private readonly IGameService gameService;
     private readonly IPlatformGameService platformGameService;
-    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService)
+    private readonly IUserGameService userGameService;
+    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService)
     {
         this.dbContextFactory = dbContextFactory;
         this.userGameAuditLogService = userGameAuditLogService;
         this.gameService = gameService;
         this.platformGameService = platformGameService;
+        this.userGameService = userGameService;
     }
     public async Task<List<WrapUpCarouselGameDTO>> ConvertUserGameAuditLogsToCarouselGame(GetWrapUpRequest request)
     {
@@ -205,6 +207,49 @@ public class WrapUpService : IWrapUpService
         }
     }
 
+    public async Task<TopGameDTO> GatherTopGameData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> bar)
+    {
+        if (request is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var topHoursGame = bar.OrderByDescending(x => x.TimePlayed).FirstOrDefault();
+
+        if (topHoursGame is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var topGame = await platformGameService.GetPlatformGameById(topHoursGame.PlatformGameId);
+
+
+        var getUserGameRequest = new GetUserGameRequest
+        {
+            PlatformGameId = topGame.id,
+            UserId = new Guid(request.UserId)
+        };
+
+        var topGameHours = await userGameService.GetUserGameByPlatformGameAndUser(getUserGameRequest);
+
+        if (topGame.Game is null || topGame.Game.CoverUrl is null || topGameHours is null || topGameHours.TimePlayed is null || topGame.Achievements is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var newTopGameDTO = new TopGameDTO
+        {
+           CoverUrl = topGame.Game.CoverUrl,
+           AllTimeHours = (double)topGameHours.TimePlayed,
+           FirstTimePlayed = topGameHours.DateAdded,
+           PlatformId = topGame.Platform.Id,
+           Title = topGame.Game.Title,
+           TotalAchievements = topGame.Achievements.Count
+        };
+
+        return newTopGameDTO;
+    }
+
     public async Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request)
     {
         if (request is null)
@@ -215,12 +260,14 @@ public class WrapUpService : IWrapUpService
         var carouselGames = await ConvertUserGameAuditLogsToCarouselGame(request);
         var hourBarGraphDTOs = await GatherBarGraphData(request);
         var graphDTO = await GatherHourGraphData(request, hourBarGraphDTOs);
+        var topGameDTO = await GatherTopGameData(request, hourBarGraphDTOs);
 
         var newWrapUpDTO = new WrapUpDTO()
         {
             GamesPlayed = carouselGames,
             BarGraphGameData = hourBarGraphDTOs,
-            HourGraph = graphDTO
+            HourGraph = graphDTO,
+            TopGame = topGameDTO
         };
 
         return newWrapUpDTO;
