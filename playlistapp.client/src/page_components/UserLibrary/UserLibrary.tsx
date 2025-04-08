@@ -8,7 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import MyLibraryGridView from "./Components/MyLibraryGridView";
 import LoadingPage from "../../individual_components/LoadingPage";
 import { UserAccountQueries } from "@/queries/UserAccountQueries";
-import { SearchableList } from "./Components/SearchableList/SearchableList";
+import { SearchableList } from "../../components/ui/searchable-list";
 import { UserGame } from "@/@types/usergame";
 
 const UserLibrary = () => {

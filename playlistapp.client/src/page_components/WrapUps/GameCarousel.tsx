@@ -8,13 +8,13 @@ interface GameCarouselProps {
 
 const GameCarousel: React.FC<GameCarouselProps> = ({ carouselGames }) => {
   return (
-    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg">
-      <Marquee pauseOnHover className="[--duration:600s]">
+    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg mt-3 mb-24">
+      <Marquee pauseOnHover className="[--duration:50s]">
         {carouselGames?.map((game, index) =>
-          game.coverUrl ? (
+          game.coverURL ? (
             <GameCard
               index={index}
-              cover={game.coverUrl}
+              cover={game.coverURL}
               title={game.gameName}
               publishDate={""}
               description={""}

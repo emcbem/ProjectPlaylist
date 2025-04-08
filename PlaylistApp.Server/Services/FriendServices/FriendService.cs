@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Requests;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 
@@ -118,6 +119,28 @@ public class FriendService : IFriendService
         return userDTOs;
     }
 
+    public async Task<List<UserDTO>> GetFriendNotisList(Guid userGuid)
+    {
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var friends = await context.Friends
+            .Include(x => x.Base)
+            .Include(x => x.Recieved)
+            .Where(x => (x.Base.Guid == userGuid && x.NotifyBaseFriendOnRecievedFriend == true) || (x.Recieved.Guid == userGuid && x.NotifyRecievedFriendOnBaseFriend == true))
+            .Where(x => x.IsAccepted == true)
+            .ToListAsync();
+
+
+        if (!friends.Any())
+        {
+            return new List<UserDTO>();
+        }
+
+        var friendDTOs = friends.SelectMany(x => new[] { x.Base.ToDTO(), x.Recieved.ToDTO() }.Where(x => x.Guid != userGuid)).ToList();
+
+        return friendDTOs;
+    }
+
     public async Task<FriendDTO> GetFriendById(int id)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
@@ -175,15 +198,15 @@ public class FriendService : IFriendService
         return true;
     }
 
-    public async Task<bool> ToggleFriendNotis(int friendId, int userId)
+    public async Task<bool> ToggleFriendNotis(UpdateMuteToggleRequest updateMuteToggleRequest)
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
         var friend = await context.Friends
             .Include(x => x.Base)
             .Include(x => x.Recieved)
-            .Where(x => (x.BaseId == friendId) || (x.RecievedId == friendId))
-            .Where(x => (x.BaseId == userId) || (x.RecievedId == userId))
+            .Where(x => (x.BaseId == updateMuteToggleRequest.friendId) || (x.RecievedId == updateMuteToggleRequest.friendId))
+            .Where(x => (x.BaseId == updateMuteToggleRequest.userId) || (x.RecievedId == updateMuteToggleRequest.userId))
             .FirstOrDefaultAsync();
 
 
@@ -192,7 +215,7 @@ public class FriendService : IFriendService
             return false;
         }
 
-        if (userId == friend.RecievedId)
+        if (updateMuteToggleRequest.userId == friend.RecievedId)
         {
             friend.NotifyRecievedFriendOnBaseFriend = !friend.NotifyRecievedFriendOnBaseFriend;
         }

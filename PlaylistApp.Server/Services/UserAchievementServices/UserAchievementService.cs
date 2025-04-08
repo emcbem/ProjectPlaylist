@@ -107,10 +107,10 @@ public class UserAchievementService : IUserAchievementService
     {
         using var context = await dbContextFactory.CreateDbContextAsync();
 
-
-
         var userAccountsToNotify = await context.Friends
-            .Where(f => ((f.BaseId == user.Id && f.NotifyBaseFriendOnRecievedFriend == true) || (f.RecievedId == user.Id && f.NotifyRecievedFriendOnBaseFriend == true)) && f.IsAccepted == true)
+            .Where(f => (((f.BaseId == user.Id && f.NotifyRecievedFriendOnBaseFriend == true) 
+                        || (f.RecievedId == user.Id && f.NotifyBaseFriendOnRecievedFriend == true))) 
+                        && f.IsAccepted == true)
             .Join(context.UserAccounts,
                   friend => friend.BaseId == user.Id ? friend.RecievedId : friend.BaseId,
                   userAccount => userAccount.Id,

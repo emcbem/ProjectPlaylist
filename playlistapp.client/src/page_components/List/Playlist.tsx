@@ -8,7 +8,7 @@ import GridAndListIcons from "../../individual_components/GridAndListIcons";
 import PlaylistTableView from "./PlaylistListView";
 import PlaylistGridView from "./PlaylistGridView";
 import ListOptionsComponent from "./ListOptionsComponent";
-import { SearchableList } from "../UserLibrary/Components/SearchableList/SearchableList";
+import { SearchableList } from "../../components/ui/searchable-list";
 
 const Playlist = () => {
   const { id } = useParams<{ id: string }>();

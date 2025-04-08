@@ -1,4 +1,4 @@
 export interface WrapUpCarouselGame {
-  coverUrl: string;
+  coverURL: string;
   gameName: string;
 }

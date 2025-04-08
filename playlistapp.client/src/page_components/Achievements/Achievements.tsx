@@ -6,7 +6,7 @@ import AchievementList from "./Components/AchievementList";
 import {
   SearchableList,
   SortFunction,
-} from "../UserLibrary/Components/SearchableList/SearchableList";
+} from "../../components/ui/searchable-list";
 import { UserAchievement } from "@/@types/userAchievement";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import { UserAccountContextInterface } from "@/@types/userAccount";

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlaylistApp.Server.DTOs;
+using PlaylistApp.Server.Requests;
 using PlaylistApp.Server.Requests.AddRequests;
 using PlaylistApp.Server.Requests.UpdateRequests;
 using PlaylistApp.Server.Services.FriendServices;
@@ -57,10 +58,16 @@ public class FriendController : Controller
         return await friendService.GetBasePendingRequests(baseId);
     }
 
-    [HttpDelete("togglefriendnotis")]
-    public async Task<bool> ToggleFriendNotis(int friendId, int userId)
+    [HttpPatch("togglefriendnotis")]
+    public async Task<bool> ToggleFriendNotis(UpdateMuteToggleRequest updateMuteToggleRequest)
     {
-        return await friendService.ToggleFriendNotis(friendId, userId);
+        return await friendService.ToggleFriendNotis(updateMuteToggleRequest);
+    }
+
+    [HttpGet("getfriendnotis")]
+    public async Task<List<UserDTO>> GetFriendNotisList(Guid userGuid)
+    {
+        return await friendService.GetFriendNotisList(userGuid);
     }
 
     [Authorize]
