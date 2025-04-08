@@ -55,6 +55,33 @@ public class UserGameAuditLogService : IUserGameAuditLogService
         return true;
     }
 
+    public async Task<List<UserGameAuditLogDTO>> GetAllUserGameAuditLogsByDate(GetAuditLogByDateRequest request)
+    {
+        if (request is null)
+        {
+            return new List<UserGameAuditLogDTO>();
+        }
+
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var allUserGameAuditLogs = await context.UserGameAuditLogs
+            .Include(x => x.PlatformGame)
+                .ThenInclude(x => x.Game)
+            .Where(x => x.UserAccount.Guid == request.UserGuid &&
+                        x.AuditDate.Year == request.Year &&
+                        (request.Month == -1 || x.AuditDate.Month == request.Month))
+            .OrderBy(x => x.AuditDate)
+            .Select(x => x.ToDTO())
+            .ToListAsync();
+
+        if (allUserGameAuditLogs is null)
+        {
+            return new List<UserGameAuditLogDTO>();
+        }
+
+        return allUserGameAuditLogs;
+    }
+
     public async Task<List<GameDTO>> GetUserGamesFromUserGameAuditLogDate(GetAuditLogByDateRequest request)
     {
         if (request is null)
