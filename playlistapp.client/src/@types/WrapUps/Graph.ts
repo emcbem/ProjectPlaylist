@@ -1,8 +1,8 @@
+import { HourGraphDataPoint } from "./HourGraphDataPoint";
+
 export interface Graph {
   title: string;
-  x_ticks: string[];
-  y_ticks: string[];
-  x_axis: string[];
-  y_axis: string[];
-  data: number[];
+  x_Axis: string[];
+  y_Axis: string[];
+  graphDataPoints: HourGraphDataPoint[];
 }
