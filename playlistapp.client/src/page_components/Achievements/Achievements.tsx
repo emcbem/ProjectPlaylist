@@ -19,10 +19,12 @@ export interface UserAchivementListItem {
 
 interface AchievementsPageProps {
   passedGameAchievements?: Achievement[];
+  isViewingOwnProfile: boolean;
 }
 
 const AchievementsPage: React.FC<AchievementsPageProps> = ({
   passedGameAchievements,
+  isViewingOwnProfile,
 }) => {
   const { gameId, id } = useParams<{ gameId?: string; id?: string }>();
   const { usr } = useContext(UserAccountContext) as UserAccountContextInterface;
@@ -76,13 +78,17 @@ const AchievementsPage: React.FC<AchievementsPageProps> = ({
       return 0;
     },
   };
-
+  console.log(isViewingOwnProfile, "isViewingOwnProfile");
   return (
     <div className="dark:text-white text-black w-full">
       {allAchievements.length > 0 ? (
         <SearchableList
           Placeholder="Search through achievements!"
-          CustomSortFunctions={[CompletedAchievementSortFunction]}
+          CustomSortFunctions={
+            isViewingOwnProfile == true
+              ? [CompletedAchievementSortFunction]
+              : []
+          }
           ItemToString={(achievement: UserAchivementListItem) =>
             achievement.Achievement.name.toLowerCase()
           }

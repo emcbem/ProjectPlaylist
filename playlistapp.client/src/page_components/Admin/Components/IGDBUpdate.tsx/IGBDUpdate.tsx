@@ -61,15 +61,18 @@ const IGBDUpdate = () => {
       </div>
 
       <Modal {...modalController}>
+        <div>
+
         {!isSyncing && !isFinished ? (
           <ConfirmationPage />
         ) : !isFinished ? (
           <SyncingPage progress={progress} />
         ) : (
           <SuccessPage
-            completeMethod={() => modalController.setModalVisibility(false)}
+          completeMethod={() => modalController.setModalVisibility(false)}
           />
         )}
+        </div>
       </Modal>
     </>
   );

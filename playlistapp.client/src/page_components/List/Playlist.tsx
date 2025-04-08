@@ -73,7 +73,9 @@ const Playlist = () => {
               return !isListView ? (
                 <PlaylistTableView games={listGames} list={list} />
               ) : (
-                <PlaylistGridView listGames={listGames} list={list} />
+                <div className="flex justify-center align-center">
+                  <PlaylistGridView listGames={listGames} list={list} />
+                </div>
               );
             }}
           />
