@@ -60,14 +60,14 @@ public class WrapUpService : IWrapUpService
 
         var context = await dbContextFactory.CreateDbContextAsync();
 
-        var allUserGameAuditLogs = await context.UserGameAuditLogs
-            .Include(x => x.PlatformGame)
-                .ThenInclude(x => x.Game)
-            .Where(x => x.UserAccount.Guid == userGuid &&
-                        x.AuditDate.Year == request.Year &&
-                        (request.Month == -1 || x.AuditDate.Month == request.Month))
-            .OrderBy(x => x.AuditDate) 
-            .ToListAsync();
+        var auditLogRequest = new GetAuditLogByDateRequest
+        {
+            Month = request.Month,
+            Year = request.Year,
+            UserGuid = userGuid
+        };
+
+        var allUserGameAuditLogs = await userGameAuditLogService.GetAllUserGameAuditLogsByDate(auditLogRequest);
 
         var platformGameIdToAuditData = new Dictionary<int, (long? MinutesBefore, long? MinutesAfter)>();
 
@@ -97,7 +97,8 @@ public class WrapUpService : IWrapUpService
             wrapUpHourBarGraphDTOs.Add(new WrapUpHourBarGraphDTO
             {
                 GameTitle = currentGame.Game.Title,
-                TimePlayed = minutesChange
+                TimePlayed = minutesChange,
+                PlatformGameId = kvp.Key
             });
         }
 
@@ -118,9 +119,63 @@ public class WrapUpService : IWrapUpService
             Year = request.Year
         };
 
-        var games = await userGameAuditLogService.GetUserGamesFromUserGameAuditLogDate(getUserGameAuditLogsRequest);
+        var allUserGameAuditLogs = await userGameAuditLogService.GetAllUserGameAuditLogsByDate(getUserGameAuditLogsRequest);
+
+        if (allUserGameAuditLogs.Count <= 0)
+        {
+            return new GraphDTO();
+        }
+
         var maxMinutes = barGraphDTOs.Max(x => x.TimePlayed) / 60;
-        int groups = 5;
+        var numberOfXTicks = 12;
+        string month = "";
+
+        if (request.Month != -1)
+        {
+            numberOfXTicks = DateTime.DaysInMonth(request.Year, request.Month);
+            month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(request.Month);
+        }
+
+        double[] minutesPerTick = new double[numberOfXTicks];
+        List<HourGraphDataPoint> dataPoints = [];
+
+        if (request.Month != -1)
+        {
+            foreach (var auditLog in allUserGameAuditLogs)
+            {
+                var currentDay = auditLog.AuditDate.Day;
+                var currentGame = barGraphDTOs.Where(x => x.PlatformGameId == auditLog.PlatformGameId).FirstOrDefault();
+
+                if (currentGame is not null)
+                {
+                    minutesPerTick[currentDay - 1] += currentGame.TimePlayed;
+                }
+            }
+        }
+        else
+        {
+            foreach (var auditLog in allUserGameAuditLogs)
+            {
+                var currentMonth = auditLog.AuditDate.Month;
+                var currentGame = barGraphDTOs.Where(x => x.PlatformGameId == auditLog.PlatformGameId).FirstOrDefault();
+
+                if (currentGame is not null)
+                {
+                    minutesPerTick[currentMonth - 1] += currentGame.TimePlayed;
+                }
+            }
+        }
+
+        for (int i = 0; i < minutesPerTick.Length; i++)
+        {
+            var newDataPoint = new HourGraphDataPoint
+            {
+                DateNumber = i + 1,
+                Minutes = minutesPerTick[i]
+            };
+
+            dataPoints.Add(newDataPoint);
+        }
 
         if (request.Month == -1)
         {
@@ -128,28 +183,22 @@ public class WrapUpService : IWrapUpService
             var newGraphDTO = new GraphDTO
             {
                 Title = $"{request.Year} Hours",
-                X_Ticks = Enumerable.Range(1, 12).Select(x => x.ToString()).ToList(),
-                Y_Ticks = Enumerable.Range(0, groups + 1).Select(i => Math.Round(i * (maxMinutes / groups)).ToString()).ToList(),
                 X_Axis = "Months",
                 Y_Axis = "Hours",
-                Data = barGraphDTOs.Select(x => Math.Round(x.TimePlayed / 60)).ToList()
+                GraphDataPoints = dataPoints
             };
 
             return newGraphDTO;
         }
         else
         {
-            var numberOfDays = DateTime.DaysInMonth(request.Year, request.Month);
-            var month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(request.Month);
 
             var newGraphDTO = new GraphDTO
             {
                 Title = $"{month}, {request.Year} Hours",
-                X_Ticks = Enumerable.Range(1, numberOfDays).Select(x => x.ToString()).ToList(),
-                Y_Ticks = Enumerable.Range(0, groups + 1).Select(i => Math.Round(i * (maxMinutes / groups)).ToString()).ToList(),
                 X_Axis = "Days",
                 Y_Axis = "Hours",
-                Data = barGraphDTOs.Select(x => Math.Round(x.TimePlayed / 60)).ToList()
+                GraphDataPoints = dataPoints
             };
 
             return newGraphDTO;
