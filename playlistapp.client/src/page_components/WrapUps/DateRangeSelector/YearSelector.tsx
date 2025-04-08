@@ -15,7 +15,11 @@ const YearSelector: React.FC<YearSelectorProps> = ({
   const [selectedYear, setSelectedYearState] = useState<number | "">("");
 
   useEffect(() => {
-    if (currentSelectedMonth !== undefined && selectedYear === "") {
+    if (
+      currentSelectedMonth !== undefined &&
+      selectedYear === "" &&
+      currentSelectedMonth !== 0
+    ) {
       setSelectedYearState(currentYear);
       setSelectedYear(currentYear);
     }

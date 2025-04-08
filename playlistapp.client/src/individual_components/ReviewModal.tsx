@@ -1,13 +1,15 @@
 import { AddGameReviewRequest } from "@/@types/Requests/AddRequests/addGameReviewRequest";
 import { UpdateGameReviewRequest } from "@/@types/Requests/UpdateRequests/updateGameReviewRequest";
 import { UserAccountContextInterface } from "@/@types/userAccount";
+import { Modal } from "@/components/ui/modal";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
+import { useModalController } from "@/page_components/Settings/Hooks/useModalController";
 import { GameQueries } from "@/queries/GameQueries";
 import { GameReviewQueries } from "@/queries/GameReviewQueries";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Slider from "@mui/material/Slider";
 import React, { FC } from "react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
@@ -24,14 +26,12 @@ const ReviewModal: FC<props> = ({
   editVal,
   editReview,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [currentRatingVal, setVal] = useState<number>(editVal ? editVal : 0);
   const [reviewText, setReviewText] = useState<string>(
     editReview ? editReview : ""
   );
   const [review, setReview] = useState<AddGameReviewRequest>();
   const [updateReview, setUpdateReview] = useState<UpdateGameReviewRequest>();
-  const modalRef = useRef<HTMLDivElement>(null);
 
   const { gameId } = useParams<{ gameId: string }>();
   const { usr } = React.useContext(
@@ -39,14 +39,6 @@ const ReviewModal: FC<props> = ({
   ) as UserAccountContextInterface;
 
   const { data: game } = GameQueries.useGetGameById(Number(gameId));
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
 
   const handleChange = (_: Event, newValue: number | number[]) => {
     setVal(newValue as number);
@@ -70,6 +62,11 @@ const ReviewModal: FC<props> = ({
     updateGameReivew();
   };
 
+  const modalController = useModalController({
+    closeOnSuccess: false,
+    showBottomButtons: false,
+    title: "Leave a review",
+  });
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -106,13 +103,7 @@ const ReviewModal: FC<props> = ({
       handleUpdateGameReview();
     }
 
-    closeModal();
-  };
-
-  const handleBackdropClick = (event: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      closeModal();
-    }
+    modalController.setModalVisibility(false);
   };
 
   return (
@@ -121,11 +112,11 @@ const ReviewModal: FC<props> = ({
         <PencilSquareIcon
           className="h-5 text-clay-900 mx-3"
           role="button"
-          onClick={openModal}
+          onClick={() => modalController.setModalVisibility(true)}
         />
       ) : (
         <button
-          onClick={openModal}
+          onClick={() => modalController.setModalVisibility(true)}
           className={`rounded-md bg-clay-200 dark:bg-clay-600 py-2 px-4 border border-transparent text-center text-sm dark:text-white text-white transition-all shadow-md ml-2 ${
             hideReview == true ? `hidden` : ``
           }`}
@@ -135,20 +126,8 @@ const ReviewModal: FC<props> = ({
         </button>
       )}
 
-      <div
-        onClick={handleBackdropClick}
-        className={`fixed inset-0 z-[10000] grid h-screen w-screen place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300 ${
-          isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div
-          ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
-            isOpen ? "scale-100" : "scale-95"
-          }`}
-        >
+      <Modal {...modalController}>
+        <div className="flex justify-center items-center">
           <div className="mx-5">
             <img
               src={game?.coverUrl.replace(/t_cover_big/g, "t_1080p")}
@@ -198,7 +177,7 @@ const ReviewModal: FC<props> = ({
             </div>
           </form>
         </div>
-      </div>
+      </Modal>
     </>
   );
 };

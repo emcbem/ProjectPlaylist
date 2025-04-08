@@ -1,3 +1,4 @@
+import { Graph } from "@/@types/WrapUps/Graph";
 import {
   XAxis,
   YAxis,
@@ -42,7 +43,18 @@ const data = [
   { month: "31", savings: 0 },
 ];
 
-const HourLineGraph = () => {
+interface HourLineGraphProps {
+  graphData: Graph;
+}
+
+const HourLineGraph: React.FC<HourLineGraphProps> = ({ graphData }) => {
+  //console.log(graphData);
+  //const [dataKey,_] = useState<string>(graphData.data);
+
+  if (!graphData) {
+    return <></>;
+  }
+
   return (
     <>
       <p className="text-lg font-semibold text-center mb-3">Hours</p>

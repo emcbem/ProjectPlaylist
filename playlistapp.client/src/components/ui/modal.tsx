@@ -15,7 +15,7 @@ export interface ModalController {
   setHideTopButtons: React.Dispatch<React.SetStateAction<boolean>>;
   setHideBottomButtons: React.Dispatch<React.SetStateAction<boolean>>;
   setClickingOffModalClosesModel: React.Dispatch<React.SetStateAction<boolean>>;
-  closeOnSuccess: boolean
+  closeOnSuccess: boolean;
 }
 
 export const Modal = ({
@@ -28,7 +28,7 @@ export const Modal = ({
   clickingOffModalClosesModal, // Default value
   hideTopButtons,
   hideBottomButtons,
-  closeOnSuccess
+  closeOnSuccess,
 }: ModalController) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
@@ -40,9 +40,8 @@ export const Modal = ({
 
   function HandleSuccess() {
     onSuccess?.();
-    if(closeOnSuccess)
-    {
-        setModalVisibility(false);
+    if (closeOnSuccess) {
+      setModalVisibility(false);
     }
   }
   const handleBackdropClick = (event: React.MouseEvent) => {
@@ -74,14 +73,16 @@ export const Modal = ({
           ref={modalRef}
         >
           <div className="flex flex-row" id="ModalTitleRow">
-            {title && <h3>{title}</h3>}
+            {title && <h1 className="text-2xl font-bold dark:text-white">{title}</h1>}
             {!hideTopButtons && (
-              <button className="ml-auto w-5 h-5" onClick={HandleDismiss}>
-                    <XMarkIcon/>
+              <button className="ml-auto w-5 h-5 dark:text-white " onClick={HandleDismiss}>
+                <XMarkIcon />
               </button>
             )}
           </div>
-          {children}
+          <div className="">
+            {children}
+          </div>
           <div className="flex flex-row" id="ModalBottomRow">
             {!hideBottomButtons && (
               <div className="flex flex-row ml-auto gap-2">

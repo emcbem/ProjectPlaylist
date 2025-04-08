@@ -50,6 +50,7 @@ const ViewLibraryGame = () => {
                       passedGameAchievements={
                         userGame?.platformGame.achievements
                       }
+                      isViewingOwnProfile={true}
                     />
                   )}
                 </ul>
@@ -64,6 +65,7 @@ const ViewLibraryGame = () => {
             {userGame?.platformGame.achievements.length > 0 && (
               <AchievementsPage
                 passedGameAchievements={userGame?.platformGame.achievements}
+                isViewingOwnProfile={true}
               />
             )}
           </ul>

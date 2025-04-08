@@ -6,6 +6,7 @@ import { PlaystationDTO } from "@/@types/Playstation/playstationDTO";
 import { SteamQueries } from "@/queries/SteamQueries";
 import { SteamActionLogRequest } from "@/@types/Requests/GetRequests/getSteamActionLogRequest";
 import { ItemAction } from "@/@types/Combination/itemAction";
+import { useModalController } from "../../Hooks/useModalController";
 
 const SyncButton = ({
   userId,
@@ -22,7 +23,11 @@ const SyncButton = ({
   isVisible: boolean;
   platformId: number;
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalController = useModalController({
+      showBottomButtons: false,
+      showTopButtons: false,
+    });
+  
   const [actionsToShowUser, setActionsToShowUser] = useState<
     ItemAction[] | undefined
   >();
@@ -55,7 +60,6 @@ const SyncButton = ({
       setActionsToShowUser(actionsFromPlaystation);
       setPlaystationSync(true);
     } else if (platformId === 163) {
-      // TODO: DUSTY FIX
       setActionsToShowUser(actionsFromSteam);
       setSteamSync(true);
     }
@@ -65,7 +69,6 @@ const SyncButton = ({
     if (platformId === 7 && actionsFromPlaystation) {
       setActionsToShowUser(actionsFromPlaystation);
     } else if (platformId === 163 && actionsFromSteam) {
-      // TODO: DUSTY FIX
       setActionsToShowUser(actionsFromSteam);
     }
   }, [actionsFromPlaystation, actionsFromSteam, platformId]);
@@ -73,8 +76,6 @@ const SyncButton = ({
   return (
     <>
       <WarningModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
         userId={userId}
         accountId={accountId}
         actionLog={actionsToShowUser}
@@ -84,13 +85,14 @@ const SyncButton = ({
         platformId={platformId}
         startSync={startSync}
         setConflicts={setActionsToShowUser}
+        modalController={modalController}
       />
       <p
         role="button"
         className={`text-teal-400 underline underline-offset-2 ms-5 ${
           isVisible || searched ? "hidden" : ""
         }  ${!userPlatform ? "hidden" : ""} mt-1`}
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => modalController.setModalVisibility(true)}
       >
         sync
       </p>
