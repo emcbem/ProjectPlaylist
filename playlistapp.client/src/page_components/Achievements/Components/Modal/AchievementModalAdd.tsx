@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState } from "react";
 import DateSelector from "../../../../individual_components/DateSelector";
 import { Achievement } from "@/@types/achievement";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
@@ -9,6 +9,8 @@ import { AchievementPictureDisplay } from "../AchievementPictureDisplay";
 import { GoalQueries } from "@/queries/GoalQueries";
 import { UpdateGoalRequest } from "@/@types/Requests/UpdateRequests/updateGoalRequest";
 import { GetGoalToCompleteRequest } from "@/@types/Requests/GetRequests/getGoalToCompleteRequest";
+import { useModalController } from "@/page_components/Settings/Hooks/useModalController";
+import { Modal } from "@/components/ui/modal";
 
 interface props {
   achievement: Achievement;
@@ -16,12 +18,10 @@ interface props {
 }
 
 const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [month, setMonth] = useState<string>("");
   const [day, setDay] = useState<string>("");
   const [year, setYear] = useState<string>("");
 
-  const modalRef = useRef<HTMLDivElement>(null);
 
   const addUserAchievementRequest: AddUserAchievementRequest = {
     dateAchieved: new Date(`${month}/${day}/${year}`),
@@ -58,13 +58,10 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
     userGuid
   );
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  const modalController = useModalController({
+    showBottomButtons: false,
+    showTopButtons: false,
+  });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -72,35 +69,18 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
     if (goalToComplete?.id !== 0) {
       CompleteGoal();
     }
-    closeModal();
-  };
-
-  const handleBackdropClick = (event: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      closeModal();
-    }
+    () => modalController.setModalVisibility(false);
   };
 
   return (
     <>
-      <AddAchievementButton openModal={openModal} />
+      <AddAchievementButton
+        openModal={() => modalController.setModalVisibility(true)}
+      />
 
-      <div
-        onClick={handleBackdropClick}
-        className={`fixed inset-0 z-[10000] grid h-screen w-screen place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300 ${
-          isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div
-          ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
-            isOpen ? "scale-100" : "scale-95"
-          }`}
-        >
+      <Modal {...modalController}>
+        <div className="flex justify-center items-center">
           <AchievementPictureDisplay achievement={achievement} />
-
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5"
@@ -118,11 +98,10 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
                 setYear={setYear}
               />
             </div>
-
             <SubmitAchievementButton />
           </form>
         </div>
-      </div>
+      </Modal>
     </>
   );
 };

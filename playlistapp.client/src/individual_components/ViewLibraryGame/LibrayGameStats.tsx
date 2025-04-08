@@ -1,13 +1,14 @@
 import { UserAccount } from "@/@types/userAccount";
 import NumberTicker from "@/components/ui/number-ticker";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
-import { FC, useState } from "react";
+import { FC } from "react";
 import Gauge from "../Gauge";
 import { UserGame } from "@/@types/usergame";
 import AddGoalButton from "@/page_components/Goals/Components/Buttons/AddGoalButton";
 import GoalModalAdd from "@/page_components/Goals/Components/Modal/GoalModalAdd";
 import ShineBorder from "@/components/ui/shine-border";
 import { useParams } from "react-router-dom";
+import { useModalController } from "@/page_components/Settings/Hooks/useModalController";
 
 const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
   usr,
@@ -15,15 +16,12 @@ const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
   const userId = id ?? usr?.guid;
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const HandleAddModal = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const CloseModal = () => {
-    setIsAddModalOpen(false);
-  };
+  const modalController = useModalController({
+    showBottomButtons: false,
+    showTopButtons: false,
+    
+  });
 
   const {
     data: userEarnedAchievement,
@@ -92,15 +90,15 @@ const LibraryGameStats: FC<{ usr: UserAccount; userGame: UserGame }> = ({
                   <p className="text-5xl">0</p>
                 )}
               </div>
-              <AddGoalButton onAddClick={HandleAddModal} />
+              <AddGoalButton
+                onAddClick={() => modalController.setModalVisibility(true)}
+              />
             </div>
           </div>
         </>
       </ShineBorder>
       <div>
-        {isAddModalOpen && (
-          <GoalModalAdd onClose={CloseModal} userGame={userGame} />
-        )}
+        <GoalModalAdd modalController={modalController} userGame={userGame} />
       </div>
     </div>
   ) : (

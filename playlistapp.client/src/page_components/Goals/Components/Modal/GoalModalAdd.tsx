@@ -11,13 +11,14 @@ import CheckBox from "@/individual_components/Checkbox";
 import { GetClaimedAchievementsForGameForUserRequest } from "@/@types/Requests/GetRequests/getClaimedAchievementsForGameForUserRequest";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import toast from "react-hot-toast";
+import { Modal, ModalController } from "@/components/ui/modal";
 
 interface props {
   userGame: UserGame;
-  onClose: () => void;
+  modalController: ModalController;
 }
 
-const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
+const GoalModalAdd: FC<props> = ({ userGame, modalController }) => {
   const [achievementId, setAchievementId] = useState<string>("");
   const [isCurrent, setIsCurrent] = useState<boolean>(true);
   const [month, setMonth] = useState<string>("");
@@ -61,7 +62,7 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
           toast.error("Goal Already Exists");
         } else {
           toast.success("Goal Added");
-          onClose();
+          modalController.setModalVisibility(false);
         }
       },
       onError: () => {
@@ -71,9 +72,9 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
   };
 
   return (
-    userGame && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pointer-events-auto">
-        <div className="dark:bg-clay-400 bg-gray-100 p-6 rounded shadow-md sm:w-1/2 sm:mx-0 w-full mx-4">
+    <Modal {...modalController}>
+      {userGame && (
+        <div>
           <div className="flex items-center justify-center">
             <h2 className="text-lg font-bold text-center">Add A Goal</h2>
           </div>
@@ -98,10 +99,12 @@ const GoalModalAdd: FC<props> = ({ userGame, onClose }) => {
             setYear={setYear}
           />
           <GoalAddButton handleAdd={handleAdd} />
-          <CancelGoalButton onClose={onClose} />
+          <CancelGoalButton
+            onClose={() => modalController.setModalVisibility(false)}
+          />
         </div>
-      </div>
-    )
+      )}
+    </Modal>
   );
 };
 

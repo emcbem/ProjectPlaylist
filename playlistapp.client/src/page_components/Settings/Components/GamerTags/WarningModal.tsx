@@ -1,24 +1,22 @@
 import { ItemAction } from "@/@types/Combination/itemAction";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
 import React, { useState } from "react";
-import { useRef } from "react";
 import Collisions from "../Syncing/Collisions";
 import Confirmation from "../Syncing/Confirmation";
 import Success from "../Syncing/Success";
+import { Modal, ModalController } from "@/components/ui/modal";
 
 const WarningModal = ({
-  isModalOpen,
-  setIsModalOpen,
+  modalController,
   actionLog,
   actionLogPending,
   platformId,
   startSync,
   setConflicts,
 }: {
+  modalController: ModalController;
   userId: string;
   accountId: string;
-  isModalOpen: boolean;
-  setIsModalOpen: (value: boolean) => void;
   actionLog: ItemAction[] | undefined;
   actionLogPending: boolean;
   platformId: number;
@@ -27,42 +25,19 @@ const WarningModal = ({
 }) => {
   const [hasCompleted, setHasCompleted] = useState<boolean>(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleRejectSync = (event: React.FormEvent) => {
     event.preventDefault();
-    closeModal();
-  };
-
-  const handleBackdropClick = (event: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      closeModal();
-    }
+    modalController.setModalVisibility(false);
   };
 
   const handleConfirmation = () => {
     startSync();
   };
+
   return (
     <>
-      <div
-        onClick={handleBackdropClick}
-        className={`fixed inset-0 z-[10000] grid h-screen w-screen place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300 ${
-          isModalOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div
-          ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-fit min-h-96 rounded-lg overflow-hidden shadow-sm bg-clay-200 dark:bg-clay-400 transition-transform duration-300 flex justify-center items-center ${
-            isModalOpen ? "scale-100" : "scale-95"
-          }`}
-        >
+      <Modal {...modalController}>
+        <div className="flex justify-center items-center ">
           {actionLogPending ? (
             <LoadingDots />
           ) : (
@@ -89,7 +64,7 @@ const WarningModal = ({
             </form>
           )}
         </div>
-      </div>
+      </Modal>
     </>
   );
 };

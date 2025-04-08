@@ -1,6 +1,7 @@
+import { Modal } from "@/components/ui/modal";
+import { useModalController } from "@/page_components/Settings/Hooks/useModalController";
 import { UserAchievementQueries } from "@/queries/UserAchievementQueries";
 import React, { FC } from "react";
-import { useRef, useState } from "react";
 
 interface props {
   userAchievementId: number;
@@ -8,16 +9,10 @@ interface props {
 }
 
 const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  const modalController = useModalController({
+    showBottomButtons: false,
+    showTopButtons: false,
+  });
 
   const { mutate: deleteUserAchievement } =
     UserAchievementQueries.useDeleteUserAchievement(
@@ -38,18 +33,16 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
 
     handleDeleteUserAchievement();
 
-    closeModal();
-  };
-
-  const handleBackdropClick = (event: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      closeModal();
-    }
+    modalController.setModalVisibility(false);
   };
 
   return (
     <>
-      <button onClick={openModal} className="" type="button">
+      <button
+        onClick={() => modalController.setModalVisibility(false)}
+        className=""
+        type="button"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -64,20 +57,8 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
           />
         </svg>
       </button>
-      <div
-        onClick={handleBackdropClick}
-        className={`fixed inset-0 z-[10000] grid h-screen w-screen place-items-center dark:bg-black bg-[#f1f3f4] dark:bg-opacity-60 bg-opacity-60  backdrop-blur-sm transition-opacity duration-300 ${
-          isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div
-          ref={modalRef}
-          className={`relative mx-auto w-full max-w-[48rem] h-auto rounded-lg overflow-hidden shadow-sm bg-[#f1f3f4] dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 animation-fill-mode: forwards;${
-            isOpen ? "scale-100" : "scale-95"
-          }`}
-        >
+      <Modal {...modalController}>
+        <div className=" flex flex-col p-8 animation-fill-mode: forwards">
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 p-6 mx-5"
@@ -97,7 +78,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
               </button>
               <button
                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                onClick={closeModal}
+                onClick={() => modalController.setModalVisibility(false)}
                 type="reset"
               >
                 Cancel
@@ -105,7 +86,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
             </div>
           </form>
         </div>
-      </div>
+      </Modal>
     </>
   );
 };
