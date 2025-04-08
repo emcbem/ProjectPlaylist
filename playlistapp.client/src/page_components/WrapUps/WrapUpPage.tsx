@@ -9,7 +9,6 @@ import { WrapUp } from "@/@types/WrapUps/WrapUp";
 import HourBarChart from "./HourBarChart";
 import DateRangeSelector from "./DateRangeSelector/DateRangeSelector";
 import HourLineGraph from "./HourLineGraph";
-import TopGameWrapUp from "./TopGame";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
 
 const WrapUpPage = () => {
@@ -105,7 +104,7 @@ const WrapUpPage = () => {
 
               <HourLineGraph graphData={wrapUp.hourGraph} />
 
-              <TopGameWrapUp TopGameData={wrapUp?.topGame} />
+              {/* <TopGameWrapUp TopGameData={wrapUp?.topGame} /> */}
             </>
           )}
           {!wrapUp && !isLoading && (

@@ -10,6 +10,7 @@ export const WrapUpService = {
         `${import.meta.env.VITE_URL}/wrapup/getwrapup`,
         request
       );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       toast.error("Failed to fetch Wrap Up. Please try again later.");

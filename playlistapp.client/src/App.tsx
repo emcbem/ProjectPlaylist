@@ -83,7 +83,7 @@ function App() {
                         <Route path="/list/:listId" element={<Playlist />} />
                         <Route
                           path="/achievements/:gameId"
-                          element={<AchievementsPage />}
+                          element={<AchievementsPage isViewingOwnProfile={false} />}
                         />
                         <Route path="/test" element={<TestPage />} />
                         <Route path="/settings" element={<Settings />} />
