@@ -230,6 +230,8 @@ public class WrapUpService : IWrapUpService
 
         var topGame = await platformGameService.GetPlatformGameById(topHoursGame.PlatformGameId);
 
+        var allHours = bar.Where(x => x.GameTitle == topGame.Game.Title).ToList();
+
         var getUserGameRequest = new GetUserGameRequest
         {
             PlatformGameId = topGame.id,
@@ -273,7 +275,7 @@ public class WrapUpService : IWrapUpService
         var newTopGameDTO = new TopGameDTO
         {
             CoverUrl = topGame.Game.CoverUrl,
-            AllTimeHours = (double)topGameHours.TimePlayed,
+            AllTimeHours = (double)allHours.Select(x => x.TimePlayed).Sum(),
             FirstTimePlayed = topGameHours.DateAdded,
             PlatformId = topGame.Platform.Id,
             Title = topGame.Game.Title,
