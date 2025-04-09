@@ -15,7 +15,7 @@ const Confirmation: FC<IConfirmation> = ({
     <>
       <h1 className="text-2xl text-red-500">Warning</h1>
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-lg text-white">
+        <label className="block mb-2 text-lg dark:text-white text-black">
           By syncing your {platformName} data, it will import your{" "}
           {platformName} library's data which includes game library and
           playtime. This can only be done if your game data in your account is
