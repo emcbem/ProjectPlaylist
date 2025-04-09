@@ -1,5 +1,5 @@
 import { Game } from "@/@types/game";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 import { AverageReview } from "./AverageReview";
 
 const ViewGameInfo = ({ game }: { game: Game }) => {

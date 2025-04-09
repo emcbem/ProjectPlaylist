@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 using PlaylistApp.Server.Data;
 using PlaylistApp.Server.DTOs;
 using PlaylistApp.Server.DTOs.WrapUpData;
@@ -6,9 +7,10 @@ using PlaylistApp.Server.Requests.GetRequests;
 using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
+using PlaylistApp.Server.Services.UserGameServices;
+using PlaylistApp.Server.Services.UserServices;
+using PlaylistApp.Server.Services.UserTrophyAuditLogServices;
 using System.Globalization;
-using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 
 namespace PlaylistApp.Server.Services.WrapUpServices;
 
@@ -16,14 +18,20 @@ public class WrapUpService : IWrapUpService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
     private readonly IUserGameAuditLogService userGameAuditLogService;
+    private readonly IUserTrophyAuditLogService userTrophyAuditLogService;
     private readonly IGameService gameService;
     private readonly IPlatformGameService platformGameService;
-    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService)
+    private readonly IUserGameService userGameService;
+    private readonly IUserService userService;
+    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService, IUserService userService, IUserTrophyAuditLogService userTrophyAuditLogService)
     {
         this.dbContextFactory = dbContextFactory;
         this.userGameAuditLogService = userGameAuditLogService;
+        this.userTrophyAuditLogService = userTrophyAuditLogService;
         this.gameService = gameService;
         this.platformGameService = platformGameService;
+        this.userGameService = userGameService;
+        this.userService = userService;
     }
     public async Task<List<WrapUpCarouselGameDTO>> ConvertUserGameAuditLogsToCarouselGame(GetWrapUpRequest request)
     {
@@ -205,6 +213,171 @@ public class WrapUpService : IWrapUpService
         }
     }
 
+    public async Task<TopGameDTO> GatherTopGameData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> bar)
+    {
+        if (request is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var context = await dbContextFactory.CreateDbContextAsync();
+        var topHoursGame = bar.OrderByDescending(x => x.TimePlayed).FirstOrDefault();
+
+        if (topHoursGame is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var topGame = await platformGameService.GetPlatformGameById(topHoursGame.PlatformGameId);
+
+        var getUserGameRequest = new GetUserGameRequest
+        {
+            PlatformGameId = topGame.id,
+            UserId = new Guid(request.UserId)
+        };
+
+        var topGameHours = await userGameService.GetUserGameByPlatformGameAndUser(getUserGameRequest);
+
+        if (topGame.Game is null || topGame.Game.CoverUrl is null || topGameHours is null || topGameHours.TimePlayed is null || topGame.Achievements is null)
+        {
+            return new TopGameDTO();
+        }
+
+        var user = await userService.GetUserById(new Guid(request.UserId));
+        DateTime firstTime;
+        DateTime lastTime;
+
+        if (request.Month != -1)
+        {
+            firstTime = new DateTime(request.Year, request.Month, 1).ToUniversalTime();
+            lastTime = firstTime.AddMonths(1).AddDays(-1).ToUniversalTime();
+        }
+        else
+        {
+            firstTime = new DateTime(request.Year, 1, 1).ToUniversalTime();
+            lastTime = new DateTime(request.Year, 12, 31).ToUniversalTime();
+        }
+
+        var allAchievements = topGame.Achievements;
+        var achievementIds = allAchievements.Select(a => a.ID).ToList();
+
+        var matchedAchievements = await context.UserAchievements
+            .Where(x => x.UserId == user.Id)
+            .Where(x => achievementIds.Contains(x.AchievementId))
+            .Where(x => x.DateAchieved >= firstTime && x.DateAchieved <= lastTime)
+            .Select(x => x.AchievementId)
+            .ToListAsync();
+
+        int totalAchievements = matchedAchievements.Count;
+
+        var newTopGameDTO = new TopGameDTO
+        {
+            CoverUrl = topGame.Game.CoverUrl,
+            AllTimeHours = (double)topGameHours.TimePlayed,
+            FirstTimePlayed = topGameHours.DateAdded,
+            PlatformId = topGame.Platform.Id,
+            Title = topGame.Game.Title,
+            TotalAchievements = totalAchievements
+        };
+
+        return newTopGameDTO;
+    }
+
+    public async Task<List<AchievementGroupDTO>> GatherAchivementGroupData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs)
+    {
+        if (request is null)
+        {
+            return new List<AchievementGroupDTO>();
+        }
+
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var allAchievementGroups = new List<AchievementGroupDTO>();
+
+        var user = await userService.GetUserById(new Guid(request.UserId));
+        DateTime firstTime;
+        DateTime lastTime;
+
+        if (request.Month != -1)
+        {
+            firstTime = new DateTime(request.Year, request.Month, 1).ToUniversalTime();
+            lastTime = firstTime.AddMonths(1).AddDays(-1).ToUniversalTime();
+        }
+        else
+        {
+            firstTime = new DateTime(request.Year, 1, 1).ToUniversalTime();
+            lastTime = new DateTime(request.Year, 12, 31).ToUniversalTime();
+        }
+
+        foreach (var barGraph in barGraphDTOs)
+        {
+            var platformGame = await platformGameService.GetPlatformGameById(barGraph.PlatformGameId);
+            var allAchievements = platformGame.Achievements;
+
+            if (allAchievements is null)
+            {
+                return new List<AchievementGroupDTO>();
+            }
+
+            var achievementIds = allAchievements.Select(a => a.ID).ToList();
+
+            var matchedAchievements = await context.UserAchievements
+                .Include(x => x.Achievement)
+                .Where(x => x.UserId == user.Id &&
+                            achievementIds.Contains(x.AchievementId) &&
+                            x.DateAchieved >= firstTime && x.DateAchieved <= lastTime)
+                .ToListAsync();
+
+            var allWrapUpAchievements = new List<WrapUpAchievementDTO>();
+
+            foreach (var achievement in matchedAchievements)
+            {
+                if (achievement.Achievement is not null && achievement.Achievement.ImageUrl is not null && achievement.DateAchieved is not null)
+                {
+                    var wrapUpAchievementDTO = new WrapUpAchievementDTO
+                    {
+                        AchievementImageUrl = achievement.Achievement.ImageUrl,
+                        AchievementName = achievement.Achievement.AchievementName,
+                        DateEarned = achievement.DateAchieved.Value.ToUniversalTime()
+                    };
+
+                    allWrapUpAchievements.Add(wrapUpAchievementDTO);
+                }
+            }
+
+            if (allWrapUpAchievements.Count > 0)
+            {
+                var newAchievementGroup = new AchievementGroupDTO
+                {
+                    GameName = barGraph.GameTitle,
+                    Achievements = allWrapUpAchievements
+                };
+
+                allAchievementGroups.Add(newAchievementGroup);
+            }
+        }
+
+        return allAchievementGroups;
+    }
+    public async Task<int> GatherTotalTrophies(GetWrapUpRequest request)
+    {
+        if (request is null)
+        {
+            return 0;
+        }
+
+        var auditLogRequest = new GetAuditLogByDateRequest
+        {
+            Month = request.Month,
+            Year = request.Year,
+            UserGuid = new Guid(request.UserId)
+        };
+
+        var trophyCount = await userTrophyAuditLogService.GetUserTrophyAuditLogByDate(auditLogRequest);
+
+        return trophyCount.Count;
+    }
+
     public async Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request)
     {
         if (request is null)
@@ -215,12 +388,18 @@ public class WrapUpService : IWrapUpService
         var carouselGames = await ConvertUserGameAuditLogsToCarouselGame(request);
         var hourBarGraphDTOs = await GatherBarGraphData(request);
         var graphDTO = await GatherHourGraphData(request, hourBarGraphDTOs);
+        var topGameDTO = await GatherTopGameData(request, hourBarGraphDTOs);
+        var achievementGroup = await GatherAchivementGroupData(request, hourBarGraphDTOs);
+        var totalTrophies = await GatherTotalTrophies(request);
 
         var newWrapUpDTO = new WrapUpDTO()
         {
             GamesPlayed = carouselGames,
             BarGraphGameData = hourBarGraphDTOs,
-            HourGraph = graphDTO
+            HourGraph = graphDTO,
+            TopGame = topGameDTO,
+            AchievementGroups = achievementGroup,
+            TrophiesEarned = totalTrophies
         };
 
         return newWrapUpDTO;
@@ -243,4 +422,5 @@ public class WrapUpService : IWrapUpService
 
         return carouselGames;
     }
+
 }

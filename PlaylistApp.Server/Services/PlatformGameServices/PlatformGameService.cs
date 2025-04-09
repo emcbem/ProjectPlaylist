@@ -69,6 +69,7 @@ public class PlatformGameService : IPlatformGameService
             .Where(x => x.Id == id)
             .Include(x => x.Game)
             .Include(x => x.Platform)
+            .Include(x => x.Achievements)
             .FirstOrDefaultAsync();
 
         if (platformGame is null)

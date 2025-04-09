@@ -2,6 +2,7 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import RemoveFriendModal from "./RemoveFriendModal";
 import { FriendQueries } from "@/queries/FriendQueries";
+import { useModalController } from "../Settings/Hooks/useModalController";
 
 const FriendButton = ({
   userGuid,
@@ -13,14 +14,15 @@ const FriendButton = ({
   friendId: number;
 }) => {
   const [friendsHovered, setFriendsHovered] = useState<boolean>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const modalController = useModalController({showBottomButtons: false, showTopButtons: false})
 
   const { mutateAsync } = FriendQueries.RemoveFriend(userGuid);
 
   const handleRemoveFriend = async () => {
     try {
       await mutateAsync({ userId, friendId });
-      setIsModalOpen(false);
+      modalController.setModalVisibility(false);
     } catch (error) {
       console.error("Error removing friend:", error);
     }
@@ -34,7 +36,7 @@ const FriendButton = ({
         onMouseLeave={() => setFriendsHovered(false)}
         onClick={(e) => {
           e.preventDefault();
-          setIsModalOpen(true);
+          modalController.setModalVisibility(true);
         }}
       >
         <UserIcon height={18} />
@@ -42,8 +44,8 @@ const FriendButton = ({
       </span>
 
       <RemoveFriendModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        modalController={modalController}
+        onClose={() => modalController.setModalVisibility(false)}
         onConfirm={handleRemoveFriend}
       />
 

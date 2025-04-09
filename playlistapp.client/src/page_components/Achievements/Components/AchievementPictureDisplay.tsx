@@ -10,10 +10,10 @@ export const AchievementPictureDisplay: FC<props> = ({ achievement }) => {
     <div className="mx-5 flex flex-col justify-center items-center">
       <img
         src={achievement.imageURL}
-        className="w-40 h-40 object-cover rounded-lg shadow-xl sticky top-10"
+        className="w-40 h-40 object-cover rounded-lg shadow-xl top-10"
         alt={`Achievement`}
       />
-      <p className="text-clay-950">{achievement.name}</p>
+      <p className="dark:text-clay-950 text-slate-900">{achievement.name}</p>
     </div>
   );
 };

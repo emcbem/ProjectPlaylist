@@ -21,11 +21,19 @@ const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData }) => {
   const filteredSortedData: WrapUpHourBarGraph[] = HourBarChartData.filter(
     (x) => x.timePlayed > 0
   ).sort((a, b) => b.timePlayed - a.timePlayed);
+
   return (
     <div className="bg-gray-100 py-12 px-8 rounded-lg border-gray-300 dark:bg-gray-800 text-center mb-20 md:w-3/4 xl:w-1/2 lg:w-3/4">
+      {filteredSortedData.length <= 0 && (
+        <p>
+          You had no hours.
+          <br />
+          Try a different time frame.
+        </p>
+      )}
       {filteredSortedData.slice(0, numRows).map((x, key) => (
         <div key={key} className="flex flex-row">
-          <div className="px-3 my-2 w-1/4 truncate me-6 text-left">
+          <div className="px-3 my-2 w-1/4 truncate text-ellipsis me-6 text-left">
             <div>{x.gameTitle}</div>
           </div>
           <div className="w-3/4">
@@ -33,7 +41,7 @@ const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData }) => {
               className="bg-cyan-500 m-1 rounded-sm text-end"
               style={{ width: `${(x.timePlayed / maxValue) * 100}%` }}
             >
-              <span className="text-white text-sm font-semibold font-sans p-1">
+              <span className="dark:text-white text-black text-sm font-semibold font-sans p-1">
                 {x.timePlayed}
               </span>
             </div>

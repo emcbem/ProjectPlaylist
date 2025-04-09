@@ -18,6 +18,7 @@ public class WrapUpController : Controller
     [HttpPost("getwrapup")]
     public async Task<WrapUpDTO> GetWrapUp(GetWrapUpRequest request)
     {
-        return await wrapUpService.OrchestrateWrapUpGathering(request);
+        var result = await wrapUpService.OrchestrateWrapUpGathering(request);
+        return result;
     }
 }
