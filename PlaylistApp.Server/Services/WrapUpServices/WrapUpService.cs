@@ -9,6 +9,7 @@ using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
 using PlaylistApp.Server.Services.UserServices;
+using PlaylistApp.Server.Services.UserTrophyAuditLogServices;
 using System.Globalization;
 
 namespace PlaylistApp.Server.Services.WrapUpServices;
@@ -17,14 +18,16 @@ public class WrapUpService : IWrapUpService
 {
     private readonly IDbContextFactory<PlaylistDbContext> dbContextFactory;
     private readonly IUserGameAuditLogService userGameAuditLogService;
+    private readonly IUserTrophyAuditLogService userTrophyAuditLogService;
     private readonly IGameService gameService;
     private readonly IPlatformGameService platformGameService;
     private readonly IUserGameService userGameService;
     private readonly IUserService userService;
-    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService, IUserService userService)
+    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService, IUserService userService, IUserTrophyAuditLogService userTrophyAuditLogService)
     {
         this.dbContextFactory = dbContextFactory;
         this.userGameAuditLogService = userGameAuditLogService;
+        this.userTrophyAuditLogService = userTrophyAuditLogService;
         this.gameService = gameService;
         this.platformGameService = platformGameService;
         this.userGameService = userGameService;
@@ -356,6 +359,24 @@ public class WrapUpService : IWrapUpService
 
         return allAchievementGroups;
     }
+    public async Task<int> GatherTotalTrophies(GetWrapUpRequest request)
+    {
+        if (request is null)
+        {
+            return 0;
+        }
+
+        var auditLogRequest = new GetAuditLogByDateRequest
+        {
+            Month = request.Month,
+            Year = request.Year,
+            UserGuid = new Guid(request.UserId)
+        };
+
+        var trophyCount = await userTrophyAuditLogService.GetUserTrophyAuditLogByDate(auditLogRequest);
+
+        return trophyCount.Count;
+    }
 
     public async Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request)
     {
@@ -369,6 +390,7 @@ public class WrapUpService : IWrapUpService
         var graphDTO = await GatherHourGraphData(request, hourBarGraphDTOs);
         var topGameDTO = await GatherTopGameData(request, hourBarGraphDTOs);
         var achievementGroup = await GatherAchivementGroupData(request, hourBarGraphDTOs);
+        var totalTrophies = await GatherTotalTrophies(request);
 
         var newWrapUpDTO = new WrapUpDTO()
         {
@@ -376,7 +398,8 @@ public class WrapUpService : IWrapUpService
             BarGraphGameData = hourBarGraphDTOs,
             HourGraph = graphDTO,
             TopGame = topGameDTO,
-            AchievementGroups = achievementGroup
+            AchievementGroups = achievementGroup,
+            TrophiesEarned = totalTrophies
         };
 
         return newWrapUpDTO;
@@ -399,4 +422,5 @@ public class WrapUpService : IWrapUpService
 
         return carouselGames;
     }
+
 }
