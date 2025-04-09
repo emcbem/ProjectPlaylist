@@ -15,8 +15,11 @@ const ListGame = (g: Game, key: number) => {
           />
         </div>
         <div className="relative w-full h-fit col-span-7 p-1">
-          <p className="md:text-2xl text-xl font-semibold truncate">{g.title}</p>
-          {formatDate(g.publishDate).slice(6,)}<br />
+          <p className="md:text-2xl text-xl font-semibold truncate">
+            {g.title}
+          </p>
+          {formatDate(g.publishDate).slice(6)}
+          <br />
           {g.ageRating}
         </div>
       </div>
@@ -25,7 +28,7 @@ const ListGame = (g: Game, key: number) => {
 };
 
 import { forwardRef } from "react";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 
 const CardGamesList = forwardRef<HTMLDivElement, { games: Game[] }>(
   ({ games }, ref) => {

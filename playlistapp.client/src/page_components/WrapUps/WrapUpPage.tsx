@@ -10,6 +10,8 @@ import HourBarChart from "./HourBarChart";
 import DateRangeSelector from "./DateRangeSelector/DateRangeSelector";
 import HourLineGraph from "./HourLineGraph";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
+import TopGameWrapUp from "./TopGame";
+import AchievementWrapUp from "./AchievementWrapUp";
 
 const WrapUpPage = () => {
   const { userGuid, isLoading: isAccountLoading } = React.useContext(
@@ -104,11 +106,15 @@ const WrapUpPage = () => {
 
               <HourLineGraph graphData={wrapUp.hourGraph} />
 
-              {/* <TopGameWrapUp TopGameData={wrapUp?.topGame} /> */}
+              <TopGameWrapUp TopGameData={wrapUp?.topGame} />
+
+              <AchievementWrapUp achievementGroups={wrapUp.achievementGroups} />
             </>
           )}
           {!wrapUp && !isLoading && (
-            <p>There is no data for this time frame.</p>
+            <p className="mt-3 dark:text-white text-gray-600">
+              There is no data for this time frame.
+            </p>
           )}
         </div>
       </div>

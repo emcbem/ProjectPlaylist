@@ -1,5 +1,5 @@
 import { UserGame } from "@/@types/usergame";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 

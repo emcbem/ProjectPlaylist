@@ -1,6 +1,6 @@
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 import { useContext } from "react";
 import DOMPurify from "dompurify";
 import "./Notifications.css";
