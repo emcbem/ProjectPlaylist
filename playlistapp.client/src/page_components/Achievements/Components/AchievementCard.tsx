@@ -2,7 +2,7 @@ import { FC, useContext } from "react";
 import { UserAccountContextInterface } from "@/@types/userAccount";
 import { UserAccountContext } from "@/contexts/UserAccountContext";
 import AchievementModalParent from "./Modal/AchievementModalParent";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 import { UserAchivementListItem } from "../Achievements";
 
 interface props {
@@ -40,7 +40,9 @@ const AchievementCard: FC<props> = ({ achievement, showAddButton }) => {
               )}
             </p>
             <p className="md:text-lg sm:text-base text-tiny text-gray-500 dark:text-gray-400">
-              {usr?.guid && !showAddButton && <p>{achievement.Achievement?.description}</p>}
+              {usr?.guid && !showAddButton && (
+                <p>{achievement.Achievement?.description}</p>
+              )}
             </p>
           </div>
           <div className="inline-flex items-center md:text-lg sm:text-base text-sm font-semibold text-gray-900 dark:text-white">

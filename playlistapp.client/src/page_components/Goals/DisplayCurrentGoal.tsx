@@ -1,5 +1,5 @@
 import { Goal } from "@/@types/goal";
-import formatDate from "@/lib/date";
+import formatDate from "@/lib/format_date";
 
 type DisplayCurrentGoalProps = {
   currentGoal: Goal | undefined;

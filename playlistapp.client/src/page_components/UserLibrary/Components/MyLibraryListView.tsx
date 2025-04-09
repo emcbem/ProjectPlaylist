@@ -1,6 +1,6 @@
 import { UserGame } from "@/@types/usergame";
 import { FC } from "react";
-import formatDate from "@/lib/date.ts";
+import formatDate from "@/lib/format_date";
 import { useNavigate, useParams } from "react-router-dom";
 import RemoveFromLibButton from "./Buttons/RemoveButton";
 

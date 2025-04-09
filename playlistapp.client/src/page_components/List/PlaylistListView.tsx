@@ -2,7 +2,7 @@ import { ListGame } from "@/@types/listgame";
 import { FC } from "react";
 import RemoveFromListButton from "./RemoveListGameButton";
 import { List } from "@/@types/list";
-import formatDate from "@/lib/date.ts";
+import formatDate from "@/lib/format_date";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface listViewProps {

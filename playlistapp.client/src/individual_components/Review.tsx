@@ -2,7 +2,7 @@ import { GameReview } from "@/@types/gameReview.js";
 import ReviewLike from "./ReviewLike.tsx";
 import ReviewModal from "./ReviewModal.tsx";
 import DeleteModal from "./DeleteModal.tsx";
-import formatDate from "@/lib/date.ts";
+import formatDate from "@/lib/format_date.ts";
 
 interface props {
   review: GameReview;
