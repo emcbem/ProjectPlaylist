@@ -12,4 +12,5 @@ public interface IWrapUpService
     public Task<GraphDTO> GatherHourGraphData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs);
     public Task<TopGameDTO> GatherTopGameData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs);
     public Task<List<AchievementGroupDTO>> GatherAchivementGroupData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs);
+    public Task<int> GatherTotalTrophies(GetWrapUpRequest request);
 }
