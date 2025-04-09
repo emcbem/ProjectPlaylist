@@ -86,7 +86,7 @@ const AchievementModalAdd: FC<props> = ({ achievement, userGuid }) => {
             className="flex flex-col gap-4 p-6 mx-5"
           >
             <div className="w-full max-w-sm min-w-[200px]">
-              <label className="block mb-2 text-sm text-white">
+              <label className="block mb-2 text-sm dark:text-white text-black">
                 Date Earned
               </label>
               <DateSelector

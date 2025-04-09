@@ -8,6 +8,7 @@ using PlaylistApp.Server.Services.Game;
 using PlaylistApp.Server.Services.PlatformGameServices;
 using PlaylistApp.Server.Services.UserGameAuditLogServices;
 using PlaylistApp.Server.Services.UserGameServices;
+using PlaylistApp.Server.Services.UserServices;
 using System.Globalization;
 
 namespace PlaylistApp.Server.Services.WrapUpServices;
@@ -19,13 +20,15 @@ public class WrapUpService : IWrapUpService
     private readonly IGameService gameService;
     private readonly IPlatformGameService platformGameService;
     private readonly IUserGameService userGameService;
-    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService)
+    private readonly IUserService userService;
+    public WrapUpService(IDbContextFactory<PlaylistDbContext> dbContextFactory, IUserGameAuditLogService userGameAuditLogService, IGameService gameService, IPlatformGameService platformGameService, IUserGameService userGameService, IUserService userService)
     {
         this.dbContextFactory = dbContextFactory;
         this.userGameAuditLogService = userGameAuditLogService;
         this.gameService = gameService;
         this.platformGameService = platformGameService;
         this.userGameService = userGameService;
+        this.userService = userService;
     }
     public async Task<List<WrapUpCarouselGameDTO>> ConvertUserGameAuditLogsToCarouselGame(GetWrapUpRequest request)
     {
@@ -214,6 +217,7 @@ public class WrapUpService : IWrapUpService
             return new TopGameDTO();
         }
 
+        var context = await dbContextFactory.CreateDbContextAsync();
         var topHoursGame = bar.OrderByDescending(x => x.TimePlayed).FirstOrDefault();
 
         if (topHoursGame is null)
@@ -222,7 +226,6 @@ public class WrapUpService : IWrapUpService
         }
 
         var topGame = await platformGameService.GetPlatformGameById(topHoursGame.PlatformGameId);
-
 
         var getUserGameRequest = new GetUserGameRequest
         {
@@ -237,14 +240,41 @@ public class WrapUpService : IWrapUpService
             return new TopGameDTO();
         }
 
+        var user = await userService.GetUserById(new Guid(request.UserId));
+        DateTime firstTime;
+        DateTime lastTime;
+
+        if (request.Month != -1)
+        {
+            firstTime = new DateTime(request.Year, request.Month, 1).ToUniversalTime();
+            lastTime = firstTime.AddMonths(1).AddDays(-1).ToUniversalTime();
+        }
+        else
+        {
+            firstTime = new DateTime(request.Year, 1, 1).ToUniversalTime();
+            lastTime = new DateTime(request.Year, 12, 31).ToUniversalTime();
+        }
+
+        var allAchievements = topGame.Achievements;
+        var achievementIds = allAchievements.Select(a => a.ID).ToList();
+
+        var matchedAchievements = await context.UserAchievements
+            .Where(x => x.UserId == user.Id)
+            .Where(x => achievementIds.Contains(x.AchievementId))
+            .Where(x => x.DateAchieved >= firstTime && x.DateAchieved <= lastTime)
+            .Select(x => x.AchievementId)
+            .ToListAsync();
+
+        int totalAchievements = matchedAchievements.Count;
+
         var newTopGameDTO = new TopGameDTO
         {
-           CoverUrl = topGame.Game.CoverUrl,
-           AllTimeHours = (double)topGameHours.TimePlayed,
-           FirstTimePlayed = topGameHours.DateAdded,
-           PlatformId = topGame.Platform.Id,
-           Title = topGame.Game.Title,
-           TotalAchievements = topGame.Achievements.Count
+            CoverUrl = topGame.Game.CoverUrl,
+            AllTimeHours = (double)topGameHours.TimePlayed,
+            FirstTimePlayed = topGameHours.DateAdded,
+            PlatformId = topGame.Platform.Id,
+            Title = topGame.Game.Title,
+            TotalAchievements = totalAchievements
         };
 
         return newTopGameDTO;
