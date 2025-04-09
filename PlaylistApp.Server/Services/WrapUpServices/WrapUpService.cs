@@ -280,6 +280,83 @@ public class WrapUpService : IWrapUpService
         return newTopGameDTO;
     }
 
+    public async Task<List<AchievementGroupDTO>> GatherAchivementGroupData(GetWrapUpRequest request, List<WrapUpHourBarGraphDTO> barGraphDTOs)
+    {
+        if (request is null)
+        {
+            return new List<AchievementGroupDTO>();
+        }
+
+        using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var allAchievementGroups = new List<AchievementGroupDTO>();
+
+        var user = await userService.GetUserById(new Guid(request.UserId));
+        DateTime firstTime;
+        DateTime lastTime;
+
+        if (request.Month != -1)
+        {
+            firstTime = new DateTime(request.Year, request.Month, 1).ToUniversalTime();
+            lastTime = firstTime.AddMonths(1).AddDays(-1).ToUniversalTime();
+        }
+        else
+        {
+            firstTime = new DateTime(request.Year, 1, 1).ToUniversalTime();
+            lastTime = new DateTime(request.Year, 12, 31).ToUniversalTime();
+        }
+
+        foreach (var barGraph in barGraphDTOs)
+        {
+            var platformGame = await platformGameService.GetPlatformGameById(barGraph.PlatformGameId);
+            var allAchievements = platformGame.Achievements;
+
+            if (allAchievements is null)
+            {
+                return new List<AchievementGroupDTO>();
+            }
+
+            var achievementIds = allAchievements.Select(a => a.ID).ToList();
+
+            var matchedAchievements = await context.UserAchievements
+                .Include(x => x.Achievement)
+                .Where(x => x.UserId == user.Id &&
+                            achievementIds.Contains(x.AchievementId) &&
+                            x.DateAchieved >= firstTime && x.DateAchieved <= lastTime)
+                .ToListAsync();
+
+            var allWrapUpAchievements = new List<WrapUpAchievementDTO>();
+
+            foreach (var achievement in matchedAchievements)
+            {
+                if (achievement.Achievement is not null && achievement.Achievement.ImageUrl is not null && achievement.DateAchieved is not null)
+                {
+                    var wrapUpAchievementDTO = new WrapUpAchievementDTO
+                    {
+                        AchievementImageUrl = achievement.Achievement.ImageUrl,
+                        AchievementName = achievement.Achievement.AchievementName,
+                        DateEarned = achievement.DateAchieved.Value.ToUniversalTime()
+                    };
+
+                    allWrapUpAchievements.Add(wrapUpAchievementDTO);
+                }
+            }
+
+            if (allWrapUpAchievements.Count > 0)
+            {
+                var newAchievementGroup = new AchievementGroupDTO
+                {
+                    GameName = barGraph.GameTitle,
+                    Achievements = allWrapUpAchievements
+                };
+
+                allAchievementGroups.Add(newAchievementGroup);
+            }
+        }
+
+        return allAchievementGroups;
+    }
+
     public async Task<WrapUpDTO> OrchestrateWrapUpGathering(GetWrapUpRequest request)
     {
         if (request is null)
@@ -291,13 +368,15 @@ public class WrapUpService : IWrapUpService
         var hourBarGraphDTOs = await GatherBarGraphData(request);
         var graphDTO = await GatherHourGraphData(request, hourBarGraphDTOs);
         var topGameDTO = await GatherTopGameData(request, hourBarGraphDTOs);
+        var achievementGroup = await GatherAchivementGroupData(request, hourBarGraphDTOs);
 
         var newWrapUpDTO = new WrapUpDTO()
         {
             GamesPlayed = carouselGames,
             BarGraphGameData = hourBarGraphDTOs,
             HourGraph = graphDTO,
-            TopGame = topGameDTO
+            TopGame = topGameDTO,
+            AchievementGroups = achievementGroup
         };
 
         return newWrapUpDTO;
