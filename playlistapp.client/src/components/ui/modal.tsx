@@ -67,7 +67,7 @@ export const Modal = ({
         onClick={handleBackdropClick}
       >
         <div
-          className={`relative mx-auto max-w-[48rem] w-auto h-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 ${
+          className={`relative mx-auto max-w-[48rem] w-full h-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-clay-400 transition-transform duration-300 flex flex-col p-8 ${
             modalVisibility ? "scale-100" : "scale-95"
           }`}
           ref={modalRef}
