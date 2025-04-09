@@ -65,21 +65,21 @@ export const SearchableList = (props: SearchableListProps) => {
     <>
       <div>
         <div className="flex flex-row">
-          <div className="flex flex-row items-center gap-2 border border-gray-300 rounded-md px-2">
+          <div className="flex flex-row items-center gap-2 border border-gray-300 rounded-md px-2 dark:border-gray-500">
             <MagnifyingGlassCircleIcon
-              className="w-6 h-6 text-gray-500 hover:cursor-pointer"
+              className="w-6 h-6 text-gray-500 hover:cursor-pointer dark:text-gray-50"
               id="searchGlass"
             />
             <input
               id="searchInput"
-              className="flex-1 rounded-md outline-none border-none py-1 px-2"
+              className="flex-1 rounded-md outline-none border-none py-1 px-2 dark:bg-black dark:text-gray-50 placeholder:text-gray-300"
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={props.Placeholder}
             />
           </div>
 
           <select
-            className="ml-auto rounded-md border-gray-300 text-gray-500"
+            className="ml-auto rounded-md border-gray-300 dark:border-gray-500 text-gray-500 dark:bg-black dark:text-gray-50"
             defaultValue="0"
             onChange={(event) =>
               setChosenSortMethodIndex(Number.parseInt(event.target.value))
