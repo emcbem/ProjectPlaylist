@@ -3,5 +3,5 @@
 public class HourGraphDataPoint
 {
     public int DateNumber { get; set; }
-    public double Minutes { get; set; }
+    public double Hours { get; set; }
 }

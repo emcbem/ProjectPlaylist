@@ -179,7 +179,7 @@ public class WrapUpService : IWrapUpService
             var newDataPoint = new HourGraphDataPoint
             {
                 DateNumber = i + 1,
-                Minutes = minutesPerTick[i]
+                Hours = minutesPerTick[i] / 60
             };
 
             dataPoints.Add(newDataPoint);
