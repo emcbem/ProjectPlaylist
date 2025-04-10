@@ -7,6 +7,7 @@ import {
   Area,
   Tooltip,
   AreaChart,
+  Label,
 } from "recharts";
 
 interface HourLineGraphProps {
@@ -14,16 +15,15 @@ interface HourLineGraphProps {
 }
 
 const HourLineGraph: React.FC<HourLineGraphProps> = ({ graphData }) => {
-  console.log("graphData ", graphData);
-
   if (!graphData) {
     return <></>;
   }
-
   return (
     <>
-      <p className="text-lg font-semibold text-center mb-3">Hours</p>
-      <div className="md:w-3/4 xl:w-1/2 lg:w-3/4">
+      <p className="text-lg font-semibold text-center mb-3">
+        {graphData.title}
+      </p>
+      <div className="md:w-3/4 xl:w-1/2 lg:w-3/4 pb-6">
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart
             data={graphData.graphDataPoints}
@@ -41,12 +41,28 @@ const HourLineGraph: React.FC<HourLineGraphProps> = ({ graphData }) => {
               strokeWidth={0.5}
               vertical={false}
             />
-            <XAxis dataKey="dateNumber" />
-            <YAxis axisLine={false} />
+            <XAxis dataKey="dateNumber">
+              <Label
+                value={graphData.x_Axis.toString()}
+                offset={-3}
+                position={"bottom"}
+              />
+            </XAxis>
+            <YAxis
+              axisLine={false}
+              label={{
+                value: graphData.y_Axis,
+                angle: -90,
+                position: "left",
+                offset: 10,
+              }}
+            >
+              <Label value={graphData.y_Axis.toString()} angle={-90} />
+            </YAxis>
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="minutes"
+              dataKey="hours"
               stroke="teal"
               fill="url(#colorSavings)"
             />

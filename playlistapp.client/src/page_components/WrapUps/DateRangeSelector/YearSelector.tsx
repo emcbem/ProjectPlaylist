@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 interface YearSelectorProps {
   currentSelectedMonth: number | undefined;
-  setSelectedYear: (year: number | undefined) => void;
+  setSelectedYear: (year: number) => void;
 }
 
 const YearSelector: React.FC<YearSelectorProps> = ({
@@ -48,6 +48,7 @@ const YearSelector: React.FC<YearSelectorProps> = ({
          focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500
            dark:focus:border-teal-500 px-10"
+        defaultValue={selectedYear}
         onChange={handleYearChange}
       >
         {currentSelectedMonth == undefined ? (

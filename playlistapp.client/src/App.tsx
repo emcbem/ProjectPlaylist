@@ -83,7 +83,9 @@ function App() {
                         <Route path="/list/:listId" element={<Playlist />} />
                         <Route
                           path="/achievements/:gameId"
-                          element={<AchievementsPage isViewingOwnProfile={false} />}
+                          element={
+                            <AchievementsPage isViewingOwnProfile={false} />
+                          }
                         />
                         <Route path="/test" element={<TestPage />} />
                         <Route path="/settings" element={<Settings />} />
@@ -117,6 +119,10 @@ function App() {
                           element={<ViewLibraryGame />}
                         />
                         <Route path="/wrapups" element={<WrapUpPage />} />
+                        <Route
+                          path="/wrapups/:id/:month/:year"
+                          element={<WrapUpPage />}
+                        />
                       </Routes>
                     </div>
                   </div>

@@ -1,4 +1,4 @@
 export interface HourGraphDataPoint {
   dateNumber: number;
-  minutes: number;
+  hours: number;
 }

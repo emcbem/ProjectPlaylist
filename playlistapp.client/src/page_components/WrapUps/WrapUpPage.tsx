@@ -12,19 +12,39 @@ import HourLineGraph from "./HourLineGraph";
 import LoadingDots from "@/individual_components/NavbarProfileSection";
 import TopGameWrapUp from "./TopGame";
 import AchievementWrapUp from "./AchievementWrapUp";
+import { useParams } from "react-router-dom";
+import { UserAccountQueries } from "@/queries/UserAccountQueries";
+import BlackButton from "@/components/ui/BlackButton";
+import toast from "react-hot-toast";
 
 const WrapUpPage = () => {
+  const { id, month, year } = useParams<{
+    id: string;
+    month: string;
+    year: string;
+  }>();
+
   const { userGuid, isLoading: isAccountLoading } = React.useContext(
     UserAccountContext
   ) as UserAccountContextInterface;
 
+  const userId = id ?? userGuid;
+
+  const { data: usr } = UserAccountQueries.useGetUserById(userId!);
+
+  const userName = id ? usr?.username : "You";
+
   const [wrapUpRequest, setWrapUpRequest] = useState<GetWrapUpRequest>();
-  const [selectedYear, setSelectedYear] = useState<number>();
-  const [selectedMonth, setSelectedMonth] = useState<number>();
+  const [selectedYear, setSelectedYear] = useState<number>(
+    Number.parseInt(year ?? "-1") ?? ""
+  );
+  const [selectedMonth, setSelectedMonth] = useState<number>(
+    Number.parseInt(month ?? "-1") ?? ""
+  );
   const [wrapUp, setWrapUp] = useState<WrapUp>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleYearChange = (year: number | undefined) => {
+  const handleYearChange = (year: number) => {
     setSelectedYear(year);
     makeWrapUpRequest(selectedMonth, year);
   };
@@ -33,6 +53,12 @@ const WrapUpPage = () => {
     setSelectedMonth(Number(event.target.value));
     makeWrapUpRequest(Number(event.target.value), selectedYear);
   };
+
+  useEffect(() => {
+    if (id) {
+      makeWrapUpRequest();
+    }
+  }, [id]);
 
   const makeWrapUpRequest = (month = selectedMonth, year = selectedYear) => {
     var mo = month;
@@ -46,7 +72,7 @@ const WrapUpPage = () => {
     }
 
     const _wrapUpRequest: GetWrapUpRequest = {
-      userId: userGuid ?? "",
+      userId: userId ?? "",
       month: mo ?? -1,
       year: ye ?? 2025,
     };
@@ -71,44 +97,90 @@ const WrapUpPage = () => {
     fetchWrapUpData();
   }, [wrapUpRequest]);
 
+  const handleShare = () => {
+    const shareUrl =
+      window.location.href + `/${userId}/${selectedMonth}/${selectedYear}`;
+
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        toast.success("Link copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Failed to copy link");
+      });
+  };
+
   if (isAccountLoading) {
-    return <LoadingPage />;
+    return (
+      <div className="mt-24">
+        <LoadingPage />
+      </div>
+    );
   }
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-black dark:text-white">
-        <div className="grid justify-items-center mb-48">
+        <div className="grid justify-items-center">
           <div style={{ maxWidth: "1200px" }} className="w-full mt-8">
             <div className="text-center">
-              <h1 className="text-3xl my-5">Your Wrap Ups</h1>
+              {!id ? (
+                <h1 className="text-3xl my-5">Your Wrap Ups</h1>
+              ) : (
+                <h1 className="text-3xl my-5">{usr?.username}'s Wrap Up</h1>
+              )}
             </div>
-            <DateRangeSelector
-              setSelectedYear={handleYearChange}
-              setSelectedMonth={handleMonthChange}
-            />
+            {!id && (
+              <DateRangeSelector
+                setSelectedYear={handleYearChange}
+                setSelectedMonth={handleMonthChange}
+              />
+            )}
           </div>
-          {isLoading == true && <LoadingDots />}
+          {isLoading == true && (
+            <div className="mt-24">
+              <LoadingDots />
+            </div>
+          )}
           {wrapUp && (
             <>
-              <div className="text-center mt-24 text-2xl dark:text-gray-200">
-                You played{" "}
-                <span className="font-semibold text-4xl dark:text-white">
-                  {
-                    wrapUp?.barGraphGameData.filter((x) => x.timePlayed > 0)
-                      .length
-                  }
-                </span>
-                <br /> games
-              </div>
-              <GameCarousel carouselGames={wrapUp?.gamesPlayed} />
+              <GameCarousel
+                carouselGames={wrapUp?.gamesPlayed}
+                userName={userName ?? "You"}
+              />
 
-              <HourBarChart HourBarChartData={wrapUp?.barGraphGameData} />
+              <HourBarChart
+                HourBarChartData={wrapUp?.barGraphGameData}
+                userName={userName ?? "You"}
+              />
 
               <HourLineGraph graphData={wrapUp.hourGraph} />
 
-              <TopGameWrapUp TopGameData={wrapUp?.topGame} />
+              <TopGameWrapUp
+                TopGameData={wrapUp?.topGame}
+                userName={userName ?? "Your"}
+              />
 
-              <AchievementWrapUp achievementGroups={wrapUp.achievementGroups} />
+              <AchievementWrapUp
+                achievementGroups={wrapUp.achievementGroups}
+                userName={userName ?? "You"}
+              />
+
+              {wrapUp.trophiesEarned > 0 && (
+                <p className="text-center text-2xl mt-6">
+                  {userName} earned{" "}
+                  <span className="font-bold">{wrapUp.trophiesEarned}</span>{" "}
+                  PlayStation troph{wrapUp.trophiesEarned > 1 ? "ies" : "y"}
+                </p>
+              )}
+              {!id && (
+                <BlackButton
+                  className="dark:bg-cyan-400 bg-cyan-400 text-black mb-48 mt-10 font-semibold text-xl"
+                  onClick={handleShare}
+                >
+                  Share
+                </BlackButton>
+              )}
             </>
           )}
           {!wrapUp && !isLoading && (

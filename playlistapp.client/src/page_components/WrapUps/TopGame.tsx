@@ -5,9 +5,10 @@ import format_date from "@/lib/format_date";
 
 interface TopGameProps {
   TopGameData: TopGame;
+  userName: string;
 }
 
-const TopGameWrapUp: FC<TopGameProps> = ({ TopGameData }) => {
+const TopGameWrapUp: FC<TopGameProps> = ({ TopGameData, userName }) => {
   if (!TopGameData) {
     return <p>No data</p>;
   }
@@ -16,7 +17,7 @@ const TopGameWrapUp: FC<TopGameProps> = ({ TopGameData }) => {
       <GameCover coverUrl={TopGameData.coverUrl} title={TopGameData.title} />
       <div className="w-full md:w-1/2 md:mx-7 mb-6">
         <h2 className="text-3xl mb-7">
-          Your top game was{" "}
+          {userName} top game was{" "}
           <span className="font-bold">{TopGameData.title}</span>
         </h2>
         <p className="text-xl mb-3">

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 
 interface HourBarChartProps {
   HourBarChartData: WrapUpHourBarGraph[] | undefined;
+  userName: string;
 }
 
-const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData }) => {
+const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData, userName }) => {
   if (!HourBarChartData) {
     return <></>;
   }
@@ -26,7 +27,7 @@ const HourBarChart: React.FC<HourBarChartProps> = ({ HourBarChartData }) => {
     <div className="bg-gray-100 py-12 px-8 rounded-lg border-gray-300 dark:bg-gray-800 text-center mb-20 md:w-3/4 xl:w-1/2 lg:w-3/4">
       {filteredSortedData.length <= 0 && (
         <p>
-          You had no hours.
+          {userName} had no hours.
           <br />
           Try a different time frame.
         </p>
