@@ -39,7 +39,7 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
   return (
     <>
       <button
-        onClick={() => modalController.setModalVisibility(false)}
+        onClick={() => modalController.setModalVisibility(true)}
         className=""
         type="button"
       >
@@ -58,10 +58,10 @@ const AchievementModalRemove: FC<props> = ({ userAchievementId, userGuid }) => {
         </svg>
       </button>
       <Modal {...modalController}>
-        <div className=" flex flex-col p-8 animation-fill-mode: forwards">
+        <div className=" flex flex-col  animation-fill-mode: forwards">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4 p-6 mx-5"
+            className="flex flex-col gap-4"
           >
             <h2 className="text-3xl mb-4 dark:text-white text-black">
               Are you sure you want to remove this achievement?
