@@ -11,22 +11,22 @@ const NotiOff: React.FC<IconProps> = ({ width }) => {
       className="transition-colors duration-300 fill-black dark:fill-white"
     >
       <path
-        d="M6 15C6 15 6 13 6 11C6 9 7 5 12 5C13.5723 5 14.749 5.39552 15.6235 6M9.5 19C9.5 21 10.5 22 12 22C13.5 22 14.5 21 14.5 19M9.5 19C11.0621 19 14.5 19 14.5 19M9.5 19C9.14909 19 8.36719 19 7.5 19M14.5 19H18.382C19.1253 19 19.6088 18.2177 19.2764 17.5528L18 15C18 15 18 13 18 11C18 10.3755 17.9025 9.55594 17.6161 8.72408"
-        stroke="#000000"
-        stroke-linecap="round"
+        d="M9.5 19C8.89555 19 7.01237 19 5.61714 19C4.87375 19 4.39116 18.2177 4.72361 17.5528L5.57771 15.8446C5.85542 15.2892 6 14.6774 6 14.0564C6 13.2867 6 12.1434 6 11C6 9 7 5 12 5C17 5 18 9 18 11C18 12.1434 18 13.2867 18 14.0564C18 14.6774 18.1446 15.2892 18.4223 15.8446L19.2764 17.5528C19.6088 18.2177 19.1253 19 18.382 19H14.5M9.5 19C9.5 21 10.5 22 12 22C13.5 22 14.5 21 14.5 19M9.5 19C11.0621 19 14.5 19 14.5 19"
         stroke-linejoin="round"
+        className="stroke-white dark:stroke-black"
+        strokeWidth="2"
       ></path>
       <path
         d="M12 5V3"
-        stroke="#000000"
         stroke-linecap="round"
         stroke-linejoin="round"
+        className="stroke-white dark:stroke-black"
+        strokeWidth="2"
       ></path>
       <path
-        d="M21 3L3 21"
-        stroke="#000000"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        d="M4 4L22 20"
+        className="stroke-white dark:stroke-black"
+        stroke-width="2"
       ></path>
     </svg>
   );

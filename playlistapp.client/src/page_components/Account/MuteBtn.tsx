@@ -38,7 +38,7 @@ const MuteBtn = ({ usr, userGuid }: { usr: UserAccount; userGuid: string }) => {
     <div>
       {isNotiEnabled ? (
         <div
-          className="w-10 h-10 bg-white flex justify-center items-center rounded-full cursor-pointer transition-all ml-4 mb-1"
+          className="w-10 h-10 bg-black dark:bg-white flex justify-center items-center rounded-full cursor-pointer transition-all ml-4 mb-1"
           onClick={() => handleToggle(currentUser?.id!, usr.id)}
           onMouseEnter={() => setButtonHovered(true)}
           onMouseLeave={() => setButtonHovered(false)}
@@ -47,7 +47,7 @@ const MuteBtn = ({ usr, userGuid }: { usr: UserAccount; userGuid: string }) => {
         </div>
       ) : (
         <div
-          className="w-10 h-10 bg-white flex justify-center items-center rounded-full cursor-pointer transition-all ml-4 mb-1"
+          className="w-10 h-10 bg-black dark:bg-white flex justify-center items-center rounded-full cursor-pointer transition-all ml-4 mb-1"
           onClick={() => handleToggle(currentUser?.id!, usr.id)}
           onMouseEnter={() => setButtonHovered(true)}
           onMouseLeave={() => setButtonHovered(false)}
