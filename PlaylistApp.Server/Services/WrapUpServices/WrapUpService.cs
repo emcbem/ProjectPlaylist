@@ -328,13 +328,15 @@ public class WrapUpService : IWrapUpService
                 .Where(x => x.UserId == user.Id &&
                             achievementIds.Contains(x.AchievementId) &&
                             x.DateAchieved >= firstTime && x.DateAchieved <= lastTime)
+                .OrderBy(x => x.AchievementId)
                 .ToListAsync();
 
             var allWrapUpAchievements = new List<WrapUpAchievementDTO>();
+            var lastAchievementId = 0;
 
             foreach (var achievement in matchedAchievements)
             {
-                if (achievement.Achievement is not null && achievement.Achievement.ImageUrl is not null && achievement.DateAchieved is not null)
+                if (achievement.Achievement is not null && achievement.Achievement.ImageUrl is not null && achievement.DateAchieved is not null && achievement.AchievementId != lastAchievementId)
                 {
                     var wrapUpAchievementDTO = new WrapUpAchievementDTO
                     {
@@ -344,6 +346,7 @@ public class WrapUpService : IWrapUpService
                     };
 
                     allWrapUpAchievements.Add(wrapUpAchievementDTO);
+                    lastAchievementId = achievement.AchievementId;
                 }
             }
 
