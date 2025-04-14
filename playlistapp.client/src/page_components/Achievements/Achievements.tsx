@@ -78,7 +78,6 @@ const AchievementsPage: React.FC<AchievementsPageProps> = ({
       return 0;
     },
   };
-  console.log(isViewingOwnProfile, "isViewingOwnProfile");
   return (
     <div className="dark:text-white text-black w-full">
       {allAchievements.length > 0 ? (

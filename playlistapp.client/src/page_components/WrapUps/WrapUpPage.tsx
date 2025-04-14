@@ -76,7 +76,6 @@ const WrapUpPage = () => {
       month: mo ?? -1,
       year: ye ?? 2025,
     };
-    console.log(_wrapUpRequest);
     setWrapUpRequest(_wrapUpRequest);
   };
 

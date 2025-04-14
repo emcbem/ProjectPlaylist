@@ -84,7 +84,6 @@ const Tabs = () => {
   const tabs = ["Reviews", "Achievements"];
   let hideReviewButton = false;
 
-  console.log(AllGameReviewsForGame, "ENOCH");
 
   useEffect(() => {
     if (AllGameReviewsForGame) {
